@@ -18,8 +18,7 @@ import org.horizontal.tella.mobile.views.fragment.reports.adapter.ViewEntityTemp
 
 abstract class BaseReportsFragment<I : IEntityInstance> :
     BaseBindingFragment<FragmentReportsListBinding>(FragmentReportsListBinding::inflate) {
-
-    // Child classes provide the specific ViewModel through this method
+        
     protected abstract fun getViewModel(): BaseEntityListViewModel<I>
     protected abstract fun getEmptyMessage(): Int // Child classes define specific empty messages
     protected abstract fun getHeaderRecyclerViewMessage(): Int
@@ -117,14 +116,16 @@ abstract class BaseReportsFragment<I : IEntityInstance> :
         deleteText: String,
         deleteConfirmation: String,
         deleteActionText: String,
+        confirmButtonLabel: String = getString(R.string.action_delete),
+        cancelButtonLabel: String = getString(R.string.action_cancel),
     ) {
 
         BottomSheetUtils.showEditDeleteMenuSheet(
-            requireActivity().supportFragmentManager,
-            title,
-            viewText,
-            deleteText,
-            object : BottomSheetUtils.ActionSeleceted {
+            fragmentManager = requireActivity().supportFragmentManager,
+            titleText = title,
+            actionEditLabel = viewText,
+            actionDeleteLabel = deleteText,
+            consumer = object : BottomSheetUtils.ActionSeleceted {
                 override fun accept(action: BottomSheetUtils.Action) {
                     when (action) {
                         BottomSheetUtils.Action.EDIT -> loadEntityInstance(instance)
@@ -134,11 +135,11 @@ abstract class BaseReportsFragment<I : IEntityInstance> :
                     }
                 }
             },
-            deleteActionText,
-            deleteConfirmation,
-            getString(R.string.action_delete),
-            getString(R.string.action_cancel),
-            R.drawable.ic_eye_white
+            titleText2 = deleteActionText,
+            descriptionText = deleteConfirmation,
+            actionButtonLabel = confirmButtonLabel,
+            cancelButtonLabel = cancelButtonLabel,
+            iconView = R.drawable.ic_eye_white
         )
     }
 

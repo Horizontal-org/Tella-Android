@@ -1,4 +1,9 @@
 <resources>
+
+    <style name="Widget.Tella.TextView" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/wa_white</item>
+    </style>
+
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
@@ -9,6 +14,7 @@
         <item name="android:textColorPrimaryInverse">@color/colorPrimaryInverse</item>
         <item name="android:fontFamily">@font/open_sans</item>
         <item name="colorSurface">@color/surfaceColor</item>
+        <item name="android:textViewStyle">@style/Widget.Tella.TextView</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
@@ -18,6 +24,7 @@
         <item name="patternViewStyle">@style/PatternView</item>
         <item name="android:textColorPrimaryInverse">@color/colorPrimaryInverse</item>
         <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:textViewStyle">@style/Widget.Tella.TextView</item>
     </style>
 
     <style name="AppTheme.NoActionBar.LineSpacing" parent="Theme.AppCompat.Light.NoActionBar">
@@ -458,21 +465,19 @@
     </style>
 
     <style name="Main_Floating_Action_Button_Style">
-        <item name="android:layout_width">50dp</item>
-        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">end|bottom</item>
         <item name="android:layout_marginHorizontal">@dimen/tella_main_vertical</item>
         <item name="android:layout_marginBottom">@dimen/tella_main_vertical</item>
-        <item name="android:background">@color/dark_orange</item>
     </style>
 
     <style name="Move_Floating_Action_Button_Style">
-        <item name="android:layout_width">50dp</item>
-        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">end|bottom</item>
         <item name="android:layout_marginEnd">@dimen/move_fab_horizontal_margin</item>
         <item name="android:layout_marginBottom">@dimen/move_fab_bottom_margin</item>
-        <item name="android:background">@color/dark_orange</item>
     </style>
 
     <!-- styles for Forms section -->
