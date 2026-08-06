@@ -40,12 +40,14 @@
             />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/filesToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingHorizontal="@dimen/tella_main_vertical"
-            android:paddingBottom="10dp">
+            android:paddingBottom="10dp"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -119,6 +121,19 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/attachmentsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="100dp"
+        android:visibility="visible"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:spanCount="3"
+        tools:itemCount="9"
+        tools:listitem="@layout/item_vault_attachment_grid" />
+
     <org.horizontal.tella.mobile.views.custom.TellaFloatingActionButton
         android:id="@+id/fab_button"
         style="@style/Main_Floating_Action_Button_Style"
@@ -184,19 +199,6 @@
             android:textColor="@color/wa_white_88"
             android:text="@string/Vault_Folder_Empty_Msg"
             android:visibility="gone" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/attachmentsRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:paddingBottom="100dp"
-            android:visibility="visible"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:spanCount="3"
-            tools:itemCount="9"
-            tools:listitem="@layout/item_vault_attachment_grid" />
     </LinearLayout>
 
     <LinearLayout
