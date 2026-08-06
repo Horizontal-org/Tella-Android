@@ -23,7 +23,8 @@ class OnBoardLockWarningFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             val typeName = it.getString(ARG_LOCK_TYPE, LockType.PASSWORD.name)
-            selectedLockType = runCatching { LockType.valueOf(typeName) }.getOrDefault(LockType.PASSWORD)
+            selectedLockType =
+                runCatching { LockType.valueOf(typeName) }.getOrDefault(LockType.PASSWORD)
             isFromSettings = it.getBoolean(IS_FROM_SETTINGS, false)
         }
     }
@@ -56,19 +57,24 @@ class OnBoardLockWarningFragment : BaseFragment() {
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    (baseActivity as OnBoardActivityInterface).showViewpager()
-                    baseActivity.supportFragmentManager.popBackStack()
+                    goBackToLockSelection()
                 }
             }
         )
 
         binding.backBtn.setOnClickListener {
-            (baseActivity as OnBoardActivityInterface).showViewpager()
-            baseActivity.supportFragmentManager.popBackStack()
+            goBackToLockSelection()
         }
         binding.understandBtn.setOnClickListener {
             startSelectedLockSetup()
         }
+    }
+
+    private fun goBackToLockSelection() {
+        if (!isFromSettings) {
+            (baseActivity as OnBoardActivityInterface).showViewpager()
+        }
+        baseActivity.supportFragmentManager.popBackStack()
     }
 
     private fun startSelectedLockSetup() {

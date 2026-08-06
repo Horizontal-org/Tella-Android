@@ -309,12 +309,14 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
                 binding.viewPager.isUserInputEnabled = false
                 showButtons(isNextButtonVisible = false, isBackButtonVisible = false)
             }
+
             ONBOARDING_LOCK_VIEW_INDEX -> {
                 showProgress()
                 setCurrentIndicator(position - 1)
                 binding.viewPager.isUserInputEnabled = true
                 showButtons(isNextButtonVisible = false, isBackButtonVisible = true)
             }
+
             else -> {
                 showProgress()
                 setCurrentIndicator(position - 1)
@@ -377,7 +379,8 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
 
     //TODO WHY THIS HARCODED?
     override fun enterCustomizationCode() {
-        BottomSheetUtils.showEnterCustomizationCodeSheet(this.supportFragmentManager,
+        BottomSheetUtils.showEnterCustomizationCodeSheet(
+            this.supportFragmentManager,
             "Customization",
             "Enter your customization code",
             "Your organization may provide a code for you to set up Tella according to their settings.",
@@ -410,6 +413,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     override fun showViewpager() {
         binding.viewPager.visibility = View.VISIBLE
         binding.onboardBottomBar.visibility = View.VISIBLE
+        updateProgressForPage(binding.viewPager.currentItem)
     }
 
     private fun handleCustomizationCode(code: String) {
