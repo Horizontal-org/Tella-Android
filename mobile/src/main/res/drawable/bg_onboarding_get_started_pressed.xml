@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetRight="-4dp"
+    android:insetBottom="-4dp">
+    <layer-list>
+        <item
+            android:left="2dp"
+            android:top="2dp">
+            <shape android:shape="rectangle">
+                <corners android:radius="19dp" />
+                <solid android:color="@color/tigers_eye_pressed" />
+            </shape>
+        </item>
+        <item>
+            <shape android:shape="rectangle">
+                <corners android:radius="19dp" />
+                <solid android:color="@color/tigers_eye_pressed" />
+                <stroke
+                    android:width="2dp"
+                    android:color="@color/wa_white" />
+            </shape>
+        </item>
+    </layer-list>
+</inset>

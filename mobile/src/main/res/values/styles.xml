@@ -577,8 +577,11 @@
     </style>
 
     <style name="OnboardingGetStarted" parent="Typography.ButtonL">
+        <item name="android:fontFamily">@font/open_sans_bold</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/wa_white</item>
         <item name="android:gravity">center</item>
+        <item name="android:textAlignment">center</item>
         <item name="android:textAllCaps">true</item>
     </style>
 

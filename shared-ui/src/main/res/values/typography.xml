@@ -122,6 +122,7 @@
     <style name="Typography.ButtonL">
         <item name="android:textAppearance">@style/TextAppearance.Tella.ButtonL</item>
         <item name="android:letterSpacing">0.03125</item>
+        <item name="lineHeight">16sp</item>
     </style>
 
     <style name="Typography.ButtonS">
