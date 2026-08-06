@@ -32,6 +32,9 @@ abstract class MainReportFragment :
      */
     protected open val listTabOffset: Int = 0
 
+    private var currentTabPosition = 0
+    private val emptyStateByTab = mutableMapOf<Int, Boolean>()
+
     protected open fun getTabTitles(): List<String> = listOf(
         getString(R.string.collect_draft_tab_title),
         getString(R.string.collect_outbox_tab_title),
@@ -95,6 +98,16 @@ abstract class MainReportFragment :
                 updateTabTitle(DRAFT_LIST_PAGE_INDEX, reportCounts.draftCounts)
                 updateTabTitle(OUTBOX_LIST_PAGE_INDEX, reportCounts.outboxCount)
                 updateTabTitle(SUBMITTED_LIST_PAGE_INDEX, reportCounts.submittedCount)
+
+                setEmptyStateForTab(
+                    DRAFT_LIST_PAGE_INDEX + listTabOffset, reportCounts.draftCounts == 0
+                )
+                setEmptyStateForTab(
+                    OUTBOX_LIST_PAGE_INDEX + listTabOffset, reportCounts.outboxCount == 0
+                )
+                setEmptyStateForTab(
+                    SUBMITTED_LIST_PAGE_INDEX + listTabOffset, reportCounts.submittedCount == 0
+                )
             }
 
         }
@@ -119,14 +132,31 @@ abstract class MainReportFragment :
             .registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
+                    currentTabPosition = position
                     setUpEmptyTextViewMessage(position)
+                    applyCachedEmptyVisibility(position)
                 }
             })
+        setUpEmptyTextViewMessage(currentTabPosition)
+    }
+
+
+    protected fun setEmptyStateForTab(position: Int, isEmpty: Boolean) {
+        emptyStateByTab[position] = isEmpty
+        if (position == currentTabPosition) {
+            applyCachedEmptyVisibility(position)
+        }
     }
 
     private fun setUpEmptyTextViewMessage(position: Int) {
         val message = getEmptyMessageForTab(position) ?: return
         binding.viewPagerComponent.setCenterMessageImg(message, getEmptyMessageIcon())
+    }
+
+    private fun applyCachedEmptyVisibility(position: Int) {
+        binding.viewPagerComponent.setEmptyTextViewMessageVisibility(
+            emptyStateByTab[position] == true
+        )
     }
 
     protected open fun getEmptyMessageForTab(position: Int): String? =
@@ -143,6 +173,7 @@ abstract class MainReportFragment :
     }
 
     override fun setEmptyTextViewMessageVisibility(isVisible: Boolean) {
+        emptyStateByTab[currentTabPosition] = isVisible
         binding.viewPagerComponent.setEmptyTextViewMessageVisibility(isVisible)
     }
 }

@@ -56,7 +56,6 @@ class TemplatesUwaziFragment : BaseBindingFragment<FragmentReportsListBinding>(
             }
 
             templates.observe(viewLifecycleOwner) { items ->
-                // The first entry is the header message, so a single entry means "no templates".
                 val isEmpty = items.size <= 1
                 binding.draftsRecyclerView.isVisible = !isEmpty
                 visibilityHandler?.setEmptyTextViewMessageVisibility(isEmpty)

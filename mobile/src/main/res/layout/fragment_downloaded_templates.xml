@@ -19,40 +19,17 @@
         app:rightIconContentDescription="@string/action_refresh"
         app:startTitle="@string/Uwazi_Dowload_Temapltes_Header_Title" />
 
-    <org.horizontal.tella.mobile.views.custom.ParagraphInlineLayout
-        android:id="@+id/description_container"
+    <TextView
+        android:id="@+id/tv_description"
+        style="@style/Tella_Main_White_Text.Meduim"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="start"
         android:layout_margin="@dimen/activity_horizontal_margin"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        android:text="@string/Donwload_Templates_Title_Description" />
 
-        <TextView
-            android:id="@+id/tv_description"
-            style="@style/Tella_Main_White_Text.Meduim"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:text="@string/Donwload_Templates_Title_Description" />
-
-        <TextView
-            android:id="@+id/tv_you_can"
-            style="@style/Tella_Main_White_Text.Meduim"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Download_Templates_You_Can" />
-
-        <TextView
-            android:id="@+id/tv_manage_instances"
-            style="@style/Tella_Main_White_Text.Meduim"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:text="@string/Download_Templates_Manage_Instances"
-            android:textColor="@color/dark_orange"
-            android:textStyle="bold"
-            tools:text="manage your Uwazi instances here." />
-    </org.horizontal.tella.mobile.views.custom.ParagraphInlineLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/templates_recyclerView"
@@ -60,7 +37,7 @@
         android:layout_height="0dp"
         android:layout_margin="@dimen/activity_horizontal_margin"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/description_container"
+        app:layout_constraintTop_toBottomOf="@id/tv_description"
         tools:itemCount="3"
         tools:listitem="@layout/item_uwazi_collect_container" />
 

@@ -1,5 +1,6 @@
 package org.horizontal.tella.mobile.views.fragment.uwazi.viewpagerfragments
 
+import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import org.hzontal.shared_ui.veiw_pager_component.fragments.FragmentProvider
@@ -15,6 +16,15 @@ internal class UwaziTabsFragment : MainReportFragment() {
     override val viewModel by activityViewModels<UwaziViewModel>()
 
     override val listTabOffset: Int = UWAZI_LIST_TAB_OFFSET
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.templates.observe(viewLifecycleOwner) { items ->
+            setEmptyStateForTab(TEMPLATES_TAB_INDEX, items.size <= 1)
+        }
+        viewModel.listTemplates()
+    }
 
     override fun getFragmentProvider(): FragmentProvider {
         return UwaziFragmentProvider()
@@ -52,10 +62,13 @@ internal class UwaziTabsFragment : MainReportFragment() {
             TEMPLATES_TAB_INDEX -> getString(R.string.Uwazi_Templates_Empty_Description)
             DRAFT_LIST_PAGE_INDEX + listTabOffset ->
                 getString(R.string.Uwazi_Draft_Entities_Empty_Description)
+
             OUTBOX_LIST_PAGE_INDEX + listTabOffset ->
                 getString(R.string.Uwazi_Outbox_Entities_Empty_Description)
+
             SUBMITTED_LIST_PAGE_INDEX + listTabOffset ->
                 getString(R.string.Uwazi_Submitted_Entities_Empty_Description)
+
             else -> null
         }
 }

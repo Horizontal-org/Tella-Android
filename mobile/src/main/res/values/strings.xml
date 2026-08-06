@@ -48,7 +48,7 @@ mode activation</string>
   <string name="collect_toast_draft.saved">Draft saved</string>
   <string name="collect_toast_fail.sending.form">There was an error submitting the form. Please try again</string>
   <string name="collect_toast_fail.form.submission.generic">There was an error submitting the form: %s</string>
-  <string name="collect.form_toast_validation.generic.error">There were validation errors in some answers</string>
+  <string name="collect.form_toast_validation.generic.error">There was a problem with one or more of your answers.</string>
   <string name="permission_dialog.expl_GPS">In order to make your files verifiable, Tella needs to record your location and needs permission to access your GPS.</string>
   <string name="collect.form_action_select.time">Select time</string>
   <string name="collect.form_action_select.date">Select date</string>
@@ -545,8 +545,6 @@ button to add a new template.</string>
   </plurals>
   <string name="Util_ellapsedTime_Seconds">A few seconds ago</string>
   <string name="Donwload_Templates_Title_Description">These are the templates available on the Uwazi instances you are connected to.</string>
-  <string name="Download_Templates_You_Can">You can</string>
-  <string name="Download_Templates_Manage_Instances">manage your Uwazi instances here.</string>
   <string name="Uwazi_Templates_HeaderMessage">These are Uwazi templates you can fill out.</string>
   <string name="Vault_Filter_Name">Name</string>
   <string name="Server_Url_Screen_Title">Enter the server URL</string>

@@ -100,11 +100,12 @@ class UwaziSendFragment : BaseEntitySendFragment<UwaziEntityInstance>() {
         getString(R.string.form_successfully_submitted, reportInstance?.title.orEmpty())
 
     override fun pauseResumeLabel(reportFormInstance: UwaziEntityInstance?) {
-        binding.nextBtn.text = if (reportFormInstance?.status == EntityStatus.SUBMISSION_IN_PROGRESS) {
-            getString(R.string.Reports_Pause)
-        } else {
-            getString(R.string.collect_end_action_submit)
-        }
+        binding.nextBtn.text =
+            if (reportFormInstance?.status == EntityStatus.SUBMISSION_IN_PROGRESS) {
+                getString(R.string.Reports_Pause)
+            } else {
+                getString(R.string.collect_end_action_submit)
+            }
     }
 
     override fun navigateBack() {
