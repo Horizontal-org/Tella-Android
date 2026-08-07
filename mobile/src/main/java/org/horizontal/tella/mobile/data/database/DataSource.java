@@ -434,6 +434,74 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 .compose(applySchedulers());
     }
 
+    /**
+     * Returns true if any of the given vault file IDs is attached to a draft/outbox
+     * instance in any connection (Reports, Uwazi, Collect, Google Drive, Dropbox, Nextcloud).
+     */
+    public Single<Boolean> areVaultFilesUsedInConnections(List<String> vaultFileIds) {
+        return Single.fromCallable(() -> areVaultFilesUsedInConnectionsDB(vaultFileIds))
+                .compose(applySchedulers());
+    }
+
+    private boolean areVaultFilesUsedInConnectionsDB(List<String> vaultFileIds) {
+        if (vaultFileIds == null || vaultFileIds.isEmpty()) {
+            return false;
+        }
+
+        List<String> ids = new ArrayList<>();
+        for (String id : vaultFileIds) {
+            if (id != null && !id.isEmpty()) {
+                ids.add(id);
+            }
+        }
+        if (ids.isEmpty()) {
+            return false;
+        }
+
+        List<String> tables = new ArrayList<>();
+        tables.add(D.T_REPORT_INSTANCE_VAULT_FILE);
+        tables.add(D.T_UWAZI_ENTITY_INSTANCE_VAULT_FILE);
+        tables.add(D.T_COLLECT_FORM_INSTANCE_VAULT_FILE);
+        tables.add(D.T_NEXT_CLOUD_INSTANCE_VAULT_FILE);
+        if (org.horizontal.tella.mobile.BuildConfig.ENABLE_GOOGLE_DRIVE) {
+            tables.add(D.T_GOOGLE_DRIVE_INSTANCE_VAULT_FILE);
+        }
+        if (org.horizontal.tella.mobile.BuildConfig.ENABLE_DROPBOX) {
+            tables.add(D.T_DROPBOX_INSTANCE_VAULT_FILE);
+        }
+
+        String[] placeholders = new String[ids.size()];
+        for (int i = 0; i < ids.size(); i++) {
+            placeholders[i] = "?";
+        }
+        String selection = D.C_VAULT_FILE_ID + " IN (" + TextUtils.join(",", placeholders) + ")";
+        String[] selectionArgs = ids.toArray(new String[0]);
+
+        for (String table : tables) {
+            Cursor cursor = null;
+            try {
+                cursor = database.query(
+                        table,
+                        new String[]{D.C_VAULT_FILE_ID},
+                        selection,
+                        selectionArgs,
+                        null, null, null,
+                        "1");
+                if (cursor != null && cursor.moveToFirst()) {
+                    return true;
+                }
+            } catch (Exception e) {
+                Timber.e(e, getClass().getName());
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+        }
+
+        return false;
+    }
+
     private List<FormMediaFile> getReportMediaFilesDB() {
         Cursor cursor = null;
         List<FormMediaFile> files = new ArrayList<>();
