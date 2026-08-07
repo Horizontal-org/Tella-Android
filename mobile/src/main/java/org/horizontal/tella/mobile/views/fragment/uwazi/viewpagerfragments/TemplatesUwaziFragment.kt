@@ -11,6 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionSeleceted
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showEditDeleteMenuSheet
+import org.hzontal.shared_ui.utils.DialogUtils
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentReportsListBinding
 import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziTemplate
@@ -67,6 +68,14 @@ class TemplatesUwaziFragment : BaseBindingFragment<FragmentReportsListBinding>(
             showSheetMore.observe(viewLifecycleOwner) { showDownloadedMenu(it) }
 
             openEntity.observe(viewLifecycleOwner) { openEntity(it) }
+
+            templateRemoved.observe(viewLifecycleOwner) { templateName ->
+                DialogUtils.showBottomMessage(
+                    baseActivity,
+                    getString(R.string.Uwazi_Template_Removed_Toast, templateName),
+                    false
+                )
+            }
         }
     }
 
@@ -83,9 +92,10 @@ class TemplatesUwaziFragment : BaseBindingFragment<FragmentReportsListBinding>(
     }
 
     private fun showDownloadedMenu(template: UwaziTemplate) {
+        val templateName = template.entityRow.name
         showEditDeleteMenuSheet(
             requireActivity().supportFragmentManager,
-            template.entityRow.name,
+            templateName,
             getString(R.string.Uwazi_Action_FillEntity),
             getString(R.string.Uwazi_Action_RemoveTemplate),
             object : ActionSeleceted {
@@ -98,8 +108,8 @@ class TemplatesUwaziFragment : BaseBindingFragment<FragmentReportsListBinding>(
                     }
                 }
             },
-            getString(R.string.action_delete) + " \"" + template.entityRow.name + "\"?",
-            requireContext().resources.getString(R.string.Uwazi_Subtitle_RemoveTemplate),
+            getString(R.string.Uwazi_RemoveTemplate_ConfirmTitle, templateName),
+            getString(R.string.Uwazi_Subtitle_RemoveTemplate),
             requireContext().getString(R.string.action_remove),
             requireContext().getString(R.string.action_cancel)
         )
