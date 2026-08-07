@@ -65,7 +65,7 @@ mode activation</string>
   <string name="action_play">Play</string>
   <string name="action_record">Record</string>
   <string name="play.audio_app.bar">Play Audio</string>
-  <string name="collect_dialog.text_delete.sent.form">Are you sure you want to delete this form from your device? Note that because it was already submitted, the data will remain on your organization\'s server.</string>
+  <string name="collect_dialog.text_delete.sent.form">Are you sure you want to delete this from your device? Note that because it was already submitted, the data will remain on your organization\'s server.</string>
   <string name="collect_dialog.text_delete.draft.form">Are you sure you want to delete this draft form?</string>
   <string name="collect_toast_form.deleted">The form was deleted</string>
   <string name="settings.lang_select.expl_default">Keep Tella in the same language as my device</string>
