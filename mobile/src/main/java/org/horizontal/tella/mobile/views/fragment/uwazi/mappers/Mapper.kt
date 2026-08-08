@@ -3,10 +3,12 @@ package org.horizontal.tella.mobile.views.fragment.uwazi.mappers
 import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziTemplate
 import org.horizontal.tella.mobile.domain.entity.uwazi.Language
 import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziEntityInstance
+import org.horizontal.tella.mobile.util.StringUtils
 import org.horizontal.tella.mobile.views.adapters.uwazi.ViewLanguageItem
 import org.horizontal.tella.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
 import org.horizontal.tella.mobile.views.fragment.uwazi.adapters.ViewUwaziTemplateItem
 import org.horizontal.tella.mobile.views.fragment.uwazi.download.adapter.ViewTemplateItem
+import java.util.Locale
 
 fun UwaziTemplate.toViewTemplateItem(onMoreClicked: () -> Unit, onDownloadClicked: () -> Unit) =
     ViewTemplateItem(
@@ -37,12 +39,27 @@ fun UwaziTemplate.toViewUwaziTemplateItem(
     onOpenEntityClicked = onOpenEntityClicked
 )
 
-fun Language.toViewLanguageItem(onLanguageClicked: () -> Unit) = ViewLanguageItem(
-    languageSmallText = label,
-    languageBigText = label,
-    key = key,
-    default = default,
-    onLanguageClicked = onLanguageClicked)
+fun Language.toViewLanguageItem(onLanguageClicked: () -> Unit): ViewLanguageItem {
+    val locale = Locale.forLanguageTag(key.replace('_', '-'))
+    val uiLocale = Locale.getDefault()
+
+    // Native name on top (e.g. Français, عربي), current Tella language name below (e.g. French, Arabic)
+    val nativeName = locale.getDisplayName(locale).ifBlank { label }
+    val translatedName = locale.getDisplayName(uiLocale).ifBlank { label }
+
+    return ViewLanguageItem(
+        languageBigText = capitalizeLanguageName(nativeName, locale),
+        languageSmallText = capitalizeLanguageName(translatedName, uiLocale),
+        key = key,
+        default = default,
+        onLanguageClicked = onLanguageClicked
+    )
+}
+
+private fun capitalizeLanguageName(name: String, locale: Locale): String {
+    if (name.isEmpty()) return name
+    return StringUtils.capitalize(name, locale)
+}
 
 /**
  * Maps a Uwazi entity onto the row model the shared draft/outbox/submitted list renders. The
