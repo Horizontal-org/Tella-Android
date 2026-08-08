@@ -78,7 +78,6 @@ class LanguageSettings : BaseFragment(), View.OnClickListener {
             langInfo.setText(R.string.settings_lang_select_expl_default)
         } else {
             val locale = localeForLanguageCode(language)
-            val uiLocale = currentUiLocale()
 
             // Native name first, then name in the current Tella UI language (e.g. Español / Spanish)
             langName.text = StringUtils.capitalize(locale.getDisplayName(locale), locale)
@@ -119,16 +118,6 @@ class LanguageSettings : BaseFragment(), View.OnClickListener {
 
     private fun localeForLanguageCode(language: String): Locale {
         return Locale.forLanguageTag(language.replace('_', '-'))
-    }
-
-    private fun currentUiLocale(): Locale {
-        val configuration = resources.configuration
-        return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            configuration.locales[0]
-        } else {
-            @Suppress("DEPRECATION")
-            configuration.locale
-        }
     }
 
 }
