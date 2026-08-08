@@ -29,14 +29,13 @@
 
     <TextView
         android:id="@+id/standard_sheet_content"
-        style="@style/Tella_Main_White_Text.MeduimbBold"
+        style="@style/Typography.Heading1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:paddingHorizontal="@dimen/activity_horizontal_margin"
         android:text="@string/Login_Type_Screen_Title"
         android:textAlignment="center"
-        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/server_icon" />
@@ -45,6 +44,7 @@
         android:id="@+id/login_button"
         android:layout_width="match_parent"
         android:layout_height="54dp"
+        style="@style/TextAppearance.Tella.ButtonL"
         android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
         android:layout_marginTop="24dp"
         app:check_state="false"
