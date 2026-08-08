@@ -1,8 +1,6 @@
 package org.horizontal.tella.mobile.views.fragment.reports.viewpagerfragments
 
 import android.annotation.SuppressLint
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.R
@@ -11,20 +9,14 @@ import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BUNDLE_RE
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BaseReportsFragment
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.ReportsUtils
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.SharedLiveData.updateOutboxTitle
-import org.horizontal.tella.mobile.views.fragment.main_connexions.base.SharedLiveData.updateSubmittedTitle
 import org.horizontal.tella.mobile.views.fragment.reports.ReportsViewModel
 
 const val BUNDLE_IS_FROM_OUTBOX = "bundle_is_from_outbox"
 
 @AndroidEntryPoint
-class OutboxReportsFragment : BaseReportsFragment<ReportsViewModel>() {
+class OutboxReportsFragment : BaseReportsFragment<ReportInstance>() {
 
     private val outboxReportsViewModel by viewModels<ReportsViewModel>()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initData()
-    }
 
     override fun getViewModel(): ReportsViewModel {
         return outboxReportsViewModel

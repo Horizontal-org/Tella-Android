@@ -17,7 +17,7 @@ abstract class MainReportFragment :
     BaseBindingFragment<MainReportConnexionBinding>(MainReportConnexionBinding::inflate),
     OnNavBckListener, EmptyMessageVisibilityHandler {
 
-    protected abstract val viewModel: BaseReportsViewModel
+    protected abstract val viewModel: BaseEntityListViewModel<*>
 
     // Abstract method to be implemented by subclasses to provide their own FragmentProvider
     abstract fun getFragmentProvider(): FragmentProvider
@@ -25,6 +25,25 @@ abstract class MainReportFragment :
     // Abstract method to be implemented by subclasses to provide their own toolbar title
     abstract fun getToolbarTitle(): String
     abstract fun navigateToNewReportScreen()
+
+    /**
+     * Tabs preceding draft/outbox/submitted. Uwazi shows a Templates tab first, so its
+     * draft/outbox/submitted pages sit one position further right than the other connections'.
+     */
+    protected open val listTabOffset: Int = 0
+
+    private var currentTabPosition = 0
+    private val emptyStateByTab = mutableMapOf<Int, Boolean>()
+
+    protected open fun getTabTitles(): List<String> = listOf(
+        getString(R.string.collect_draft_tab_title),
+        getString(R.string.collect_outbox_tab_title),
+        getString(R.string.collect_sent_tab_title)
+    )
+
+    protected open fun getNewButtonText(): Int = R.string.New_Reports_Text
+
+    protected open fun configurePrimaryActionButton() {}
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -37,69 +56,67 @@ abstract class MainReportFragment :
         if (isViewInitialized) {
             // Setup the view with the fragment provider from the subclass
             val fragmentProvider = getFragmentProvider()
-            binding.viewPagerComponent.setTabTitles(
-                listOf(
-                    getString(R.string.collect_draft_tab_title),
-                    getString(R.string.collect_outbox_tab_title),
-                    getString(R.string.collect_sent_tab_title)
-                )
-            )
+            val tabTitles = getTabTitles()
+            val tabCount = tabTitles.size
+            binding.viewPagerComponent.setTabTitles(tabTitles)
             viewModel.listDraftsOutboxAndSubmitted()
 
-            binding.viewPagerComponent.initViewPager(childFragmentManager, lifecycle, 3)
-            binding.viewPagerComponent.setupTabs(fragmentProvider, 3)
+            binding.viewPagerComponent.initViewPager(childFragmentManager, lifecycle, tabCount)
+            binding.viewPagerComponent.setupTabs(fragmentProvider, tabCount)
 
             binding.viewPagerComponent.setToolBarTitle(getToolbarTitle())
 
+            binding.newReportBtn.setText(getNewButtonText())
             binding.newReportBtn.setOnClickListener {
                 navigateToNewReportScreen()
             }
+            configurePrimaryActionButton()
             binding.viewPagerComponent.setOnToolbarBackClickListener { back() }
 
             SharedLiveData.updateViewPagerPosition.observe(baseActivity) { position ->
                 when (position) {
-                    DRAFT_LIST_PAGE_INDEX -> setCurrentTab(DRAFT_LIST_PAGE_INDEX)
-                    OUTBOX_LIST_PAGE_INDEX -> setCurrentTab(OUTBOX_LIST_PAGE_INDEX)
-                    SUBMITTED_LIST_PAGE_INDEX -> setCurrentTab(SUBMITTED_LIST_PAGE_INDEX)
+                    DRAFT_LIST_PAGE_INDEX,
+                    OUTBOX_LIST_PAGE_INDEX,
+                    SUBMITTED_LIST_PAGE_INDEX -> setCurrentTab(position + listTabOffset)
                 }
             }
 
             updateOutboxTitle.observe(viewLifecycleOwner) { outBoxesSize ->
-                binding.viewPagerComponent.updateTabTitle(
-                    OUTBOX_LIST_PAGE_INDEX, outBoxesSize
-                )
+                updateTabTitle(OUTBOX_LIST_PAGE_INDEX, outBoxesSize)
             }
 
             updateSubmittedTitle.observe(viewLifecycleOwner) { outBoxesSize ->
-                binding.viewPagerComponent.updateTabTitle(
-                    SUBMITTED_LIST_PAGE_INDEX, outBoxesSize
-                )
+                updateTabTitle(SUBMITTED_LIST_PAGE_INDEX, outBoxesSize)
             }
 
             updateDraftTitle.observe(viewLifecycleOwner) { outBoxesSize ->
-                binding.viewPagerComponent.updateTabTitle(
-                    DRAFT_LIST_PAGE_INDEX, outBoxesSize
-                )
+                updateTabTitle(DRAFT_LIST_PAGE_INDEX, outBoxesSize)
             }
 
 
             viewModel.reportCounts.observe(viewLifecycleOwner) { reportCounts ->
-                binding.viewPagerComponent.updateTabTitle(
-                    DRAFT_LIST_PAGE_INDEX,
-                    reportCounts.draftCounts
-                )
-                binding.viewPagerComponent.updateTabTitle(
-                    OUTBOX_LIST_PAGE_INDEX, reportCounts.outboxCount
-                )
+                updateTabTitle(DRAFT_LIST_PAGE_INDEX, reportCounts.draftCounts)
+                updateTabTitle(OUTBOX_LIST_PAGE_INDEX, reportCounts.outboxCount)
+                updateTabTitle(SUBMITTED_LIST_PAGE_INDEX, reportCounts.submittedCount)
 
-                binding.viewPagerComponent.updateTabTitle(
-                    SUBMITTED_LIST_PAGE_INDEX, reportCounts.submittedCount
+                setEmptyStateForTab(
+                    DRAFT_LIST_PAGE_INDEX + listTabOffset, reportCounts.draftCounts == 0
+                )
+                setEmptyStateForTab(
+                    OUTBOX_LIST_PAGE_INDEX + listTabOffset, reportCounts.outboxCount == 0
+                )
+                setEmptyStateForTab(
+                    SUBMITTED_LIST_PAGE_INDEX + listTabOffset, reportCounts.submittedCount == 0
                 )
             }
 
         }
 
         setUpEmptyTextViewMessage()
+    }
+
+    protected fun updateTabTitle(listPageIndex: Int, count: Int) {
+        binding.viewPagerComponent.updateTabTitle(listPageIndex + listTabOffset, count)
     }
 
     private fun setCurrentTab(position: Int) {
@@ -115,33 +132,48 @@ abstract class MainReportFragment :
             .registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
+                    currentTabPosition = position
                     setUpEmptyTextViewMessage(position)
+                    applyCachedEmptyVisibility(position)
                 }
             })
+        setUpEmptyTextViewMessage(currentTabPosition)
+    }
+
+
+    protected fun setEmptyStateForTab(position: Int, isEmpty: Boolean) {
+        emptyStateByTab[position] = isEmpty
+        if (position == currentTabPosition) {
+            applyCachedEmptyVisibility(position)
+        }
     }
 
     private fun setUpEmptyTextViewMessage(position: Int) {
-        when (position) {
-            DRAFT_LIST_PAGE_INDEX -> binding.viewPagerComponent.setCenterMessageImg(
-                getString(R.string.Drafts_Reports_Empty_Message), getEmptyMessageIcon()
-            )
-
-            OUTBOX_LIST_PAGE_INDEX -> binding.viewPagerComponent.setCenterMessageImg(
-                getString(R.string.Outbox_Reports_Empty_Message), getEmptyMessageIcon()
-            )
-
-            SUBMITTED_LIST_PAGE_INDEX -> binding.viewPagerComponent.setCenterMessageImg(
-                getString(R.string.Submitted_Reports_Empty_Message), getEmptyMessageIcon()
-            )
-        }
+        val message = getEmptyMessageForTab(position) ?: return
+        binding.viewPagerComponent.setCenterMessageImg(message, getEmptyMessageIcon())
     }
-    
+
+    private fun applyCachedEmptyVisibility(position: Int) {
+        binding.viewPagerComponent.setEmptyTextViewMessageVisibility(
+            emptyStateByTab[position] == true
+        )
+    }
+
+    protected open fun getEmptyMessageForTab(position: Int): String? =
+        when (position - listTabOffset) {
+            DRAFT_LIST_PAGE_INDEX -> getString(R.string.Drafts_Reports_Empty_Message)
+            OUTBOX_LIST_PAGE_INDEX -> getString(R.string.Outbox_Reports_Empty_Message)
+            SUBMITTED_LIST_PAGE_INDEX -> getString(R.string.Submitted_Reports_Empty_Message)
+            else -> null
+        }
+
     override fun onBackPressed(): Boolean {
         back()
         return true
     }
 
     override fun setEmptyTextViewMessageVisibility(isVisible: Boolean) {
+        emptyStateByTab[currentTabPosition] = isVisible
         binding.viewPagerComponent.setEmptyTextViewMessageVisibility(isVisible)
     }
 }

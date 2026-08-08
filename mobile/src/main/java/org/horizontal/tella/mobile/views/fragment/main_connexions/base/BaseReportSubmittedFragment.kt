@@ -67,7 +67,7 @@ abstract class BaseReportSubmittedFragment :
             baseActivity.supportFragmentManager,
             getString(R.string.Delete_Report_Confirmation),
             getString(R.string.action_delete) + " \"" + entityInstance.title + "\"?",
-            getString(R.string.action_yes),
+            getString(R.string.action_delete),
             getString(R.string.action_cancel),
             { viewModel.deleteReport(entityInstance) })
     }

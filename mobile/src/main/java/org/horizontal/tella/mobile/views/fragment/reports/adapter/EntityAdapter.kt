@@ -74,7 +74,7 @@ class EntityAdapter :
             with(binding.submittedItem) {
                 setName(entityRow.title)
                 setDates(entityRow.updated)
-                setOrganization(null)
+                setOrganization(entityRow.description.ifEmpty { null })
                 setIconByStatus(entityRow.status)
                 setOnClickListener { entityRow.onOpenEntityClicked() }
                 popClickListener = { entityRow.onMoreClicked() }

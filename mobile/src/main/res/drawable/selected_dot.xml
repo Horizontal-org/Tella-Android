@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item>
-        <shape
-            android:innerRadius="0dp"
-            android:shape="ring"
-            android:thickness="4dp"
-            android:useLevel="false">
-            <solid android:color="@color/onboardingIndicatorActive"/>
-        </shape>
-    </item>
-</layer-list>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="@color/onboarding_indicator_active" />
+    <size
+        android:width="@dimen/onboarding_indicator_dot_size"
+        android:height="@dimen/onboarding_indicator_dot_size" />
+</shape>

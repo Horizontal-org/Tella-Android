@@ -838,8 +838,9 @@ class AttachmentsFragment :
     private fun onGetFilesSuccess(files: List<VaultFile?>) {
         val recyclerView = binding.attachmentsRecyclerView
         val emptyViewContainer = binding.emptyViewMsgContainer
+        val isEmpty = files.isEmpty()
 
-        if (files.isEmpty()) {
+        if (isEmpty) {
             recyclerView.visibility = View.GONE
             emptyViewContainer.visibility = View.VISIBLE
             updateEmptyStateMessage()
@@ -847,6 +848,7 @@ class AttachmentsFragment :
             recyclerView.visibility = View.VISIBLE
             emptyViewContainer.visibility = View.GONE
         }
+        binding.filesToolbar.visibility = if (isEmpty) View.GONE else View.VISIBLE
 
         attachmentsAdapter.setFiles(files)
         attachmentsAdapter.enableSelectMode(isListCheckOn)

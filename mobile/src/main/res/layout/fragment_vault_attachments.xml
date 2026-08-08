@@ -40,12 +40,14 @@
             />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/filesToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingHorizontal="@dimen/tella_main_vertical"
-            android:paddingBottom="10dp">
+            android:paddingBottom="10dp"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -123,41 +125,32 @@
         android:id="@+id/attachmentsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="100dp"
         android:clipToPadding="false"
+        android:paddingBottom="100dp"
         android:visibility="visible"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:spanCount="3"
         tools:itemCount="9"
-        tools:listitem="@layout/item_vault_attachment_grid"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        tools:listitem="@layout/item_vault_attachment_grid" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <org.horizontal.tella.mobile.views.custom.TellaFloatingActionButton
         android:id="@+id/fab_button"
-        app:backgroundTint="@color/dark_orange"
-        app:fabCustomSize="50dp"
-        app:layout_anchorGravity="center"
-        app:maxImageSize="30dp"
+        style="@style/Main_Floating_Action_Button_Style"
         android:contentDescription="@string/action_add"
-        app:srcCompat="@drawable/ic_plus"
-        app:useCompatPadding="true"
-        tools:ignore="VectorDrawableCompat"
-        style="@style/Main_Floating_Action_Button_Style" />
+        app:fabIcon="@drawable/ic_plus"
+        app:layout_anchorGravity="center" />
 
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <org.horizontal.tella.mobile.views.custom.TellaFloatingActionButton
         android:id="@+id/fab_move_button"
-        app:backgroundTint="@color/dark_orange"
-        app:fabCustomSize="50dp"
-        app:layout_anchorGravity="center"
-        app:maxImageSize="30dp"
-        app:srcCompat="@drawable/ic_folder_plus"
+        style="@style/Move_Floating_Action_Button_Style"
         android:layout_marginBottom="60dp"
         android:layout_marginEnd="28dp"
-        tools:ignore="VectorDrawableCompat"
-        android:visibility="gone"
         android:contentDescription="@string/action_create_new_folder"
-        style="@style/Move_Floating_Action_Button_Style" />
+        android:visibility="gone"
+        app:fabIcon="@drawable/ic_folder_plus"
+        app:layout_anchorGravity="center" />
 
 
     <LinearLayout

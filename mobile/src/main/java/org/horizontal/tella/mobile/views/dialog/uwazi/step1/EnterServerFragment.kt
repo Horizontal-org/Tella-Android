@@ -67,6 +67,8 @@ class EnterServerFragment : BaseFragment() {
     }
 
     override fun initView(view: View) {
+        binding.titleTextView.text = getString(R.string.Server_Url_Screen_Title)
+
         arguments?.getBoolean(IS_UPDATE_SERVER)?.let {
             isUpdate = it
         }
@@ -81,6 +83,7 @@ class EnterServerFragment : BaseFragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.urlLayout.error = null
             }
+
             override fun afterTextChanged(s: Editable?) {}
         })
     }
@@ -118,7 +121,7 @@ class EnterServerFragment : BaseFragment() {
             url = url.trim { it <= ' ' }.trimEnd('/')
             field.setText(url)
             if (!Patterns.WEB_URL.matcher(url).matches()) {
-                layout.error = getString(R.string.settings_docu_error_not_valid_URL)
+                layout.error = getString(R.string.settings_invalid_url)
                 validated = false
             }
             server.url = url
@@ -148,7 +151,7 @@ class EnterServerFragment : BaseFragment() {
                         R.id.container
                     )
                 }
-                KeyboardUtil.hideKeyboard(baseActivity,binding.root)
+                KeyboardUtil.hideKeyboard(baseActivity, binding.root)
             }
 
             progress.observe(viewLifecycleOwner) {

@@ -3,10 +3,12 @@ package org.horizontal.tella.mobile.views.fragment.uwazi.mappers
 import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziTemplate
 import org.horizontal.tella.mobile.domain.entity.uwazi.Language
 import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziEntityInstance
+import org.horizontal.tella.mobile.util.StringUtils
 import org.horizontal.tella.mobile.views.adapters.uwazi.ViewLanguageItem
-import org.horizontal.tella.mobile.views.fragment.uwazi.adapters.ViewEntityInstanceItem
-import org.horizontal.tella.mobile.views.fragment.uwazi.adapters.ViewEntityTemplateItem
+import org.horizontal.tella.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
+import org.horizontal.tella.mobile.views.fragment.uwazi.adapters.ViewUwaziTemplateItem
 import org.horizontal.tella.mobile.views.fragment.uwazi.download.adapter.ViewTemplateItem
+import java.util.Locale
 
 fun UwaziTemplate.toViewTemplateItem(onMoreClicked: () -> Unit, onDownloadClicked: () -> Unit) =
     ViewTemplateItem(
@@ -21,11 +23,11 @@ fun UwaziTemplate.toViewTemplateItem(onMoreClicked: () -> Unit, onDownloadClicke
         onMoreClicked = onMoreClicked
     )
 
-fun UwaziTemplate.toViewEntityTemplateItem(
+fun UwaziTemplate.toViewUwaziTemplateItem(
     onFavoriteClicked: () -> Unit,
     onMoreClicked: () -> Unit,
     onOpenEntityClicked: () -> Unit
-) = ViewEntityTemplateItem(
+) = ViewUwaziTemplateItem(
     id = id,
     serverId = serverId,
     templateName = entityRow.name,
@@ -37,24 +39,44 @@ fun UwaziTemplate.toViewEntityTemplateItem(
     onOpenEntityClicked = onOpenEntityClicked
 )
 
-fun Language.toViewLanguageItem(onLanguageClicked: () -> Unit) = ViewLanguageItem(
-    languageSmallText = label,
-    languageBigText = label,
-    key = key,
-    default = default,
-    onLanguageClicked = onLanguageClicked)
+fun Language.toViewLanguageItem(onLanguageClicked: () -> Unit): ViewLanguageItem {
+    val locale = Locale.forLanguageTag(key.replace('_', '-'))
+    val uiLocale = Locale.getDefault()
 
+    // Native name on top (e.g. Français, عربي), current Tella language name below (e.g. French, Arabic)
+    val nativeName = locale.getDisplayName(locale).ifBlank { label }
+    val translatedName = locale.getDisplayName(uiLocale).ifBlank { label }
+
+    return ViewLanguageItem(
+        languageBigText = capitalizeLanguageName(nativeName, locale),
+        languageSmallText = capitalizeLanguageName(translatedName, uiLocale),
+        key = key,
+        default = default,
+        onLanguageClicked = onLanguageClicked
+    )
+}
+
+private fun capitalizeLanguageName(name: String, locale: Locale): String {
+    if (name.isEmpty()) return name
+    return StringUtils.capitalize(name, locale)
+}
+
+/**
+ * Maps a Uwazi entity onto the row model the shared draft/outbox/submitted list renders. The
+ * entity's template name takes the `description` slot, which the shared adapter shows as the
+ * row's secondary line.
+ */
 fun UwaziEntityInstance.toViewEntityInstanceItem(
     onMoreClicked: () -> Unit,
     onOpenClicked: () -> Unit
-) = ViewEntityInstanceItem(
+) = ViewEntityTemplateItem(
     id = id,
-    instanceName = title,
-    serverId = collectTemplate?.serverId,
+    serverId = serverId,
+    title = title,
+    description = collectTemplate?.entityRow?.translatedName ?: "",
+    serverName = collectTemplate?.serverName ?: "",
     updated = updated,
     status = status,
-    translatedTemplateName = collectTemplate?.entityRow?.translatedName ?: "",
-    serverName = collectTemplate?.serverName ?: "",
     onMoreClicked = onMoreClicked,
-    onOpenClicked = onOpenClicked
+    onOpenEntityClicked = onOpenClicked
 )

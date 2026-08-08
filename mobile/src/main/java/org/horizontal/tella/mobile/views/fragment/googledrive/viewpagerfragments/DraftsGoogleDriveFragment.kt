@@ -1,8 +1,6 @@
 package org.horizontal.tella.mobile.views.fragment.googledrive.viewpagerfragments
 
 import android.annotation.SuppressLint
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.R
@@ -14,18 +12,13 @@ import org.horizontal.tella.mobile.views.fragment.main_connexions.base.ReportsUt
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.SharedLiveData.updateDraftTitle
 
 @AndroidEntryPoint
-class DraftsGoogleDriveFragment : BaseReportsFragment<GoogleDriveViewModel>() {
+class DraftsGoogleDriveFragment : BaseReportsFragment<ReportInstance>() {
 
     // Use the ViewModel provided by Hilt
     private val draftGoogleDriveViewModel: GoogleDriveViewModel by viewModels()
 
     override fun getViewModel(): GoogleDriveViewModel {
         return draftGoogleDriveViewModel
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initData()
     }
 
     override fun getEmptyMessage(): Int {

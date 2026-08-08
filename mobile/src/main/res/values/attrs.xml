@@ -25,4 +25,10 @@
         <attr name="startImg" format="reference" />
         <attr name="state_checked" format="boolean"/>
     </declare-styleable>
+
+    <declare-styleable name="TellaFloatingActionButton">
+        <attr name="fabIcon" format="reference" />
+        <attr name="fabBackgroundTint" format="color" />
+        <attr name="fabIconTint" format="color" />
+    </declare-styleable>
 </resources>

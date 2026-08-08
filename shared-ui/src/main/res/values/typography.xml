@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <!-- region Text appearances -->
+
+    <style name="TextAppearance.Tella" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/open_sans_regular</item>
+    </style>
+
+    <style name="TextAppearance.Tella.Heading1">
+        <item name="android:fontFamily">@font/open_sans_semibold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/wa_white</item>
+    </style>
+
+    <style name="TextAppearance.Tella.Heading2">
+        <item name="android:fontFamily">@font/open_sans_semibold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextAppearance.Tella.Heading3">
+        <item name="android:fontFamily">@font/open_sans_bold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextAppearance.Tella.Subheading1">
+        <item name="android:fontFamily">@font/open_sans_semibold</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextAppearance.Tella.Subheading2">
+        <item name="android:fontFamily">@font/open_sans_bold</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="TextAppearance.Tella.Body1">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextAppearance.Tella.Body2">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextAppearance.Tella.Body2.Italic">
+        <item name="android:fontFamily">@font/open_sans_italic</item>
+    </style>
+
+    <style name="TextAppearance.Tella.Body3">
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="TextAppearance.Tella.ButtonL">
+        <item name="android:fontFamily">@font/open_sans_bold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextAppearance.Tella.ButtonS">
+        <item name="android:fontFamily">@font/open_sans_semibold</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextAppearance.Tella.ButtonDetailRegular">
+        <item name="android:textSize">11sp</item>
+    </style>
+
+    <!-- Regular, not bold: mirrors buttonDetailBoldStyle on iOS, which returns
+         regularFontName. Change both platforms together if that was unintended. -->
+    <style name="TextAppearance.Tella.ButtonDetailBold">
+        <item name="android:textSize">11sp</item>
+    </style>
+
+    <style name="TextAppearance.Tella.Link1">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!-- endregion -->
+
+    <!-- region Widget styles -->
+
+    <style name="Typography" />
+
+    <style name="Typography.Heading1">
+        <item name="android:textAppearance">@style/TextAppearance.Tella.Heading1</item>
+    </style>
+
+    <style name="Typography.Heading2">
+        <item name="android:textAppearance">@style/TextAppearance.Tella.Heading2</item>
+    </style>
+
+    <style name="Typography.Heading3">
+        <item name="android:textAppearance">@style/TextAppearance.Tella.Heading3</item>
+    </style>
+
+    <style name="Typography.Subheading1">
+        <item name="android:textAppearance">@style/TextAppearance.Tella.Subheading1</item>
+    </style>
+
+    <style name="Typography.Subheading2">
+        <item name="android:textAppearance">@style/TextAppearance.Tella.Subheading2</item>
+        <item name="android:letterSpacing">0.05</item>
+        <item name="lineHeight">12.3sp</item>
+    </style>
+
+    <style name="Typography.Body1">
+        <item name="android:textAppearance">@style/TextAppearance.Tella.Body1</item>
+        <item name="android:letterSpacing">0.0357</item>
+        <item name="lineHeight">21sp</item>
+    </style>
+
+    <style name="Typography.Body2">
+        <item name="android:textAppearance">@style/TextAppearance.Tella.Body2</item>
+    </style>
+
+    <style name="Typography.Body2.Italic">
+        <item name="android:textAppearance">@style/TextAppearance.Tella.Body2.Italic</item>
+    </style>
+
+    <style name="Typography.Body3">
+        <item name="android:textAppearance">@style/TextAppearance.Tella.Body3</item>
+    </style>
+
+    <style name="Typography.ButtonL">
+        <item name="android:textAppearance">@style/TextAppearance.Tella.ButtonL</item>
+        <item name="android:letterSpacing">0.03125</item>
+        <item name="lineHeight">16sp</item>
+    </style>
+
+    <style name="Typography.ButtonS">
+        <item name="android:textAppearance">@style/TextAppearance.Tella.ButtonS</item>
+        <item name="android:letterSpacing">0.0214</item>
+    </style>
+
+    <style name="Typography.ButtonDetailRegular">
+        <item name="android:textAppearance">@style/TextAppearance.Tella.ButtonDetailRegular</item>
+    </style>
+
+    <style name="Typography.ButtonDetailBold">
+        <item name="android:textAppearance">@style/TextAppearance.Tella.ButtonDetailBold</item>
+    </style>
+
+    <style name="Typography.Link1">
+        <item name="android:textAppearance">@style/TextAppearance.Tella.Link1</item>
+    </style>
+
+    <!-- endregion -->
+
+</resources>

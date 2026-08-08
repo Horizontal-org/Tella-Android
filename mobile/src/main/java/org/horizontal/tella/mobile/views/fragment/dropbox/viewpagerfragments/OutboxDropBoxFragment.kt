@@ -1,8 +1,6 @@
 package org.horizontal.tella.mobile.views.fragment.dropbox.viewpagerfragments
 
 import android.annotation.SuppressLint
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.R
@@ -15,15 +13,10 @@ import org.horizontal.tella.mobile.views.fragment.main_connexions.base.SharedLiv
 import org.horizontal.tella.mobile.views.fragment.reports.viewpagerfragments.BUNDLE_IS_FROM_OUTBOX
 
 @AndroidEntryPoint
-class OutboxDropBoxFragment : BaseReportsFragment<DropBoxViewModel>() {
+class OutboxDropBoxFragment : BaseReportsFragment<ReportInstance>() {
 
     // Use the ViewModel provided by Hilt
     private val outboxDropBoxViewModel: DropBoxViewModel by viewModels()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initData()
-    }
 
     // Provide the specific ViewModel to the base class
     override fun getViewModel(): DropBoxViewModel {

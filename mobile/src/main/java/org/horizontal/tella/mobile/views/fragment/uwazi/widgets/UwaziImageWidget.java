@@ -4,7 +4,6 @@ import static org.horizontal.tella.mobile.views.fragment.uwazi.attachments.Attac
 import static org.horizontal.tella.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_PICKER_SINGLE;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -77,6 +76,8 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
 
     @Override
     public String setBinaryData(@NonNull Object data) {
+        VaultFile vaultFile = null;
+
         if (data instanceof FormMediaFile) {
             FormMediaFile formMediaFile = (FormMediaFile) data;
             setFilename(formMediaFile.name);
@@ -86,15 +87,24 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
             return getFilename();
         }
 
-        ArrayList<String> files = new Gson().fromJson((String) data, new TypeToken<List<String>>() {
-        }.getType());
-        if (!files.isEmpty() && !files.get(0).isEmpty()) {
-            RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
-            VaultFile vaultFile = rxVault
-                    .get(files.get(0))
-                    .subscribeOn(Schedulers.io())
-                    .blockingGet();
+        if (data instanceof VaultFile) {
+            vaultFile = (VaultFile) data;
+        } else if (data instanceof String) {
+            String payload = (String) data;
+            if (payload.startsWith("[")) {
+                ArrayList<String> files = new Gson().fromJson(payload, new TypeToken<List<String>>() {
+                }.getType());
+                if (files != null && !files.isEmpty() && files.get(0) != null && !files.get(0).isEmpty()) {
+                    RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
+                    vaultFile = rxVault
+                            .get(files.get(0))
+                            .subscribeOn(Schedulers.io())
+                            .blockingGet();
+                }
+            }
+        }
 
+        if (vaultFile != null) {
             FormMediaFile file = FormMediaFile.fromMediaFile(vaultFile);
             setFilename(file.name);
             setFile(file);
@@ -140,7 +150,10 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
 
     private void showAttachmentsFragment() {
         try {
-            Activity activity = (Activity) getContext();
+            BaseActivity activity = getBaseActivity();
+            if (activity == null) {
+                return;
+            }
             waitingForAData = true;
             List<VaultFile> files = new ArrayList<>();
             RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
@@ -151,7 +164,7 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
 
             files.add(vaultFile);
 
-            activity.startActivityForResult(new Intent(getContext(), AttachmentsActivitySelector.class)
+            activity.startActivityForResult(new Intent(activity, AttachmentsActivitySelector.class)
                             .putExtra(VAULT_FILES_FILTER, FilterType.PHOTO)
                             .putExtra(VAULT_PICKER_SINGLE, true),
                     C.MEDIA_FILE_ID);
@@ -163,10 +176,13 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
 
     private void showCameraActivity() {
         try {
-            Activity activity = (Activity) getContext();
+            BaseActivity activity = getBaseActivity();
+            if (activity == null) {
+                return;
+            }
             waitingForAData = true;
 
-            activity.startActivityForResult(new Intent(getContext(), CameraActivity.class)
+            activity.startActivityForResult(new Intent(activity, CameraActivity.class)
                             .putExtra(CameraActivity.INTENT_MODE, CameraActivity.IntentMode.COLLECT .name())
                             .putExtra(CameraActivity.CAMERA_MODE, CameraActivity.CameraMode.PHOTO.name()),
                     C.MEDIA_FILE_ID
@@ -177,7 +193,10 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
     }
 
     public void importPhoto() {
-        BaseActivity activity = (BaseActivity) getContext();
+        BaseActivity activity = getBaseActivity();
+        if (activity == null) {
+            return;
+        }
         activity.maybeChangeTemporaryTimeout(() -> {
             waitingForAData = true;
             MediaFileHandler.startSelectMediaActivity(activity, "image/*", null, C.IMPORT_IMAGE, false);
@@ -186,8 +205,12 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
     }
 
     private void showSelectFilesSheet() {
+        BaseActivity activity = getBaseActivity();
+        if (activity == null) {
+            return;
+        }
         VaultSheetUtils.showVaultSelectFilesSheet(
-                ((BaseActivity) getContext()).getSupportFragmentManager(),
+                activity.getSupportFragmentManager(),
                 getContext().getString(R.string.Uwazi_WidgetMedia_Take_Photo),
                 null,
                 getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Device),

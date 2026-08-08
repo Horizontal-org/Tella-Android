@@ -18,7 +18,7 @@ import org.horizontal.tella.mobile.views.fragment.uwazi.widgets.UwaziFormEndView
 class SubmittedPreviewFragment : BaseBindingFragment<FragmentSumbittedPreviewBinding>(
     FragmentSumbittedPreviewBinding::inflate
 ) {
-    private val viewModel: SharedUwaziViewModel by viewModels()
+    private val viewModel: UwaziViewModel by viewModels()
     private lateinit var endView: UwaziFormEndView
     private var submittedInstance: UwaziEntityInstance? = null
 
@@ -31,7 +31,7 @@ class SubmittedPreviewFragment : BaseBindingFragment<FragmentSumbittedPreviewBin
 
     private fun initObservers() {
         with(viewModel) {
-            instanceDeleteD.observe(viewLifecycleOwner) { deletedTitle ->
+            instanceDeleted.observe(viewLifecycleOwner) { deletedTitle ->
                 deletedTitle?.let { title ->
                     DialogUtils.showBottomMessage(
                         requireActivity(),
@@ -54,7 +54,7 @@ class SubmittedPreviewFragment : BaseBindingFragment<FragmentSumbittedPreviewBin
             object : BottomSheetUtils.ActionConfirmed {
                 override fun accept(isConfirmed: Boolean) {
                     if (isConfirmed) {
-                        viewModel.confirmDelete(entityInstance)
+                        viewModel.deleteReport(entityInstance)
                     }
                 }
             }
