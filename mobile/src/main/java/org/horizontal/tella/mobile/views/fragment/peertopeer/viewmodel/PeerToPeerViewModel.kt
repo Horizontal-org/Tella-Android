@@ -599,7 +599,10 @@ class PeerToPeerViewModel @Inject constructor(
                                 _waitingForOtherSide.postValue(false)
                                 _canTapConfirm.postValue(true)
                             }
-                            bottomMessageError.postValue(context.getString(R.string.peer_to_peer_invalid_pin))
+                            bottomSheetError.postValue(
+                                context.getString(R.string.connection_failed) to
+                                    context.getString(R.string.peer_to_peer_invalid_details_message)
+                            )
                             return@launch
                         }
 

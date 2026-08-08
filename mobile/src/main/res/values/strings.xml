@@ -1133,6 +1133,7 @@ No. The Wi-Fi network does not need to have internet access. As long as the Wi-F
   <string name="nearby_sharing_sender_transfer_content_too_large">Transfer is too large. Remove some files or shrink file sizes and try again.</string>
   <string name="peer_to_peer_error_too_many_requests">Too many requests. Wait a moment and try again.</string>
   <string name="peer_to_peer_invalid_pin">Invalid PIN.</string>
+  <string name="peer_to_peer_invalid_details_message">Please ask the sender to verify their connection details and try again.</string>
   <string name="peer_to_peer_invalid_request_format">Invalid request format.</string>
   <string name="peer_to_peer_active_session_exists">A session is already active on the other device. Try again later.</string>
   <string name="peer_to_peer_server_error_try_later">Server error. Try again later.</string>

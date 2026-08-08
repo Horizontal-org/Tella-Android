@@ -11,6 +11,7 @@
     <style name="TextAppearance.Tella.Heading1">
         <item name="android:fontFamily">@font/open_sans_semibold</item>
         <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/wa_white</item>
     </style>
 
     <style name="TextAppearance.Tella.Heading2">
