@@ -235,7 +235,7 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
                     null,
                     getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Device),
                     getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Tella),
-                    getContext().getString(R.string.Uwazi_MiltiFileWidget_ChooseHowToAddPdfFiles),
+                    null,
                     getContext().getString(R.string.Uwazi_MiltiFileWidget_SelectPdfFiles),
                     new VaultSheetUtils.IVaultFilesSelector() {
 
@@ -267,7 +267,7 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
                     null, //getContext().getString(R.string.Vault_RecordAudio_SheetAction),
                     getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Device),
                     getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Tella),
-                    getContext().getString(R.string.Uwazi_MiltiFileWidget_ChooseHowToAddFiles),
+                    null,
                     getContext().getString(R.string.Uwazi_MiltiFileWidget_SelectFiles),
                     new VaultSheetUtils.IVaultFilesSelector() {
 

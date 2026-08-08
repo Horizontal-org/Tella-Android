@@ -473,8 +473,9 @@ object VaultSheetUtils {
                 override fun onBind(holder: VaultSelectFilesSheetHolder) {
                     with(holder) {
                         title.text = titleText
-                        if (descriptionText != null) {
+                        if (!descriptionText.isNullOrEmpty()) {
                             descriptionTV.text = descriptionText
+                            descriptionTV.isVisible = true
                         } else {
                             descriptionTV.isVisible = false
                         }
