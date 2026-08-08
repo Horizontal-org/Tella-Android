@@ -70,7 +70,10 @@ class GoogleDriveRepository @Inject constructor(
             try {
                 val folder =
                     driveServiceProvider.getDriveService(googleDriveServer.username).files()
-                        .create(folderMetadata).setFields("id").execute()
+                        .create(folderMetadata)
+                        .setFields("id")
+                        .setSupportsTeamDrives(true)
+                        .execute()
                 folder.id
             } catch (e: Exception) {
                 throw e
@@ -95,7 +98,10 @@ class GoogleDriveRepository @Inject constructor(
 
                 val folder =
                     driveServiceProvider.getDriveService(googleDriveServer.username).files()
-                        .create(folderMetadata).setFields("id").execute()
+                        .create(folderMetadata)
+                        .setFields("id")
+                        .setSupportsTeamDrives(true)
+                        .execute()
 
                 // Emit the folder ID on success
                 emitter.onSuccess(folder.id)
@@ -137,7 +143,7 @@ class GoogleDriveRepository @Inject constructor(
                 val fileContent =
                     InputStreamContent(mediaFile.mimeType, requestBody.publicInputStream)
 
-                // Upload the file to Google Drive (setSupportsTeamDrives for Team/Shared Drives)
+                // Upload the file to Google Drive (shared drives / legacy team drives)
                 val uploadedFile = driveServiceProvider.getDriveService(email).files()
                     .create(fileMetadata, fileContent)
                     .setSupportsTeamDrives(true)

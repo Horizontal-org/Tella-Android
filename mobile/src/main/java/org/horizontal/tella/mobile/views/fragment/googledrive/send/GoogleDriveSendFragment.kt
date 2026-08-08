@@ -62,6 +62,7 @@ class GoogleDriveSendFragment : BaseReportsSendFragment() {
         }
 
         viewModel.instanceProgress.observe(viewLifecycleOwner) { entity ->
+            if (entity == null) return@observe
             if (entity.id == this@GoogleDriveSendFragment.reportInstance?.id) {
                 when (entity.status) {
                     EntityStatus.SUBMITTED -> {
@@ -79,7 +80,6 @@ class GoogleDriveSendFragment : BaseReportsSendFragment() {
                     }
 
                     EntityStatus.DELETED -> {
-                        viewModel.instanceProgress.postValue(null)
                         handleBackButton()
                     }
 

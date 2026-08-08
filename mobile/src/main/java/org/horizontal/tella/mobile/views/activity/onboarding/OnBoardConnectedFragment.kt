@@ -19,6 +19,10 @@ class OnBoardConnectedFragment : BaseFragment() {
         return inflater.inflate(R.layout.onboard_connected_server, container, false)
     }
 
+    override fun applyEdgeToEdgeIfNeeded(view: View) {
+        OnboardingInsets.applyFullscreenOverlay(view, baseActivity)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView(view)

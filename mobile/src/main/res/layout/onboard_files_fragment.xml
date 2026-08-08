@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/wa_purple"
-   >
+    android:background="@color/wa_purple">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineCenter"
@@ -14,19 +13,13 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.5" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineBottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.95" />
-
     <ImageView
-        android:layout_width="101dp"
-        android:layout_height="81dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_marginBottom="@dimen/hide_tella_big_margin"
-        android:src="@drawable/ic_files_illustration"
-        android:textColor="@color/wa_white"
+        android:importantForAccessibility="no"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_onboard_store_files"
         app:layout_constraintBottom_toTopOf="@+id/sheet_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,56 +27,42 @@
 
     <TextView
         android:id="@+id/sheet_title"
+        style="@style/Typography.Heading1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/hide_tella_big_margin"
         android:layout_marginBottom="@dimen/hide_tella_big_margin"
-        android:fontFamily="@font/open_sans"
+        android:accessibilityHeading="true"
         android:gravity="center"
-        android:textStyle="bold"
         android:padding="6dp"
         android:text="@string/onboard.title_files"
         android:textColor="@color/wa_white"
-        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/sheet_subtitle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="RtlSymmetry" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/sheet_subtitle"
-        android:layout_width="wrap_content"
+        style="@style/Typography.Body1"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/open_sans"
         android:gravity="center"
-        android:padding="@dimen/hide_tella_small_margin"
+        android:paddingHorizontal="21dp"
+        android:paddingVertical="@dimen/hide_tella_small_margin"
         android:text="@string/onboard.expl_files"
         android:textColor="@color/wa_white"
-        android:textSize="14sp"
-        android:paddingHorizontal="21dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guidelineCenter"
-        tools:ignore="RtlSymmetry" />
+        app:layout_constraintTop_toTopOf="@+id/guidelineCenter" />
 
-    <TextView
-        style="@style/Unlock_White_Text_Back"
-        android:id="@+id/back_btn"
-        android:text="@string/LockSelect_Action_Back"
-        android:visibility="gone"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
-    <TextView
-        style="@style/Unlock_White_Text_Back"
-        android:id="@+id/next_btn"
-        android:text="@string/action_next"
-        android:visibility="gone"
-        android:layout_marginEnd="34dp"
+    <org.hzontal.shared_ui.views.OnboardingInfoCard
+        android:id="@+id/files_info_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="21dp"
+        android:layout_marginTop="24dp"
+        app:infoMessage="@string/onboard.expl_files_info"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sheet_subtitle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -46,6 +46,17 @@
     <!-- elevation for Plant Detail toolbar - used to convert to pixels when hiding/showing -->
     <dimen name="tella_main_vertical">17dp</dimen>
     <dimen name="onboardingIndicator">8dp</dimen>
+    <dimen name="onboarding_indicator_dot_size">10dp</dimen>
+    <dimen name="onboarding_indicator_spacing">8dp</dimen>
+    <dimen name="onboarding_indicator_bottom_margin">16dp</dimen>
+    <dimen name="onboarding_nav_horizontal_margin">16dp</dimen>
+    <dimen name="onboarding_nav_bottom_margin">8dp</dimen>
+    <dimen name="onboarding_bottom_bar_min_height">96dp</dimen>
+    <dimen name="onboarding_get_started_width">307dp</dimen>
+    <dimen name="onboarding_get_started_height">50dp</dimen>
+    <dimen name="onboarding_get_started_horizontal_margin">27dp</dimen>
+    <dimen name="onboarding_share_data_pager_gap">100dp</dimen>
+    <dimen name="onboarding_slide_section_spacing">24dp</dimen>
     <dimen name="margin_start">14.5dp</dimen>
     <dimen name="default_edittext_layout_height">120dp</dimen>
     <dimen name="pdf_top_margin">60dp</dimen>

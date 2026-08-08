@@ -62,6 +62,9 @@ class UwaziViewModel @Inject constructor() : BaseEntityListViewModel<UwaziEntity
     private val _openEntity = SingleLiveEvent<UwaziTemplate>()
     val openEntity: LiveData<UwaziTemplate> get() = _openEntity
 
+    private val _templateRemoved = SingleLiveEvent<String>()
+    val templateRemoved: LiveData<String> get() = _templateRemoved
+
     /** Status of the last save from the entry screen, used to pick the tab to return to. */
     val saveStatus = MutableLiveData<EntityStatus>()
 
@@ -130,7 +133,10 @@ class UwaziViewModel @Inject constructor() : BaseEntityListViewModel<UwaziEntity
                 dataSource.deleteTemplate(template.id)
             }
             .doFinally { _progress.postValue(false) }
-            .subscribe({ listTemplates() }) { throwable ->
+            .subscribe({
+                _templateRemoved.postValue(template.entityRow.name)
+                listTemplates()
+            }) { throwable ->
                 CrashReporterProvider.get().recordException(throwable)
                 handleError(throwable)
             }

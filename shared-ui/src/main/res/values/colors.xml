@@ -8,6 +8,7 @@
     <color name="space_cadet">#2C275A</color>
     <color name="wa_white">#FFFF</color>
     <color name="tigers_eye">#D6933B</color>
+    <color name="tigers_eye_pressed">#66D6933B</color>
     <color name="tigers_eye_dark">#8B4F00</color>
     <color name="wa_white_32">#52FFFFFF</color>
     <color name="wa_orange">#D6933B</color>
@@ -27,6 +28,7 @@
     <color name="wa_white_38">#61FFFFFF</color>
     <color name="wa_white_92">#EBFFFFFF</color>
     <color name="wa_grey">#E8E8EC</color>
+    <color name="onboarding_info_card_background">#28264A</color>
     <color name="green">#59AE3C</color>
     <color name="light_green">#B2CFA8</color>
     <color name="light_purple">#3D3867</color>
