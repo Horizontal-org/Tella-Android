@@ -14,9 +14,4 @@
     <string name="action_hide_pin">ocultar pin</string>
     <string name="action_delete">Borrar</string>
     <string name="action_go_back">volver</string>
-    <string name="Migration_Failed_Description" translatable="false"></string>
-    <string name="Migration_Failed_Title" translatable="false"></string>
-    <string name="onboarding_info_icon_content_description"></string>
-    <string name="Home_BottomNav_Settings" translatable="false"></string>
-    <string name="Home_BottomNav_Uwazi"></string>
 </resources>
