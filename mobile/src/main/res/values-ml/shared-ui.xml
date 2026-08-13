@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="action_cancel">റദ്ദാക്കുക </string>
+    <string name="action_cancel">റദ്ദാക്കുക</string>
     <string name="action_delete">നീക്കം ചെയ്യുക</string>
+    <string name="action_hide_password"></string>
+    <string name="Migration_Failed_Description" translatable="false"></string>
+    <string name="action_go_to_homescreen"></string>
+    <string name="action_show_password"></string>
+    <string name="Home_BottomNav_Rec"></string>
+    <string name="action_hide_pin"></string>
+    <string name="Home_BottomNav_Home"></string>
+    <string name="Rename_name_Hint"></string>
+    <string name="Home_BottomNav_Camera"></string>
+    <string name="action_show_pin"></string>
+    <string name="Home_BottomNav_Forms"></string>
+    <string name="Migration_Failed_Title" translatable="false"></string>
+    <string name="action_go_back"></string>
+    <string name="onboarding_info_icon_content_description"></string>
+    <string name="Home_BottomNav_Settings" translatable="false"></string>
+    <string name="Home_BottomNav_Uwazi"></string>
+    <string name="Home_BottomNav_Reports"></string>
 </resources>
