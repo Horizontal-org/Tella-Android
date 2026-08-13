@@ -46,11 +46,4 @@
     <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">আপনার ছদ্মবেশ পরিবর্তন করতে আপনার বর্তমান পিন লিখুন৷</string>
     <string name="Settings_Action_SetLock">তালা</string>
     <string name="Settings_Message_LockChanged">আপনার লক পরিবর্তন করা হয়েছে!</string>
-    <string name="attempts_remaining_plural"></string>
-    <string name="unlock"></string>
-    <string name="exceeded_max_attempts"></string>
-    <string name="attempts_remaining_singular"></string>
-    <string name="incorrect_pin"></string>
-    <string name="incorrect_password"></string>
-    <string name="incorrect_pattern"></string>
 </resources>
