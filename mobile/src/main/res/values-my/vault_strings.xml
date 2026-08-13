@@ -27,10 +27,6 @@
     <string name="Vault_FileLength">ကြာချိန်</string>
     <string name="Vault_FilePath">ဖိုင်လမ်းကြောင်း</string>
     <string name="Vault_RenameFile_SheetTitle">ဖိုင်အမည်ပြောင်းမည်</string>
-    <plurals name="Vault_DeleteFile_SheetTitle">
-    </plurals>
-    <plurals name="Vault_deleteFile_SheetDesc">
-    </plurals>
     <string name="Vault_SortNameAsc_SheetAction">အမည် A &gt; Z</string>
     <string name="Vault_SortNameDesc_SheetAction">အမည် Z &gt; A</string>
     <string name="Vault_SortDateAsc_SheetAction">အသစ်ဆုံးမှ အဟောင်းဆုံးသို့</string>

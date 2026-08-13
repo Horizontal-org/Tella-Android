@@ -27,10 +27,6 @@
     <string name="Vault_FileLength">Độ dài</string>
     <string name="Vault_FilePath">Đường dẫn tệp</string>
     <string name="Vault_RenameFile_SheetTitle">Đổi tên tệp tin</string>
-    <plurals name="Vault_DeleteFile_SheetTitle">
-    </plurals>
-    <plurals name="Vault_deleteFile_SheetDesc">
-    </plurals>
     <string name="Vault_SortNameAsc_SheetAction">Tên A &gt; Z</string>
     <string name="Vault_SortNameDesc_SheetAction">Tên Z &gt; A</string>
     <string name="Vault_SortDateAsc_SheetAction">Mới nhất đến cũ nhất</string>
