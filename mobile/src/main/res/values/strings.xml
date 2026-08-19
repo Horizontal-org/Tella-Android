@@ -1008,7 +1008,7 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="onboard_lock_success_message">Your lock is set up! You can change it anytime in the Tella Settings.</string>
   <string name="onboard_lock_success_learn_more">Learn more about Tella\'s lock</string>
   <string name="Uwazi_DeleteEntity_SheetTitle">Delete entity?</string>
-  <string name="Uwazi_Subtitle_RemoveSubmittedEntity">Are you sure you want to delete this form from your device? Note that because it was already submitted, the data will remain on your organization\'s server.</string>
+  <string name="Uwazi_Subtitle_RemoveSubmittedEntity">Are you sure you want to delete this from your device? Note that because it was already submitted, the data will remain on your organization\'s server.</string>
   <string name="Uwazi_Entity_Deleted_Toast">\"%1$s\" has been deleted.</string>
   <string name="Uwazi_Template_Removed_Toast">\"%1$s\" has been removed from your device.</string>
   <string name="google_drive_shared_drive_migration_sheet_title">Create a new Google Drive folder</string>
