@@ -527,9 +527,8 @@ public class VaultDataSource implements IVaultDatabase {
                 + " OR (" + getDocumentsMimeTypeQuery() + ")"
                 + " OR (" + getOthersMimeTypeQuery() + ")"
                 + ")";
-        String missingParent = cn(D.C_PARENT_ID) + " IS NULL OR " + cn(D.C_PARENT_ID) + " = ''";
 
-        return "(" + directoriesHere + ") OR (" + everyType + ") OR (" + missingParent + ")";
+        return "(" + directoriesHere + ") OR (" + everyType + ")";
     }
 
     private String getDocumentsMimeTypeQuery() {
