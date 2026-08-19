@@ -19,21 +19,10 @@
         />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/sheetTitleDescTv"
-        style="@style/Tella_Main_White_Text.Meduim"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sheetTitleTv"
-        tools:text="Choose how you want to add files"
-        android:layout_marginTop="10dp"
-        />
-
-    <TextView
         android:id="@+id/cameraActionTV"
         style="@style/Tella2_BottomSheet_Text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sheetTitleDescTv"
+        app:layout_constraintTop_toBottomOf="@id/sheetTitleTv"
         android:drawableStart="@drawable/ic_camera_alt_24px"
         tools:text="Take video"
         android:gravity="center|start"
