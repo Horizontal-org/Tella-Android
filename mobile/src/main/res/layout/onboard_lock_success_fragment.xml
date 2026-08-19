@@ -8,7 +8,6 @@
     android:background="@color/wa_purple"
     android:paddingStart="24dp"
     android:paddingEnd="24dp"
-    android:visibility="gone"
     tools:visibility="visible">
 
     <ImageView

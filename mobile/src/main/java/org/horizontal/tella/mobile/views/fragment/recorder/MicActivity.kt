@@ -101,7 +101,6 @@ class MicActivity : MetadataActivity(),
         recordingName = findViewById(R.id.rec_name)
         toolBar = findViewById(R.id.toolbar)
 
-        // Treat vault ROOT as "root context" (some parts of the app pass ROOT_UID instead of null/empty).
         val isRootContext = currentRootParent.isNullOrEmpty() || currentRootParent == VaultDataSource.ROOT_UID
 
         if (isCollect || isReport || isPrepareUpload || !isRootContext) {

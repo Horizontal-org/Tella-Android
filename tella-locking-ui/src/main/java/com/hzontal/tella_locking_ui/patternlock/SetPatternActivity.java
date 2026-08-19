@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.hzontal.tella_locking_ui.ConstantsKt.FINISH_ACTIVITY_REQUEST_CODE;
-import static com.hzontal.tella_locking_ui.ConstantsKt.IS_FROM_SETTINGS;
 
 import org.hzontal.shared_ui.utils.DialogUtils;
 
@@ -193,9 +192,8 @@ public class SetPatternActivity extends BasePatternActivity
             }
             Intent intent = new Intent(this, PatternSetConfirmActivity.class);
             intent.putExtra(PATTERN_CELL_BYTES, PatternUtils.patternToSha1String(mPattern, mPattern.size()));
-            intent.putExtra(IS_FROM_SETTINGS, isFromSettings());
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivityForResult(intent, FINISH_ACTIVITY_REQUEST_CODE);
+            launchConfirmActivity(intent);
 
         } else if (mStage.rightButtonState == RightButtonState.Confirm) {
             if (mStage != Stage.ConfirmCorrect) {

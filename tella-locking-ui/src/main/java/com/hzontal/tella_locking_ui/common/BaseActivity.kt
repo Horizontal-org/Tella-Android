@@ -10,9 +10,11 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.hzontal.tella_locking_ui.FINISH_ACTIVITY_REQUEST_CODE
 import com.hzontal.tella_locking_ui.IS_CAMOUFLAGE
 import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
 import com.hzontal.tella_locking_ui.IS_ONBOARD_LOCK_SET
+import com.hzontal.tella_locking_ui.ONBOARDING_LOCK_PROTECT_SHEET_TAG
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.RETURN_ACTIVITY
 import com.hzontal.tella_locking_ui.ReturnActivity
@@ -28,6 +30,9 @@ open class BaseActivity : AppCompatActivity() {
     protected val isFromSettings by lazy { intent.getBooleanExtra(IS_FROM_SETTINGS, false) }
     protected val returnActivity by lazy { intent.getIntExtra(RETURN_ACTIVITY, 0) }
     private var isConfirmSettingsUpdate: Boolean = false
+    private val onboardingProtectSheetLock = Any()
+    private var isOnboardingProtectSheetShowing: Boolean = false
+    private var onboardingSheetDismissCallback: FragmentManager.FragmentLifecycleCallbacks? = null
     protected val config: UnlockConfig by lazy {
         TellaKeysUI.getUnlockRegistry().getActiveConfig(this)
     }
@@ -92,7 +97,23 @@ open class BaseActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         Timber.d("** %s: %s **", javaClass, "onDestroy()")
+        onboardingSheetDismissCallback?.let {
+            supportFragmentManager.unregisterFragmentLifecycleCallbacks(it)
+            onboardingSheetDismissCallback = null
+        }
+        isOnboardingProtectSheetShowing = false
         super.onDestroy()
+    }
+
+    protected fun launchConfirmActivity(intent: Intent) {
+        intent.putExtra(IS_FROM_SETTINGS, isFromSettings)
+        if (isFromSettings) {
+            startActivityForResult(intent, FINISH_ACTIVITY_REQUEST_CODE)
+        } else {
+            startActivity(intent)
+            finish()
+        }
+        overridePendingTransition(R.anim.`in`, R.anim.out)
     }
 
     protected fun onSuccessfulUnlock() {
@@ -116,17 +137,58 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     protected fun onSuccessConfirmUnlock() {
-        if (isConfirmSettingsUpdate) {
+        if (isConfirmSettingsUpdate && isFromSettings) {
             TellaKeysUI.getCredentialsCallback().onUpdateUnlocking()
             TellaKeysUI.getCredentialsCallback().onLockUpdateSuccess(this)
             setResult(RESULT_OK)
             finish()
         } else {
-            val intent = Intent(this, Class.forName(ReturnActivity.SETTINGS.activityName))
-            intent.putExtra(IS_ONBOARD_LOCK_SET, true)
-            startActivity(intent)
-            finishAffinity()
+            synchronized(onboardingProtectSheetLock) {
+                if (isOnboardingProtectSheetShowing) return
+                isOnboardingProtectSheetShowing = true
+            }
+            registerOnboardingProtectSheetDismissListener()
+            runOnUiThread {
+                if (isFinishing || isDestroyed) {
+                    synchronized(onboardingProtectSheetLock) {
+                        isOnboardingProtectSheetShowing = false
+                    }
+                    return@runOnUiThread
+                }
+                TellaKeysUI.getCredentialsCallback().onOnboardingLockSetupComplete(this) {
+                    synchronized(onboardingProtectSheetLock) {
+                        isOnboardingProtectSheetShowing = false
+                    }
+                    val intent = Intent(this, Class.forName(ReturnActivity.SETTINGS.activityName))
+                    intent.putExtra(IS_ONBOARD_LOCK_SET, true)
+                    startActivity(intent)
+                    finishAffinity()
+                }
+            }
         }
+    }
+
+    protected open fun onOnboardingProtectSheetClosed() {}
+
+    private fun registerOnboardingProtectSheetDismissListener() {
+        onboardingSheetDismissCallback?.let {
+            supportFragmentManager.unregisterFragmentLifecycleCallbacks(it)
+        }
+        onboardingSheetDismissCallback = object : FragmentManager.FragmentLifecycleCallbacks() {
+            override fun onFragmentDestroyed(fm: FragmentManager, f: Fragment) {
+                if (f.tag != ONBOARDING_LOCK_PROTECT_SHEET_TAG) return
+                synchronized(onboardingProtectSheetLock) {
+                    isOnboardingProtectSheetShowing = false
+                }
+                onOnboardingProtectSheetClosed()
+                fm.unregisterFragmentLifecycleCallbacks(this)
+                onboardingSheetDismissCallback = null
+            }
+        }
+        supportFragmentManager.registerFragmentLifecycleCallbacks(
+            onboardingSheetDismissCallback!!,
+            false
+        )
     }
 
     /**
