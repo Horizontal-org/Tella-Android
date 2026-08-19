@@ -266,10 +266,13 @@ class UwaziViewModel @Inject constructor() : BaseEntityListViewModel<UwaziEntity
                         .firstOrError()
                         .flatMap { rxVault ->
                             rxVault.get(bundle.fileIds).map { vaultFiles ->
+                                val existing = vaultFiles.filterNotNull().associateBy { it.id }
                                 bundle.instance.apply {
-                                    widgetMediaFiles = vaultFiles.map { file ->
-                                        FormMediaFile.fromMediaFile(file).apply {
-                                            status = FormMediaFileStatus.NOT_SUBMITTED
+                                    widgetMediaFiles = bundle.fileIds.mapNotNull { fileId ->
+                                        existing[fileId]?.let { file ->
+                                            FormMediaFile.fromMediaFile(file).apply {
+                                                status = FormMediaFileStatus.NOT_SUBMITTED
+                                            }
                                         }
                                     }
                                 }
@@ -279,11 +282,11 @@ class UwaziViewModel @Inject constructor() : BaseEntityListViewModel<UwaziEntity
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ loaded -> _reportInstance.postValue(loaded) }) { throwable ->
-                    CrashReporterProvider.get().run {
-                        recordException(throwable)
-                        log("Failed to get Uwazi entity instance ${instance.id}")
-                    }
-                    handleError(throwable)
+                    openInstanceAfterUnexpectedFailure(
+                        instance,
+                        throwable,
+                        "Failed to get Uwazi entity instance ${instance.id}"
+                    )
                 }
         )
     }

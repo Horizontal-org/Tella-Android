@@ -1,7 +1,5 @@
 package org.horizontal.tella.mobile.views.fragment.reports
 
-import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
-import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -20,11 +18,11 @@ import org.horizontal.tella.mobile.domain.usecases.reports.GetReportBundleUseCas
 import org.horizontal.tella.mobile.domain.usecases.reports.GetReportsServersUseCase
 import org.horizontal.tella.mobile.domain.usecases.reports.GetReportsUseCase
 import org.horizontal.tella.mobile.domain.usecases.reports.SaveReportFormInstanceUseCase
+import com.hzontal.tella_vault.VaultFile
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.ReportCounts
 import org.horizontal.tella.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
 import org.horizontal.tella.mobile.views.fragment.reports.mappers.toViewEntityInstanceItem
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -215,17 +213,20 @@ class ReportsViewModel @Inject constructor(
                             instance.widgetMediaFiles = processFiles(files, vaultFiles)
                             _reportInstance.postValue(instance)
                         }, { throwable ->
-                            Timber.e(throwable, "Error getting report bundle")
-                            CrashReporterProvider.get().run {
-                                recordException(throwable)
-                                log("Failed to get report bundle for instance ${instance.id}")
-                            }
-                            _error.postValue(throwable)
+                            openInstanceAfterUnexpectedFailure(
+                                instance,
+                                throwable,
+                                "Failed to get report bundle for instance ${instance.id}"
+                            )
                         })
                 )
             },
             onError = { error ->
-                _error.postValue(error)
+                openInstanceAfterUnexpectedFailure(
+                    instance,
+                    error,
+                    "Failed to get report bundle for instance ${instance.id}"
+                )
             },
             onFinished = {
                 _progress.postValue(false)
@@ -240,17 +241,10 @@ class ReportsViewModel @Inject constructor(
     )
 
     private fun processFiles(
-        formFiles: List<FormMediaFile>,
-        vaultFiles: List<VaultFile>
+        formFiles: List<FormMediaFile>?,
+        vaultFiles: List<VaultFile>?
     ): List<FormMediaFile> {
-        return formFiles.mapNotNull { formFile ->
-            vaultFiles.firstOrNull { it.id == formFile.id }?.let { vaultFile ->
-                FormMediaFile.fromMediaFile(vaultFile).apply {
-                    status = formFile.status
-                    uploadedSize = formFile.uploadedSize
-                }
-            }
-        }
+        return mergeReportAttachments(formFiles, vaultFiles)
     }
 
     override fun getFormInstance(

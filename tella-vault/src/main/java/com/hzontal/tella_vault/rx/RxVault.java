@@ -17,6 +17,7 @@ import com.hzontal.tella_vault.filter.Sort;
 import org.hzontal.tella.keys.key.LifecycleMainKey;
 
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Completable;
@@ -127,7 +128,8 @@ public class RxVault extends BaseVault {
     public Single<List<VaultFile>> get(String[] ids) {
         return Single.defer(() -> {
             try {
-                return Single.just(baseGet(ids));
+                List<VaultFile> files = baseGet(ids);
+                return Single.just(files != null ? files : Collections.emptyList());
             } catch (Exception e) {
                 return Single.error(e);
             }

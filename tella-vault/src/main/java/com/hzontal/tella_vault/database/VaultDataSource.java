@@ -377,16 +377,20 @@ public class VaultDataSource implements IVaultDatabase {
     @Override
     public List<VaultFile> get(String[] ids) {
         List<VaultFile> files = new ArrayList<>();
-
+        if (ids == null) {
+            return files;
+        }
         try {
             for (String id : ids) {
-                files.add(get(id));
+                VaultFile file = get(id);
+                if (file != null) {
+                    files.add(file);
+                }
             }
-            return files;
         } catch (Exception e) {
             Timber.d(e, getClass().getName());
         }
-        return null;
+        return files;
     }
 
     /**
