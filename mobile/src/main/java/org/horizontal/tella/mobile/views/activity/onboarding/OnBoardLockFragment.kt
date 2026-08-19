@@ -92,7 +92,7 @@ class OnBoardLockFragment : BaseFragment() {
      */
     private fun proceedWithSelection(lockType: OnBoardLockWarningFragment.LockType) {
         if (!isFromSettings) (baseActivity as OnBoardingActivity).hideViewpager()
-        baseActivity.addFragment(
+        baseActivity.addFragmentWithoutPopAnimation(
             this,
             OnBoardLockWarningFragment.newInstance(lockType, isFromSettings),
             R.id.rootOnboard

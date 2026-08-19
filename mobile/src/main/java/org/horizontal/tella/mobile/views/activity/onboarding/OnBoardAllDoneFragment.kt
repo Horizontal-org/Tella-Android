@@ -16,6 +16,8 @@ import org.horizontal.tella.mobile.views.base_ui.BaseFragment
 class OnBoardAllDoneFragment : BaseFragment() {
 
     private lateinit var startBtn: TextView
+    private lateinit var advancedBtn: TextView
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -30,20 +32,30 @@ class OnBoardAllDoneFragment : BaseFragment() {
     }
 
     override fun initView(view: View) {
-        (baseActivity as OnBoardActivityInterface).setCurrentIndicator(4)
+        (baseActivity as OnBoardActivityInterface).showOverlayProgress(
+            activeIndex = OnboardingProgress.ALL_DONE_INDEX,
+            showNextButton = false
+        )
 
         startBtn = view.findViewById(R.id.startBtn)
+        advancedBtn = view.findViewById(R.id.sheet_two_btn)
 
         startBtn.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
-                // Do heavy unlock off main thread
                 TellaKeysUI.getCredentialsCallback().onLockConfirmed(requireContext())
 
-                // Go back to main thread to finish activity
                 withContext(Dispatchers.Main) {
                     baseActivity.finish()
                 }
             }
+        }
+
+        advancedBtn.setOnClickListener {
+            baseActivity.addFragment(
+                this,
+                OnBoardShareDataFragment(),
+                R.id.rootOnboard
+            )
         }
     }
 }

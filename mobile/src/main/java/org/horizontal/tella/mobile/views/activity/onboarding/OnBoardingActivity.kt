@@ -4,13 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.core.view.size
 import androidx.fragment.app.Fragment
@@ -43,7 +39,6 @@ private const val ONBOARDING_FILES_VIEW_INDEX = 2
 private const val ONBOARDING_COLLECT_DATA_VIEW = 3
 private const val ONBOARDING_NEARBY_SHARING_VIEW_INDEX = 4
 private const val ONBOARDING_LOCK_VIEW_INDEX = 5
-private const val ONBOARDING_PROGRESS_DOT_COUNT = 5
 
 
 @AndroidEntryPoint
@@ -51,6 +46,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     IOnBoardPresenterContract.IView, TellaUploadServerDialogHandler {
 
     private var viewpagerItemsCount = 0
+    private var overlayNextClickListener: (() -> Unit)? = null
     private val isFromSettings by lazy { intent.getBooleanExtra(IS_FROM_SETTINGS, false) }
     private val isOnboardLockSet by lazy { intent.getBooleanExtra(IS_ONBOARD_LOCK_SET, false) }
     private val presenter by lazy { OnBoardPresenter(this) }
@@ -136,24 +132,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     }
 
     private fun setupIndicators(indicatorCount: Int) {
-        binding.indicatorsContainer.removeAllViews()
-        val dotSize = resources.getDimensionPixelSize(R.dimen.onboarding_indicator_dot_size)
-        val spacing = resources.getDimensionPixelSize(R.dimen.onboarding_indicator_spacing)
-        for (i in 0 until indicatorCount) {
-            val indicator = ImageView(this).apply {
-                layoutParams = LinearLayout.LayoutParams(dotSize, dotSize).apply {
-                    marginStart = if (i == 0) 0 else spacing
-                    marginEnd = 0
-                }
-                scaleType = ImageView.ScaleType.FIT_CENTER
-                adjustViewBounds = true
-                setImageDrawable(
-                    ContextCompat.getDrawable(this@OnBoardingActivity, R.drawable.default_dot)
-                )
-                importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
-            }
-            binding.indicatorsContainer.addView(indicator)
-        }
+        OnboardingProgress.setup(binding.indicatorsContainer, this)
     }
 
     private fun initUwaziEvents() {
@@ -200,23 +179,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     }
 
     override fun setCurrentIndicator(index: Int) {
-        val childCount = binding.indicatorsContainer.childCount
-        for (i in 0 until childCount) {
-            val imageView = binding.indicatorsContainer[i] as ImageView
-            if (i == index) {
-                imageView.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        applicationContext, R.drawable.selected_dot
-                    )
-                )
-            } else {
-                imageView.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        applicationContext, R.drawable.default_dot
-                    )
-                )
-            }
-        }
+        OnboardingProgress.setActive(binding.indicatorsContainer, this, index)
     }
 
     override fun showChooseServerTypeDialog() {
@@ -283,7 +246,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
         binding.viewPager.adapter = pagerAdapter
         binding.viewPager.offscreenPageLimit = 1
 
-        initProgress(ONBOARDING_PROGRESS_DOT_COUNT)
+        initProgress(OnboardingProgress.DOT_COUNT)
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 if (position in ONBOARDING_RECORD_VIEW_INDEX until ONBOARDING_LOCK_VIEW_INDEX) {
@@ -410,7 +373,28 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
         binding.onboardBottomBar.visibility = View.GONE
     }
 
+    override fun showOverlayProgress(
+        activeIndex: Int,
+        showNextButton: Boolean,
+        onNextClick: (() -> Unit)?
+    ) {
+        binding.viewPager.visibility = View.GONE
+        binding.onboardBottomBar.visibility = View.VISIBLE
+        if (binding.indicatorsContainer.childCount != OnboardingProgress.DOT_COUNT) {
+            initProgress(OnboardingProgress.DOT_COUNT)
+        }
+        setCurrentIndicator(activeIndex)
+        showProgress()
+        showButtons(isNextButtonVisible = showNextButton, isBackButtonVisible = false)
+        overlayNextClickListener = onNextClick
+        binding.nextBtn.setOnClickListener {
+            overlayNextClickListener?.invoke() ?: onNextPressed()
+        }
+    }
+
     override fun showViewpager() {
+        overlayNextClickListener = null
+        binding.nextBtn.setOnClickListener { onNextPressed() }
         binding.viewPager.visibility = View.VISIBLE
         binding.onboardBottomBar.visibility = View.VISIBLE
         updateProgressForPage(binding.viewPager.currentItem)

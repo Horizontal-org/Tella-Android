@@ -35,16 +35,18 @@ class OnBoardLockSuccessFragment : BaseFragment() {
     }
 
     override fun initView(view: View) {
-        (baseActivity as OnBoardActivityInterface).apply {
+        val onboarding = baseActivity as OnBoardActivityInterface
+        onboarding.apply {
             enableSwipe(isSwipeable = false, isTabLayoutVisible = false)
-            showButtons(isNextButtonVisible = false, isBackButtonVisible = false)
+            showOverlayProgress(
+                activeIndex = OnboardingProgress.LOCK_INDEX,
+                showNextButton = true,
+                onNextClick = { goToLockSetFragment() }
+            )
         }
 
         binding.learnMoreLink.setOnClickListener {
             openLockDocs()
-        }
-        binding.nextBtn.setOnClickListener {
-            goToLockSetFragment()
         }
     }
 

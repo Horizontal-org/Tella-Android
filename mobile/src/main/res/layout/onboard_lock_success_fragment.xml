@@ -6,8 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/wa_purple"
-    android:paddingStart="24dp"
-    android:paddingEnd="24dp"
     tools:visibility="visible">
 
     <ImageView
@@ -45,6 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:gravity="center"
+        android:paddingHorizontal="21dp"
         android:text="@string/onboard_lock_success_message"
         android:textColor="@color/wa_white"
         app:layout_constraintBottom_toTopOf="@+id/learnMoreLink"
@@ -62,19 +61,10 @@
         android:padding="8dp"
         android:text="@string/onboard_lock_success_learn_more"
         android:textColor="@color/wa_yellow"
-        app:layout_constraintBottom_toTopOf="@+id/nextBtn"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/successMessage" />
-
-    <TextView
-        android:id="@+id/nextBtn"
-        style="@style/Onboarding_BottomNavButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/action_next"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
