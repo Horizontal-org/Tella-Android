@@ -840,18 +840,19 @@ class AttachmentsFragment :
         val emptyViewContainer = binding.emptyViewMsgContainer
         val isEmpty = files.isEmpty()
 
+        attachmentsAdapter.setFiles(files)
+
         if (isEmpty) {
+            syncSelectionChromeLeavingSelectModeFully()
             recyclerView.visibility = View.GONE
             emptyViewContainer.visibility = View.VISIBLE
             updateEmptyStateMessage()
         } else {
             recyclerView.visibility = View.VISIBLE
             emptyViewContainer.visibility = View.GONE
+            attachmentsAdapter.enableSelectMode(isListCheckOn)
         }
         binding.filesToolbar.visibility = if (isEmpty) View.GONE else View.VISIBLE
-
-        attachmentsAdapter.setFiles(files)
-        attachmentsAdapter.enableSelectMode(isListCheckOn)
     }
 
     private fun updateEmptyStateMessage() {

@@ -124,9 +124,21 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                     binding.attachmentsRecyclerView.visibility = View.GONE
                     binding.emptyViewMsgContainer.visibility = View.VISIBLE
                     updateEmptyStateMessage()
+                    attachmentsAdapter.clearSelected()
+                    binding.checkBoxList.visibility = View.GONE
+                    isListCheckOn = false
+                    selectMode = SelectMode.DESELECT_ALL
+                    attachmentsAdapter.enableSelectMode(false)
+                    updateAttachmentsToolbar(0)
                 } else {
                     binding.attachmentsRecyclerView.visibility = View.VISIBLE
                     binding.emptyViewMsgContainer.visibility = View.GONE
+                    binding.checkBoxList.visibility = if (isMultiplePicker) View.GONE else View.VISIBLE
+                    isListCheckOn = true
+                    selectMode = SelectMode.ONE_SELECTION
+                    attachmentsAdapter.enableSelectMode(true)
+                    bindSelectAllCheckbox(SelectAllCheckboxVisual.PARTIAL)
+                    updateAttachmentsToolbar(attachmentsAdapter.selectedMediaFiles.size)
                 }
                 attachmentsAdapter.setFiles(files)
             }
