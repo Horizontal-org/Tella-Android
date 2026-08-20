@@ -46,4 +46,11 @@
     <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">I inthup dan thlak turin i PIN hman lai chhu lut rawh</string>
     <string name="Settings_Action_SetLock">Lock</string>
     <string name="Settings_Message_LockChanged">I lock thlak a ni tawh!</string>
+    <string name="attempts_remaining_plural"></string>
+    <string name="unlock"></string>
+    <string name="exceeded_max_attempts"></string>
+    <string name="attempts_remaining_singular"></string>
+    <string name="incorrect_pin"></string>
+    <string name="incorrect_password"></string>
+    <string name="incorrect_pattern"></string>
 </resources>
