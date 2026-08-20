@@ -7,4 +7,6 @@
     <string name="Home_BottomNav_Reports">Munghtawn laika ni</string>
     <string name="action_cancel">Dawm kau u</string>
     <string name="action_delete">Shaprai hkau u</string>
+    <string name="Home_BottomNav_Uwazi">Uwazi</string>
+    <string name="Rename_name_Hint">Name</string>
 </resources>
