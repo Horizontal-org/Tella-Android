@@ -2,4 +2,10 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="action_cancel">Адмяніць</string>
     <string name="action_delete">Удалить</string>
+    <string name="Home_BottomNav_Home">Home</string>
+    <string name="Home_BottomNav_Rec">Rec</string>
+    <string name="Home_BottomNav_Camera">Camera</string>
+    <string name="Home_BottomNav_Reports">Reports</string>
+    <string name="Home_BottomNav_Uwazi">Uwazi</string>
+    <string name="Rename_name_Hint">Name</string>
 </resources>
