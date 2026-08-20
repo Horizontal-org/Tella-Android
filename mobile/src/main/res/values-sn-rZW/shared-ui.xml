@@ -14,4 +14,5 @@
     <string name="action_hide_pin">Vhiga pass</string>
     <string name="action_delete">Kulassa/Bvisa</string>
     <string name="action_go_back">Hwirira</string>
+    <string name="Home_BottomNav_Rec">Rec</string>
 </resources>
