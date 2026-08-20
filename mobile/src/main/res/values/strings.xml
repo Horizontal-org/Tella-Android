@@ -9,7 +9,7 @@
 <string name="settings_menu.item_contact">Contact us</string>
   <string name="collect_dialog.text_download.progress">Downloading the form</string>
   <string name="collect_toast_download.completed">Download completed</string>
-<string name="collect.draft_tab.title">Draft</string>
+<string name="collect.draft_tab.title">Drafts</string>
   <string name="collect.blank_action_download.form">Download</string>
   <string name="settings_text_empty.field">This field cannot be empty.</string>
   <string name="home_toast_back.exit">Tap the \"Back\" button again to exit the app</string>

@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.widget.TextViewCompat
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.widget.ViewPager2
@@ -63,20 +64,21 @@ class ViewPagerComponent @JvmOverloads constructor(
             tab.customView = getTabTitleView(position, 0)
         }.attach()
 
-
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                updateTabTextColor(tab, true)
+                updateTabAppearance(tab, true)
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
-                updateTabTextColor(tab, false)
+                updateTabAppearance(tab, false)
             }
 
             override fun onTabReselected(tab: TabLayout.Tab) {
                 // No action needed
             }
         })
+
+        tabLayout.post { applyTabAppearanceForAllTabs() }
     }
 
     fun setupTabs(fragmentProvider: FragmentProvider, tabCount: Int) {
@@ -141,15 +143,31 @@ class ViewPagerComponent @JvmOverloads constructor(
     }
 
 
-    private fun updateTabTextColor(tab: TabLayout.Tab, isSelected: Boolean) {
+    private fun applyTabAppearanceForAllTabs() {
+        val selectedPosition = tabLayout.selectedTabPosition
+        for (index in 0 until tabLayout.tabCount) {
+            tabLayout.getTabAt(index)?.let { tab ->
+                updateTabAppearance(tab, index == selectedPosition)
+            }
+        }
+    }
+
+    private fun updateTabAppearance(tab: TabLayout.Tab, isSelected: Boolean) {
         tab.customView?.let { customView ->
             val tabTitleTextView = customView.findViewById<TextView>(R.id.tab_title)
+            val tabNumberTextView = customView.findViewById<TextView>(R.id.tab_number)
 
             val selectedColor = ContextCompat.getColor(context, R.color.wa_white)
-            val unselectedColor = ContextCompat.getColor(context,R.color.wa_white_50)
-
-            // Update text color based on selection state
+            val unselectedColor = ContextCompat.getColor(context, R.color.wa_white_50)
             tabTitleTextView.setTextColor(if (isSelected) selectedColor else unselectedColor)
+
+            val textAppearance = if (isSelected) {
+                R.style.Tella_Main_White_Text_MeduimbBold
+            } else {
+                R.style.Typography_Subheading1
+            }
+            TextViewCompat.setTextAppearance(tabTitleTextView, textAppearance)
+            TextViewCompat.setTextAppearance(tabNumberTextView, textAppearance)
         }
     }
 

@@ -8,14 +8,14 @@
 
     <TextView
         android:id="@+id/tab_title"
-        style="@style/Tella_Main_White_Text.MeduimbBold"
+        style="@style/Typography.Subheading1"
         tools:text="OUtbox"
         android:textColor="@color/wa_white_50"
         />
 
     <TextView
         android:id="@+id/tab_number"
-        style="@style/Tella_Main_White_Text.MeduimbBold"
+        style="@style/Typography.Subheading1"
         android:textColor="@color/tigers_eye"
         tools:text="(20)" />
 
