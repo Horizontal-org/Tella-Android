@@ -552,7 +552,7 @@
     <string name="Uwazi_Templates_TabTitle">Plantillas</string>
     <string name="action_no">no</string>
     <string name="Vault_Items">Ítems</string>
-    <string name="Vault_DeleteFile_SheetTitle">¿Eliminar archivo?</string>
+    <string name="Vault_DeleteFile_SheetTitle">¿Borrar archivo?</string>
     <string name="Vault_deleteFile_SheetDesc">El archivo seleccionado será borrado permanentemente de Tella.</string>
     <string name="Uwazi_Info_UrlLabelEmpty">La etiqueta de la URL está vacía.</string>
     <string name="Collect_EndSubtitleExpl_UncheckedItems">Deselecciona adjuntos para enviarlos más tarde. Puedes completar el envío desde tu Bandeja de Entrada.</string>
