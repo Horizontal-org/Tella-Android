@@ -27,10 +27,6 @@
     <string name="Vault_FileLength">Panjang</string>
     <string name="Vault_FilePath">Jalur berkas</string>
     <string name="Vault_RenameFile_SheetTitle">Ubah nama berkas</string>
-    <plurals name="Vault_DeleteFile_SheetTitle">
-    </plurals>
-    <plurals name="Vault_deleteFile_SheetDesc">
-    </plurals>
     <string name="Vault_SortNameAsc_SheetAction">Nama A &gt; Z</string>
     <string name="Vault_SortNameDesc_SheetAction">Nama Z &gt; A</string>
     <string name="Vault_SortDateAsc_SheetAction">Baru ke lama</string>
