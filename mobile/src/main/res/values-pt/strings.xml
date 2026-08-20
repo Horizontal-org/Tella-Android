@@ -9,7 +9,7 @@
     <string name="settings_menu.item_contact">Fale conosco</string>
     <string name="collect_dialog.text_download.progress">Baixando o formulário</string>
     <string name="collect_toast_download.completed">Transferência concluída</string>
-    <string name="collect.draft_tab.title">Rascunho</string>
+    <string name="collect.draft_tab.title">Esboços</string>
     <string name="collect.blank_action_download.form">Baixar</string>
     <string name="settings_text_empty.field">Este campo não pode ficar vazio.</string>
     <string name="home_toast_back.exit">Pressione novamente o botão \"Voltar\" para sair do aplicativo</string>
@@ -363,7 +363,7 @@
     <string name="recorder_toast_recording.saved">The audio recording was saved to your Tella files</string>
     <string name="onboard.intro_title">Welcome to Tella</string>
     <string name="onboard.intro_get_started">Get started</string>
-    <string name="onboard.title_camera">Câmera</string>
+    <string name="onboard.title_camera">Registrar</string>
     <string name="onboard.expl_camera">Take photos and videos directly in Tella. These files are automatically encrypted and saved in Tella, and will not be visible from your phone’s regular gallery.</string>
     <string name="onboard.title_recorder">Gravar audio</string>
     <string name="onboard.expl_recorder">Record interviews or any sound around you with Tella’s voice recorder. The audio files are automatically encrypted and saved in Tella’s hidden folder.</string>
