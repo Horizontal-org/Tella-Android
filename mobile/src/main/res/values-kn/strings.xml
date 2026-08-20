@@ -363,7 +363,7 @@
     <string name="recorder_toast_recording.saved">The audio recording was saved to your Tella files</string>
     <string name="onboard.intro_title">Welcome to Tella</string>
     <string name="onboard.intro_get_started">Get started</string>
-    <string name="onboard.title_camera">Camera</string>
+    <string name="onboard.title_camera">ರೆಕಾರ್ಡ</string>
     <string name="onboard.expl_camera">Take photos and videos directly in Tella. These files are automatically encrypted and saved in Tella, and will not be visible from your phone’s regular gallery.</string>
     <string name="onboard.title_recorder">Recorder</string>
     <string name="onboard.expl_recorder">Record interviews or any sound around you with Tella’s voice recorder. The audio files are automatically encrypted and saved in Tella’s hidden folder.</string>
