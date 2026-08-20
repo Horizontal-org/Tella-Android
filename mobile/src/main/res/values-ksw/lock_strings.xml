@@ -46,4 +46,11 @@
     <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">ထၢနုာ်လီၤန PIN နီၣ်ဂံၢ် လၢနသူအီၤအဖၢမုၢ် လၢတၢ်ကဆီတလဲထီၣ်ဝဲ နတၢ်မၤလီၤဂာ်လီၤဘၢတၢ်အဂီၢ်န့ၣ်တက့ၢ်.</string>
     <string name="Settings_Action_SetLock">နီၣ်ဝံာ်တံာ်</string>
     <string name="Settings_Message_LockChanged">နနီၣ်ဝံာ်တံာ်အဆီတလဲအသးလံန့ၣ်လီၤ</string>
+    <string name="attempts_remaining_plural"></string>
+    <string name="unlock"></string>
+    <string name="exceeded_max_attempts"></string>
+    <string name="attempts_remaining_singular"></string>
+    <string name="incorrect_pin"></string>
+    <string name="incorrect_password"></string>
+    <string name="incorrect_pattern"></string>
 </resources>
