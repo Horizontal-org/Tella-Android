@@ -14,4 +14,5 @@
     <string name="action_hide_pin">ပင်ကို ဝှက်မည်</string>
     <string name="action_delete">ဖျက်ရန်</string>
     <string name="action_go_back">ပြန်သွားမည်</string>
+    <string name="Home_BottomNav_Uwazi">Uwazi</string>
 </resources>
