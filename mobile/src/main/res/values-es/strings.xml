@@ -1116,4 +1116,5 @@
     <string name="peer_to_peer_invalid_details_message"></string>
     <string name="Uwazi_RemoveTemplate_ConfirmTitle"></string>
     <string name="Uwazi_Template_Removed_Toast"></string>
+    <string name="onboard.expl_camera_info">Estos archivos están guardados en Tella, y no estarán visibles desde la galería de photos de tu teléfono.</string>
 </resources>
