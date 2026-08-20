@@ -7,16 +7,4 @@
     <string name="Home_BottomNav_Reports">Munghtawn laika ni</string>
     <string name="action_cancel">Dawm kau u</string>
     <string name="action_delete">Shaprai hkau u</string>
-    <string name="action_hide_password"></string>
-    <string name="Migration_Failed_Description" translatable="false"></string>
-    <string name="action_go_to_homescreen"></string>
-    <string name="action_show_password"></string>
-    <string name="action_hide_pin"></string>
-    <string name="Rename_name_Hint"></string>
-    <string name="action_show_pin"></string>
-    <string name="Migration_Failed_Title" translatable="false"></string>
-    <string name="action_go_back"></string>
-    <string name="onboarding_info_icon_content_description"></string>
-    <string name="Home_BottomNav_Settings" translatable="false"></string>
-    <string name="Home_BottomNav_Uwazi"></string>
 </resources>
