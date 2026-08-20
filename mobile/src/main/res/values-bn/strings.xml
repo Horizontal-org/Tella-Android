@@ -9,7 +9,7 @@
     <string name="settings_menu.item_contact">আমাদের সাথে যোগাযোগ করুন</string>
     <string name="collect_dialog.text_download.progress">ফর্ম ডাউনলোড করা হচ্ছে</string>
     <string name="collect_toast_download.completed">ডাউনলোড সম্পন্ন হয়েছে</string>
-    <string name="collect.draft_tab.title">খসড়া</string>
+    <string name="collect.draft_tab.title">Drafts</string>
     <string name="collect.blank_action_download.form">ডাউনলোড</string>
     <string name="settings_text_empty.field">এই ক্ষেত্র খালি রাখা যাবে না</string>
     <string name="home_toast_back.exit">অ্যাপটি থেকে প্রস্থান করতে আবার \"পিছনে\" বোতামটি চাপুন</string>
@@ -363,12 +363,12 @@
     <string name="recorder_toast_recording.saved">অডিও রেকর্ডিংটি আপনার Tella ফাইলে সংরক্ষণ করা হয়েছে</string>
     <string name="onboard.intro_title">Tella -এ স্বাগতম</string>
     <string name="onboard.intro_get_started">শুরু করা যাক</string>
-    <string name="onboard.title_camera">ক্যামেরা</string>
+    <string name="onboard.title_camera">রেকর্ড</string>
     <string name="onboard.expl_camera">Tella দিয়ে সরাসরি ফটো এবং ভিডিও তুলুন। এই ফাইলগুলি স্বয়ংক্রিয়ভাবে এনক্রিপ্ট করা হয় এবং Tella-এ সংরক্ষিত হয় এবং আপনার ফোনের গ্যালারি থেকে এগুলি দেখা যাবে না৷</string>
     <string name="onboard.title_recorder">রেকর্ডার</string>
     <string name="onboard.expl_recorder">Tella ভয়েস রেকর্ডার দিয়ে সাক্ষাত্কার বা আপনার চারপাশের যেকোনো শব্দ রেকর্ড করুন। অডিও ফাইলগুলি স্বয়ংক্রিয়ভাবে এনক্রিপ্ট করা হয় এবং Tella তে লুকানো ফোল্ডারে সংরক্ষণ করা হয়।</string>
-    <string name="onboard.title_files">এনক্রিপ্ট করা ফাইল এবং ফোল্ডার</string>
-    <string name="onboard.expl_files">আপনার সমস্ত ফাইল নিরাপদে সংরক্ষণ এবং সংগঠিত করুন। Tella লক করা না থাকলে আপনার ফাইল এবং ফোল্ডারগুলি ডিভাইসটি কেউ নিয়ে গেলে তারা সেগুলি দেখতে পাবে।</string>
+    <string name="onboard.title_files">Store files safely</string>
+    <string name="onboard.expl_files">Your Tella files are encrypted. As long as Tella is locked, no one else (not even the Tella team) can access your data।</string>
     <string name="onboard.title_lock_finish">তালা</string>
     <string name="onboard.expl_lock_finish">আপনার তালা সেট আপ করা হয়েছে! আপনি সেটিংস থেকে যেকোনো সময় এটি পরিবর্তন করতে পারেন।</string>
     <string name="onboard.title_all_done">আপনার সব কাজ শেষ!</string>
@@ -433,7 +433,7 @@
     <string name="collect.outbox_tab.title">আউটবক্স</string>
     <string name="Collect_RemoveForm_SheetTitle">ফর্ম মুছবেন?</string>
     <string name="fragment_uwazi">Uwazi</string>
-    <string name="Uwazi_Dowload_Temapltes_Header_Title">টেমপ্লেট ডাউনলোড করুন</string>
+    <string name="Uwazi_Dowload_Temapltes_Header_Title">Add Templates</string>
     <string name="Uwazi_RemoveTemplate_SheetTitle">ডিভাইস থেকে সরান</string>
     <string name="Uwazi_Action_FillEntity">একটি সত্তা তৈরি করুন</string>
     <string name="Uwazi_Action_RemoveTemplate">টেমপ্লেট মুছুন</string>
@@ -861,8 +861,8 @@
     <string name="Settings_Analytics_turn_on_dialog">আপনি অ্যানালিটিক্স শেয়ার করতে সাইন আপ করেছেন। আপনি সেটিংসে যেকোনো সময় এটি পরিবর্তন করতে পারবেন।</string>
     <string name="Settings_Analytics_turn_off_dialog">আপনি আর অ্যানালিটিক্স শেয়ার করবেন না। আপনি সেটিংসে যেকোনো সময় এটি পরিবর্তন করতে পারবেন।</string>
     <string name="unlock">আনলক করুন</string>
-    <string name="Onboard_Collect_Data">তথ্য সংগ্রহ করুন</string>
-    <string name="Onboard_Collect_Data_Exp">আপনি যদি কোনো প্রতিষ্ঠানের সাথে কাজ করেন, তাহলে Tella থেকে সরাসরি আপনার প্রতিষ্ঠানে ফর্ম, রিপোর্ট এবং ফাইল পাঠান।</string>
+    <string name="Onboard_Collect_Data">Share data</string>
+    <string name="Onboard_Collect_Data_Exp">Send reports, forms and files to your organization, or back up files to a personal cloud।</string>
     <string name="action_flip_vertically">ডানে বামে উল্টান</string>
     <string name="action_flip_horizontally">উপরে নিচে উল্টান</string>
     <string name="settings.docu_add.server_dialog.select_tella_google_drive" translatable="false">Google drive</string>
@@ -1110,4 +1110,8 @@
     <string name="verification_step2_sender_hash">Step 2: Confirm sender hash</string>
     <string name="confirm_and_continue">Confirm and continue</string>
     <string name="collect_form_geopoint_first_load_message_secondary">This may take some time, depending on your Internet connection.</string>
+    <string name="settings_invalid_url">Error: The server URL is incorrect</string>
+    <string name="onboard.expl_files_info">By default, your Tella files are stored only on your device, not online।</string>
+    <string name="Uwazi_Subtitle_RemoveOutboxEntity">Are you sure you want to delete this entity?</string>
+    <string name="onboard.share_data_connections">Tella supports server Connections to:</string>
 </resources>
