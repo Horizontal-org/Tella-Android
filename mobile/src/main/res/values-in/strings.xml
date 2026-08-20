@@ -362,7 +362,7 @@
     <string name="onboard.intro_title">Welcome to Tella</string>
     <string name="onboard.intro_get_started">Get started</string>
     <string name="onboard.title_camera">Rekam</string>
-    <string name="onboard.expl_camera">Take photos and videos directly in Tella. These files are automatically encrypted and saved in Tella, and will not be visible from your phone’s regular gallery.</string>
+    <string name="onboard.expl_camera">Capture photos, videos and audio directly in Tella.</string>
     <string name="onboard.title_recorder">Perekam</string>
     <string name="onboard.expl_recorder">Rekam wawancara atau suara apapun di sekitar Anda dengan perekam suara di Tella. Berkas audio dienkripsi secara otomatis dan disimpan di folder tersembunyi di dalam Tella.</string>
     <string name="onboard.title_files">Store files safely</string>
@@ -1098,7 +1098,7 @@
     <string name="onboard.expl_files_info">By default, your Tella files are stored only on your device, not online.</string>
     <string name="Uwazi_Subtitle_RemoveOutboxEntity">Are you sure you want to delete this entity?</string>
     <string name="onboard.share_data_connections">Tella supports server Connections to:</string>
-    <string name="onboard.expl_camera_info">These files are saved in Tella, and cannot be seen from your phone\'s regular gallery.</string>
+    <string name="onboard.expl_camera_info">These files are saved in Tella, and cannot be seen from your phone’s regular gallery.</string>
     <string name="Uwazi_RemoveTemplate_ConfirmTitle">Remove \"%1$s\"?</string>
     <string name="Uwazi_Template_Removed_Toast">\"%1$s\" has been removed from your device.</string>
     <string name="onboard.title_nearby_sharing">Share files nearby</string>
