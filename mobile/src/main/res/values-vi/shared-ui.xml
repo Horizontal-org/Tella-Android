@@ -13,4 +13,6 @@
     <string name="action_hide_pin">giấu mã pin</string>
     <string name="action_delete">Xóa</string>
     <string name="action_go_back">quay lại</string>
+    <string name="Home_BottomNav_Rec">Rec</string>
+    <string name="Home_BottomNav_Uwazi">Uwazi</string>
 </resources>
