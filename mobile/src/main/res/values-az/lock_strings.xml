@@ -47,10 +47,10 @@
     <string name="Settings_Action_SetLock">Kilid</string>
     <string name="Settings_Message_LockChanged">Kilidin dəyişdi!</string>
     <string name="unlock">Kilidi açın</string>
-    <string name="attempts_remaining_plural">You have %1$d attempts remaining until&#13;\n everything in your Tella is deleted.</string>
-    <string name="exceeded_max_attempts">You have exceeded the maximum number of&#13;\n incorrect login attempts. All your Tella data&#13;\n has been deleted.</string>
-    <string name="attempts_remaining_singular">You have 1 attempt remaining until&#13;\n everything in your Tella is deleted.</string>
-    <string name="incorrect_pin">Incorrect Pin. &#13;\n&#13;\n</string>
-    <string name="incorrect_password">Incorrect Password. &#13;\n&#13;\n</string>
-    <string name="incorrect_pattern">Incorrect Pattern.&#13;\n&#13;\n</string>
+    <string name="attempts_remaining_plural">Tella məlumatlarınızın silinməsinə %1$d cəhdiniz qalır.</string>
+    <string name="exceeded_max_attempts">You have exceeded the maximum number of incorrect login attempts. All your Tella data has been deleted.</string>
+    <string name="attempts_remaining_singular">Tella məlumatlarınızın silinməsinə 1 cəhdiniz qalır.</string>
+    <string name="incorrect_pin">Yanlış Pin &#13;\n&#13;\n</string>
+    <string name="incorrect_password">Yanlış Parol &#13;\n&#13;\n</string>
+    <string name="incorrect_pattern">Yanlış Naxış&#13;\n&#13;\n</string>
 </resources>
