@@ -308,6 +308,7 @@ class MicActivity : MetadataActivity(),
     }
 
     private fun scheduleFileUpload(vaultFile: VaultFile) {
+        if (isReport || isCollect || isPrepareUpload) return
         if (Preferences.isAutoUploadEnabled()) {
             viewModel.scheduleUploadReportFiles(
                 vaultFile,

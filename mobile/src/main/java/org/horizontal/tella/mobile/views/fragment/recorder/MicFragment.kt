@@ -348,6 +348,7 @@ class MicFragment : MetadataBaseLockFragment(),
     }
 
     private fun scheduleFileUpload(vaultFile: VaultFile) {
+        if (isReport || isCollect) return
         if (Preferences.isAutoUploadEnabled()) {
             viewModel.scheduleUploadReportFiles(
                 vaultFile,
