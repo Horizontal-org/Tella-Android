@@ -363,12 +363,12 @@
     <string name="recorder_toast_recording.saved">L\'enregistrement audio a été enregistré dans vos fichiers Tella</string>
     <string name="onboard.intro_title">Bienvenue à Tella</string>
     <string name="onboard.intro_get_started">Commencez</string>
-    <string name="onboard.title_camera">Appareil photo</string>
+    <string name="onboard.title_camera">Enregistrer</string>
     <string name="onboard.expl_camera">Prenez des photos et des vidéos directement dans Tella. Ces fichiers sont chiffrés automatiquement et enregistrés dans Tella, et ne seront pas visibles dans la galerie habituelle de votre téléphone.</string>
     <string name="onboard.title_recorder">Dictaphone</string>
     <string name="onboard.expl_recorder">Record interviews or any sound around you with Tella’s voice recorder. The audio files are automatically encrypted and saved in Tella’s hidden folder.</string>
-    <string name="onboard.title_files">Fichiers et dossiers cryptés</string>
-    <string name="onboard.expl_files">Securely store and organize all your files. As long as Tella is locked, your files and folders will remain inaccessible to someone seizing or searching the device.</string>
+    <string name="onboard.title_files">Store files safely</string>
+    <string name="onboard.expl_files">Your Tella files are encrypted. As long as Tella is locked, no one else (not even the Tella team) can access your data.</string>
     <string name="onboard.title_lock_finish">Verrou</string>
     <string name="onboard.expl_lock_finish">Votre verrou est configuré ! Vous pouvez le modifier à tout moment dans les Paramètres.</string>
     <string name="onboard.title_all_done">Vous avez terminé !</string>
@@ -433,7 +433,7 @@
     <string name="collect.outbox_tab.title">Boîte d\'envoi</string>
     <string name="Collect_RemoveForm_SheetTitle">Supprimer le formulaire ?</string>
     <string name="fragment_uwazi">Uwazi</string>
-    <string name="Uwazi_Dowload_Temapltes_Header_Title">Télécharger des modèles</string>
+    <string name="Uwazi_Dowload_Temapltes_Header_Title">Ajouter des modèles</string>
     <string name="Uwazi_RemoveTemplate_SheetTitle">Supprimer de l\'appareil</string>
     <string name="Uwazi_Action_FillEntity">Créer une entité</string>
     <string name="Uwazi_Action_RemoveTemplate">Supprimer le modèle</string>
@@ -861,8 +861,8 @@
     <string name="Settings_Analytics_turn_on_dialog">Vous vous êtes inscrits pour partager des données d\'utilisation. Vous pouvez toujours changer ce choix dans les paramètres.</string>
     <string name="Settings_Analytics_turn_off_dialog">Vous n\'allez plus partager de données d\'utilisation. Vous pouvez toujours changer cela dans les paramètres.</string>
     <string name="unlock">Déverrouiller</string>
-    <string name="Onboard_Collect_Data">Données d\'utilisation collectées</string>
-    <string name="Onboard_Collect_Data_Exp">Si vous travaillez avec une organisation, envoyez des formulaires, rapports et autres fichiers directement de Tella à votre organisation.</string>
+    <string name="Onboard_Collect_Data">Share data</string>
+    <string name="Onboard_Collect_Data_Exp">Send reports, forms and files to your organization, or back up files to a personal cloud.</string>
     <string name="action_flip_vertically">Passer en mode portrait</string>
     <string name="action_flip_horizontally">Passer en mode paysage</string>
     <string name="settings.docu_add.server_dialog.select_tella_google_drive" translatable="false">Google drive</string>
@@ -1110,4 +1110,8 @@
     <string name="verification_step2_sender_hash">Step 2: Confirm sender hash</string>
     <string name="confirm_and_continue">Confirm and continue</string>
     <string name="collect_form_geopoint_first_load_message_secondary">This may take some time, depending on your Internet connection.</string>
+    <string name="settings_invalid_url">Erreur : L\'Url du serveur est incorrecte</string>
+    <string name="onboard.expl_files_info">By default, your Tella files are stored only on your device, not online.</string>
+    <string name="Uwazi_Subtitle_RemoveOutboxEntity">Êtes-vous sûr de vouloir supprimer cette entité ?</string>
+    <string name="onboard.share_data_connections">Tella supports server Connections to:</string>
 </resources>
