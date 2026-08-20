@@ -362,7 +362,7 @@
     <string name="onboard.intro_title">Chào mừng đến với Tella</string>
     <string name="onboard.intro_get_started">Bắt đầu</string>
     <string name="onboard.title_camera">Ghi</string>
-    <string name="onboard.expl_camera">Chụp ảnh và quay video trực tiếp trong Tella. Các tệp này được tự động mã hóa, được lưu trong Tella và sẽ không được hiển thị từ thư viện thông thường trên điện thoại của bạn.</string>
+    <string name="onboard.expl_camera">Capture photos, videos and audio directly in Tella.</string>
     <string name="onboard.title_recorder">Máy ghi âm</string>
     <string name="onboard.expl_recorder">Ghi lại các cuộc phỏng vấn hoặc bất kỳ âm thanh nào xung quanh bạn bằng máy ghi âm của Tella. Các tệp tin âm thanh được tự động mã hóa và lưu vào thư mục ẩn của Tella.</string>
     <string name="onboard.title_files">Store files safely</string>
@@ -1098,7 +1098,7 @@
     <string name="onboard.expl_files_info">By default, your Tella files are stored only on your device, not online.</string>
     <string name="Uwazi_Subtitle_RemoveOutboxEntity">Are you sure you want to delete this entity?</string>
     <string name="onboard.share_data_connections">Tella supports server Connections to:</string>
-    <string name="onboard.expl_camera_info">These files are saved in Tella, and cannot be seen from your phone\'s regular gallery.</string>
+    <string name="onboard.expl_camera_info">These files are saved in Tella, and cannot be seen from your phone’s regular gallery.</string>
     <string name="Uwazi_RemoveTemplate_ConfirmTitle">Remove \"%1$s\"?</string>
     <string name="Uwazi_Template_Removed_Toast">\"%1$s\" has been removed from your device.</string>
     <string name="onboard.title_nearby_sharing">Share files nearby</string>
