@@ -13,4 +13,5 @@
     <string name="action_hide_pin">sembunyikan pin</string>
     <string name="action_delete">Hapus</string>
     <string name="action_go_back">kembali</string>
+    <string name="Home_BottomNav_Uwazi">Uwazi</string>
 </resources>
