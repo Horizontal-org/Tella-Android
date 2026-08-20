@@ -52,8 +52,6 @@ class DraftsUwaziFragment : BaseReportsFragment<UwaziEntityInstance>() {
                     deleteText = getString(R.string.action_delete),
                     deleteConfirmation = getString(R.string.Uwazi_Subtitle_RemoveDraft),
                     deleteActionText = getString(R.string.action_delete) + " \"" + instance.title + "\"?",
-                    confirmButtonLabel = getString(R.string.action_yes),
-                    cancelButtonLabel = getString(R.string.action_no),
                 )
             }
 
