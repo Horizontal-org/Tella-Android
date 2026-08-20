@@ -47,10 +47,10 @@
     <string name="Settings_Action_SetLock">နီၣ်ဝံာ်တံာ်</string>
     <string name="Settings_Message_LockChanged">နနီၣ်ဝံာ်တံာ်အဆီတလဲအသးလံန့ၣ်လီၤ</string>
     <string name="unlock">Unlock</string>
-    <string name="attempts_remaining_plural">You have %1$d attempts remaining until&#13;\n everything in your Tella is deleted.</string>
-    <string name="exceeded_max_attempts">You have exceeded the maximum number of&#13;\n incorrect login attempts. All your Tella data&#13;\n has been deleted.</string>
-    <string name="attempts_remaining_singular">You have 1 attempt remaining until&#13;\n everything in your Tella is deleted.</string>
-    <string name="incorrect_pin">Incorrect Pin. &#13;\n&#13;\n</string>
-    <string name="incorrect_password">Incorrect Password. &#13;\n&#13;\n</string>
-    <string name="incorrect_pattern">Incorrect Pattern.&#13;\n&#13;\n</string>
+    <string name="attempts_remaining_plural">တချုးလၢ တၢ်ကထူးသံကွံာ် နTella တၢ်ဂ့ၢ်တၢ်ကျိၤတဖၣ်ခဲလၢာ်ခဲဆ့ဒံးဘၣ်န့ၣ် နဂုာ်ကျဲးစၢးနုာ်လီၤ ကန့ၢ်ဝဲအလီၢ်ခံကတၢၢ် %1$d ဘျီဒံးန့ၣ်လီၤ.</string>
+    <string name="exceeded_max_attempts">နဂုာ်ကျဲးစၢးထၢနုာ်လီၤ တၢ်ဂ့ၢ်တၢ်ကျိၤလၢအကမၣ်တဖၣ် အဘျီအါန့ၢ်ဒံး တၢ်ပာ်ပနီၣ်ဃာ်အီၤလံန့ၣ်လီၤ. နTella တၢ်ဂ့ၢ်တၢ်ကျိၤတဖၣ် အဘၣ်တၢ်ထူးသံကွံာ်အီၤခဲလၢာ်လံန့ၣ်လီၤ.</string>
+    <string name="attempts_remaining_singular">တချုးလၢ တၢ်ကထူးသံကွံာ် နTella တၢ်ဂ့ၢ်တၢ်ကျိၤတဖၣ်ခဲလၢာ်ခဲဆ့ဒံးဘၣ်န့ၣ် နတၢ်ခွဲးတၢ်ယာ်ကအိၣ်ဝဲ ၁ဘျီ ဒံးလၢနကနုာ်လီၤအဂီၢ်န့ၣ်လီၤ</string>
+    <string name="incorrect_pin">PIN နီၣ်ဂံၢ်အံၤ ကမၣ်ဝဲလီၤ. &#13;\n&#13;\n</string>
+    <string name="incorrect_password">လံာ်ဖျၢၣ်ခူသူၣ်အံၤ ကမၣ်ဝဲလီၤ. &#13;\n&#13;\n</string>
+    <string name="incorrect_pattern">တၢ်ဒဲးကံၣ်ဒဲးဝ့ၤအက့ၢ်အဂီၤ ကမၣ်ဝဲလီၤ.&#13;\n&#13;\n</string>
 </resources>
