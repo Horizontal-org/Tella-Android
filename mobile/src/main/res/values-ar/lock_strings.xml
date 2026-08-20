@@ -1,73 +1,56 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="LockSelect_Action_Cancel">إلغاء</string>
-  <string name="LockSelect_Action_Back">رجوع</string>
-  <string name="LockSelect_Action_Confirm">التالي</string>
-  <string name="LockPatternConfirm_Action_Confirm">تأكيد النمط</string>
-  <string name="LockSelect_Action_Continue">التالي</string>
-  <string name="LockPatternSet_Draw_Pattern">يُرجى رسم نمط إلغاء التأمين</string>
-  <string name="UnlockPattern_DrawToUnlock">ارسم النمط لفتح قفل Tella</string>
-  <string name="LockPatternConfirm_Pattern_Confirmed">نمط فتح القفل الجديد الخاص بك</string>
-  <string name="LockPatternSet_Pattern_Recorded">لقد تم تسجيل النمط</string>
-  <string name="UnlockPattern_PatternTooShort">ارسم النمط الخاص بك
- من خلال توصيل ست نقاط على الأقل</string>
-  <string name="LockPatternSet_RecordingPattern">حرر إصبعك عند الانتهاء</string>
-  <string name="LockPatternSet_Action_Redraw">Clear</string>
-  <string name="LockPatternConfirm_Message_WrongPattern">نمط غير صحيح،
- يُرجى المحاولة مرة أخرى</string>
-  <string name="LockPatternSet_Message_PatternStarted">تم بدء استخدام النمط</string>
-  <string name="LockPatternSet_Message_PatternCleared">تم محو النمط</string>
-  <string name="LockPatternSet_Message_CellAdded">لقد أضيفت الخلية</string>
-  <string name="LockPatternSet_Message_CellAddedVerbose">Cell <xliff:g example="3" id="cell_index">%1$d</xliff:g> added</string>
-  <string name="LockPatternSet_Message_PatternDetected">تم إكمال النمط</string>
-  <string name="UnLockPattern_PatternArea">منطقة رسم النمط.</string>
-  <string name="UnLockPattern_Message_DrawPattern">Draw your pattern to
-unlock Tella</string>
-  <string name="UnLockPattern_Message_IncorrectPattern">يُرجى المحاولة مرة أخرى. النمطان غير متطابقين.</string>
-  <string name="LockPinSet_Message_EnterPin">أدخل رقم التعريف الشخصي</string>
-  <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock
-Tella</string>
-  <string name="LockPinSet_Message_Hint">Use at least 6 digits.
-Avoid using numbers that can be guessed easily, such as your birthday.</string>
-  <string name="LockPinSet_Message_Confirm">يُرجى تأكيد رقم التعريف الشخصي</string>
-  <string name="LockPinConfirm_Message_Confirm">يُرجى إدخال رقم التعريف الشخصي مرةً أخرى،
-فقط للتأكد.</string>
-  <string name="LockPinConfirm_Message_Error_TryAgain">يُرجى المحاولة مرة أخرى. رقما التعريف الشخصي غير متطابقين.</string>
-  <string name="LockPinConfirm_Message_Error_IncorrectPin">رقم التعريف الشخصي غير صحيح،
- يُرجى المحاولة مرة أخرى</string>
-  <string name="UnlockPassword_Message_EnterYourPassword">أدخل كلمة السر</string>
-  <string name="LockPasswordSet_Message_Hint">استخدم 6 أحرف على الأقل وتجنب
-استخدام كلمات السر التي يسهل
-تخمينها، مثل \"كلمة سر\". تذكر أنه كلما
-زاد طول كلمة السر كلما كانت أكثر أمانًا.</string>
-  <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">يُرجى المحاولة مرة أخرى. كلمتا السر غير متطابقتين.</string>
-  <string name="LockSuccess_Message_AllDone">اكتمل الضبط</string>
-  <string name="LockSuccess_Message_Hint">يمكنك دومًا تغيير خيار قفل التأمين 
-وزيادة تخصيص Tella من الإعدادات.</string>
-  <string name="LockSuccess_Action_GoToTella">الذهاب إلى Tella</string>
-  <string name="LockPasswordSet_Message_Error_IncorrectPassword">كلمة سر غير صحيحة،
-يُرجى المحاولة مرة أخرى</string>
-  <string name="UnlockPassword_Message_EnterPassword">Enter your password to
-unlock Tella</string>
-  <string name="LockPasswordConfirm_Message_ConfirmPassword">تأكيد كلمة السر</string>
-  <string name="LockPasswordConfirm_Message_EnterPasswordAgain">يُرجى إدخال كلمة السر مرة أخرى،
-فقط للتأكد.</string>
-  <string name="LockPasswordSet_Settings_EnterCurrentPassword">أدخل كلمة السر
-الحالية لتغيير
-القفل</string>
-  <string name="LockPatternSet_Settings_DrawCurrentPattern">ارسم النمط
-الحالي لتغيير
-القفل</string>
-  <string name="LockPinSet_Settings_EnterCurrentPin">أدخل رقم التعريف الشخصي الحالي
- لتغيير قفل الأمان</string>
-  <string name="LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage">أدخل كلمة السر
-الحالية لتغيير
-طريقة التمويه</string>
-  <string name="LockPatternSet_Settings_DrawCurrentPatternToChangeCamouflage">ارسم النمط 
-الحالي لتغيير
-طريقة التمويه</string>
-  <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">أدخل رقم التعريف الشخصي
- لتغيير طريقة التمويه</string>
-  <string name="Settings_Action_SetLock">قفل</string>
-  <string name="Settings_Message_LockChanged">تم تغيير القفل الخاص بك!</string>
+    <string name="LockSelect_Action_Cancel">إلغاء</string>
+    <string name="LockSelect_Action_Back">رجوع</string>
+    <string name="LockSelect_Action_Confirm">التالي</string>
+    <string name="LockPatternConfirm_Action_Confirm">تأكيد النمط</string>
+    <string name="LockSelect_Action_Continue">التالي</string>
+    <string name="LockPatternSet_Draw_Pattern">يُرجى رسم نمط إلغاء التأمين</string>
+    <string name="UnlockPattern_DrawToUnlock">ارسم النمط لفتح قفل Tella</string>
+    <string name="LockPatternConfirm_Pattern_Confirmed">نمط فتح القفل الجديد الخاص بك</string>
+    <string name="LockPatternSet_Pattern_Recorded">لقد تم تسجيل النمط</string>
+    <string name="UnlockPattern_PatternTooShort">ارسم النمط الخاص بك من خلال توصيل ست نقاط على الأقل</string>
+    <string name="LockPatternSet_RecordingPattern">حرر إصبعك عند الانتهاء</string>
+    <string name="LockPatternSet_Action_Redraw">Clear</string>
+    <string name="LockPatternConfirm_Message_WrongPattern">نمط غير صحيح، يُرجى المحاولة مرة أخرى</string>
+    <string name="LockPatternSet_Message_PatternStarted">تم بدء استخدام النمط</string>
+    <string name="LockPatternSet_Message_PatternCleared">تم محو النمط</string>
+    <string name="LockPatternSet_Message_CellAdded">لقد أضيفت الخلية</string>
+    <string name="LockPatternSet_Message_CellAddedVerbose">Cell <xliff:g example="3" id="cell_index">%1$d</xliff:g> added</string>
+    <string name="LockPatternSet_Message_PatternDetected">تم إكمال النمط</string>
+    <string name="UnLockPattern_PatternArea">منطقة رسم النمط.</string>
+    <string name="UnLockPattern_Message_DrawPattern">Draw your pattern to unlock Tella</string>
+    <string name="UnLockPattern_Message_IncorrectPattern">يُرجى المحاولة مرة أخرى. النمطان غير متطابقين.</string>
+    <string name="LockPinSet_Message_EnterPin">أدخل رقم التعريف الشخصي</string>
+    <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock Tella</string>
+    <string name="LockPinSet_Message_Hint">Use at least 6 digits. Avoid using numbers that can be guessed easily, such as your birthday.</string>
+    <string name="LockPinSet_Message_Confirm">يُرجى تأكيد رقم التعريف الشخصي</string>
+    <string name="LockPinConfirm_Message_Confirm">يُرجى إدخال رقم التعريف الشخصي مرةً أخرى، فقط للتأكد.</string>
+    <string name="LockPinConfirm_Message_Error_TryAgain">يُرجى المحاولة مرة أخرى. رقما التعريف الشخصي غير متطابقين.</string>
+    <string name="LockPinConfirm_Message_Error_IncorrectPin">رقم التعريف الشخصي غير صحيح، يُرجى المحاولة مرة أخرى</string>
+    <string name="UnlockPassword_Message_EnterYourPassword">أدخل كلمة السر</string>
+    <string name="LockPasswordSet_Message_Hint">استخدم 6 أحرف على الأقل وتجنب استخدام كلمات السر التي يسهل تخمينها، مثل \"كلمة سر\". تذكر أنه كلما زاد طول كلمة السر كلما كانت أكثر أمانًا.</string>
+    <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">يُرجى المحاولة مرة أخرى. كلمتا السر غير متطابقتين.</string>
+    <string name="LockSuccess_Message_AllDone">اكتمل الضبط</string>
+    <string name="LockSuccess_Message_Hint">يمكنك دومًا تغيير خيار قفل التأمين وزيادة تخصيص Tella من الإعدادات.</string>
+    <string name="LockSuccess_Action_GoToTella">الذهاب إلى Tella</string>
+    <string name="LockPasswordSet_Message_Error_IncorrectPassword">كلمة سر غير صحيحة، يُرجى المحاولة مرة أخرى</string>
+    <string name="UnlockPassword_Message_EnterPassword">Enter your password to unlock Tella</string>
+    <string name="LockPasswordConfirm_Message_ConfirmPassword">تأكيد كلمة السر</string>
+    <string name="LockPasswordConfirm_Message_EnterPasswordAgain">يُرجى إدخال كلمة السر مرة أخرى، فقط للتأكد.</string>
+    <string name="LockPasswordSet_Settings_EnterCurrentPassword">أدخل كلمة السر الحالية لتغيير القفل</string>
+    <string name="LockPatternSet_Settings_DrawCurrentPattern">ارسم النمط الحالي لتغيير القفل</string>
+    <string name="LockPinSet_Settings_EnterCurrentPin">أدخل رقم التعريف الشخصي الحالي لتغيير قفل الأمان</string>
+    <string name="LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage">أدخل كلمة السر الحالية لتغيير طريقة التمويه</string>
+    <string name="LockPatternSet_Settings_DrawCurrentPatternToChangeCamouflage">ارسم النمط الحالي لتغيير طريقة التمويه</string>
+    <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">أدخل رقم التعريف الشخصي لتغيير طريقة التمويه</string>
+    <string name="Settings_Action_SetLock">قفل</string>
+    <string name="Settings_Message_LockChanged">تم تغيير القفل الخاص بك!</string>
+    <string name="attempts_remaining_plural"></string>
+    <string name="unlock"></string>
+    <string name="exceeded_max_attempts"></string>
+    <string name="attempts_remaining_singular"></string>
+    <string name="incorrect_pin"></string>
+    <string name="incorrect_password"></string>
+    <string name="incorrect_pattern"></string>
 </resources>
