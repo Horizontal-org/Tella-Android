@@ -1,7 +1,9 @@
 package com.hzontal.tella_locking_ui.ui.password
 
+import android.content.Intent
 import android.os.Bundle
 import org.hzontal.shared_ui.utils.DialogUtils
+import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.TellaKeysUI
 import com.hzontal.tella_locking_ui.ui.password.base.BasePasswordActivity
@@ -50,5 +52,14 @@ class ConfirmPasswordActivity : BasePasswordActivity() {
     override fun onFailureSetPassword(error: String) {
         hideKeyboard()
         DialogUtils.showBottomMessage(this, error, false)
+    }
+
+    override fun onPasswordBackPressed() {
+        if (!isFromSettings) {
+            startActivity(
+                Intent(this, SetPasswordActivity::class.java).putExtra(IS_FROM_SETTINGS, false)
+            )
+        }
+        super.onPasswordBackPressed()
     }
 }

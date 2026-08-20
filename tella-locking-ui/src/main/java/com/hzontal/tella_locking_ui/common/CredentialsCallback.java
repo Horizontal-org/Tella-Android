@@ -18,6 +18,10 @@ public interface CredentialsCallback {
 
     void saveRemainingAttempts(long num);
 
+    default void onOnboardingLockSetupComplete(Activity activity, Runnable onContinue) {
+        onContinue.run();
+    }
+
     /**
      * Main key was cleared (e.g. lock timeout) while confirming a new lock — treat as full app lock.
      * No Settings / change-lock flow; user unlocks like a cold resume.

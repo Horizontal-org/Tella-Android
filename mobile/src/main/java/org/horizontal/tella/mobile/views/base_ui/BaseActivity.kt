@@ -188,6 +188,21 @@ abstract class BaseActivity : AppCompatActivity() {
             .commitAllowingStateLoss()
     }
 
+    fun addFragmentWithoutPopAnimation(
+        fragmentToHide: Fragment,
+        fragment: Fragment,
+        container: Int
+    ) {
+        val className = fragment.javaClass.name
+        supportFragmentManager
+            .beginTransaction()
+            .setCustomAnimations(R.anim.`in`, R.anim.out, 0, 0)
+            .hide(fragmentToHide)
+            .add(container, fragment, className)
+            .addToBackStack(null)
+            .commitAllowingStateLoss()
+    }
+
     fun addFragment(fragment: Fragment, container: Int) {
         val className = fragment.javaClass.name
         supportFragmentManager

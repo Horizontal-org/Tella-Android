@@ -14,9 +14,7 @@ class SetPinActivity : BasePinActivity() {
         val intent = Intent(this, ConfirmPinActivity::class.java)
         intent.putExtra(CONFIRM_PIN, pin)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        intent.putExtra(IS_FROM_SETTINGS, isFromSettings)
-        startActivityForResult(intent, FINISH_ACTIVITY_REQUEST_CODE)
-        overridePendingTransition(R.anim.`in`, R.anim.out)
+        launchConfirmActivity(intent)
     }
 
     override fun onFailureSetPin(error: String) {

@@ -15,9 +15,7 @@ class SetPasswordActivity : BasePasswordActivity() {
         val intent = Intent(this, ConfirmPasswordActivity::class.java)
         intent.putExtra(CONFIRM_PASSWORD, password)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        intent.putExtra(IS_FROM_SETTINGS, isFromSettings)
-        startActivityForResult(intent, FINISH_ACTIVITY_REQUEST_CODE)
-        overridePendingTransition(R.anim.`in`, R.anim.out)
+        launchConfirmActivity(intent)
     }
 
     override fun onFailureSetPassword(error: String) {}

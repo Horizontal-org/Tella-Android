@@ -19,6 +19,8 @@ const val IS_FROM_SETTINGS = "IS_FROM_SETTINGS"
 
 const val IS_ONBOARD_LOCK_SET = "IS_ONBOARD_LOCK_SET"
 
+const val ONBOARDING_LOCK_PROTECT_SHEET_TAG = "onboarding_lock_protect_sheet"
+
 const val IS_CAMOUFLAGE = "IS_CAMOUFLAGE"
 
 const val CALCULATOR_ALIAS = "org.horizontal.tella.mobile.views.activity.AliasCalculator"

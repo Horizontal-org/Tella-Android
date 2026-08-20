@@ -14,6 +14,7 @@ import com.google.gson.Gson
 import com.hzontal.tella_vault.MyLocation
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.bottomsheet.KeyboardUtil
 import org.hzontal.shared_ui.utils.DialogUtils
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
@@ -234,7 +235,17 @@ class UwaziEntryFragment :
         )
     }
 
+    private fun hideKeyboard() {
+        val focusedView = baseActivity.currentFocus
+        if (focusedView != null) {
+            KeyboardUtil.hideKeyboard(baseActivity, focusedView)
+        } else {
+            KeyboardUtil.hideKeyboard(baseActivity, binding.root)
+        }
+    }
+
     private fun showValidationMandatoryFieldsDialog() {
+        hideKeyboard()
         DialogUtils.showBottomMessage(
             baseActivity,
             getString(R.string.Uwazi_Entry_Validation_MandatoryFields),
@@ -243,6 +254,7 @@ class UwaziEntryFragment :
     }
 
     private fun showValidationErrorsFieldsDialog() {
+        hideKeyboard()
         DialogUtils.showBottomMessage(
             baseActivity,
             getString(R.string.collect_form_toast_validation_generic_error),
@@ -251,6 +263,7 @@ class UwaziEntryFragment :
     }
 
     private fun showValidationMandatoryTitleDialog() {
+        hideKeyboard()
         DialogUtils.showBottomMessage(
             baseActivity,
             getString(R.string.Uwazi_Entry_Validation_MandatoryTitle),

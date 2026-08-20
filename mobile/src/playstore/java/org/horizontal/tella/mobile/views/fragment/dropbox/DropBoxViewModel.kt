@@ -3,7 +3,6 @@ package org.horizontal.tella.mobile.views.fragment.dropbox
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import org.horizontal.tella.mobile.domain.repository.dropbox.DropboxClientHandle
-import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -30,7 +29,6 @@ import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BaseRepor
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.ReportCounts
 import org.horizontal.tella.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
 import org.horizontal.tella.mobile.views.fragment.reports.mappers.toViewEntityInstanceItem
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -92,29 +90,23 @@ class DropBoxViewModel @Inject constructor(
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ (files, vaultFiles) ->
-                        val filesResult = arrayListOf<FormMediaFile>()
-
-                        files.forEach { formMediaFile ->
-                            val vaultFile = vaultFiles.firstOrNull { it?.id == formMediaFile.id }
-                            if (vaultFile != null) {
-                                val fileResult = FormMediaFile.fromMediaFile(vaultFile)
-                                fileResult.status = formMediaFile.status
-                                fileResult.uploadedSize = formMediaFile.uploadedSize
-                                filesResult.add(fileResult)
-                            }
-                        }
-
-                        resultInstance.widgetMediaFiles = filesResult
+                        resultInstance.widgetMediaFiles = mergeReportAttachments(files, vaultFiles)
                         _reportInstance.postValue(resultInstance)
                     }, { throwable ->
-                        Timber.d(throwable)
-                        CrashReporterProvider.get().recordException(throwable)
-                      //  _error.postValue(R.string.default_error_msg)
+                        openInstanceAfterUnexpectedFailure(
+                            instance,
+                            throwable,
+                            "Failed to get report bundle for instance ${instance.id}"
+                        )
                     })
             )
 
-        }, onError = {
-            _error.postValue(it)
+        }, onError = { error ->
+            openInstanceAfterUnexpectedFailure(
+                instance,
+                error,
+                "Failed to get report bundle for instance ${instance.id}"
+            )
         }, onFinished = {
             _progress.postValue(false)
         })

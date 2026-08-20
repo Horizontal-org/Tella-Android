@@ -50,13 +50,17 @@ object BottomSheetUtils {
         cancelButtonLabel: String? = null,
         onConfirmClick: (() -> Unit)? = null,
         onCancelClick: (() -> Unit)? = null,
-        secondaryDescriptionText: String? = null
+        secondaryDescriptionText: String? = null,
+        screenTag: String? = null,
+        useOverlay: Boolean = true
     ) {
 
         val customSheetFragment =
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.standar_sheet_layout)
-                .showOnTop()
                 .cancellable(true)
+        if (useOverlay) {
+            customSheetFragment.showOnTop()
+        }
         customSheetFragment.holder(GenericSheetHolder(), object : Binder<GenericSheetHolder> {
             override fun onBind(holder: GenericSheetHolder) {
                 with(holder) {
@@ -96,7 +100,7 @@ object BottomSheetUtils {
             }
         })
 
-        customSheetFragment.screenTag("showStandardSheet22")
+        customSheetFragment.screenTag(screenTag ?: "showStandardSheet22")
         customSheetFragment.transparentBackground()
         customSheetFragment.launch()
     }

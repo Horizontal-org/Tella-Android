@@ -96,12 +96,12 @@ open class ReportsFilesRecyclerViewAdapter(
                 removeBtn.setOnClickListener {
                     removeFile(position = layoutPosition)
                 }
-                if (isImageFileType(vaultFile.mimeType)) {
+                if (!vaultFile.mimeType.isNullOrEmpty() && isImageFileType(vaultFile.mimeType)) {
                     this.showImageInfo(vaultFile)
-                } else if (isAudioFileType(vaultFile.mimeType)) {
+                } else if (!vaultFile.mimeType.isNullOrEmpty() && isAudioFileType(vaultFile.mimeType)) {
                     this.showAudioInfo()
                     fileNameTextView.text = vaultFile.name
-                } else if (isVideoFileType(vaultFile.mimeType)) {
+                } else if (!vaultFile.mimeType.isNullOrEmpty() && isVideoFileType(vaultFile.mimeType)) {
                     this.showVideoInfo(vaultFile)
                 } else {
                     fileNameTextView.text = vaultFile.name

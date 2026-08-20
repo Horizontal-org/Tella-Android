@@ -16,6 +16,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
@@ -499,11 +500,14 @@ class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
         intent?.getStringExtra(EXTRA_NAVIGATE_TO)?.let { destination ->
             if (destination == "attachments_screen") {
                 val bundle = Bundle().apply {
+                    intent.getStringExtra(VAULT_FILTER)?.let { putString(VAULT_FILTER, it) }
                     intent.getStringExtra(EXTRA_VAULT_PARENT_ID)?.let { putString(VAULT_PARENT_ID, it) }
                 }
-                if (navController.currentDestination?.id != R.id.attachments_screen) {
-                    navController.navigate(R.id.attachments_screen, bundle)
-                }
+                val navOptions = NavOptions.Builder()
+                    .setPopUpTo(R.id.attachments_screen, true)
+                    .setLaunchSingleTop(true)
+                    .build()
+                navController.navigate(R.id.attachments_screen, bundle, navOptions)
             }
         }
     }

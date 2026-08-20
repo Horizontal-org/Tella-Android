@@ -13,5 +13,6 @@ interface OnBoardActivityInterface {
     fun showButtons(isNextButtonVisible : Boolean,isBackButtonVisible: Boolean)
     fun hideViewpager()
     fun showViewpager()
+    fun showOverlayProgress(activeIndex: Int, showNextButton: Boolean = false, onNextClick: (() -> Unit)? = null)
 
 }

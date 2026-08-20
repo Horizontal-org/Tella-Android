@@ -5,6 +5,7 @@ import android.animation.AnimatorInflater
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
@@ -16,7 +17,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.hzontal.tella_vault.database.VaultDataSource
 import com.hzontal.tella_vault.VaultFile
+import com.hzontal.tella_vault.filter.FilterType
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.MyApplication
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
@@ -30,10 +33,12 @@ import org.horizontal.tella.mobile.mvp.presenter.MetadataAttacher
 import org.horizontal.tella.mobile.util.C.RECORD_REQUEST_CODE
 import org.horizontal.tella.mobile.util.StringUtils
 import org.horizontal.tella.mobile.views.activity.MetadataActivity
+import org.horizontal.tella.mobile.views.activity.MainActivity
 import org.horizontal.tella.mobile.views.activity.camera.CameraActivity.Companion.VAULT_CURRENT_ROOT_PARENT
 import org.horizontal.tella.mobile.views.activity.viewer.toolBar
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_VAULT_FILE
 import org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.PREPARE_UPLOAD_ENTRY
+import org.horizontal.tella.mobile.views.fragment.vault.home.VAULT_FILTER
 import org.horizontal.tella.mobile.views.interfaces.VerificationWorkStatusCallback
 import java.util.Locale
 import java.util.UUID
@@ -96,20 +101,16 @@ class MicActivity : MetadataActivity(),
         recordingName = findViewById(R.id.rec_name)
         toolBar = findViewById(R.id.toolbar)
 
-        if (isCollect || isReport || isPrepareUpload || currentRootParent?.isNotEmpty() == true) {
+        val isRootContext = currentRootParent.isNullOrEmpty() || currentRootParent == VaultDataSource.ROOT_UID
+
+        if (isCollect || isReport || isPrepareUpload || !isRootContext) {
             mPlay.visibility = View.GONE
         }
 
-        if (isCollect || isPrepareUpload || currentRootParent?.isNotEmpty() == true) {
-            toolBar.navigationIcon =
-                ContextCompat.getDrawable(this, R.drawable.ic_close_white)
-
-            // Set a click listener for the navigation icon
-            toolBar.setNavigationOnClickListener {
-                // Handle back or close action here
-                finish()
-
-            }
+        toolBar.navigationIcon =
+            ContextCompat.getDrawable(this, R.drawable.ic_close_white)
+        toolBar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
         }
 
         mRecord.setOnClickListener {
@@ -196,6 +197,7 @@ class MicActivity : MetadataActivity(),
                             })
                         return
                     }
+                    finish()
                 }
             })
     }
@@ -300,6 +302,7 @@ class MicActivity : MetadataActivity(),
     }
 
     private fun scheduleFileUpload(vaultFile: VaultFile) {
+        if (isReport || isCollect || isPrepareUpload) return
         if (Preferences.isAutoUploadEnabled()) {
             viewModel.scheduleUploadReportFiles(
                 vaultFile,
@@ -436,8 +439,13 @@ class MicActivity : MetadataActivity(),
     }
 
     private fun openRecordings() {
-        // bundle.putString(VAULT_FILTER, FilterType.AUDIO.name)
-        // nav().navigate(R.id.action_micScreen_to_attachments_screen, bundle)
+        startActivity(
+            Intent(this, MainActivity::class.java).apply {
+                putExtra(MainActivity.EXTRA_NAVIGATE_TO, "attachments_screen")
+                putExtra(VAULT_FILTER, FilterType.AUDIO.name)
+                currentRootParent?.let { putExtra(MainActivity.EXTRA_VAULT_PARENT_ID, it) }
+            }
+        )
     }
 
     private fun stopRecorder() {

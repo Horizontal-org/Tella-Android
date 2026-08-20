@@ -9,7 +9,7 @@
 <string name="settings_menu.item_contact">Contact us</string>
   <string name="collect_dialog.text_download.progress">Downloading the form</string>
   <string name="collect_toast_download.completed">Download completed</string>
-<string name="collect.draft_tab.title">Draft</string>
+<string name="collect.draft_tab.title">Drafts</string>
   <string name="collect.blank_action_download.form">Download</string>
   <string name="settings_text_empty.field">This field cannot be empty.</string>
   <string name="home_toast_back.exit">Tap the \"Back\" button again to exit the app</string>
@@ -449,7 +449,7 @@ connecting to a server</string>
   <string name="Uwazi_RemoveTemplate_ConfirmTitle">Remove \"%1$s\"?</string>
   <string name="Uwazi_Subtitle_RemoveTemplate">Are you sure you want to remove this template?</string>
   <string name="UWAZI_Language_Header_Title">Uwazi language</string>
-  <string name="Uwazi_Language_Screen_Description">This Uwazi collection is available in several languages. Please select the language in which you would like to download templates. </string>
+  <string name="Uwazi_Language_Screen_Description">This Uwazi collection is available in several languages. Please select the language in which you would like to download templates.</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Expl">Show shortcuts to your favorite templates on Tella’s homescreen.</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Title">Favorite templates</string>
   <string name="Uwazi_Templates_Empty_Description">Your have no saved templates. Tap the “+”
@@ -1008,7 +1008,7 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="onboard_lock_success_message">Your lock is set up! You can change it anytime in the Tella Settings.</string>
   <string name="onboard_lock_success_learn_more">Learn more about Tella\'s lock</string>
   <string name="Uwazi_DeleteEntity_SheetTitle">Delete entity?</string>
-  <string name="Uwazi_Subtitle_RemoveSubmittedEntity">Are you sure you want to delete this form from your device? Note that because it was already submitted, the data will remain on your organization\'s server.</string>
+  <string name="Uwazi_Subtitle_RemoveSubmittedEntity">Are you sure you want to delete this from your device? Note that because it was already submitted, the data will remain on your organization\'s server.</string>
   <string name="Uwazi_Entity_Deleted_Toast">\"%1$s\" has been deleted.</string>
   <string name="Uwazi_Template_Removed_Toast">\"%1$s\" has been removed from your device.</string>
   <string name="google_drive_shared_drive_migration_sheet_title">Create a new Google Drive folder</string>

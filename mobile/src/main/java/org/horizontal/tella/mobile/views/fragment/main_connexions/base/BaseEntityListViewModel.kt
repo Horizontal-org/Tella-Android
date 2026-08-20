@@ -14,8 +14,10 @@ import org.horizontal.tella.mobile.domain.entity.IEntityInstance
 import org.horizontal.tella.mobile.domain.entity.Server
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFileStatus
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import org.horizontal.tella.mobile.util.fromJsonToObjectList
 import org.horizontal.tella.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
+import timber.log.Timber
 
 /**
  * Draft / outbox / submitted behaviour shared by every connection type. [I] is the concrete
@@ -85,6 +87,20 @@ abstract class BaseEntityListViewModel<I : IEntityInstance> : ViewModel() {
         _error.postValue(error)
     }
 
+    protected fun openInstanceAfterUnexpectedFailure(
+        instance: I,
+        throwable: Throwable,
+        logMessage: String
+    ) {
+        Timber.e(throwable, logMessage)
+        CrashReporterProvider.get().run {
+            recordException(throwable)
+            log(logMessage)
+        }
+        instance.widgetMediaFiles = emptyList()
+        _reportInstance.postValue(instance)
+    }
+
     // Method to handle progress state
     protected fun showProgress() {
         _progress.postValue(true)
@@ -105,6 +121,21 @@ abstract class BaseEntityListViewModel<I : IEntityInstance> : ViewModel() {
 
     protected fun onMoreClicked(reportInstance: I) {
         _onMoreClickedFormInstance.postValue(reportInstance)
+    }
+
+    protected fun mergeReportAttachments(
+        formFiles: List<FormMediaFile>?,
+        vaultFiles: List<VaultFile>?
+    ): List<FormMediaFile> {
+        val existing = (vaultFiles ?: emptyList()).filterNotNull().associateBy { it.id }
+        return (formFiles ?: emptyList()).mapNotNull { formFile ->
+            existing[formFile.id]?.let { vaultFile ->
+                FormMediaFile.fromMediaFile(vaultFile).apply {
+                    status = formFile.status
+                    uploadedSize = formFile.uploadedSize
+                }
+            }
+        }
     }
 
     fun vaultFilesToMediaFiles(files: List<VaultFile>): List<FormMediaFile> {

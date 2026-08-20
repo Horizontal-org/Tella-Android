@@ -489,7 +489,6 @@ abstract class BaseReportsEntryFragment :
     }
 
     override fun playMedia(mediaFile: VaultFile?) {
-
     }
 
     override fun addFiles() {

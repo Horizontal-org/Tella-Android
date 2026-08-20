@@ -219,13 +219,14 @@ knkerfkefkfekfkekekl,f,klferkl,f,lkefe,fe,lf,lef,lef,lef,er,f,ref,f,,llkf,elk,f,
             android:layout_marginVertical="@dimen/activity_vertical_large_margin"
             android:layout_toEndOf="@+id/send_later_btn"
             android:background="@drawable/bg_round_orange_btn"
-            android:fontFamily="@font/open_sans"
+            android:fontFamily="@font/open_sans_semibold"
             android:gravity="center"
             android:text="@string/collect.end_action_submit"
             android:textAlignment="center"
+            android:textAllCaps="true"
             android:textColor="@color/btn_dark_letter"
-            android:textSize="16sp"
-            android:textStyle="bold"
+            android:textSize="14sp"
+            android:letterSpacing="0.0214"
             tools:ignore="RtlCompat" />
 
     </RelativeLayout>

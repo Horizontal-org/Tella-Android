@@ -88,8 +88,14 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideGoogleDriveId(@ApplicationContext context: Context, gson: Gson): Config {
-        val inputStream = context.assets.open("config.json")
-        val reader = InputStreamReader(inputStream)
-        return gson.fromJson(reader, Config::class.java)
+        return try {
+            context.assets.open("config.json").use { inputStream ->
+                InputStreamReader(inputStream).use { reader ->
+                    gson.fromJson(reader, Config::class.java)
+                }
+            }
+        } catch (_: Exception) {
+            Config(googleClientId = "")
+        }
     }
 }

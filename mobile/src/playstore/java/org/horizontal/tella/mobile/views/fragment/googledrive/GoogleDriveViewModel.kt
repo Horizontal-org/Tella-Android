@@ -2,7 +2,6 @@ package org.horizontal.tella.mobile.views.fragment.googledrive
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Flowable
@@ -29,7 +28,6 @@ import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BaseRepor
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.ReportCounts
 import org.horizontal.tella.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
 import org.horizontal.tella.mobile.views.fragment.reports.mappers.toViewEntityInstanceItem
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -262,28 +260,30 @@ class GoogleDriveViewModel @Inject constructor(
                             instance.widgetMediaFiles = filesResult
                             _reportInstance.postValue(instance)
                         }, { throwable ->
-                            Timber.d(throwable)
-                            CrashReporterProvider.get().recordException(throwable)
+                            openInstanceAfterUnexpectedFailure(
+                                instance,
+                                throwable,
+                                "Failed to get report bundle for instance ${instance.id}"
+                            )
                         })
                 )
             },
-            onError = { _error.postValue(it) },
+            onError = { error ->
+                openInstanceAfterUnexpectedFailure(
+                    instance,
+                    error,
+                    "Failed to get report bundle for instance ${instance.id}"
+                )
+            },
             onFinished = { _progress.postValue(false) }
         )
     }
 
     private fun processMediaFiles(
-        files: List<FormMediaFile>,
-        vaultFiles: List<VaultFile>
+        files: List<FormMediaFile>?,
+        vaultFiles: List<VaultFile>?
     ): ArrayList<FormMediaFile> {
-        return files.mapNotNull { formMediaFile ->
-            vaultFiles.firstOrNull { it.id == formMediaFile.id }?.let { vaultFile ->
-                FormMediaFile.fromMediaFile(vaultFile).apply {
-                    status = formMediaFile.status
-                    uploadedSize = formMediaFile.uploadedSize
-                }
-            }
-        }.toCollection(ArrayList())
+        return mergeReportAttachments(files, vaultFiles).toCollection(ArrayList())
     }
 
     override fun getFormInstance(
