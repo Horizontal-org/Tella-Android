@@ -364,7 +364,7 @@
     <string name="onboard.intro_title">Bienvenide a Tella</string>
     <string name="onboard.intro_get_started">Empezar</string>
     <string name="onboard.title_camera">Grabar</string>
-    <string name="onboard.expl_camera">Toma fotos y videos directamente en Tella. Estos archivos se cifran automáticamente y se guardan en Tella, y no serán visibles desde la galería habitual de tu teléfono.</string>
+    <string name="onboard.expl_camera">Capture photos, videos and audio directly in Tella.</string>
     <string name="onboard.title_recorder">Grabadora</string>
     <string name="onboard.expl_recorder">Graba entrevistas o cualquier sonido a tu alrededor con la grabadora de voz de Tella. Los archivos de audio se cifran automáticamente y se guardan en la carpeta oculta de Tella.</string>
     <string name="onboard.title_files">Store files safely</string>
