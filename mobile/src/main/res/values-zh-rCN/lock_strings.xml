@@ -46,4 +46,5 @@
     <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">请输入当前 PIN 码， 更改您的伪装</string>
     <string name="Settings_Action_SetLock">应用锁</string>
     <string name="Settings_Message_LockChanged">应用锁已更换！</string>
+    <string name="unlock">解锁</string>
 </resources>
