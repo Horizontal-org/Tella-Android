@@ -14,4 +14,5 @@
     <string name="action_hide_pin">приховати PIN-код</string>
     <string name="action_delete">Видалити</string>
     <string name="action_go_back">повернутися</string>
+    <string name="Home_BottomNav_Uwazi">Uwazi</string>
 </resources>
