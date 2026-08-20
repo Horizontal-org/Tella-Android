@@ -46,4 +46,5 @@
     <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">Masukkan PIN Anda saat ini untuk mengubah kamuflase Anda</string>
     <string name="Settings_Action_SetLock">Lock</string>
     <string name="Settings_Message_LockChanged">Kunci Anda telah diubah!</string>
+    <string name="unlock">Buka kunci</string>
 </resources>
