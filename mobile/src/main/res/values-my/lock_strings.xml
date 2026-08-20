@@ -46,4 +46,5 @@
     <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">သင့်အသွင်အပြင် ပြောင်းလဲရန် သင့်လက်ရှိပင်နံပါတ်ကို ရိုက်ထည့်ပါ...</string>
     <string name="Settings_Action_SetLock">လော့ခ်</string>
     <string name="Settings_Message_LockChanged">သင့်လော့ခ်ကို ပြောင်းပြီးပြီ။</string>
+    <string name="unlock">Unlock</string>
 </resources>
