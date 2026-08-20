@@ -47,10 +47,10 @@
     <string name="Settings_Action_SetLock">Bloqueio</string>
     <string name="Settings_Message_LockChanged">Seu bloqueio foi alterado</string>
     <string name="unlock">Unlock</string>
-    <string name="attempts_remaining_plural">You have %1$d attempts remaining until&#13;\n everything in your Tella is deleted.</string>
-    <string name="exceeded_max_attempts">You have exceeded the maximum number of&#13;\n incorrect login attempts. All your Tella data&#13;\n has been deleted.</string>
-    <string name="attempts_remaining_singular">You have 1 attempt remaining until&#13;\n everything in your Tella is deleted.</string>
-    <string name="incorrect_pin">Incorrect Pin. &#13;\n&#13;\n</string>
+    <string name="attempts_remaining_plural">Você tem %1$d tentativas restantes até tudo em seu Tella é excluído.</string>
+    <string name="exceeded_max_attempts">Você excedeu o número máximo de tentativas de login incorretas. Todos os seus dados Tella foi deletado.</string>
+    <string name="attempts_remaining_singular">Você tem 1 tentativa restante até tudo em seu Tella é excluído.</string>
+    <string name="incorrect_pin">Pin incorreto. &#13;\n&#13;\n</string>
     <string name="incorrect_password">Incorrect Password. &#13;\n&#13;\n</string>
-    <string name="incorrect_pattern">Incorrect Pattern.&#13;\n&#13;\n</string>
+    <string name="incorrect_pattern">Padrão incorreto.&#13;\n&#13;\n</string>
 </resources>
