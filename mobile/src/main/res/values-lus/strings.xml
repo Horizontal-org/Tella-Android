@@ -364,7 +364,7 @@
     <string name="onboard.intro_title">Tella-ah kan lo lawm a che</string>
     <string name="onboard.intro_get_started">Ṭan ang le</string>
     <string name="onboard.title_camera">Record</string>
-    <string name="onboard.expl_camera">Tella chhungah h hian thla la in video la nghal rawh. Heng file te hi automatic-a encrypt niin Tella-ah save a ni ang a, i phone gallery pangaiah a lang lo ang.</string>
+    <string name="onboard.expl_camera">Capture photos, videos and audio directly in Tella.</string>
     <string name="onboard.title_recorder">Recorder</string>
     <string name="onboard.expl_recorder">Tella voice recorder hmangin thil zawhfiahna (interviews) emaw i vela ri apiang record rawh. Audio file te hi automatic-a encrypt a ni ang a, Tella folder inthupah save a ni ang.</string>
     <string name="onboard.title_files">Store files safely</string>
@@ -1115,7 +1115,7 @@
     <string name="Uwazi_Subtitle_RemoveOutboxEntity">Are you sure you want to delete this entity?</string>
     <string name="onboard.share_data_connections">Tella supports server Connections to:</string>
     <string name="onboard.title_nearby_sharing">Share files nearby</string>
-    <string name="onboard.expl_camera_info">These files are saved in Tella, and cannot be seen from your phone\'s regular gallery.</string>
+    <string name="onboard.expl_camera_info">These files are saved in Tella, and cannot be seen from your phone’s regular gallery.</string>
     <string name="Uwazi_RemoveTemplate_ConfirmTitle">Remove \"%1$s\"?</string>
     <string name="Uwazi_Template_Removed_Toast">\"%1$s\" has been removed from your device.</string>
     <string name="peer_to_peer_invalid_details_message">Please ask the sender to verify their connection details and try again.</string>
