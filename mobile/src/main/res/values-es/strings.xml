@@ -1108,4 +1108,5 @@
     <string name="verification_step2_sender_hash">Step 2: Confirm sender hash</string>
     <string name="confirm_and_continue">Confirm and continue</string>
     <string name="collect_form_geopoint_first_load_message_secondary">This may take some time, depending on your Internet connection.</string>
+    <string name="onboard.expl_camera_info">Estos archivos están guardados en Tella, y no estarán visibles desde la galería de photos de tu teléfono.</string>
 </resources>
