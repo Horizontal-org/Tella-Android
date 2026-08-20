@@ -363,7 +363,7 @@
     <string name="recorder_toast_recording.saved">Nsen rim ai lam hpe na a Tella lamang nhtan hta e matsing bang da sai</string>
     <string name="onboard.intro_title">Tella kaw na hkap tau la ga ai</string>
     <string name="onboard.intro_get_started">Galaw hpang u</string>
-    <string name="onboard.title_camera">Sumla dem jak (Kemra)</string>
+    <string name="onboard.title_camera">Nsen rim bang u</string>
     <string name="onboard.expl_camera">Take photos and videos directly in Tella. These files are automatically encrypted and saved in Tella, and will not be visible from your phone’s regular gallery.</string>
     <string name="onboard.title_recorder">Nsen rim jak</string>
     <string name="onboard.expl_recorder">Record interviews or any sound around you with Tella’s voice recorder. The audio files are automatically encrypted and saved in Tella’s hidden folder.</string>
