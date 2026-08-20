@@ -46,4 +46,5 @@
     <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">Nhập mã PIN hiện tại của bạn để thay đổi chế độ ngụy trang</string>
     <string name="Settings_Action_SetLock">Khóa</string>
     <string name="Settings_Message_LockChanged">Mật khẩu khóa của bạn đã được thay đổi!</string>
+    <string name="unlock">Unlock</string>
 </resources>
