@@ -9,7 +9,7 @@
     <string name="settings_menu.item_contact">ကျွန်တော်တို့ကို ဆက်သွယ်ပါ</string>
     <string name="collect_dialog.text_download.progress">ဖောင်ကို ဒေါင်းလုပ်လုပ်နေသည်</string>
     <string name="collect_toast_download.completed">ဒေါင်းလုဒ် ပြီးပါပြီ</string>
-    <string name="collect.draft_tab.title">ပုံစံအကြမ်း</string>
+    <string name="collect.draft_tab.title">Drafts</string>
     <string name="collect.blank_action_download.form">ဒေါင်းလုဒ်လုပ်ပါ</string>
     <string name="settings_text_empty.field">ဤအကွက်သည် ဗလာမဖြစ်ရပါ။</string>
     <string name="home_toast_back.exit">အက်ပ်မှထွက်ရန် \"နောက်သို့\" ခလုတ်ကို ထပ်မံနှိပ်ပါ</string>
@@ -361,12 +361,12 @@
     <string name="recorder_toast_recording.saved">သွင်းထားသောအသံဖိုင်ကို သင်၏ Tella ဖိုင်များတွင် သိမ်းဆည်းထားသည်</string>
     <string name="onboard.intro_title">Tella မှ ကြိုဆိုပါတယ်</string>
     <string name="onboard.intro_get_started">စတင်မည်</string>
-    <string name="onboard.title_camera">ကင်မရာ</string>
+    <string name="onboard.title_camera">ဖမ်းယူမည်</string>
     <string name="onboard.expl_camera">ဓာတ်ပုံနှင့် ဗီဒီယိုများကို Tella တွင် တိုက်ရိုက် ရိုက်ကူးပါ။ ထိုဖိုင်များကို အလိုအလျောက် ကုဒ်ဝှက်ပြီး Tella တွင် သိမ်းထားသည့်အပြင် သင့်ဖုန်း၏ ပုံမှန်ဓာတ်ပုံအယ်လ်ဘမ်တွင် မြင်ရမည်မဟုတ်ပါ။</string>
     <string name="onboard.title_recorder">အသံဖမ်းစက်</string>
     <string name="onboard.expl_recorder">အင်တာဗျူးများ သို့မဟုတ် သင့်အနီးဝန်းကျင်ရှိ မည်သည့်အသံကိုမဆို Tella ၏ အသံသွင်းစက်ဖြင့် အသံသွင်းယူပါ။ အသံဖိုင်များကို အလိုအလျောက် ကုဒ်ဝှက်ပြီး Tella ၏ လျှို့ဝှက်ဖိုင်တွဲတွင် သိမ်းဆည်းထားပါမည်။</string>
-    <string name="onboard.title_files">လျှို့ဝှက်ဖိုင်များနှင့် ဖိုင်တွဲများ</string>
-    <string name="onboard.expl_files">သင့်ဖိုင်အားလုံးကို လုံခြုံစွာ စုစည်းသိမ်းဆည်းထားပါ။ Tella ကို လော့ခ်ချထားသရွေ့ သင့်စက်ပစ္စည်း သိမ်းဆည်းခြင်း သို့မဟုတ် ရှာဖွေခြင်း ခံရသည့်တိုင်အောင် သင့်ဖိုင်များနှင့် ဖိုင်တွဲများကို ဝင်ရောက်၍ရမည်မဟုတ်ပါ။</string>
+    <string name="onboard.title_files">Store files safely</string>
+    <string name="onboard.expl_files">Your Tella files are encrypted. As long as Tella is locked, no one else (not even the Tella team) can access your data.</string>
     <string name="onboard.title_lock_finish">လော့ခ်</string>
     <string name="onboard.expl_lock_finish">သင့်လော့ခ်ကို တပ်ဆင်ပြီးပါပြီ။ ၎င်းကို ဆက်တင်များတွင် အချိန်မရွေး ပြောင်းလဲနိုင်သည်။</string>
     <string name="onboard.title_all_done">အားလုံးပြီးစီးသွားပါပြီ။</string>
@@ -430,7 +430,7 @@
     <string name="collect.outbox_tab.title">Outbox</string>
     <string name="Collect_RemoveForm_SheetTitle">ဖောင်ပုံစံကို ဖယ်ရှားမလား။</string>
     <string name="fragment_uwazi">Uwazi</string>
-    <string name="Uwazi_Dowload_Temapltes_Header_Title">အသင့်သုံးပုံစံလွှာများ ဒေါင်းလုဒ်လုပ်မည်</string>
+    <string name="Uwazi_Dowload_Temapltes_Header_Title">Add Templates</string>
     <string name="Uwazi_RemoveTemplate_SheetTitle">စက်မှ ဖယ်ရှားမည်</string>
     <string name="Uwazi_Action_FillEntity">Entity တစ်ခု ဖန်တီးမည်</string>
     <string name="Uwazi_Action_RemoveTemplate">အသင့်သုံးပုံစံလွှာကို ဖျက်မည်</string>
@@ -848,8 +848,8 @@
     <string name="Settings_Analytics_turn_on_dialog">You have signed up to share analytics. You can always change this in Settings.</string>
     <string name="Settings_Analytics_turn_off_dialog">You will not longer be sharing analytics. You can always change this in Settings.</string>
     <string name="unlock">Unlock</string>
-    <string name="Onboard_Collect_Data">Collect data</string>
-    <string name="Onboard_Collect_Data_Exp">If you work with an organization, send forms, reports, and files directly from Tella to your organization.</string>
+    <string name="Onboard_Collect_Data">Share data</string>
+    <string name="Onboard_Collect_Data_Exp">Send reports, forms and files to your organization, or back up files to a personal cloud.</string>
     <string name="action_flip_vertically">Flip vertically</string>
     <string name="action_flip_horizontally">Flip horizontally</string>
     <string name="settings.docu_add.server_dialog.select_tella_google_drive" translatable="false">Google drive</string>
@@ -1094,4 +1094,8 @@
     <string name="verification_step2_sender_hash">Step 2: Confirm sender hash</string>
     <string name="confirm_and_continue">Confirm and continue</string>
     <string name="collect_form_geopoint_first_load_message_secondary">This may take some time, depending on your Internet connection.</string>
+    <string name="settings_invalid_url">Error: The server URL is incorrect</string>
+    <string name="onboard.expl_files_info">By default, your Tella files are stored only on your device, not online.</string>
+    <string name="Uwazi_Subtitle_RemoveOutboxEntity">Are you sure you want to delete this entity?</string>
+    <string name="onboard.share_data_connections">Tella supports server Connections to:</string>
 </resources>
