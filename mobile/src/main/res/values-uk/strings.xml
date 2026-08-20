@@ -9,7 +9,7 @@
     <string name="settings_menu.item_contact">Зв’язатися з нами</string>
     <string name="collect_dialog.text_download.progress">Завантаження форми</string>
     <string name="collect_toast_download.completed">Завантаження завершено</string>
-    <string name="collect.draft_tab.title">Чернетка</string>
+    <string name="collect.draft_tab.title">Drafts</string>
     <string name="collect.blank_action_download.form">Завантажити</string>
     <string name="settings_text_empty.field">Це поле не може бути порожнім.</string>
     <string name="home_toast_back.exit">Натисніть кнопку \"Назад\" ще раз, щоб вийти з програми</string>
@@ -367,12 +367,12 @@
     <string name="recorder_toast_recording.saved">Аудіозапис збережено у файлах Tella</string>
     <string name="onboard.intro_title">Ласкаво просимо до Tella</string>
     <string name="onboard.intro_get_started">Почати роботу</string>
-    <string name="onboard.title_camera">Камера</string>
+    <string name="onboard.title_camera">Записати</string>
     <string name="onboard.expl_camera">Робіть фото та відео безпосередньо в Tella. Ці файли автоматично шифруються і зберігаються в Tella, їх не буде видно у звичайній галереї телефону.</string>
     <string name="onboard.title_recorder">Диктофон</string>
     <string name="onboard.expl_recorder">Записуйте інтерв’ю або будь-які навколишні звуки за допомогою диктофона Tella. Аудіофайли автоматично шифруються та зберігаються у прихованій папці Tella.</string>
-    <string name="onboard.title_files">Зашифровані файли та папки</string>
-    <string name="onboard.expl_files">Надійно зберігайте та впорядковуйте всі свої файли. Поки Tella заблокована, ваші файли та папки залишатимуться недоступними для тих, хто вилучить або перевірятиме пристрій.</string>
+    <string name="onboard.title_files">Store files safely</string>
+    <string name="onboard.expl_files">Your Tella files are encrypted. As long as Tella is locked, no one else (not even the Tella team) can access your data.</string>
     <string name="onboard.title_lock_finish">Блокування</string>
     <string name="onboard.expl_lock_finish">Ваше блокування налаштовано! Ви можете змінити його будь-коли в Налаштуваннях.</string>
     <string name="onboard.title_all_done">Усе готово!</string>
@@ -439,7 +439,7 @@
     <string name="collect.outbox_tab.title">Вихідні</string>
     <string name="Collect_RemoveForm_SheetTitle">Видалити форму?</string>
     <string name="fragment_uwazi">Uwazi</string>
-    <string name="Uwazi_Dowload_Temapltes_Header_Title">Завантажити шаблони</string>
+    <string name="Uwazi_Dowload_Temapltes_Header_Title">Add Templates</string>
     <string name="Uwazi_RemoveTemplate_SheetTitle">Видалити з пристрою</string>
     <string name="Uwazi_Action_FillEntity">Створити сутність</string>
     <string name="Uwazi_Action_RemoveTemplate">Видалити шаблон</string>
@@ -887,8 +887,8 @@
     <string name="Settings_Analytics_turn_on_dialog">Ви погодилися ділитися аналітикою. Ви завжди можете змінити це в налаштуваннях.</string>
     <string name="Settings_Analytics_turn_off_dialog">Ви більше не ділитиметеся аналітикою. Ви завжди можете змінити це в налаштуваннях.</string>
     <string name="unlock">Розблокувати</string>
-    <string name="Onboard_Collect_Data">Збір інформації</string>
-    <string name="Onboard_Collect_Data_Exp">Якщо ви працюєте з організацією, надсилайте форми, звіти та файли безпосередньо з Tella до вашої організації.</string>
+    <string name="Onboard_Collect_Data">Share data</string>
+    <string name="Onboard_Collect_Data_Exp">Send reports, forms and files to your organization, or back up files to a personal cloud.</string>
     <string name="action_flip_vertically">Відзеркалити вертикально</string>
     <string name="action_flip_horizontally">Відзеркалити горизонтально</string>
     <string name="settings.docu_add.server_dialog.select_tella_google_drive" translatable="false">Google drive</string>
@@ -1142,4 +1142,8 @@
     <string name="verification_step2_sender_hash">Крок 2: Підтвердьте хеш відправника</string>
     <string name="confirm_and_continue">Підтвердити й продовжити</string>
     <string name="collect_form_geopoint_first_load_message_secondary">This may take some time, depending on your Internet connection.</string>
+    <string name="settings_invalid_url">Error: The server URL is incorrect</string>
+    <string name="onboard.expl_files_info">By default, your Tella files are stored only on your device, not online.</string>
+    <string name="Uwazi_Subtitle_RemoveOutboxEntity">Are you sure you want to delete this entity?</string>
+    <string name="onboard.share_data_connections">Tella supports server Connections to:</string>
 </resources>
