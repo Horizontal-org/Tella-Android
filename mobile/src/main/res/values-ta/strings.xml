@@ -1114,4 +1114,9 @@
     <string name="onboard.expl_files_info">By default, your Tella files are stored only on your device, not online.</string>
     <string name="Uwazi_Subtitle_RemoveOutboxEntity">Are you sure you want to delete this entity?</string>
     <string name="onboard.share_data_connections">Tella supports server Connections to:</string>
+    <string name="onboard.expl_camera_info">These files are saved in Tella, and cannot be seen from your phone\'s regular gallery.</string>
+    <string name="onboard.title_nearby_sharing">Share files nearby</string>
+    <string name="peer_to_peer_invalid_details_message">Please ask the sender to verify their connection details and try again.</string>
+    <string name="Uwazi_RemoveTemplate_ConfirmTitle">Remove \"%1$s\"?</string>
+    <string name="Uwazi_Template_Removed_Toast">\"%1$s\" has been removed from your device.</string>
 </resources>
