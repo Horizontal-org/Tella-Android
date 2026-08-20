@@ -1142,13 +1142,4 @@
     <string name="verification_step2_sender_hash">Крок 2: Підтвердьте хеш відправника</string>
     <string name="confirm_and_continue">Підтвердити й продовжити</string>
     <string name="collect_form_geopoint_first_load_message_secondary">This may take some time, depending on your Internet connection.</string>
-    <string name="settings_invalid_url"></string>
-    <string name="onboard.expl_camera_info"></string>
-    <string name="onboard.title_nearby_sharing"></string>
-    <string name="Uwazi_Subtitle_RemoveOutboxEntity"></string>
-    <string name="onboard.share_data_connections"></string>
-    <string name="onboard.expl_files_info"></string>
-    <string name="peer_to_peer_invalid_details_message"></string>
-    <string name="Uwazi_RemoveTemplate_ConfirmTitle"></string>
-    <string name="Uwazi_Template_Removed_Toast"></string>
 </resources>
