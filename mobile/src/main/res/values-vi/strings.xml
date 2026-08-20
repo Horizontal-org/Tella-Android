@@ -9,7 +9,7 @@
     <string name="settings_menu.item_contact">Liên hệ với chúng tôi</string>
     <string name="collect_dialog.text_download.progress">Đang tải xuống biểu mẫu</string>
     <string name="collect_toast_download.completed">Tải xuống hoàn tất</string>
-    <string name="collect.draft_tab.title">Bản nháp</string>
+    <string name="collect.draft_tab.title">Drafts</string>
     <string name="collect.blank_action_download.form">Tải xuống</string>
     <string name="settings_text_empty.field">Trường này không được để trống.</string>
     <string name="home_toast_back.exit">Nhấn vào nút \"Quay lại\" để thoát ứng dụng</string>
@@ -361,12 +361,12 @@
     <string name="recorder_toast_recording.saved">Bản ghi âm đã được lưu vào tệp tin Tella</string>
     <string name="onboard.intro_title">Chào mừng đến với Tella</string>
     <string name="onboard.intro_get_started">Bắt đầu</string>
-    <string name="onboard.title_camera">Máy ảnh</string>
+    <string name="onboard.title_camera">Ghi</string>
     <string name="onboard.expl_camera">Chụp ảnh và quay video trực tiếp trong Tella. Các tệp này được tự động mã hóa, được lưu trong Tella và sẽ không được hiển thị từ thư viện thông thường trên điện thoại của bạn.</string>
     <string name="onboard.title_recorder">Máy ghi âm</string>
     <string name="onboard.expl_recorder">Ghi lại các cuộc phỏng vấn hoặc bất kỳ âm thanh nào xung quanh bạn bằng máy ghi âm của Tella. Các tệp tin âm thanh được tự động mã hóa và lưu vào thư mục ẩn của Tella.</string>
-    <string name="onboard.title_files">Tệp và thư mục được mã hóa</string>
-    <string name="onboard.expl_files">Lưu trữ và sắp xếp an toàn tất cả các tệp tin của bạn. Người đang chiếm giữ hoặc lục soát thiết bị sẽ không thể truy cập được tệp tin và thư mục bên trong Tella khi Tella bị khóa.</string>
+    <string name="onboard.title_files">Store files safely</string>
+    <string name="onboard.expl_files">Your Tella files are encrypted. As long as Tella is locked, no one else (not even the Tella team) can access your data.</string>
     <string name="onboard.title_lock_finish">Khóa</string>
     <string name="onboard.expl_lock_finish">Mật khẩu của bạn đã được thiết lập! Bạn có thể thay đổi nó bất cứ lúc nào trong Cài đặt.</string>
     <string name="onboard.title_all_done">Bạn đã hoàn tất!</string>
@@ -430,7 +430,7 @@
     <string name="collect.outbox_tab.title">Hộp thư đi</string>
     <string name="Collect_RemoveForm_SheetTitle">Xóa biểu mẫu?</string>
     <string name="fragment_uwazi">Uwazi</string>
-    <string name="Uwazi_Dowload_Temapltes_Header_Title">Tải biểu mẫu</string>
+    <string name="Uwazi_Dowload_Temapltes_Header_Title">Add Templates</string>
     <string name="Uwazi_RemoveTemplate_SheetTitle">Xóa khỏi thiết bị</string>
     <string name="Uwazi_Action_FillEntity">Tạo thực thể</string>
     <string name="Uwazi_Action_RemoveTemplate">Xóa Biểu mẫu</string>
@@ -848,8 +848,8 @@
     <string name="Settings_Analytics_turn_on_dialog">You have signed up to share analytics. You can always change this in Settings.</string>
     <string name="Settings_Analytics_turn_off_dialog">You will not longer be sharing analytics. You can always change this in Settings.</string>
     <string name="unlock">Unlock</string>
-    <string name="Onboard_Collect_Data">Collect data</string>
-    <string name="Onboard_Collect_Data_Exp">If you work with an organization, send forms, reports, and files directly from Tella to your organization.</string>
+    <string name="Onboard_Collect_Data">Share data</string>
+    <string name="Onboard_Collect_Data_Exp">Send reports, forms and files to your organization, or back up files to a personal cloud.</string>
     <string name="action_flip_vertically">Flip vertically</string>
     <string name="action_flip_horizontally">Flip horizontally</string>
     <string name="settings.docu_add.server_dialog.select_tella_google_drive" translatable="false">Google drive</string>
@@ -1094,4 +1094,8 @@
     <string name="verification_step2_sender_hash">Step 2: Confirm sender hash</string>
     <string name="confirm_and_continue">Confirm and continue</string>
     <string name="collect_form_geopoint_first_load_message_secondary">This may take some time, depending on your Internet connection.</string>
+    <string name="settings_invalid_url">Error: The server URL is incorrect</string>
+    <string name="onboard.expl_files_info">By default, your Tella files are stored only on your device, not online.</string>
+    <string name="Uwazi_Subtitle_RemoveOutboxEntity">Are you sure you want to delete this entity?</string>
+    <string name="onboard.share_data_connections">Tella supports server Connections to:</string>
 </resources>
