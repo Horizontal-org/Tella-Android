@@ -14,9 +14,4 @@
     <string name="action_hide_pin">приховати PIN-код</string>
     <string name="action_delete">Видалити</string>
     <string name="action_go_back">повернутися</string>
-    <string name="Migration_Failed_Description" translatable="false"></string>
-    <string name="Migration_Failed_Title" translatable="false"></string>
-    <string name="onboarding_info_icon_content_description"></string>
-    <string name="Home_BottomNav_Settings" translatable="false"></string>
-    <string name="Home_BottomNav_Uwazi"></string>
 </resources>
