@@ -5,4 +5,5 @@
     <string name="action_cancel">ರದ್ದುಮಾಡಿ</string>
     <string name="action_delete">ಅಳಿಸುವುದಾ</string>
     <string name="action_go_back">ಹಿಂತಿರುಗಿ</string>
+    <string name="Home_BottomNav_Camera">Camera</string>
 </resources>
