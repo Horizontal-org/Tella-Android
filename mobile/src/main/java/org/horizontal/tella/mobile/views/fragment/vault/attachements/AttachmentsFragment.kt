@@ -662,6 +662,7 @@ class AttachmentsFragment :
     private fun syncSelectionChromeLeavingSelectModeFully() {
         selectMode = SelectMode.DESELECT_ALL
         isListCheckOn = false
+        attachmentsAdapter.clearSelected()
         attachmentsAdapter.enableSelectMode(false)
         enableMoveTheme(false)
         bindSelectAllCheckbox(SelectAllCheckboxVisual.IDLE)
@@ -935,8 +936,7 @@ class AttachmentsFragment :
             baseActivity, getString(R.string.Snackbar_files_were_deleted), false
         )
         onMediaFilesAdded()
-        selectMode = SelectMode.SELECT_ALL
-        handleSelectMode()
+        syncSelectionChromeLeavingSelectModeFully()
     }
 
     private fun onMediaFileDeleted() {
@@ -944,8 +944,7 @@ class AttachmentsFragment :
             baseActivity, getString(R.string.Snackbar_file_was_deleted), false
         )
         onMediaFilesAdded()
-        selectMode = SelectMode.SELECT_ALL
-        handleSelectMode()
+        syncSelectionChromeLeavingSelectModeFully()
     }
 
     private fun onMediaFileDeletionError(throwable: Throwable?) {

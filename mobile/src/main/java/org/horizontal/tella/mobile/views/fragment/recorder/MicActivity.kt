@@ -107,16 +107,10 @@ class MicActivity : MetadataActivity(),
             mPlay.visibility = View.GONE
         }
 
-        if (isCollect || isPrepareUpload || !isRootContext) {
-            toolBar.navigationIcon =
-                ContextCompat.getDrawable(this, R.drawable.ic_close_white)
-
-            // Set a click listener for the navigation icon
-            toolBar.setNavigationOnClickListener {
-                // Handle back or close action here
-                finish()
-
-            }
+        toolBar.navigationIcon =
+            ContextCompat.getDrawable(this, R.drawable.ic_close_white)
+        toolBar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
         }
 
         mRecord.setOnClickListener {

@@ -529,10 +529,10 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/btn_dark_letter</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:textAlignment">center</item>
-        <item name="android:fontFamily">@font/open_sans</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/open_sans_semibold</item>
+        <item name="android:letterSpacing">0.0214</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_marginBottom">18dp</item>
         <item name="android:layout_marginStart">34dp</item>

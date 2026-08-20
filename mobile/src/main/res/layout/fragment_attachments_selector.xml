@@ -40,12 +40,14 @@
             />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/filesToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingHorizontal="@dimen/tella_main_vertical"
-            android:paddingBottom="10dp">
+            android:paddingBottom="10dp"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/filterNameTv"

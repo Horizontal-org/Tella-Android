@@ -449,7 +449,7 @@ connecting to a server</string>
   <string name="Uwazi_RemoveTemplate_ConfirmTitle">Remove \"%1$s\"?</string>
   <string name="Uwazi_Subtitle_RemoveTemplate">Are you sure you want to remove this template?</string>
   <string name="UWAZI_Language_Header_Title">Uwazi language</string>
-  <string name="Uwazi_Language_Screen_Description">This Uwazi collection is available in several languages. Please select the language in which you would like to download templates. </string>
+  <string name="Uwazi_Language_Screen_Description">This Uwazi collection is available in several languages. Please select the language in which you would like to download templates.</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Expl">Show shortcuts to your favorite templates on Tella’s homescreen.</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Title">Favorite templates</string>
   <string name="Uwazi_Templates_Empty_Description">Your have no saved templates. Tap the “+”

@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.widget.TextViewCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.widget.ViewPager2
@@ -161,13 +161,10 @@ class ViewPagerComponent @JvmOverloads constructor(
             val unselectedColor = ContextCompat.getColor(context, R.color.wa_white_50)
             tabTitleTextView.setTextColor(if (isSelected) selectedColor else unselectedColor)
 
-            val textAppearance = if (isSelected) {
-                R.style.Tella_Main_White_Text_MeduimbBold
-            } else {
-                R.style.Typography_Subheading1
-            }
-            TextViewCompat.setTextAppearance(tabTitleTextView, textAppearance)
-            TextViewCompat.setTextAppearance(tabNumberTextView, textAppearance)
+            val fontRes = if (isSelected) R.font.open_sans_bold else R.font.open_sans_semibold
+            val typeface = ResourcesCompat.getFont(context, fontRes)
+            tabTitleTextView.typeface = typeface
+            tabNumberTextView.typeface = typeface
         }
     }
 

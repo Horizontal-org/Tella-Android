@@ -129,15 +129,16 @@ class MicFragment : MetadataBaseLockFragment(),
             activity.hideBottomNavigation()
         }
 
-        if (currentRootParent?.isNotEmpty() == true) {
-            toolBar.navigationIcon =
-                activity?.let { ContextCompat.getDrawable(it, R.drawable.ic_close_white) }
-
-            // Set a click listener for the navigation icon
-            toolBar.setNavigationOnClickListener {
-                // Handle back or close action here
-                activity?.supportFragmentManager?.popBackStack()
-
+        toolBar.navigationIcon =
+            activity?.let { ContextCompat.getDrawable(it, R.drawable.ic_close_white) }
+        toolBar.setNavigationOnClickListener {
+            when {
+                isCollect || isReport || currentRootParent?.isNotEmpty() == true -> {
+                    activity?.supportFragmentManager?.popBackStack()
+                }
+                else -> {
+                    (activity as? MainActivity)?.selectHome()
+                }
             }
         }
 
