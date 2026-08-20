@@ -9,7 +9,7 @@
     <string name="settings_menu.item_contact">الاتصال بنا</string>
     <string name="collect_dialog.text_download.progress">تنزيل الاستمارة</string>
     <string name="collect_toast_download.completed">لقد اكتمل التنزيل</string>
-    <string name="collect.draft_tab.title">المُسوَّدات</string>
+    <string name="collect.draft_tab.title">Drafts</string>
     <string name="collect.blank_action_download.form">تنزيل</string>
     <string name="settings_text_empty.field">لا يمكن ترك هذا الحقل فارغا.</string>
     <string name="home_toast_back.exit">يُرجة لمس زر « الرجوع » مرة أخرى لمغادرة التطبيق</string>
@@ -363,12 +363,12 @@
     <string name="recorder_toast_recording.saved">تم حفظ التسجيل الصوتي في ملفات Tella</string>
     <string name="onboard.intro_title">مرحبًا بك في Tella</string>
     <string name="onboard.intro_get_started">البدء</string>
-    <string name="onboard.title_camera">الكاميرا</string>
+    <string name="onboard.title_camera">تسجيل</string>
     <string name="onboard.expl_camera">Take photos and videos directly in Tella. These files are automatically encrypted and saved in Tella, and will not be visible from your phone’s regular gallery.</string>
     <string name="onboard.title_recorder">المُسجِّل الصوتي</string>
     <string name="onboard.expl_recorder">سجل مقابلاتك أو أي أصوات حولك باستخدام مسجل الصوت في Tella. يعَمّي التطبيق الملفات الصوتية تلقائيًّا ويحفظها داخل ملف مخفي به.</string>
-    <string name="onboard.title_files">ملفات ومجلدات مشفرة</string>
-    <string name="onboard.expl_files">جميع ملفاتك مخزنة ومنظمة ومحفوظة في أمان كامل. طالما كان التطبيق مغلقًا، ستظل ملفاتك ومجلداتك آمنة ولن يتمكن أي شخص يصادر الجهاز أو يفتشه من الوصول إليها أو الاطلاع عليها.</string>
+    <string name="onboard.title_files">Store files safely</string>
+    <string name="onboard.expl_files">Your Tella files are encrypted. As long as Tella is locked, no one else (not even the Tella team) can access your data.</string>
     <string name="onboard.title_lock_finish">قفل</string>
     <string name="onboard.expl_lock_finish">تم إعداد قفل التأمين الخاص بك! يمكنك تغيير قفل التأمين في أي وقت من قسم الإعدادات.</string>
     <string name="onboard.title_all_done">اكتمل الضبط</string>
@@ -433,7 +433,7 @@
     <string name="collect.outbox_tab.title">علبة الصادر</string>
     <string name="Collect_RemoveForm_SheetTitle">هل ترغب في حذف الاستمارة؟</string>
     <string name="fragment_uwazi">Uwazi</string>
-    <string name="Uwazi_Dowload_Temapltes_Header_Title">تنزيل القوالب</string>
+    <string name="Uwazi_Dowload_Temapltes_Header_Title">Add Templates</string>
     <string name="Uwazi_RemoveTemplate_SheetTitle">حذف من الجهاز</string>
     <string name="Uwazi_Action_FillEntity">إنشاء كيان</string>
     <string name="Uwazi_Action_RemoveTemplate">حذف القالب</string>
@@ -861,8 +861,8 @@
     <string name="Settings_Analytics_turn_on_dialog">You have signed up to share analytics. You can always change this in Settings.</string>
     <string name="Settings_Analytics_turn_off_dialog">لن تشارك التحليلات بعد الآن. يمكنك دائمًا تغيير ذلك في الإعدادات.</string>
     <string name="unlock">فتح</string>
-    <string name="Onboard_Collect_Data">Collect data</string>
-    <string name="Onboard_Collect_Data_Exp">If you work with an organization, send forms, reports, and files directly from Tella to your organization.</string>
+    <string name="Onboard_Collect_Data">Share data</string>
+    <string name="Onboard_Collect_Data_Exp">Send reports, forms and files to your organization, or back up files to a personal cloud.</string>
     <string name="action_flip_vertically">Flip vertically</string>
     <string name="action_flip_horizontally">Flip horizontally</string>
     <string name="settings.docu_add.server_dialog.select_tella_google_drive" translatable="false">Google drive</string>
@@ -1110,4 +1110,8 @@
     <string name="verification_step2_sender_hash">Step 2: Confirm sender hash</string>
     <string name="confirm_and_continue">Confirm and continue</string>
     <string name="collect_form_geopoint_first_load_message_secondary">This may take some time, depending on your Internet connection.</string>
+    <string name="settings_invalid_url">Error: The server URL is incorrect</string>
+    <string name="onboard.expl_files_info">By default, your Tella files are stored only on your device, not online.</string>
+    <string name="Uwazi_Subtitle_RemoveOutboxEntity">Are you sure you want to delete this entity?</string>
+    <string name="onboard.share_data_connections">Tella supports server Connections to:</string>
 </resources>
