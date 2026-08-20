@@ -10,4 +10,6 @@
     <string name="action_hide_pin">ocultar alfinete</string>
     <string name="action_delete">Excluir</string>
     <string name="action_go_back">volte</string>
+    <string name="Home_BottomNav_Uwazi">Uwazi</string>
+    <string name="Rename_name_Hint">Name</string>
 </resources>
