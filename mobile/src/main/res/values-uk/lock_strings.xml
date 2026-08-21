@@ -19,23 +19,23 @@
     <string name="LockPatternSet_Message_CellAddedVerbose">Точку <xliff:g example="3" id="cell_index">%1$d</xliff:g> додано</string>
     <string name="LockPatternSet_Message_PatternDetected">Ключ завершено</string>
     <string name="UnLockPattern_PatternArea">Область ключа.</string>
-    <string name="UnLockPattern_Message_DrawPattern">Намалюйте ключ, щоброзблокувати Tella</string>
+    <string name="UnLockPattern_Message_DrawPattern">Намалюйте ключ, щоб розблокувати Tella</string>
     <string name="UnLockPattern_Message_IncorrectPattern">Спробуйте ще раз. Ключі не збігаються.</string>
     <string name="LockPinSet_Message_EnterPin">Введіть PIN-код</string>
     <string name="UnlockPin_Message_EnterPin">Введіть PIN-код, щоб розблокуватиTella</string>
-    <string name="LockPinSet_Message_Hint">Використовуйте принаймні 6 цифр.Уникайте комбінацій, які легко вгадати, наприклад, ваш день народження.</string>
+    <string name="LockPinSet_Message_Hint">Використовуйте принаймні 6 цифр. Уникайте комбінацій, які легко вгадати, наприклад, ваш день народження.</string>
     <string name="LockPinSet_Message_Confirm">Підтвердьте PIN-код</string>
     <string name="LockPinConfirm_Message_Confirm">Будь ласка, введіть PIN-код ще раз, щоб переконатися.</string>
     <string name="LockPinConfirm_Message_Error_TryAgain">Спробуйте ще раз. PIN-коди не збігаються.</string>
     <string name="LockPinConfirm_Message_Error_IncorrectPin">Неправильний PIN-код, спробуйте ще раз</string>
     <string name="UnlockPassword_Message_EnterYourPassword">Введіть пароль</string>
-    <string name="LockPasswordSet_Message_Hint">Використовуйте принаймні 6 символів і намагайтеся не використовувати паролі, які легко вгадати, наприклад, „пароль”. Чим довший ваш пароль, тим він безпечніший.</string>
+    <string name="LockPasswordSet_Message_Hint">Використовуйте принаймні 6 символів і намагайтеся не використовувати паролі, які легко вгадати, наприклад, „password”. Чим довший ваш пароль, тим він безпечніший.</string>
     <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">Спробуйте ще раз. Паролі не збігаються.</string>
-    <string name="LockSuccess_Message_AllDone">Усеготово!</string>
+    <string name="LockSuccess_Message_AllDone">Усе готово!</string>
     <string name="LockSuccess_Message_Hint">Ви завжди можете змінити спосіб блокування та додатково налаштувати Tella в Налаштуваннях.</string>
     <string name="LockSuccess_Action_GoToTella">Перейти до Tella</string>
     <string name="LockPasswordSet_Message_Error_IncorrectPassword">Неправильний пароль, спробуйте ще раз</string>
-    <string name="UnlockPassword_Message_EnterPassword">Введіть пароль, щоброзблокувати Tella</string>
+    <string name="UnlockPassword_Message_EnterPassword">Введіть пароль, щоб розблокувати Tella</string>
     <string name="LockPasswordConfirm_Message_ConfirmPassword">Підтвердьте пароль</string>
     <string name="LockPasswordConfirm_Message_EnterPasswordAgain">Будь ласка, введіть пароль ще раз, щоб переконатися.</string>
     <string name="LockPasswordSet_Settings_EnterCurrentPassword">Введіть поточний пароль, щоб змінити блокування</string>
@@ -48,7 +48,7 @@
     <string name="Settings_Message_LockChanged">Блокування змінено!</string>
     <string name="unlock">Розблокувати</string>
     <string name="attempts_remaining_plural">У вас залишилося %1$d спроб, перш ніж увесь вміст Tella буде видалено.</string>
-    <string name="exceeded_max_attempts">You have exceeded the maximum number of incorrect login attempts. All your Tella data has been deleted.</string>
+    <string name="exceeded_max_attempts">Ви перевищили максимально допустиму кількість невдалих спроб входу. Усі ваші дані в Tella видалено.</string>
     <string name="attempts_remaining_singular">У вас залишилася 1 спроба, перш ніж увесь вміст Tella буде видалено.</string>
     <string name="incorrect_pin">Неправильний PIN-код. &#13;\n&#13;\n</string>
     <string name="incorrect_password">Неправильний пароль. &#13;\n&#13;\n</string>
