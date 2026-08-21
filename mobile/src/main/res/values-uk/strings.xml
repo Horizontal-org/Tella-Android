@@ -780,10 +780,10 @@
     <string name="Settings_failed_unlock_message_template">Ваш вміст у Tella буде видалено після %1$d невдалих спроб розблокування</string>
     <string name="Settings_feature_not_available_camouflage">Ця функція недоступна з маскуванням під калькулятор. Змініть маскування, щоб увімкнути цю функцію.</string>
     <string name="Auto_Upload_Report">Імпортовані файли було автоматично завантажено як звіт.</string>
-    <string name="Auto_Upload_Media_Report">Зняті фото/відео було автоматично завантажено як звіт.</string>
+    <string name="Auto_Upload_Media_Report">Зроблені фото/відео було автоматично завантажено як звіт.</string>
     <string name="Auto_Upload_Recording_Report">Створений запис було автоматично завантажено як звіт.</string>
     <string name="Auto_Upload_Imported_Report_And_Deleted">Імпортовані файли було завантажено як звіт і автоматично видалено з пристрою.</string>
-    <string name="Auto_Upload_Media_Imported_Report_And_Deleted">Зняті фото/відео було завантажено як звіт і автоматично видалено з пристрою.</string>
+    <string name="Auto_Upload_Media_Imported_Report_And_Deleted">Зроблені фото/відео було завантажено як звіт і автоматично видалено з пристрою.</string>
     <string name="Auto_Upload_Recording_Imported_Report_And_Deleted">Створений запис було завантажено як звіт і автоматично видалено з пристрою.</string>
     <string name="Report_Available_in_Outbox">Ваш звіт доступний у скриньці Вихідні</string>
     <string name="Snackbar_Submit_Report_WithProject_Error">Щоб надіслати звіт, будь ласка, виберіть проєкт, введіть заголовок і додайте опис або прикріпіть файл.</string>
@@ -1149,6 +1149,6 @@
     <string name="onboard.expl_camera_info">Ці файли збережені в Tella, і їх не можна побачити у звичайній галереї вашого телефону.</string>
     <string name="peer_to_peer_invalid_details_message">Попросіть відправника перевірити параметри підключення та спробувати знову.</string>
     <string name="Uwazi_RemoveTemplate_ConfirmTitle">Видалити \"%1$s\"?</string>
-    <string name="Uwazi_Template_Removed_Toast">\"%1$s\" has been removed from your device.</string>
+    <string name="Uwazi_Template_Removed_Toast">\"%1$s\" вилучено з вашого пристрою.</string>
     <string name="onboard.title_nearby_sharing">Обмін файлами поблизу</string>
 </resources>
