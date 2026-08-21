@@ -15,6 +15,7 @@ private const val TELLA_LOCK_DOCS_URL = "https://tella-app.org/features?_highlig
 class OnBoardLockSuccessFragment : BaseFragment() {
 
     private lateinit var binding: OnboardLockSuccessFragmentBinding
+    private var hasNavigatedForward = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,20 +35,30 @@ class OnBoardLockSuccessFragment : BaseFragment() {
         initView(view)
     }
 
+    override fun onResume() {
+        super.onResume()
+        hasNavigatedForward = false
+        bindOverlayNext()
+    }
+
     override fun initView(view: View) {
-        val onboarding = baseActivity as OnBoardActivityInterface
-        onboarding.apply {
-            enableSwipe(isSwipeable = false, isTabLayoutVisible = false)
-            showOverlayProgress(
-                activeIndex = OnboardingProgress.LOCK_INDEX,
-                showNextButton = true,
-                onNextClick = { goToLockSetFragment() }
-            )
-        }
+        (baseActivity as OnBoardActivityInterface).enableSwipe(
+            isSwipeable = false,
+            isTabLayoutVisible = false
+        )
+        bindOverlayNext()
 
         binding.learnMoreLink.setOnClickListener {
             openLockDocs()
         }
+    }
+
+    private fun bindOverlayNext() {
+        (baseActivity as OnBoardActivityInterface).showOverlayProgress(
+            activeIndex = OnboardingProgress.LOCK_INDEX,
+            showNextButton = true,
+            onNextClick = { goToAllDoneFragment() }
+        )
     }
 
     private fun openLockDocs() {
@@ -56,11 +67,13 @@ class OnBoardLockSuccessFragment : BaseFragment() {
         } catch (_: Exception) { }
     }
 
-    private fun goToLockSetFragment() {
-        baseActivity.addFragment(
-            this,
-            OnBoardAllDoneFragment(),
-            R.id.rootOnboard
-        )
+    private fun goToAllDoneFragment() {
+        if (!isAdded || hasNavigatedForward) return
+        hasNavigatedForward = true
+        baseActivity.supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.rootOnboard, OnBoardAllDoneFragment())
+            .addToBackStack(null)
+            .commitAllowingStateLoss()
     }
 }

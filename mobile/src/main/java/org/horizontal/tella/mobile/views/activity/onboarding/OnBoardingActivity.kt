@@ -70,8 +70,8 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
 
         if (isOnboardLockSet) {
             Preferences.setFirstStart(false)
+            binding.viewPager.visibility = View.GONE
             replaceFragmentNoAddToBackStack(OnBoardLockSuccessFragment(), R.id.rootOnboard)
-            hideViewpager()
         } else {
             if (isFromSettings) {
                 replaceFragmentNoAddToBackStack(
@@ -388,7 +388,17 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
         showButtons(isNextButtonVisible = showNextButton, isBackButtonVisible = false)
         overlayNextClickListener = onNextClick
         binding.nextBtn.setOnClickListener {
-            overlayNextClickListener?.invoke() ?: onNextPressed()
+            if (!showNextButton) return@setOnClickListener
+            binding.nextBtn.isEnabled = false
+            val handled = overlayNextClickListener
+            if (handled != null) {
+                handled.invoke()
+            } else {
+                onNextPressed()
+            }
+            if (overlayNextClickListener === handled) {
+                binding.nextBtn.isEnabled = showNextButton
+            }
         }
     }
 
