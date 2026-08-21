@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--
+        2025-08-20 (audit-fix rev 7): optional per-activity override of the
+        dialog theme used by shared-ui's [QuickDeletePinManager] (and any
+        other shared-ui dialog that needs visible button text). Activities
+        that want a custom dialog overlay declare
+        `<item name="tellaDialogTheme">@style/SomeDialogTheme</item>`
+        in their theme; otherwise the fallback in
+        [QuickDeletePinManager.themedBuilder] is used.
+
+        The mobile module's `AppTheme.NoActionBar` doesn't currently set
+        this attr — `QuickDeletePinManager.themedBuilder` falls back to
+        `Theme_DeviceDefault_Light_Dialog_Alert` in that case, which is
+        good enough (the buttons are visible). The mobile module can opt
+        in by adding the line above to its theme — see the audit doc.
+    -->
+    <attr name="tellaDialogTheme" format="reference" />
+
     <declare-styleable name="InformationButton">
         <attr name="topText" format="reference|string" />
         <attr name="topTextCenter" format="reference|string" />

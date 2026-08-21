@@ -1188,4 +1188,123 @@ To enable camera silent mode, please go to your device’s settings and turn on 
   <string name="verification_step2_sender_hash">Step 2: Confirm sender hash</string>
   <string name="confirm_and_continue">Confirm and continue</string>
   <string name="collect_form_geopoint_first_load_message_secondary">This may take some time, depending on your Internet connection.</string>
+
+  <!-- 2025-08-19: PDF annotation toolbar (audit) -->
+  <string name="pdf_annot_title_highlight">Highlight</string>
+  <string name="pdf_annot_title_sticky_note">Sticky note</string>
+  <string name="pdf_annot_title_off">Stop annotating</string>
+  <string name="pdf_annot_title_clear">Clear all annotations</string>
+  <string name="pdf_annot_title_list">List annotations</string>
+  <string name="pdf_annot_dialog_edit_title">Edit sticky note</string>
+  <string name="pdf_annot_dialog_edit_hint">Write something…</string>
+  <string name="pdf_annot_dialog_delete">Delete</string>
+  <string name="pdf_annot_dialog_save">Save</string>
+  <string name="pdf_annot_dialog_cancel">Cancel</string>
+  <string name="pdf_annot_dialog_delete_title">Delete this annotation?</string>
+  <string name="pdf_annot_dialog_delete_message">This annotation will be removed from this PDF.</string>
+  <string name="pdf_annot_hint_tap_to_highlight">Tap on the page to highlight. Tap the highlight icon again to stop.</string>
+  <string name="pdf_annot_hint_tap_for_note">Tap on the page to place a note. Tap the sticky icon again to stop.</string>
+  <string name="pdf_annot_highlight_picker_title">Highlight brush</string>
+  <string name="pdf_annot_sticky_picker_title">Sticky note style</string>
+  <string name="pdf_annot_picker_color">Color</string>
+  <string name="pdf_annot_picker_width">Width</string>
+  <string name="pdf_annot_picker_height">Height</string>
+  <string name="pdf_annot_picker_size">Size</string>
+  <string name="pdf_annot_title_copy_text">Copy page text</string>
+  <string name="pdf_annot_copy_text_done">Page text copied to clipboard</string>
+  <string name="pdf_annot_copy_text_empty">This page has no selectable text.</string>
+  <string name="pdf_annot_clear_confirm_message">All annotations will be permanently removed. This cannot be undone.</string>
+  <string name="pdf_annot_long_press_copy">Copy text</string>
+  <string name="pdf_annot_long_press_copy_image">Copy as image</string>
+  <string name="pdf_annot_empty">No annotations yet</string>
+  <string name="pdf_annot_resumed_at">Resumed at page %1$d of %2$d</string>
+
+  <!-- 2025-08-20 (audit-fix rev 7): annotations list rows now expose the
+       page number prominently and navigate to that page on tap. -->
+  <string name="pdf_annot_list_page_label">Page %1$d</string>
+  <string name="pdf_annot_list_no_text">(no text, %1$s)</string>
+  <!-- "Apply" replaces "Save" on the highlight / sticky note style pickers
+       so the button describes its effect (activate the chosen mode) rather
+       than a save-to-disk action that isn't happening. -->
+  <string name="pdf_annot_dialog_apply">Apply</string>
+  <!-- Toast shown when the device cannot extract text from this PDF
+       (e.g. the PDF library failed to load). Distinguished from
+       pdf_annot_copy_text_empty which is shown after a real extraction
+       pass that returned no characters. -->
+  <string name="pdf_annot_copy_text_unavailable">Text extraction is not available for this PDF.</string>
+  <string name="pdf_annot_copy_text_loading">Extracting text…</string>
+
+  <!-- 2025-08-19 (audit / Feature 1.B): Go-to-Page -->
+  <string name="pdf_annot_goto_title">Go to page</string>
+  <string name="pdf_annot_goto_action">Go</string>
+  <string name="pdf_annot_goto_hint">Page (1–%1$d)</string>
+  <string name="pdf_annot_title_goto_page">Go to page</string>
+
+  <!-- 2025-08-19 (audit / Feature 1.C): TTS read-aloud -->
+  <string name="pdf_annot_title_tts_play">Read aloud</string>
+  <string name="pdf_annot_title_tts_stop">Stop reading</string>
+  <string name="pdf_tts_unavailable">Text-to-speech engine unavailable</string>
+
+  <!-- 2025-08-19 (audit / Feature 2): Secure Wipe on Import -->
+  <string name="secure_wipe_title">Securely wipe original?</string>
+  <string name="secure_wipe_message">Overwrite the original file with random data so it cannot be recovered forensically. This may take a few seconds for large files.</string>
+  <string name="secure_wipe_action">Secure wipe</string>
+  <string name="secure_wipe_skip">Skip (keep original)</string>
+  <string name="secure_wipe_progress">Wiping… %1$d%%</string>
+  <string name="secure_wipe_done">Original file securely wiped</string>
+  <string name="secure_wipe_failed">Secure wipe failed (file may still exist)</string>
+  <string name="secure_wipe_setting_title">Use secure wipe on import</string>
+  <string name="secure_wipe_setting_summary">Overwrite original files with random data before deletion after import</string>
+
+  <!-- 2025-08-19 (audit / Feature 3): Quick Delete PIN -->
+  <string name="quick_delete_pin_title">Quick Delete PIN</string>
+  <string name="quick_delete_pin_set">Set Quick Delete PIN</string>
+  <string name="quick_delete_pin_change">Change Quick Delete PIN</string>
+  <string name="quick_delete_pin_remove">Remove Quick Delete PIN</string>
+  <string name="quick_delete_pin_summary">A separate PIN that triggers Tella\'s Quick Delete sequence when entered at the lock screen.</string>
+  <!-- 2025-08-20 (audit-fix rev 8): summary shown when a PIN is already set. -->
+  <string name="quick_delete_pin_summary_set">Duress PIN is set. Entering it at the lock screen wipes all Tella data.</string>
+  <string name="quick_delete_pin_enter_pin">Enter 4–8 digit PIN</string>
+  <string name="quick_delete_pin_confirm">Re-enter PIN</string>
+  <string name="quick_delete_pin_mismatch">PINs do not match</string>
+  <string name="quick_delete_pin_wrong_length">PIN must be 4–8 digits</string>
+  <string name="quick_delete_pin_set_ok">Quick Delete PIN saved</string>
+  <string name="quick_delete_pin_removed">Quick Delete PIN removed</string>
+  <string name="quick_delete_pin_wrong">Wrong Quick Delete PIN</string>
+
+  <!-- 2025-08-20 (audit-fix rev 8): the brute-force auto-trigger feature
+       has been REMOVED. The 7 strings below are deleted. The existing
+       "Delete after failed unlock" feature (Settings_Delete_After_Failed_Unlock)
+       already provides the actual protection, and brute-force was never
+       enforced — the threshold/window were written to prefs but no code
+       read them. -->
+
+  <!-- 2025-08-20 (audit-fix rev 8): PDF share with/without annotations. -->
+  <string name="pdf_share_title">Share PDF</string>
+  <string name="pdf_share_with_annotations">Share with annotations</string>
+  <string name="pdf_share_with_annotations_desc">Highlights and sticky notes will be baked into the PDF.</string>
+  <string name="pdf_share_original">Share original</string>
+  <string name="pdf_share_original_desc">Share the PDF as it was imported, without any annotations.</string>
+  <string name="pdf_share_flattening_progress">Baking annotations into PDF…</string>
+  <string name="pdf_share_flattening_failed">Could not bake annotations into the PDF. Sharing the original instead.</string>
+  <string name="pdf_share_no_annotations">This PDF has no annotations. Sharing the original.</string>
+
+  <!-- 2025-08-20 (audit-fix rev 9): manual rotate button. -->
+  <string name="pdf_annot_title_rotate">Rotate</string>
+  <string name="pdf_rotate_portrait">Portrait</string>
+  <string name="pdf_rotate_landscape">Landscape</string>
+  <string name="pdf_rotate_auto">Auto-rotate</string>
+
+  <!-- 2026-08-20 (audit rev 12): Secure In-App Browser strings. -->
+  <string name="browser_title">Secure Browser</string>
+  <string name="browser_url_hint">Search or type URL</string>
+  <string name="browser_go">Go</string>
+  <string name="browser_back">Back</string>
+  <string name="browser_forward">Forward</string>
+  <string name="browser_home">Home</string>
+  <string name="browser_ssl_error">SSL certificate error. Connection cancelled for security.</string>
+  <string name="browser_download_saved">"%1$s" saved to vault</string>
+  <string name="browser_download_failed">Could not download "%1$s"</string>
+  <string name="browser_download_progress">Downloading "%1$s"…</string>
+  <string name="browser_menu_open">Browser</string>
 </resources>

@@ -52,6 +52,29 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0'
     implementation 'androidx.activity:activity-ktx:1.8.2'
 
+    // 2025-08-20 (audit-fix rev 7): real PDF text extraction.
+    //
+    // The previous implementation used Android's framework PdfRenderer which
+    // only renders pages to Bitmaps — it has no text API. The audit rev6
+    // `PdfTextExtractor` rendered the page to a Bitmap, immediately
+    // `recycle()`d it, and returned an empty StringBuilder, so "Copy page
+    // text" always fell through to the misleading "may be a scanned image"
+    // toast. PDFBox-Android is the Android port of Apache PDFBox; it parses
+    // the actual PDF text stream and supports PDF 1.x + 2.0 spec. minSdk 21
+    // is supported. Initialised lazily by `PDFBoxResourceLoader.init(context)`
+    // on first use — see PdfTextExtractor.init.
+    //
+    // 2025-08-20 (audit-fix rev 8): exclude the transitive BouncyCastle
+    // dependencies because the mobile app already ships bcprov-jdk18on
+    // 1.81.1 (a newer version). Without this exclusion, D8 fails with
+    // "Duplicate class org.bouncycastle.x509.*" because both jdk15to18 and
+    // jdk18on ship the same classes under different artifact coordinates.
+    implementation('com.tom-roush:pdfbox-android:2.0.27.0') {
+        exclude group: 'org.bouncycastle', module: 'bcprov-jdk15to18'
+        exclude group: 'org.bouncycastle', module: 'bcpkix-jdk15to18'
+        exclude group: 'org.bouncycastle', module: 'bcutil-jdk15to18'
+    }
+
     // Compose
     implementation platform('androidx.compose:compose-bom:2024.04.01')
     implementation 'androidx.activity:activity-compose:1.8.2'

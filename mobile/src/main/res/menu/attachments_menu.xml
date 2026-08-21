@@ -6,4 +6,12 @@
         android:title="@string/action.desc_confirm"
         android:icon="@drawable/ic_check_white"
         app:showAsAction="ifRoom"/>
+
+    <!-- 2026-08-20 (audit rev 12): Secure In-App Browser entry point.
+         Launches SecureBrowserActivity which routes downloads into the vault. -->
+    <item
+        android:id="@+id/menu_item_browser"
+        android:title="@string/browser_menu_open"
+        android:icon="@drawable/ic_home"
+        app:showAsAction="ifRoom"/>
 </menu>

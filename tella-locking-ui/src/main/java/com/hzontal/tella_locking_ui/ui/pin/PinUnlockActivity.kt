@@ -10,6 +10,7 @@ import com.hzontal.tella_locking_ui.TellaKeysUI
 import com.hzontal.tella_locking_ui.common.ErrorMessageUtil
 import com.hzontal.tella_locking_ui.patternlock.ConfirmPatternActivity
 import com.hzontal.tella_locking_ui.ui.pin.base.BasePinActivity
+import org.hzontal.shared_ui.security.QuickDeletePinManager
 import org.hzontal.tella.keys.MainKeyStore
 import org.hzontal.tella.keys.key.MainKey
 import javax.crypto.spec.PBEKeySpec
@@ -63,7 +64,38 @@ class PinUnlockActivity : BasePinActivity() {
         outState.putInt(ConfirmPatternActivity.KEY_NUM_FAILED_ATTEMPTS, mNumFailedAttempts)
     }
 
+    /**
+     * 2025-08-20 (audit-fix rev 8): Wire up the Quick Delete PIN trigger.
+     *
+     * BEFORE attempting the normal unlock, check whether the entered PIN
+     * matches the Quick Delete PIN. If it does, trigger the destructive
+     * wipe via [TellaKeysUI.getCredentialsCallback.onFailedAttempts] (which
+     * calls `ActivityManager.clearApplicationUserData()` in MyApplication).
+     * Do NOT proceed with unlock — the Quick Delete PIN is a duress PIN,
+     * not a real unlock credential.
+     *
+     * Only check on the normal unlock path (not SETTINGS / CAMOUFLAGE
+     * return activities) — the user is changing their lock config there
+     * and shouldn't accidentally trigger a wipe by entering their
+     * Quick Delete PIN.
+     */
     override fun onSuccessSetPin(pin: String?) {
+        // 2025-08-20 (audit-fix rev 8): Quick Delete PIN trigger.
+        if (returnActivity == ReturnActivity.SETTINGS.getActivityOrder() ||
+            returnActivity == ReturnActivity.CAMOUFLAGE.getActivityOrder()) {
+            // Skip the quick-delete check on Settings / Camouflage flows —
+            // the user is changing their lock config, not unlocking.
+        } else if (pin != null && QuickDeletePinManager.isSet(this) &&
+            QuickDeletePinManager.matches(this, pin)) {
+            // Duress PIN entered — trigger the destructive wipe.
+            // onFailedAttempts(0) → MyApplication calls
+            // ActivityManager.clearApplicationUserData() which wipes the
+            // app's /data directory (vault DB, forms, servers, prefs).
+            TellaKeysUI.getCredentialsCallback().onFailedAttempts(0L)
+            finish()
+            return
+        }
+
         TellaKeysUI.getMainKeyStore().load(config.wrapper,
             PBEKeySpec(pin?.toCharArray()),
             object : MainKeyStore.IMainKeyLoadCallback {

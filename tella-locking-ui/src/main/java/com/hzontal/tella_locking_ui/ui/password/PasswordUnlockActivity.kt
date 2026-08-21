@@ -12,6 +12,7 @@ import com.hzontal.tella_locking_ui.common.ErrorMessageUtil
 import com.hzontal.tella_locking_ui.common.extensions.onChange
 import com.hzontal.tella_locking_ui.patternlock.ConfirmPatternActivity
 import com.hzontal.tella_locking_ui.ui.password.base.BasePasswordActivity
+import org.hzontal.shared_ui.security.QuickDeletePinManager
 import org.hzontal.tella.keys.MainKeyStore
 import org.hzontal.tella.keys.key.MainKey
 import timber.log.Timber
@@ -85,7 +86,28 @@ class PasswordUnlockActivity : BasePasswordActivity() {
         }
     }
 
+    /**
+     * 2025-08-20 (audit-fix rev 8): Quick Delete PIN trigger — see
+     * [PinUnlockActivity.onSuccessSetPin] for the full rationale.
+     *
+     * The user might use the same string for their unlock password and
+     * their Quick Delete PIN — that would be a misconfiguration, but we
+     * still check the password against the Quick Delete PIN first. If it
+     * matches, we trigger the wipe. The user can always choose a
+     * different password vs. duress PIN.
+     */
     override fun onSuccessSetPassword(password: String) {
+        // 2025-08-20 (audit-fix rev 8): Quick Delete PIN trigger.
+        if (returnActivity == ReturnActivity.SETTINGS.getActivityOrder() ||
+            returnActivity == ReturnActivity.CAMOUFLAGE.getActivityOrder()) {
+            // Skip on Settings / Camouflage flows.
+        } else if (password.isNotEmpty() && QuickDeletePinManager.isSet(this) &&
+            QuickDeletePinManager.matches(this, password)) {
+            TellaKeysUI.getCredentialsCallback().onFailedAttempts(0L)
+            finish()
+            return
+        }
+
         TellaKeysUI.getMainKeyStore().load(config.wrapper,
             PBEKeySpec(password.toCharArray()),
             object : MainKeyStore.IMainKeyLoadCallback {

@@ -309,6 +309,81 @@
                 app:layout_constraintTop_toBottomOf="@+id/camera_silent_switch"
                 app:titleText="@string/settings_sec_security_screen" />
 
+            <!-- ============================================================ -->
+            <!-- 2025-08-19 (audit / Feature 2 + 3): new privacy section.     -->
+            <!-- Lives below the existing "Security Screen" switch so the    -->
+            <!-- existing UI ordering stays intact for users who don't enable -->
+            <!-- the new features.                                          -->
+            <!--                                                            -->
+            <!-- 2025-08-20 (audit-fix rev 7): the previous version showed a -->
+            <!-- big blank purple rectangle below the "Quick Delete PIN" row -->
+            <!-- when no PIN was set. Root cause: this LinearLayout has the  -->
+            <!-- rounded_light_purple_background drawable, and when the      -->
+            <!-- brute-force controls below are VISIBLE.GONE, the padding    -->
+            <!-- of the LinearLayout still draws the background — so the     -->
+            <!-- user perceives an empty card with no children.              -->
+            <!--                                                            -->
+            <!-- Fix: give the `quickDeletePinSetting` row a visible bottom  -->
+            <!-- line (`app:isBottomLineVisible="true"`) so the card         -->
+            <!-- terminates cleanly even when the brute-force rows are gone, -->
+            <!-- and reduce the bottom padding so the card doesn't extend    -->
+            <!-- past the last visible row.                                 -->
+            <!-- ============================================================ -->
+
+            <LinearLayout
+                android:id="@+id/audit_security_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/activity_vertical_margin"
+                android:layout_marginEnd="@dimen/activity_vertical_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginBottom="0dp"
+                android:animateLayoutChanges="false"
+                android:orientation="vertical"
+                android:paddingBottom="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/security_screen_switch">
+
+                <!-- Feature 2: Secure Wipe on Import -->
+                <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+                    android:id="@+id/secureWipeSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:explainText="@string/secure_wipe_setting_summary"
+                    app:titleText="@string/secure_wipe_setting_title" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/light_purple" />
+
+                <!-- Feature 3.A: Quick Delete PIN -->
+                <!-- 2025-08-20 (audit-fix rev 7): isBottomLineVisible flipped
+                     from `false` to `true` so the card terminates cleanly
+                     with a divider above the bottom padding when the
+                     brute-force rows below are GONE. This eliminates the
+                     "big blank area" the user reported. -->
+                <org.hzontal.shared_ui.textviews.InfoSettingsView
+                    android:id="@+id/quickDeletePinSetting"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:isBottomLineVisible="true"
+                    app:settingsLabelText="@string/quick_delete_pin_summary"
+                    app:settingsTitleText="@string/quick_delete_pin_title" />
+
+                <!-- 2025-08-20 (audit-fix rev 8): the brute-force auto-trigger
+                     UI (bruteForceDivider, bruteForceSwitch,
+                     bruteForceThresholdSetting, bruteForceWindowSetting) has
+                     been REMOVED. The feature was never enforced — the
+                     threshold/window were written to prefs but no code read
+                     them. The existing "Delete after failed unlock" feature
+                     (see SecuritySettings.kt showDeleteAfterFailedUnlockDialog
+                     + FailedUnlockManager + ErrorMessageUtil +
+                     MyApplication.onFailedAttempts) already provides the
+                     actual protection, making brute-force redundant. -->
+            </LinearLayout>
+
             <!-- <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
                  android:id="@+id/bypass_censorship_switch"
                  android:layout_width="match_parent"

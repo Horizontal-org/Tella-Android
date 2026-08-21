@@ -13,6 +13,9 @@
     <string name="divviup_count_report_sent_id" translatable="false"></string>
     <string name="divviup_count_uwazi_sent_id" translatable="false"></string>
     <string name="divviup_count_odk_sent_id" translatable="false"></string>
+    <string name="divviup_count_nextcloud_sent_id" translatable="false"></string>
+    <string name="divviup_count_google_drive_sent_id" translatable="false"></string>
+    <string name="divviup_count_drop_box_sent_id" translatable="false"></string>
     <string name="divviup_leader" translatable="false"></string>
     <string name="divviup_helper" translatable="false"></string>
     <integer name="divviup_count_unlocks_timePrecisionSeconds">300</integer>

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/dark_purple"
     android:fitsSystemWindows="true"
-    android:animateLayoutChanges="true"
+    android:animateLayoutChanges="false"
     tools:context="org.horizontal.tella.mobile.views.activity.viewer.PhotoViewerActivity">
 
     <androidx.appcompat.widget.Toolbar

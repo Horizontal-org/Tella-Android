@@ -83,6 +83,23 @@
                 android:resource="@xml/encrypted_file_paths" />
         </provider>
 
+        <!-- 2025-08-20 (audit-fix rev 9): Plain FileProvider for sharing
+             NON-encrypted files (e.g. the flattened annotation-baked PDF
+             written by PdfAnnotationFlattener to cacheDir). The existing
+             EncryptedFileProvider intercepts every URI and tries to read
+             from the encrypted vault — which fails for cache files and
+             produces a 0-byte response. This plain provider serves files
+             directly from disk via the framework default. -->
+        <provider
+            android:name=".data.provider.PlainFileProvider"
+            android:authorities="${applicationId}.PlainFileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/plain_file_paths" />
+        </provider>
+
         <activity
             android:name=".views.activity.SplashActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
@@ -610,6 +627,15 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.viewer.PDFReaderActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <!-- 2026-08-20 (audit rev 12): Secure In-App Browser.
+             Heavily sandboxed WebView that routes downloads into the vault.
+             android:configChanges includes orientation so the browser
+             isn't recreated on rotation (same pattern as PDFReaderActivity). -->
+        <activity
+            android:name=".views.activity.browser.SecureBrowserActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

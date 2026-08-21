@@ -312,6 +312,55 @@
                 app:layout_constraintTop_toBottomOf="@+id/camera_silent_switch"
                 app:titleText="@string/settings_sec_security_screen" />
 
+            <!-- 2025-08-19 (audit / Feature 2 + 3): new privacy section.
+                 Must mirror the layout/ variant exactly so view binding
+                 generates non-nullable references.
+                 2025-08-20 (audit-fix rev 7): see layout/fragment_security_settings.xml
+                 for the full comment on the "blank area" fix. -->
+            <LinearLayout
+                android:id="@+id/audit_security_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/activity_vertical_margin"
+                android:layout_marginEnd="@dimen/activity_vertical_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginBottom="0dp"
+                android:animateLayoutChanges="false"
+                android:orientation="vertical"
+                android:paddingBottom="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/security_screen_switch">
+
+                <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+                    android:id="@+id/secureWipeSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:explainText="@string/secure_wipe_setting_summary"
+                    app:titleText="@string/secure_wipe_setting_title" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/light_purple" />
+
+                <!-- 2025-08-20 (audit-fix rev 7): isBottomLineVisible=true
+                     so the card terminates cleanly when brute-force rows
+                     are gone — eliminates the "big blank area". -->
+                <org.hzontal.shared_ui.textviews.InfoSettingsView
+                    android:id="@+id/quickDeletePinSetting"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:isBottomLineVisible="true"
+                    app:settingsLabelText="@string/quick_delete_pin_summary"
+                    app:settingsTitleText="@string/quick_delete_pin_title" />
+
+                <!-- 2025-08-20 (audit-fix rev 8): brute-force UI REMOVED —
+                     see layout/fragment_security_settings.xml for the full
+                     comment. The existing "Delete after failed unlock"
+                     feature already provides this protection. -->
+            </LinearLayout>
+
             <!--   <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
                 android:id="@+id/bypass_censorship_switch"
                 android:layout_width="match_parent"

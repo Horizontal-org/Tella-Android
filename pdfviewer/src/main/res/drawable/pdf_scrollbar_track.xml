@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  2025-08-20 (audit-fix rev 9): scrollbar track for the PDF reader.
+  Very faint white so the user can see the scroll extent but it doesn't
+  compete with the page content.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#22FFFFFF" />
+    <corners android:radius="5dp" />
+</shape>

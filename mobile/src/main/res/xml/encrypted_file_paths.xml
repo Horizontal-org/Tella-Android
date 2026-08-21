@@ -2,4 +2,9 @@
 <paths>
     <files-path name="media" path="media/"/>
     <files-path name="metadata" path="metadata/"/>
+    <!-- 2025-08-20 (audit-fix rev 8): expose the cache dir so the flattened
+         (annotation-baked) PDF written by PdfAnnotationFlattener.flatten()
+         to context.cacheDir can be shared via FileProvider. The root cache
+         dir is exposed (path=".") so any tmp file in cacheDir is reachable. -->
+    <cache-path name="cache" path="."/>
 </paths>

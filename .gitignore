@@ -1,34 +1,42 @@
-*.iml
-.gradle
-/local.properties
-/.idea/workspace.xml
-/.idea/libraries
-/.idea/
-/projectFilesBackup/
-.DS_Store
-/build
-/captures
-java_pid18084.hprof
-/mobile/release/
+# Built outputs
+build/
+**/build/
 
-# Google Maps API keys
-/mobile/src/debug/res/values/google_maps_api.xml
-/mobile/src/main/res/values/google_maps_api.xml
-/mobile/src/release/res/values/google_maps_api.xml
+# Gradle
+.gradle/
+**/.gradle/
 
-# Google services configuration
-/mobile/src/debug/google-services.json
-/mobile/src/main/google-services.json
-/mobile/src/release/google-services.json
+# Kotlin
+.kotlin/
+**/.kotlin/
 
-mobile/google-services.json
+# Local configuration (SDK paths, signing keys, etc.)
+local.properties
+**/local.properties
 
-# Google drive configuration
-/mobile/src/main/assets/config.json
-
-/mobile/src/main/res/values/divviup.xml
-
-# Keystores and signing (do not commit)
+# Signing keystores
 *.jks
 *.keystore
-fastlane/*.json
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.DS_Store
+Thumbs.db
+
+# Native builds
+**/jniLibs/
+*.so
+
+# Crash reports / logs
+*.hprof
+*.log
+
+# Play services (auto-generated, not for F-Droid)
+google-services.json
+
+# Generated
+gradle-app.setting
+!gradle-wrapper.jar

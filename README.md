@@ -1,4 +1,6 @@
-<img src="docs/Tella2.0-feature.png" alt="Tella" width="350"/>
+# Tella Android (fork)
+
+This repository is a **fork of [Horizontal-org/Tella-Android](https://github.com/Horizontal-org/Tella-Android)** with additional privacy and documentation features on top of upstream Tella. See [Fork additions](#fork-additions) below.
 
 ## Table of Contents
 
@@ -8,25 +10,23 @@
 
 3. [Detailed list of features](#features)
 
-4. [How to get Tella and start using it?](#use-tella)
+4. [Fork additions](#fork-additions)
 
-5. [Tech & frameworks used](#tech-used)
+5. [How to get Tella and start using it?](#use-tella)
 
-6. [Contributing to the code](#contributing)
+6. [Tech & frameworks used](#tech-used)
 
-7. [Translating the app](#translating)
+7. [Contributing to the code](#contributing)
 
-8. [Contact us](#contact)
+8. [Translating the app](#translating)
+
+9. [Contact us](#contact)
 
 ## About Tella <a id="about"></a>
 
 In challenging environments, with limited or no internet connectivity or in the face of repression, Tella is an app that makes it easier and safer to document human rights violations and collect data. Tella is available Android and iOS. 
 
 More information about how to get Tella --including user guides-- can be found on our [documentation platform](https://tella-app.org/docs).
-
-| [![Camouflage](docs/Camouflage.gif)](https://tella-app.org/features#encryption/)  | [![Encrypting](docs/Encrypting.gif)](https://tella-app.org/) | [![Server Connections](docs/Server.gif)](https://tella-app.org/for-organizations) |
-|:---:|:---:|:---:|
-| [Tella camouflaged as a calculator](https://tella-app.org/features#camouflage) | [Taking and encrypting a video](https://tella-app.org/features#encryption) | [Sending data to a server](https://tella-app.org/for-organizations) |
 
 Tella:
 - encrypts photo, video, documents and audio files in a separate gallery so it cannot be accessed from the phone's regular gallery or file explorer.
@@ -60,6 +60,35 @@ You can read usage stories [here](https://tella-app.org/user-stories).
 ## Detailed list of features <a id="features"></a>
 
 A detailed list of all Tella features can be found here: https://tella-app.org/features. 
+
+## Fork additions <a id="fork-additions"></a>
+
+The following features are additions made in this fork and are not part of upstream Tella:
+
+### Enhanced PDF Reader
+The built-in PDF reader (`pdfviewer` module) has been extended into an annotation-capable reader:
+- **Reading state persistence** — the last read page (and scroll position) is remembered per document, so you resume where you left off.
+- **Go to page** — jump directly to any page via a page-number input.
+- **Text-to-Speech (read aloud)** — have the document's text read aloud with Android's TTS engine.
+- **Text highlighting** — highlight passages of text; highlights are saved per document.
+- **Sticky notes** — attach sticky notes to any point in a document.
+
+Annotations are stored encrypted alongside the vault file and are flattened into the document when exporting/sharing.
+
+### Secure Wipe on Import
+Optional setting (*Settings → Security → "Use secure wipe on import"*). When enabled, after importing a file into Tella's encrypted vault, you are prompted to **securely wipe the original**: the original unencrypted file is overwritten with random data before deletion, so it is forensically unrecoverable from the device storage — instead of a standard deletion that leaves the bytes intact.
+
+### Quick Delete PIN (duress PIN)
+A dedicated secondary PIN that can be set in *Settings → Security*. Entering this PIN at any lock screen (PIN, password, pattern, or calculator camouflage) instantly triggers Quick Delete — wiping all Tella data. This lets you comply under duress while protecting the contents of the vault. The PIN is stored only as a SHA-256 hash.
+
+> This fork previously shipped an experimental brute-force auto-trigger (auto Quick Delete after X wrong attempts in Y minutes). It was removed because it duplicated the existing **"Delete after failed unlock"** protection, which deletes all data after a configurable number of failed unlock attempts.
+
+### In-App Secure Browser
+A sandboxed, minimalist browser built into Tella (accessible from the vault attachments screen) designed to leave no trace outside Tella:
+- Runs in a heavily restricted `WebView`: no file/content access to the device, third-party cookies blocked, all SSL certificate errors cancelled for security.
+- On close, a forensic cleanup wipes the WebView's history, cache, form data, cookies, and DOM storage — nothing leaks to the device's regular browser.
+- Downloads are intercepted and imported **directly into Tella's encrypted vault** (never the public Downloads folder); the temporary plaintext copy is securely deleted after encryption.
+
 
 
 ## How to get Tella and start using it? <a id="use-tella"></a>

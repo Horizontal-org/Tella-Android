@@ -16,7 +16,12 @@ import io.reactivex.schedulers.Schedulers;
 public class SharedPrefs {
     public static final String NONE = "";
     public static final String FEEDBACK_SHARING_ENBALED = "feedback_sharing_enabled";
-    private static final String SHARED_PREFS_NAME = "washington_shared_prefs";
+    // 2025-08-19 (audit-fix): made public so the new security package
+    // (org.horizontal.tella.mobile.security.*) can reference the same
+    // backing file. Previously the BruteForceProtectionManager hard-coded
+    // the string "washington_shared_prefs" — that was brittle and would
+    // silently break if this name ever changed upstream.
+    public static final String SHARED_PREFS_NAME = "washington_shared_prefs";
 
     static final String SECRET_PASSWORD = "secret_password";
     //private static final String TOR_MODE_ENABLED = "tor_password_enabled";
@@ -82,6 +87,14 @@ public class SharedPrefs {
     static final String INSTALL_METRIC_SENT = "install_metric_sent";
     static final String UNLOCK_TIME = "unlock_time";
     static final String TIME_SPENT = "time_spent";
+
+    // 2025-08-19 (audit / Feature 2) — Secure Wipe + Quick Delete PIN.
+    // 2025-08-20 (audit-fix rev 8) — Brute-force feature REMOVED (was never
+    // enforced; existing "Delete after failed unlock" already covers it).
+    // Public so they can be read from outside the data.sharedpref package
+    // (e.g. from the new org.horizontal.tella.mobile.security package).
+    public static final String SECURE_WIPE_ENABLED = "secure_wipe_enabled";
+    public static final String QUICK_DELETE_PIN = "quick_delete_pin";
 
     private static SharedPrefs instance;
     private SharedPreferences pref;
