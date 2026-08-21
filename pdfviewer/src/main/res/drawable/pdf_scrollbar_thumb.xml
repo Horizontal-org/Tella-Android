@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  2025-08-20 (audit-fix rev 9): scrollbar thumb for the PDF reader's
+  PinchZoomRecyclerView. Rounded rectangle, semi-transparent orange so
+  it's visible on both the white page background and the dark purple
+  window background. Width is controlled by android:scrollbarSize in
+  pdf_rendererview.xml (10dp).
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#CCD6933B" />
+    <corners android:radius="5dp" />
+</shape>

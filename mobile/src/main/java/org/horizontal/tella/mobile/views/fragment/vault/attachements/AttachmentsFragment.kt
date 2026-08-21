@@ -119,6 +119,11 @@ class AttachmentsFragment :
     private var uriToDelete: Uri? = null
     private var withMetadata = false
     private var initialFolderTitle: String? = null
+
+    // 2025-08-19 (audit / Feature 2): holds the in-flight Secure Wipe job
+    // (if any) so we can cancel it from onDestroyView and avoid leaking
+    // the activity context if the user navigates away mid-overwrite.
+    private var secureWipeHandle: org.horizontal.tella.mobile.security.SecureWipeDialog.WipeHandle? = null
     private var selectMode = SelectMode.DESELECT_ALL
     private lateinit var gridLayoutManager: GridLayoutManager
     private var isLaunchingPicker = false
@@ -163,6 +168,9 @@ class AttachmentsFragment :
             inflater.inflate(R.menu.home_menu_selected, menu)
             maybeShowUploadIcon(menu)
         }
+        // 2026-08-20 (audit rev 12): always inflate the browser menu item
+        // so the user can launch the secure browser from the vault toolbar.
+        inflater.inflate(R.menu.attachments_menu, menu)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -194,12 +202,29 @@ class AttachmentsFragment :
                 true
             }
 
+            // 2026-08-20 (audit rev 12): Launch the secure in-app browser.
+            // Downloads in the browser are routed into the vault.
+            R.id.menu_item_browser -> {
+                val intent = Intent(requireContext(), org.horizontal.tella.mobile.views.activity.browser.SecureBrowserActivity::class.java)
+                startActivity(intent)
+                true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
 
     private fun setUpToolbar() {
         baseActivity.setSupportActionBar(binding.toolbar)
+    }
+
+    // 2025-08-19 (audit / Feature 2): cancel any in-flight Secure Wipe
+    // job when the view is destroyed so the background overwrite does
+    // not outlive the activity context.
+    override fun onDestroyView() {
+        super.onDestroyView()
+        secureWipeHandle?.dispose()
+        secureWipeHandle = null
     }
 
     private fun initView() {
@@ -871,8 +896,42 @@ class AttachmentsFragment :
 
     private fun onMediaImportedWithDelete(uri: Uri) {
         uriToDelete = uri
-        deleteFileFromExternalStorage(uri)
-        onMediaFilesAdded()
+        // 2025-08-19 (audit / Feature 2): when the user has enabled the
+        // "Use secure wipe on import" setting in Privacy & Security,
+        // overwrite the source file with random data before unlinking so
+        // it cannot be recovered via forensic NAND access. Falls back to
+        // the legacy quick-delete path when the setting is off — keeps
+        // existing behaviour identical for users who haven't opted in.
+        //
+        // 2025-08-19 (audit-fix): the previous version called
+        // `SecureWipeDialog.runWipe(...)` directly, which SKIPS the user
+        // prompt and starts overwriting the file immediately on import.
+        // That contradicted the feature requirement ("Prompt the user to
+        // Secure Wipe ... instead of just standard deletion") and was
+        // also a footgun — if the user accidentally tapped import they
+        // had no way to cancel. Switched to `promptAndWipe(...)` so the
+        // user sees a confirm/cancel dialog first.
+        if (org.horizontal.tella.mobile.data.sharedpref.Preferences.isSecureWipeEnabled()) {
+            // Hold the disposable so we can cancel the wipe if the user
+            // navigates away mid-overwrite (otherwise the activity context
+            // leaks and the progress dialog crashes on dismiss).
+            secureWipeHandle =
+                org.horizontal.tella.mobile.security.SecureWipeDialog.promptAndWipe(
+                    context = baseActivity,
+                    uri = uri,
+                    onResult = { ok ->
+                        val msg = if (ok) getString(R.string.secure_wipe_done)
+                                  else getString(R.string.secure_wipe_failed)
+                        org.hzontal.shared_ui.utils.DialogUtils.showBottomMessage(
+                            baseActivity, msg, !ok
+                        )
+                        onMediaFilesAdded()
+                    }
+                )
+        } else {
+            deleteFileFromExternalStorage(uri)
+            onMediaFilesAdded()
+        }
     }
 
     private fun onConfirmDeleteFiles(deleteState: Pair<List<VaultFile?>, Boolean>) {

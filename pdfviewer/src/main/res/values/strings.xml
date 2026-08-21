@@ -14,4 +14,33 @@
     <string name="pdf_viewer_retry">Retry</string>
     <string name="pdf_viewer_grant">Grant</string>
     <string name="pdf_viewer_cancel">Cancel</string>
+
+    <!-- 2025-08-19 (audit): PDF annotation toolbar (audit) -->
+    <string name="pdf_annot_title_highlight">Highlight</string>
+    <string name="pdf_annot_title_sticky_note">Sticky note</string>
+    <string name="pdf_annot_title_off">Stop annotating</string>
+    <string name="pdf_annot_title_clear">Clear all annotations</string>
+    <string name="pdf_annot_title_list">List annotations</string>
+    <string name="pdf_annot_dialog_edit_title">Edit sticky note</string>
+    <string name="pdf_annot_dialog_edit_hint">Write something…</string>
+    <string name="pdf_annot_dialog_delete">Delete</string>
+    <string name="pdf_annot_dialog_save">Save</string>
+    <string name="pdf_annot_dialog_cancel">Cancel</string>
+    <string name="pdf_annot_dialog_delete_title">Delete this annotation?</string>
+    <string name="pdf_annot_dialog_delete_message">This annotation will be removed from this PDF.</string>
+    <string name="pdf_annot_hint_drag">Drag to highlight text</string>
+    <string name="pdf_annot_hint_tap">Tap where you want the note</string>
+    <string name="pdf_annot_empty">No annotations yet</string>
+    <string name="pdf_annot_resumed_at">Resumed at page %1$d of %2$d</string>
+
+    <!-- 2025-08-19 (audit / Feature 1.B): Go-to-Page -->
+    <string name="pdf_annot_goto_title">Go to page</string>
+    <string name="pdf_annot_goto_action">Go</string>
+    <string name="pdf_annot_goto_hint">Page (1–%1$d)</string>
+    <string name="pdf_annot_title_goto_page">Go to page</string>
+
+    <!-- 2025-08-19 (audit / Feature 1.C): TTS read-aloud -->
+    <string name="pdf_annot_title_tts_play">Read aloud</string>
+    <string name="pdf_annot_title_tts_stop">Stop reading</string>
+    <string name="pdf_tts_unavailable">Text-to-speech engine unavailable</string>
 </resources>

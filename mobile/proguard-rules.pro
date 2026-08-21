@@ -31,6 +31,21 @@
 -dontwarn sun.security.x509.**
 # Netty 4.2+ optional pkitesting / CertificateBuilder (SelfSignedCertificate path, not on Android)
 -dontwarn io.netty.pkitesting.**
+# Netty 4.2.x classes missing from forced 4.1.93 (Ktor 3.3.0 pulls 4.2 transitively)
+-dontwarn io.netty.channel.IoEvent
+-dontwarn io.netty.channel.IoEventLoop
+-dontwarn io.netty.channel.IoEventLoopGroup
+-dontwarn io.netty.channel.IoHandle
+-dontwarn io.netty.channel.IoHandler
+-dontwarn io.netty.channel.IoHandlerContext
+-dontwarn io.netty.channel.IoHandlerFactory
+-dontwarn io.netty.channel.IoOps
+-dontwarn io.netty.channel.IoRegistration
+-dontwarn io.netty.channel.MultiThreadIoEventLoopGroup
+-dontwarn io.netty.channel.SingleThreadIoEventLoop
+-dontwarn io.netty.channel.socket.SocketProtocolFamily
+-dontwarn io.netty.util.concurrent.ThreadAwareExecutor
+-dontwarn io.netty.util.internal.CleanableDirectBuffer
 # JFR (jdk.jfr.*) — not part of the Android Java API; optional Netty tracing hooks
 -dontwarn jdk.jfr.**
 # OSGi bundle metadata annotations (JCTools / shaded deps) — not used on Android
@@ -469,3 +484,34 @@
 
 -keep class org.bouncycastle.** { *; }
 -dontwarn org.bouncycastle.**
+
+# ========== 2025-08-19 (audit): PDF annotation persistence ==========
+# Keep the new annotation classes so R8 minification (enabled even on debug
+# variants) does not strip them. These are persisted as JSON via org.json so
+# the field names MUST survive minification.
+-keep class com.horizontal.pdfviewer.annotations.** { *; }
+-keepclassmembers class com.horizontal.pdfviewer.annotations.** {
+    <fields>;
+    <init>(...);
+}
+# Keep the renderer view + adapter (referenced via reflection in XML layouts)
+-keep class com.horizontal.pdfviewer.PdfRendererView { *; }
+-keep class com.horizontal.pdfviewer.PdfRendererView$* { *; }
+-keep class com.horizontal.pdfviewer.PinchZoomRecyclerView { *; }
+-keep class com.horizontal.pdfviewer.annotations.PdfAnnotationOverlayView { *; }
+# org.json (already kept above, repeat for safety with new code paths)
+-keep class org.json.** { *; }
+# ========== END PDF annotation rules ==========
+# ========== 2025-08-20 (audit-fix rev 7): PDFBox-Android text extraction ==========
+# PDFBox-Android parses PDFs via reflection on its model classes. R8
+# minification (enabled even on debug variants) would strip the metadata
+# classes that PDFBox loads lazily, breaking text extraction at runtime
+# (the symptom is a NoClassDefFoundError inside PDFTextStripper).
+# Keep the entire com.tom_roush.pdfbox package + the ICU data loader.
+-keep class com.tom_roush.pdfbox.** { *; }
+-keep class com.tom_roush.fontbox.** { *; }
+-dontwarn com.tom_roush.**
+# PDFBox-Android ships BouncyCastle for crypto (encrypted PDFs); keep it.
+-keep class org.bouncycastle.** { *; }
+-dontwarn org.bouncycastle.**
+# ========== END PDFBox-Android rules ==========

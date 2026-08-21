@@ -580,4 +580,43 @@ public class Preferences {
     public static void setFreshInstall(boolean value) {
         setBoolean(IS_FRESH_INSTALL, value);
     }
+
+    // ====================================================================
+    // 2025-08-19 (audit / Feature 2 + Feature 3) — Secure Wipe + Quick
+    // Delete PIN + Brute-force protection. New prefs, kept entirely in
+    // the existing SharedPrefs backend so no schema migration is needed.
+    // ====================================================================
+
+    /** When true, the import flow uses [SecureWipeManager] instead of
+     *  the standard [DocumentsContract.deleteDocument] call. */
+    public static boolean isSecureWipeEnabled() {
+        return getBoolean(SharedPrefs.SECURE_WIPE_ENABLED, false);
+    }
+
+    public static void setSecureWipeEnabled(boolean value) {
+        setBoolean(SharedPrefs.SECURE_WIPE_ENABLED, value);
+    }
+
+    /** The dedicated Quick Delete PIN. Empty string = PIN not set. */
+    public static String getQuickDeletePin() {
+        return getString(SharedPrefs.QUICK_DELETE_PIN, "");
+    }
+
+    public static void setQuickDeletePin(@NonNull String value) {
+        setString(SharedPrefs.QUICK_DELETE_PIN, value);
+    }
+
+    public static boolean isQuickDeletePinSet() {
+        return !getQuickDeletePin().isEmpty();
+    }
+
+    // 2025-08-20 (audit-fix rev 8): the brute-force auto-trigger feature
+    // (getBruteForceThreshold / setBruteForceThreshold /
+    // getBruteForceWindowMinutes / setBruteForceWindowMinutes) has been
+    // REMOVED. The feature was never enforced — the threshold/window were
+    // written to SharedPreferences but no code read them. The existing
+    // "Delete after failed unlock" feature (FailedUnlockManager +
+    // ErrorMessageUtil + MyApplication.onFailedAttempts →
+    // ActivityManager.clearApplicationUserData) already provides the
+    // actual protection, making brute-force redundant.
 }

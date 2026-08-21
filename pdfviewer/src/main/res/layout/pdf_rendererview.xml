@@ -4,12 +4,25 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- 2025-08-20 (audit-fix rev 9): made the scrollbar ALWAYS visible
+         (fadeScrollbars=false) with a thicker, custom thumb so the user
+         can grab it for fast scrolling. The default scrollbar fades out
+         ~400ms after the user stops scrolling and is only 5dp wide with
+         a default-color thumb that's nearly invisible on the dark purple
+         background. -->
     <com.horizontal.pdfviewer.PinchZoomRecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
         android:scrollbars="vertical"
+        android:fadeScrollbars="false"
+        android:scrollbarFadeDuration="0"
+        android:scrollbarDefaultDelayBeforeFade="0"
+        android:scrollbarSize="10dp"
+        android:scrollbarThumbVertical="@drawable/pdf_scrollbar_thumb"
+        android:scrollbarTrackVertical="@drawable/pdf_scrollbar_track"
+        android:scrollbarStyle="outsideOverlay"
         tools:listitem="@layout/list_item_pdf_page" />
 
     <WebView

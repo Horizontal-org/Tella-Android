@@ -1,0 +1,5 @@
+# Copy this file to local.properties and adjust the SDK path.
+# This file should NOT be committed to source control.
+sdk.dir=/path/to/your/Android/Sdk
+# Optional: JDK 17 path if your JAVA_HOME is JDK 21+ (Tella targets Java 17)
+# org.gradle.java.installations.paths=/path/to/jdk-17

@@ -62,6 +62,11 @@ internal class PdfRendererCore(
     }
 
     private var pdfRenderer: PdfRenderer? = null
+    // 2025-08-19 (audit rev6): retain the ParcelFileDescriptor so we can
+    // close it in closePdfRender(). The previous version only closed the
+    // PdfRenderer — the PFD leaked, causing "Too many open files" after
+    // ~10-15 PDF opens.
+    private var parcelFileDescriptor: ParcelFileDescriptor? = null
     private val memoryCache: LruCache<Int, Bitmap>
 
     init {
@@ -70,7 +75,7 @@ internal class PdfRendererCore(
         memoryCache = object : LruCache<Int, Bitmap>(cacheSize) {
             override fun sizeOf(key: Int, bitmap: Bitmap): Int = bitmap.byteCount / 1024 // size in KB
         }
-        // Proceed with safeFile
+        parcelFileDescriptor = fileDescriptor
         openPdfFile(fileDescriptor)
         initCache()
     }
@@ -180,7 +185,12 @@ internal class PdfRendererCore(
         }
     }
     fun closePdfRender() {
-        pdfRenderer?.close()
+        // 2025-08-19 (audit rev6): close PdfRenderer + PFD + evict memory cache.
+        try { pdfRenderer?.close() } catch (_: Exception) {}
+        pdfRenderer = null
+        try { parcelFileDescriptor?.close() } catch (_: Exception) {}
+        parcelFileDescriptor = null
+        try { memoryCache.evictAll() } catch (_: Exception) {}
         val cacheDir = File(context.cacheDir, CACHE_PATH)
         if (cacheDir.exists()) {
             cacheDir.deleteRecursively()

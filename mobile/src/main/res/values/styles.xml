@@ -18,6 +18,11 @@
         <item name="patternViewStyle">@style/PatternView</item>
         <item name="android:textColorPrimaryInverse">@color/colorPrimaryInverse</item>
         <item name="android:fontFamily">@font/open_sans</item>
+        <!-- 2025-08-20 (audit-fix rev 7): tell shared-ui dialogs (e.g.
+             QuickDeletePinManager.showSetPinDialog) to use the Tella dialog
+             overlay so their OK / Cancel buttons are visible. The attr
+             itself is declared in shared-ui/res/values/attrs.xml. -->
+        <item name="tellaDialogTheme">@style/TellaDialogTheme</item>
     </style>
 
     <style name="AppTheme.NoActionBar.LineSpacing" parent="Theme.AppCompat.Light.NoActionBar">
@@ -397,6 +402,41 @@
         <item name="android:background">@color/wa_light_gray</item>
         <item name="android:textColor">@color/wa_darker_gray</item>
         <item name="android:textStyle">bold</item>
+        <!-- 2025-08-20 (audit-fix): CRITICAL — must override colorAccent too,
+             otherwise AlertDialog buttons inherit AppTheme.NoActionBar's
+             colorAccent = wa_white_80 (#CCFFFFFF) and render as invisible
+             white-on-white text on the white dialog background. -->
+        <item name="colorAccent">@color/wa_orange</item>
+        <!-- Button text is rendered via colorAccent on AppCompat AlertDialog;
+             also set android:textColorPrimary for any custom text views. -->
+        <item name="android:textColorPrimary">@color/wa_darker_gray</item>
+    </style>
+
+    <!--
+        2025-08-20 (audit-fix): TellaDialogTheme — the canonical overlay used
+        for every AlertDialog.Builder(context) call across the audit-era code.
+
+        Root cause of the "white text on white background" bug reported by the
+        user: AppTheme.NoActionBar sets colorAccent = wa_white_80 (#CCFFFFFF),
+        and AppCompat AlertDialog button text is tinted by ?colorAccent. With
+        a white dialog background, that produces 80% transparent white text —
+        effectively invisible. The previous audit rev6 fix that swapped
+        BrightBackgroundDarkLettersDialogTheme for plain AlertDialog.Builder(context)
+        actually made it worse — it dropped the background override too.
+
+        This theme overlay is parent ThemeOverlay.AppCompat.Light (so the
+        dialog window background stays white) and overrides ONLY:
+          - colorAccent        → wa_orange (#D6933B, the Tella accent)
+          - android:textColorPrimary → wa_darker_gray (#1C1C1C) for body text
+        That single change makes every positive/negative/neutral button label
+        readable on a white background without recoloring every dialog by hand.
+
+        Apply via: AlertDialog.Builder(ContextThemeWrapper(context, R.style.TellaDialogTheme))
+    -->
+    <style name="TellaDialogTheme" parent="ThemeOverlay.AppCompat.Light">
+        <item name="colorAccent">@color/wa_orange</item>
+        <item name="android:textColorPrimary">@color/wa_darker_gray</item>
+        <item name="android:textColorSecondary">@color/wa_darker_gray</item>
     </style>
 
     <style name="PurpleBackgroundLightLettersDialogTheme" parent="Theme.AppCompat.Dialog.Alert">

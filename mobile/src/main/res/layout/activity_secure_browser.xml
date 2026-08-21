@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  2026-08-20 (audit rev 12): Secure In-App Browser layout.
+
+  A minimalist layout: toolbar with URL bar + nav buttons, a thin
+  progress bar, and the WebView filling the rest. No scrollbars on the
+  WebView (the spec says "no scrollbars, no native UI" — the WebView's
+  own scrolling is sufficient).
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/dark_purple">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/browserToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/space_cadet"
+        app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+        app:titleTextColor="@color/wa_white"
+        app:titleTextAppearance="@style/Toolbar.TitleText" />
+
+    <!-- URL bar + navigation buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/space_cadet"
+        android:padding="4dp"
+        android:gravity="center_vertical">
+
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/pdf_viewer_ic_arrow_back"
+            android:contentDescription="@string/browser_back"
+            android:tint="@color/wa_white" />
+
+        <ImageButton
+            android:id="@+id/forwardButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/pdf_viewer_ic_arrow_back_alt"
+            android:contentDescription="@string/browser_forward"
+            android:tint="@color/wa_white" />
+
+        <ImageButton
+            android:id="@+id/homeButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_home"
+            android:contentDescription="@string/browser_home"
+            android:tint="@color/wa_white" />
+
+        <EditText
+            android:id="@+id/urlBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:inputType="textUri"
+            android:imeOptions="actionGo"
+            android:singleLine="true"
+            android:hint="@string/browser_url_hint"
+            android:textColorHint="@color/wa_white_80"
+            android:textColor="@color/wa_white"
+            android:backgroundTint="@color/wa_white_80"
+            android:textSize="14sp" />
+
+        <ImageButton
+            android:id="@+id/goButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_more"
+            android:contentDescription="@string/browser_go"
+            android:tint="@color/wa_white" />
+    </LinearLayout>
+
+    <!-- Thin progress bar -->
+    <ProgressBar
+        android:id="@+id/browserProgressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:max="100"
+        android:progress="0"
+        android:visibility="gone"
+        android:progressTint="@color/wa_orange" />
+
+    <!-- The sandboxed WebView -->
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none" />
+
+</LinearLayout>

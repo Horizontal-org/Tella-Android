@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_item_pdf_highlight"
+        android:title="@string/pdf_annot_title_highlight"
+        app:showAsAction="always"
+        android:icon="@drawable/pdf_annot_ic_highlight" />
+
+    <item
+        android:id="@+id/menu_item_pdf_sticky"
+        android:title="@string/pdf_annot_title_sticky_note"
+        app:showAsAction="always"
+        android:icon="@drawable/pdf_annot_ic_sticky" />
+
+    <item
+        android:id="@+id/menu_item_pdf_goto_page"
+        android:title="@string/pdf_annot_title_goto_page"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/pdf_annot_ic_goto_page" />
+
+    <item
+        android:id="@+id/menu_item_pdf_list"
+        android:title="@string/pdf_annot_title_list"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/pdf_annot_ic_list" />
+
+    <!-- 2025-08-20 (audit-fix rev 9): manual rotate button. Cycles
+         requestedOrientation through PORTRAIT → LANDSCAPE → UNSPECIFIED
+         (follow device). Uses the existing rotate_image drawable
+         (white 24dp vector with two curved arrows). -->
+    <item
+        android:id="@+id/menu_item_pdf_rotate"
+        android:title="@string/pdf_annot_title_rotate"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/rotate_image" />
+
+    <item
+        android:id="@+id/menu_item_pdf_copy_text"
+        android:title="@string/pdf_annot_title_copy_text"
+        app:showAsAction="never" />
+
+    <!-- 2025-08-20 (audit-fix rev 8): dedicated Share menu item.
+         Opens a dialog asking whether to bake annotations into the PDF
+         or share the original. The existing "more" overflow → share path
+         (VaultActionsHelper) still works but doesn't flatten annotations. -->
+    <item
+        android:id="@+id/menu_item_pdf_share"
+        android:title="@string/pdf_share_title"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_item_pdf_clear"
+        android:title="@string/pdf_annot_title_clear"
+        app:showAsAction="never" />
+
+</menu>

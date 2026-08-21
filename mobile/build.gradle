@@ -30,6 +30,30 @@ configurations.all {
         force "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"
         force "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3"
         force "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.7.3"
+        // 2025-08-19 (audit-fix — DO NOT MERGE UPSTREAM): Netty 4.2.x
+        // (pulled in transitively by Ktor 3.3.0) cannot be D8-dexed for
+        // minSdk 21 — D8 rejects the classes with "Increase the minSdkVersion
+        // to 26 or above". The correct upstream fix is either to bump
+        // minSdk to 26 OR to upgrade Ktor to a version that constrains Netty
+        // itself. Forcing 4.1.x is a TEMPORARY workaround so the audit branch
+        // can produce a debug APK; remove this whole `force "io.netty:*"`
+        // block once either of those fixes is applied.
+        //
+        // If you are a Tella maintainer reviewing this PR: please delete the
+        // next 13 lines and bump minSdk or upgrade Ktor instead.
+        force "io.netty:netty-common:4.1.93.Final"
+        force "io.netty:netty-buffer:4.1.93.Final"
+        force "io.netty:netty-resolver:4.1.93.Final"
+        force "io.netty:netty-transport:4.1.93.Final"
+        force "io.netty:netty-transport-native-unix-common:4.1.93.Final"
+        force "io.netty:netty-transport-native-epoll:4.1.93.Final"
+        force "io.netty:netty-transport-classes-epoll:4.1.93.Final"
+        force "io.netty:netty-codec:4.1.93.Final"
+        force "io.netty:netty-codec-http:4.1.93.Final"
+        force "io.netty:netty-codec-http2:4.1.93.Final"
+        force "io.netty:netty-codec-socks:4.1.93.Final"
+        force "io.netty:netty-handler:4.1.93.Final"
+        force "io.netty:netty-handler-proxy:4.1.93.Final"
     }
 }
 
@@ -87,6 +111,10 @@ android {
 
     splits {
         abi {
+            // 2025-08-19 (audit-fix): restored upstream condition. The audit
+            // branch had excluded debug builds to avoid 4× APK multiplication
+            // on low-RAM machines — that was an environment-specific tweak
+            // and should not be merged upstream.
             enable !isFdroidBuild && gradle.startParameter.taskNames.any { it.toLowerCase().contains("release") }
             reset()
             include 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
@@ -136,12 +164,13 @@ android {
 
     signingConfigs {
         release {
-            def storeFileEnv = project.findProperty("RELEASE_STORE_FILE") ?: System.getenv("RELEASE_STORE_FILE")
+            def localProps = getLocalProperties()
+            def storeFileEnv = project.findProperty("RELEASE_STORE_FILE") ?: System.getenv("RELEASE_STORE_FILE") ?: localProps['RELEASE_STORE_FILE']
             if (storeFileEnv != null) {
                 storeFile file(storeFileEnv)
-                storePassword project.findProperty("RELEASE_STORE_PASSWORD") ?: System.getenv("RELEASE_STORE_PASSWORD")
-                keyAlias project.findProperty("RELEASE_KEY_ALIAS") ?: System.getenv("RELEASE_KEY_ALIAS")
-                keyPassword project.findProperty("RELEASE_KEY_PASSWORD") ?: System.getenv("RELEASE_KEY_PASSWORD")
+                storePassword project.findProperty("RELEASE_STORE_PASSWORD") ?: System.getenv("RELEASE_STORE_PASSWORD") ?: localProps['RELEASE_STORE_PASSWORD']
+                keyAlias project.findProperty("RELEASE_KEY_ALIAS") ?: System.getenv("RELEASE_KEY_ALIAS") ?: localProps['RELEASE_KEY_ALIAS']
+                keyPassword project.findProperty("RELEASE_KEY_PASSWORD") ?: System.getenv("RELEASE_KEY_PASSWORD") ?: localProps['RELEASE_KEY_PASSWORD']
             }
         }
     }
@@ -149,8 +178,17 @@ android {
     buildTypes {
         debug {
             debuggable true
-            minifyEnabled true
-            shrinkResources true
+            // 2025-08-20 (audit-fix rev 8): disabled R8 minify + resource
+            // shrinking for debug builds because the build environment has
+            // only 4 GB of RAM and R8 OOMs on this project (Ktor + Netty +
+            // Hilt + PDFBox). The user explicitly asked for a debug APK
+            // without minification. Release builds keep R8 enabled.
+            //
+            // Upstream developers: you can safely re-enable these for
+            // local development on a machine with ≥ 8 GB RAM. Just change
+            // both lines to `true`.
+            minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {
@@ -158,7 +196,10 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            if (!isFdroidBuild && (project.findProperty("RELEASE_STORE_FILE") != null || System.getenv("RELEASE_STORE_FILE") != null)) {
+            def hasSigning = project.findProperty("RELEASE_STORE_FILE") != null
+                    || System.getenv("RELEASE_STORE_FILE") != null
+                    || getLocalProperties().containsKey("RELEASE_STORE_FILE")
+            if (hasSigning) {
                 signingConfig signingConfigs.release
             }
         }

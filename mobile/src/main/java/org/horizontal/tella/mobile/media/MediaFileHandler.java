@@ -633,6 +633,50 @@ public class MediaFileHandler {
         }
     }
 
+    /**
+     * 2026-08-20 (audit rev 12): Import a downloaded file from the secure
+     * in-app browser into the encrypted vault.
+     *
+     * This is the vault-ingestion hook called by [VaultDownloadInterceptor].
+     * It uses the EXISTING encryption pipeline (RxVault.builder →
+     * BaseVault.baseCreate → CipherStreamUtils.getEncryptedOutputStream)
+     * — no new crypto code.
+     *
+     * @param file the temp file on disk (in noBackupFilesDir). The caller
+     *             is responsible for securely deleting this after the
+     *             Single completes (success or error).
+     * @param fileName the display name for the vault entry.
+     * @param mimeType the MIME type (from the HTTP Content-Type header).
+     * @param parentId the parent folder ID, or null for the vault root.
+     * @return a Single that emits the created VaultFile on success.
+     */
+    public static Single<VaultFile> importDownloadedFile(
+            @NonNull File file, @NonNull String fileName,
+            @NonNull String mimeType, @Nullable String parentId) {
+        return Single.defer(() -> {
+            try {
+                if (!file.exists() || file.length() == 0) {
+                    return Single.error(new FileNotFoundException(
+                            "Downloaded file does not exist or is empty: " + file.getAbsolutePath()));
+                }
+                InputStream is = new FileInputStream(file);
+                RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
+                return rxVault
+                        .builder(is)
+                        .setMimeType(mimeType)
+                        .setAnonymous(true)
+                        .setName(fileName)
+                        .setType(VaultFile.Type.FILE)
+                        .build(parentId)
+                        .subscribeOn(Schedulers.io());
+            } catch (Exception e) {
+                CrashReporterProvider.INSTANCE.get().recordException(e);
+                Timber.e(e, "importDownloadedFile failed for %s", fileName);
+                return Single.error(e);
+            }
+        });
+    }
+
     @WorkerThread
     public static VaultFile saveMp4Video(File video, String parent) throws IOException {
         return saveMp4Video(video, parent, true);

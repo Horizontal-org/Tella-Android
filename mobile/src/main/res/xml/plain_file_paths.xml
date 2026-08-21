@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  2025-08-20 (audit-fix rev 9): FileProvider paths for PlainFileProvider.
+  Only the cache dir is exposed — the flattened (annotation-baked) PDF
+  written by PdfAnnotationFlattener.flatten() lives in context.cacheDir.
+  We do NOT expose the files/media or files/metadata paths here because
+  those are served by EncryptedFileProvider (which decrypts vault files
+  on the fly). PlainFileProvider serves plain on-disk files only.
+-->
+<paths>
+    <cache-path name="cache" path="."/>
+</paths>

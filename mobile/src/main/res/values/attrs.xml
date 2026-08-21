@@ -2,6 +2,14 @@
 <resources>
     <bool name="isTablet">false</bool>
 
+    <!--
+        2025-08-20 (audit-fix rev 7): `tellaDialogTheme` is now declared in
+        the shared-ui module (so QuickDeletePinManager, which lives in
+        shared-ui, can resolve it). The mobile `AppTheme.NoActionBar`
+        theme overrides it to `@style/TellaDialogTheme` so every shared-ui
+        dialog inherits the visible-button color scheme.
+    -->
+
     <declare-styleable name="DonutProgress">
         <attr name="donut_progress" format="integer"/>
         <attr name="donut_max" format="integer"/>

@@ -6,10 +6,12 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.widget.TextViewCompat
 import com.hzontal.tella_locking_ui.R
+import com.hzontal.tella_locking_ui.ReturnActivity
 import com.hzontal.tella_locking_ui.TellaKeysUI
 import com.hzontal.tella_locking_ui.databinding.ActivityCalculatorBinding
 import com.hzontal.tella_locking_ui.ui.pin.base.BasePinActivity
 import org.hzontal.shared_ui.pinview.ResultListener
+import org.hzontal.shared_ui.security.QuickDeletePinManager
 import org.hzontal.shared_ui.utils.CALCULATOR_THEME
 import org.hzontal.shared_ui.utils.CalculatorTheme
 import org.hzontal.tella.keys.MainKeyStore
@@ -76,7 +78,26 @@ class CalculatorActivity : BasePinActivity(), ResultListener {
 
     }
 
+    /**
+     * 2025-08-20 (audit-fix rev 8): Quick Delete PIN trigger — see
+     * [PinUnlockActivity.onSuccessSetPin] for the full rationale.
+     *
+     * The Calculator camouflage is the most likely entry point for a
+     * duress scenario (user is forced to hand over the phone, opens the
+     * calculator, enters the duress PIN instead of the real one). So
+     * this check is critical.
+     */
     override fun onSuccessSetPin(pin: String?) {
+        // 2025-08-20 (audit-fix rev 8): Quick Delete PIN trigger.
+        // CalculatorActivity is always a normal-unlock entry point (no
+        // SETTINGS / CAMOUFLAGE returnActivity flow), so we always check.
+        if (pin != null && QuickDeletePinManager.isSet(this) &&
+            QuickDeletePinManager.matches(this, pin)) {
+            TellaKeysUI.getCredentialsCallback().onFailedAttempts(0L)
+            finish()
+            return
+        }
+
         TellaKeysUI.getMainKeyStore().load(
                 config.wrapper,
                 PBEKeySpec(pin?.toCharArray()),

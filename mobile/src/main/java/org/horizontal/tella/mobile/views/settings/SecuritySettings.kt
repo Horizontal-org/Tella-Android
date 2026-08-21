@@ -138,6 +138,11 @@ class SecuritySettings :
             Preferences.setBypassCensorship(isChecked)
         })*/
 
+        // 2025-08-19 (audit / Feature 2 + 3): wire the new privacy section.
+        // Lives below the existing switches; safe to leave the existing
+        // initView() flow intact.
+        setupAuditSecuritySection()
+
         binding.deleteVaultTooltip.setOnClickListener {
             showTooltip(
                 binding.deleteVaultTooltip,
@@ -437,5 +442,131 @@ class SecuritySettings :
             quickExitSwitch.isChecked = false
             binding.quickExitSettingsLayout.visibility = View.GONE
         }
+    }
+
+    // ====================================================================
+    // 2025-08-19 (audit / Feature 2 + 3): new privacy section.
+    // Wires Secure Wipe on Import + Quick Delete PIN + Brute-force auto-
+    // trigger into the existing SecuritySettings screen. All controls
+    // live behind the existing layout's `audit_security_layout` LinearLayout
+    // and are invisible to the user until they scroll down past the
+    // existing switches — so the existing UI ordering is preserved.
+    // ====================================================================
+    private fun setupAuditSecuritySection() {
+        // ---- Feature 2: Secure Wipe on Import ----
+        binding.secureWipeSwitch.mSwitch.isChecked =
+            Preferences.isSecureWipeEnabled()
+        binding.secureWipeSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked ->
+            Preferences.setSecureWipeEnabled(isChecked)
+        }
+
+        // ---- Feature 3.A: Quick Delete PIN ----
+        binding.quickDeletePinSetting.setOnClickListener {
+            // If a PIN is already set, show a small dialog offering
+            // Change / Remove / Cancel. Otherwise go straight to Set.
+            if (org.hzontal.shared_ui.security.QuickDeletePinManager.isSet(requireContext())) {
+                // 2025-08-20 (audit-fix rev 7): use TellaDialogs.builder so
+                // the Cancel button on the change/remove picker is visible.
+                // Previously this used `AlertDialog.Builder(baseActivity)`
+                // which inherited colorAccent = wa_white_80 (invisible).
+                org.horizontal.tella.mobile.views.activity.viewer.TellaDialogs
+                    .builder(baseActivity)
+                    .setTitle(R.string.quick_delete_pin_title)
+                    .setItems(arrayOf(
+                        getString(R.string.quick_delete_pin_change),
+                        getString(R.string.quick_delete_pin_remove)
+                    )) { d, idx ->
+                        d.dismiss()
+                        when (idx) {
+                            0 -> org.hzontal.shared_ui.security.QuickDeletePinManager
+                                .showSetPinDialog(
+                                    baseActivity,
+                                    onSaved = {
+                                        // 2025-08-19 (audit-fix): refresh the
+                                        // brute-force section visibility so the
+                                        // user sees the controls appear without
+                                        // having to leave and re-enter the screen.
+                                        refreshAuditSecuritySectionVisibility()
+                                    }
+                                )
+                            1 -> {
+                                org.hzontal.shared_ui.security.QuickDeletePinManager.clearPin(requireContext())
+                                android.widget.Toast.makeText(
+                                    baseActivity,
+                                    R.string.quick_delete_pin_removed,
+                                    android.widget.Toast.LENGTH_SHORT
+                                ).show()
+                                // 2025-08-20 (audit-fix rev 8): brute-force
+                                // feature removed — no threshold to reset.
+                                // Just refresh the audit section visibility.
+                                refreshAuditSecuritySectionVisibility()
+                            }
+                        }
+                    }
+                    .setNegativeButton(R.string.pdf_annot_dialog_cancel) { d, _ -> d.dismiss() }
+                    .show()
+            } else {
+                org.hzontal.shared_ui.security.QuickDeletePinManager
+                    .showSetPinDialog(
+                        requireContext(),
+                        onSaved = {
+                            // 2025-08-20 (audit-fix rev 8): refresh the
+                            // quick-delete-pin summary label so it reflects
+                            // the new "set" state immediately.
+                            refreshAuditSecuritySectionVisibility()
+                        }
+                    )
+            }
+        }
+
+        // 2025-08-20 (audit-fix rev 8): the brute-force auto-trigger feature
+        // (Feature 3.B/C/D) has been REMOVED. The threshold/window pickers,
+        // the toggle, and the refreshBruteForceLabels / showNumberPicker
+        // helpers are all deleted. The existing "Delete after failed unlock"
+        // feature (see showDeleteAfterFailedUnlockDialog above) already
+        // provides the actual protection — brute-force was redundant AND
+        // never enforced (the threshold/window were written to prefs but no
+        // code read them).
+        refreshAuditSecuritySectionVisibility()
+    }
+
+    /**
+     * 2025-08-20 (audit-fix rev 8): Refreshes the Quick Delete PIN summary
+     * label based on whether a PIN is currently set.
+     *
+     * The brute-force visibility logic that used to live here has been
+     * removed along with the feature itself. This method now just updates
+     * the quick-delete-pin row's label so the user sees "Set" / "Change"
+     * reflect the current state immediately after setting / clearing the
+     * PIN, without requiring a screen re-entry.
+     */
+    private fun refreshAuditSecuritySectionVisibility() {
+        val pinSet = org.hzontal.shared_ui.security.QuickDeletePinManager.isSet(requireContext())
+        binding.quickDeletePinSetting.setLabelText(
+            if (pinSet) getString(R.string.quick_delete_pin_summary_set)
+            else getString(R.string.quick_delete_pin_summary)
+        )
+        // 2026-08-20 (audit-fix rev 11): definitive fix for the "blank area"
+        // below the Quick Delete PIN row. Three measures:
+        //
+        // 1. Hide the bottom line (it was set to visible in rev 7 to
+        //    "terminate the card" but it just added a visible dark line
+        //    that looked like a blank gap).
+        // 2. Set the InfoSettingsView's own padding to 0 on all sides
+        //    (the LinearLayout that wraps the internal ConstraintLayout).
+        // 3. Find the internal views (centered_linear_layout and
+        //    label_textview) and set THEIR bottom padding to 0 — these
+        //    have 16dp padding from settings_info_view.xml which is the
+        //    actual source of the gap.
+        binding.quickDeletePinSetting.isBottomLineVisible(false)
+        binding.quickDeletePinSetting.setPadding(0, 0, 0, 0)
+        try {
+            binding.quickDeletePinSetting.findViewById<android.view.View>(
+                org.hzontal.shared_ui.R.id.centered_linear_layout
+            )?.setPadding(0, 0, 0, 0)
+            binding.quickDeletePinSetting.findViewById<android.view.View>(
+                org.hzontal.shared_ui.R.id.label_textview
+            )?.setPadding(0, 0, 0, 0)
+        } catch (_: Throwable) { /* best-effort — IDs may differ */ }
     }
 }
