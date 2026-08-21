@@ -9,7 +9,6 @@ import android.view.View
 import android.webkit.CookieManager
 import android.webkit.DownloadListener
 import android.webkit.SslErrorHandler
-import android.webkit.URLUtil
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebStorage
@@ -34,16 +33,10 @@ import timber.log.Timber
 /**
  * Secure In-App Browser for Tella.
  *
- * 2026-08-20 (audit rev 12 — Topic 5): A minimalist, heavily-sandboxed
- * WebView that intercepts downloads and routes them directly into
- * Tella's encrypted vault — preventing external browser traces (cache,
- * history, cookies) from leaking outside Tella's secure environment.
- *
- * 2026-08-21 (audit rev 13 — Topic 5): Bug-fix release. The download
- * pipeline now sniffs magic bytes after the fetch and overrides the
- * `.bin` extension that Google Drive serves via
- * `Content-Type: application/octet-stream`. See
- * [VaultDownloadInterceptor] for the full pipeline.
+ * 2026-08-20 (audit rev 12): A minimalist, heavily-sandboxed WebView that
+ * intercepts downloads and routes them directly into Tella's encrypted
+ * vault — preventing external browser traces (cache, history, cookies)
+ * from leaking outside Tella's secure environment.
  *
  * ## Security constraints (per spec)
  *
@@ -57,30 +50,19 @@ import timber.log.Timber
  * 4. **Download Flow:** Intercept via `setDownloadListener`. Do NOT use
  *    Android's `DownloadManager`. Do NOT write to public external storage.
  *
- * ## Download → Vault flow (rev 13)
+ * ## Download → Vault flow
  *
- * 1. `setDownloadListener` extracts the filename + URL + MIME type and
- *    passes them to [VaultDownloadInterceptor.downloadToVault].
- * 2. [VaultDownloadInterceptor] resolves a first-pass filename + MIME
- *    using RFC 6266 Content-Disposition parsing, URL path, and the
- *    `MimeTypeMap`.
- * 3. The file is fetched via `HttpURLConnection` into a temporary file
- *    in `context.noBackupFilesDir` (NOT public external storage).
- * 4. **Magic-byte sniffing:** the first 64 bytes of the temp file are
- *    read and matched against known file signatures (PDF, PNG, JPEG,
- *    GIF, WebP, BMP, MP4, MP3, OGG, FLAC, WAV, AVI, ZIP, 7Z, RAR, GZIP,
- *    MS-Office OLE2, JSON, text, …).
- * 5. If the first-pass filename has a "weak" extension (`.bin`,
- *    `.download`, none) the sniffed type **overrides** both the filename
- *    extension and the MIME that gets passed to the vault. This fixes
- *    the Google-Drive-saves-as-`.bin` bug.
- * 6. The temp file is handed to Tella's existing vault encryption
+ * 1. `setDownloadListener` extracts the filename + URL + MIME type.
+ * 2. [VaultDownloadInterceptor] fetches the file via `HttpURLConnection`
+ *    into a temporary file in `context.noBackupFilesDir` (NOT public
+ *    external storage).
+ * 3. The temp file is handed to Tella's existing vault encryption
  *    pipeline via [MediaFileHandler.importDownloadedFile] →
  *    `RxVault.builder(stream).setMimeType(...).setName(...).build(parentId)`
  *    → `BaseVault.baseCreate` → `CipherStreamUtils.getEncryptedOutputStream`.
- * 7. The temporary unencrypted file is immediately and securely deleted
- *    after successful vault ingestion (overwrite with random bytes + delete).
- * 8. A toast confirms success/failure to the user.
+ * 4. The temporary unencrypted file is immediately and securely deleted
+ *    after successful vault ingestion (overwrite with zeros + delete).
+ * 5. A toast confirms success/failure to the user.
  *
  * ## Orientation
  *
@@ -158,29 +140,10 @@ class SecureBrowserActivity : BaseLockActivity() {
         webView.webChromeClient = SecureWebChromeClient()
 
         webView.setDownloadListener(DownloadListener { url, userAgent, contentDisposition, mimetype, contentLength ->
-            // 2026-08-21 (audit rev 13 — Topic 5): pass the WebView's
-            // first-pass filename guess through to the interceptor. The
-            // interceptor does its own robust RFC 6266 parsing and a
-            // magic-byte sniff on the downloaded bytes, and will
-            // override the `.bin` extension if the server sent a
-            // misleading `Content-Type: application/octet-stream`
-            // (this is what happens on Google Drive).
-            Timber.d(
-                "Browser download intercepted: url=%s, mimetype=%s, contentLength=%d",
-                url, mimetype, contentLength
-            )
-            val webViewGuessedFileName = try {
-                URLUtil.guessFileName(
-                    url, contentDisposition,
-                    mimetype ?: "application/octet-stream"
-                )
-            } catch (e: Exception) {
-                "download_${System.currentTimeMillis()}.bin"
-            }
+            Timber.d("Browser download intercepted: url=%s, mimetype=%s", url, mimetype)
+            val fileName = downloadInterceptor.guessFileName(url, contentDisposition, mimetype)
             scope.launch {
-                downloadInterceptor.downloadToVault(
-                    url, contentDisposition, mimetype, webViewGuessedFileName
-                )
+                downloadInterceptor.downloadToVault(url, fileName, mimetype)
             }
         })
     }

@@ -1296,7 +1296,6 @@ To enable camera silent mode, please go to your device’s settings and turn on 
   <string name="pdf_rotate_auto">Auto-rotate</string>
 
   <!-- 2026-08-20 (audit rev 12): Secure In-App Browser strings. -->
-  <!-- 2026-08-21 (audit rev 13 — Topic 5): added browser_download_renamed + browser_no_network. -->
   <string name="browser_title">Secure Browser</string>
   <string name="browser_url_hint">Search or type URL</string>
   <string name="browser_go">Go</string>
@@ -1307,7 +1306,5 @@ To enable camera silent mode, please go to your device’s settings and turn on 
   <string name="browser_download_saved">"%1$s" saved to vault</string>
   <string name="browser_download_failed">Could not download "%1$s"</string>
   <string name="browser_download_progress">Downloading "%1$s"…</string>
-  <string name="browser_download_renamed">Saved to vault as "%1$s" (corrected extension)</string>
-  <string name="browser_no_network">No network connection available</string>
   <string name="browser_menu_open">Browser</string>
 </resources>
