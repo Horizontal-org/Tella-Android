@@ -31,12 +31,21 @@ class OnBoardAllDoneFragment : BaseFragment() {
         initView(view)
     }
 
-    override fun initView(view: View) {
-        (baseActivity as OnBoardActivityInterface).showOverlayProgress(
-            activeIndex = OnboardingProgress.ALL_DONE_INDEX,
-            showNextButton = false
-        )
+    override fun onResume() {
+        super.onResume()
+        if (!isHidden) {
+            showAllDoneProgress()
+        }
+    }
 
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (!hidden) {
+            showAllDoneProgress()
+        }
+    }
+
+    override fun initView(view: View) {
         startBtn = view.findViewById(R.id.startBtn)
         advancedBtn = view.findViewById(R.id.sheet_two_btn)
 
@@ -53,9 +62,16 @@ class OnBoardAllDoneFragment : BaseFragment() {
         advancedBtn.setOnClickListener {
             baseActivity.addFragment(
                 this,
-                OnBoardShareDataFragment(),
+                OnBoardHideOptionFragment(),
                 R.id.rootOnboard
             )
         }
+    }
+
+    private fun showAllDoneProgress() {
+        (baseActivity as OnBoardActivityInterface).showOverlayProgress(
+            activeIndex = OnboardingProgress.ALL_DONE_INDEX,
+            showNextButton = false
+        )
     }
 }

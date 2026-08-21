@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.core.view.AccessibilityDelegateCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
+import org.horizontal.tella.mobile.BuildConfig
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.OnboardCollectDataBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
@@ -33,14 +34,18 @@ class OnboardCollectDataFragment :
     }
 
     private fun bindConnections() {
-        val connections = listOf(
-            R.drawable.ic_onboard_dropbox to R.string.settings_docu_add_server_dialog_select_tella_dropbox,
-            R.drawable.ic_onboard_google_drive to R.string.google_drive,
-            R.drawable.ic_onboard_nextcloud to R.string.NextCloud,
-            R.drawable.ic_onboard_uwazi to R.string.settings_docu_add_server_dialog_select_tella_uwazi,
-            R.drawable.ic_onboard_tella_web to R.string.settings_docu_add_server_dialog_select_tella_web,
-            R.drawable.ic_onboard_odk to R.string.settings_docu_add_server_dialog_select_odk,
-        )
+        val connections = buildList {
+            if (BuildConfig.ENABLE_DROPBOX) {
+                add(R.drawable.ic_onboard_dropbox to R.string.settings_docu_add_server_dialog_select_tella_dropbox)
+            }
+            if (BuildConfig.ENABLE_GOOGLE_DRIVE) {
+                add(R.drawable.ic_onboard_google_drive to R.string.google_drive)
+            }
+            add(R.drawable.ic_onboard_nextcloud to R.string.NextCloud)
+            add(R.drawable.ic_onboard_uwazi to R.string.settings_docu_add_server_dialog_select_tella_uwazi)
+            add(R.drawable.ic_onboard_tella_web to R.string.settings_docu_add_server_dialog_select_tella_web)
+            add(R.drawable.ic_onboard_odk to R.string.settings_docu_add_server_dialog_select_odk)
+        }
 
         val inflater = LayoutInflater.from(requireContext())
         val rows = connections.chunked(3)

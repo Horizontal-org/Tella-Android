@@ -33,7 +33,7 @@ object OnboardingProgress {
 
     fun setActive(container: LinearLayout, context: Context, activeIndex: Int) {
         for (i in 0 until container.childCount) {
-            val imageView = container.getChildAt(i) as ImageView
+            val imageView = container.getChildAt(i) as? ImageView ?: continue
             val drawableRes = if (i == activeIndex) R.drawable.selected_dot else R.drawable.default_dot
             imageView.setImageDrawable(ContextCompat.getDrawable(context, drawableRes))
         }

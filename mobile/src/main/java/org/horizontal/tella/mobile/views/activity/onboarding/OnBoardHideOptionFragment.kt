@@ -28,7 +28,7 @@ class OnBoardHideOptionFragment: BaseFragment() {
     }
 
     override fun initView(view: View) {
-        (baseActivity as OnBoardActivityInterface).setCurrentIndicator(1)
+        (baseActivity as OnBoardActivityInterface).hideViewpager()
 
         hideBtn = view.findViewById(R.id.startBtn)
         hideBtn.setOnClickListener {

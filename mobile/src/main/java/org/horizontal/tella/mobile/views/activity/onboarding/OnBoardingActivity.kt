@@ -33,6 +33,7 @@ import org.horizontal.tella.mobile.views.dialog.uwazi.UwaziConnectFlowActivity
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 
+private const val GESTURE_NAVIGATION_MODE = 2
 private const val ONBOARDING_INTRODUCTION_VIEW_INDEX = 0
 private const val ONBOARDING_RECORD_VIEW_INDEX = 1
 private const val ONBOARDING_FILES_VIEW_INDEX = 2
@@ -70,8 +71,8 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
 
         if (isOnboardLockSet) {
             Preferences.setFirstStart(false)
+            binding.viewPager.visibility = View.GONE
             replaceFragmentNoAddToBackStack(OnBoardLockSuccessFragment(), R.id.rootOnboard)
-            hideViewpager()
         } else {
             if (isFromSettings) {
                 replaceFragmentNoAddToBackStack(
@@ -93,28 +94,55 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
         val navHorizontal =
             resources.getDimensionPixelSize(R.dimen.onboarding_nav_horizontal_margin)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets -> insets }
-
-        ViewCompat.setOnApplyWindowInsetsListener(binding.viewPager) { view, insets ->
-            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(bars.left, bars.top, bars.right, 0)
-            insets
-        }
-
-        ViewCompat.setOnApplyWindowInsetsListener(binding.onboardBottomBar) { view, insets ->
-            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(
-                bars.left + navHorizontal,
-                view.paddingTop,
-                bars.right + navHorizontal,
-                bars.bottom
-            )
+        // Apply chrome insets on the root. Overlay fragments in rootOnboard consume
+        // insets, which would otherwise skip later siblings such as the bottom bar.
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            applySystemInsetsToOnboardingChrome(insets, navHorizontal)
             insets
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.rootOnboard) { _, insets -> insets }
 
         ViewCompat.requestApplyInsets(binding.root)
+    }
+
+    private fun applySystemInsetsToOnboardingChrome(
+        insets: WindowInsetsCompat,
+        navHorizontal: Int
+    ) {
+        val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+        val navBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+        val left = maxOf(bars.left, navBars.left)
+        val right = maxOf(bars.right, navBars.right)
+        val bottom = navigationBottomInset(insets)
+
+        binding.viewPager.setPadding(left, bars.top, right, 0)
+        binding.onboardBottomBar.setPadding(
+            left + navHorizontal,
+            binding.onboardBottomBar.paddingTop,
+            right + navHorizontal,
+            bottom
+        )
+    }
+
+    private fun navigationBottomInset(insets: WindowInsetsCompat): Int {
+        val visible = maxOf(
+            insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom,
+            insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom,
+            insets.getInsets(WindowInsetsCompat.Type.tappableElement()).bottom,
+            insets.getInsets(WindowInsetsCompat.Type.mandatorySystemGestures()).bottom
+        )
+        if (visible > 0) return visible
+        // ColorOS 3-button nav can report 0 while the bar is still on screen.
+        if (isGestureNavigation()) return 0
+        return insets.getInsetsIgnoringVisibility(
+            WindowInsetsCompat.Type.navigationBars()
+        ).bottom
+    }
+
+    private fun isGestureNavigation(): Boolean {
+        val id = resources.getIdentifier("config_navBarInteractionMode", "integer", "android")
+        return id != 0 && resources.getInteger(id) == GESTURE_NAVIGATION_MODE
     }
 
     private fun initButtons() {
@@ -388,8 +416,19 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
         showButtons(isNextButtonVisible = showNextButton, isBackButtonVisible = false)
         overlayNextClickListener = onNextClick
         binding.nextBtn.setOnClickListener {
-            overlayNextClickListener?.invoke() ?: onNextPressed()
+            if (!showNextButton) return@setOnClickListener
+            binding.nextBtn.isEnabled = false
+            val handled = overlayNextClickListener
+            if (handled != null) {
+                handled.invoke()
+            } else {
+                onNextPressed()
+            }
+            if (overlayNextClickListener === handled) {
+                binding.nextBtn.isEnabled = showNextButton
+            }
         }
+        ViewCompat.requestApplyInsets(binding.root)
     }
 
     override fun showViewpager() {
@@ -398,6 +437,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
         binding.viewPager.visibility = View.VISIBLE
         binding.onboardBottomBar.visibility = View.VISIBLE
         updateProgressForPage(binding.viewPager.currentItem)
+        ViewCompat.requestApplyInsets(binding.root)
     }
 
     private fun handleCustomizationCode(code: String) {
