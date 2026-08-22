@@ -195,7 +195,7 @@
     <string name="action_learn.more">Докладніше</string>
     <string name="settings.servers_add.server_dialog.title">Додати сервер</string>
     <string name="settings.prot_select_delete.forms">Видалити чернетки та надіслані форми</string>
-    <string name="settings.prot_select_delete.servers">Видалити з’єднання</string>
+    <string name="settings.prot_select_delete.servers">Видалити підключення</string>
     <string name="settings.prot_select_delete.app">Видалити Tella</string>
     <string name="collect.sent_action_edit.to.resend">Редагувати для повторного надсилання</string>
     <string name="collect_toast_form.submitted">Форму надіслано</string>
@@ -292,13 +292,13 @@
     <string name="settings.select_security">Безпека</string>
     <string name="settings.select_lock_timeout">Час до блокування</string>
     <string name="settings.sec_camera.mute_switch">Беззвучний режим камери</string>
-    <string name="settings.sec_camera.mute_expl">Вимкніть звук затвора камери, щоб привертати менше уваги під час зйомки.</string>
+    <string name="settings.sec_camera.mute_expl">Вимкніть звук клацання камери, щоб привертати менше уваги під час зйомки.</string>
     <string name="settings.sec_quick.delete_switch">Швидке видалення</string>
     <string name="settings.sec_quick.delete_expl">Показує повзунок на головному екрані Tella для швидкого видалення файлів у надзвичайних ситуаціях.</string>
     <string name="settings.servers.title_server.settings">Сервери</string>
     <string name="settings.servers.add_server.expl">Під’єднуйтеся до серверів, щоб збирати та надсилати дані вашій організації</string>
     <string name="settings.servers_auto.upload_action">Автозавантаження на сервер</string>
-    <string name="settings.servers_auto.upload_action.expl">Завантажуйте свої файли на сервер Звітів (Reports), щойно вони будуть зняті (фото, відео, аудіо) або імпортовані в Tella.</string>
+    <string name="settings.servers_auto.upload_action.expl">Завантажуйте свої файли на сервер Звітів, щойно вони будуть зняті (фото, відео, аудіо) або імпортовані в Tella.</string>
     <string name="settings.servers_auto.delete_action.expl">Якщо активовано, Tella автоматично видалятиме завантажені файли, щойно завантаження буде завершено.</string>
     <string name="settings.servers_auto.upload.server.selection">Сервер для автозавантаження</string>
     <string name="settings.servers_add.server.forms">ФОРМИ</string>
@@ -325,7 +325,7 @@
     <string name="settings.prot_select_delete.vault">Видалити файли</string>
     <string name="settings.sec_delete.vault_tooltip">Видалити всі файли, що зберігаються в Tella.</string>
     <string name="settings.sec_delete.forms_tooltip">Видалити всі чернетки та надіслані форми.</string>
-    <string name="settings.sec_delete.servers_tooltip">Видалити ваші З’єднання та всі пов’язані з ними дані.</string>
+    <string name="settings.sec_delete.servers_tooltip">Видалення Підключень та усіх пов’язаних із ними даних.</string>
     <string name="settings.sec_delete.app_tooltip">Видалити програму та всі дані, які вона містить. Вас запитають: „Бажаєте видалити цю програму?”. Доки ви не підтвердите, Tella не буде видалено.</string>
     <string name="settings.sec_bypass_switch_title">Обхід цензури</string>
     <string name="settings.sec_bypass_switch_expl">Дозволяє долати спроби блокування Tella у вашому регіоні. Зауважте, що це може сповільнити надсилання даних на сервери.</string>
@@ -382,7 +382,7 @@
     <string name="onboard.title_share_data">Діліться зібраними даними</string>
     <string name="onboard.expl_share_data">Якщо ви працюєте з організацією, під’єднайтеся до її сервера, щоб надсилати файли та дані. Ваша організація має надати вам дані сервера.</string>
     <string name="onboard.connect_btn_share_data">Під’єднатися до сервера</string>
-    <string name="onboard.continue_btn_share_data">Продовжити безпід’єднання до сервера</string>
+    <string name="onboard.continue_btn_share_data">Продовжити без під’єднання до сервера</string>
     <string name="onboard.expl_hide_tella">Щоб Tella було важче знайти на пристрої, ви можете приховати її, змінивши вигляд значка на головному екрані.</string>
     <string name="onboard.default_btn_title_hide_tella">ЗАЛИШИТИ стандартний вигляд Tella</string>
     <string name="onboard.default_btn_subtitle_hide_tella">Tella залишиться видимою на головному екрані</string>
@@ -631,7 +631,7 @@
     <string name="settings.docu_connect.to.servers_enable_action">Під’єднатися до серверів</string>
     <string name="settings.docu_connect.to.servers_enable_action.expl">Керуйте під’єднанням до серверів для надсилання ваших матеріалів.</string>
     <string name="settings.docu_disable.servers_dialog.title">Від’єднати сервери</string>
-    <string name="settings.docu_connect.to.servers_disable_dialog.expl">Ви бажаєте повністю видалити з’єднання з серверами чи просто приховати їх? Приховування збереже інформацію про сервери в пам’яті, щоб ви могли легко відновити зв’язок і надсилати туди дані.</string>
+    <string name="settings.docu_connect.to.servers_disable_dialog.expl">Бажаєте видалити підключення до серверів повністю чи просто приховати їх? Приховування збереже інформацію про сервери у пам\'яті, щоб ви могли легко відновити підключення та надсилати дані на сервери.</string>
     <string name="settings.docu_delete.auto.server_dialog.expl">Якщо ви видалите цей сервер, ваші файли більше не будуть завантажуватися автоматично.</string>
     <string name="settings.docu_auto.upload_action">Автозавантаження</string>
     <string name="settings.docu_auto.delete_action.expl">Tella автоматично видалятиме файли з вашого пристрою, щойно вони будуть завантажені на сервер.</string>
@@ -673,7 +673,7 @@
     <string name="Setting_Reports_Share_Information_Title">Ділитися інформацією для перевірки</string>
     <string name="Setting_Reports_Share_Information_Description">Додавайте інформацію про ваш пристрій і місцезнаходження під час надсилання звітів, щоб ваші файли можна було перевірити.</string>
     <string name="Setting_Reports_Background_Upload">Фонове завантаження</string>
-    <string name="Setting_Reports_Background_Upload_Description">Продовжуйте завантажувати звіти під час виконання інших завдань або після виходу з Tella.УВАГА: якщо цю функцію увімкнено, Tella залишатиметься розблокованою до повного завершення завантаження всіх звітів.</string>
+    <string name="Setting_Reports_Background_Upload_Description">Продовжуйте завантажувати звіти під час виконання інших завдань або після виходу з Tella. УВАГА: якщо цю функцію увімкнено, Tella залишатиметься розблокованою до повного завершення завантаження всіх звітів.</string>
     <string name="Setting_Reports_Settings_Completed">Розширені налаштування завершено</string>
     <string name="Setting_Reports_Settings_Completed_Description">Ви завжди можете змінити параметри Звітів у налаштуваннях Tella.</string>
     <string name="Drafts_Reports_Empty_Message">Ваша скринька Чернетки наразі порожня. Звіти, які ви ще не надіслали, з’являться тут.</string>
@@ -850,7 +850,7 @@
     <string name="back">НАЗАД</string>
     <string name="encrypting">Шифрування</string>
     <string name="Sensitive_Chnage_Title">⚠️ Важливі зміни у наступному випуску</string>
-    <string name="Sensitive_Chnage_Description">Наступна версія Tella (реліз 15 липня 2024 року) міститиме суттєві технічні покращення. Ці зміни несуть невеликий ризик втрати деяких файлів під час оновлення.Якщо ви зберігаєте важливі файли в Tella, радимо скопіювати їх у безпечне місце за межами програми перед оновленням.Натисніть «Дізнатися більше» нижче для отримання детальної інформації про майбутні зміни та інструкцій щодо експорту всіх файлів із Tella.</string>
+    <string name="Sensitive_Chnage_Description">Наступна версія Tella (реліз 15 липня 2024 року) міститиме суттєві технічні покращення. Ці зміни несуть невеликий ризик втрати деяких файлів під час оновлення. Якщо ви зберігаєте важливі файли в Tella, радимо скопіювати їх у безпечне місце за межами програми перед оновленням. Натисніть «Дізнатися більше» нижче для отримання детальної інформації про майбутні зміни та інструкцій щодо експорту всіх файлів із Tella.</string>
     <string name="Learn_More">ДІЗНАТИСЯ БІЛЬШЕ</string>
     <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
         <item quantity="one">Вибрано %1$d сутність</item>
@@ -876,7 +876,7 @@
     <string name="Analytics_respect_privacy_title">Ми поважаємо вашу приватність</string>
     <string name="Analytics_respect_privacy_description">• Ми не маємо доступу до жодних файлів, які ви зберігаєте в Tella або якими ділитеся зі своєю організацією.• Ми <b>ніколи</b> не будемо поширювати чи продавати вашу інформацію будь-кому.</string>
     <string name="Analytics_banner_title">Покращуйте Tella, ділячись аналітикою</string>
-    <string name="Analytics_banner_improve_description">Допоможіть нам зрозуміти, як ви використовуєте Tella. Уся інформація анонімна і не може бути пов’язана з вами.Бажаєте ділитися аналітикою з командою Tella?</string>
+    <string name="Analytics_banner_improve_description">Допоможіть нам зрозуміти, як ви використовуєте Tella. Уся інформація анонімна і не може бути пов’язана з вами. Бажаєте ділитися аналітикою з командою Tella?</string>
     <string name="Settings_Analytics_switch_title">Ділитися аналітикою для покращення Tella</string>
     <string name="Settings_Analytics_switch_expl">Допоможіть нам зрозуміти, як ви використовуєте Tella. Ваша активність ніколи не буде пов’язана з вами особисто.</string>
     <string name="select_entities">Вибрати сутності</string>
@@ -903,9 +903,9 @@
     <string name="gdrive_documentation_url" translatable="false">https://tella-app.org/g-drive/</string>
     <string name="settings_add.server.selection_dialog.title">До якого типу сервера ви хочете під’єднатися?</string>
     <string name="unavailable_connections">Недоступні з’єднання</string>
-    <string name="unavailable_connections_desc">Для наступних категорій одночасно може бути увімкнено лише одне з’єднання. Щоб додати нове, будь ласка, видаліть поточне в налаштуваннях З’єднань.</string>
+    <string name="unavailable_connections_desc">Для наведених категорій одночасно може бути увімкнено лише одне підключення. Щоб додати нове підключення, будь ласка, видаліть поточне у налаштуваннях Підключень.</string>
     <string name="no_permission_to_folder_google_drive">У вас немає прав для завантаження в цю папку.</string>
-    <string name="settings.servers.title_server.settings2">З’єднання</string>
+    <string name="settings.servers.title_server.settings2">Підключення</string>
     <string name="settings.servers.add_server.expl2">Якщо ви працюєте з організацією, під’єднайтеся до її сервера, щоб надсилати файли та матеріали. Організація має надати вам параметри сервера.</string>
     <string name="settings.docu_add.server_dialog.select_tella_dropbox" translatable="false">Dropbox</string>
     <string name="go_to_dropbox">ПЕРЕЙТИ ДО DROPBOX</string>
@@ -913,8 +913,8 @@
     <string name="Drafts_Header_Message">Це звіти, над якими ви зараз працюєте.</string>
     <string name="Outboxes_Header_Message">Ці звіти готові до надсилання.</string>
     <string name="Submitted_Header_Message">Це звіти, які ви успішно надіслали.</string>
-    <string name="Connections_description">Дізнайтеся більше про з’єднання тут. Якщо ви працюєте з організацією, ви можете запитати у них, яке з’єднання використовувати.</string>
-    <string name="Connections_description_selection">Дізнайтеся більше про з’єднання тут.</string>
+    <string name="Connections_description">Дізнайтеся більше про підключення тут. Якщо ви співпрацюєте з організацією, ви можете уточнити у них, яке підключення використовувати.</string>
+    <string name="Connections_description_selection">Дізнайтеся більше про підключення тут.</string>
     <string name="settings.docu_add.server_dialog.select_next_cloud">Nextcloud</string>
     <string name="NextCloud">Nextcloud</string>
     <string name="NextCloud_Create_New_Folder">Створити нову папку</string>
@@ -967,7 +967,7 @@
     <string name="select_file_picker">Виберіть файловий менеджер</string>
     <string name="gallery_toast_fail_import_no_file_manager">Програму файлового менеджера не знайдено. Будь ласка, встановіть файловий менеджер (наприклад, Google Files, Fossify або будь-який інший), щоб імпортувати файли.</string>
     <string name="onboard_lock_warning_title">Не втратьте свої файли</string>
-    <string name="onboard_lock_warning_message">Ваш ключ доступу (пароль/ключ/PIN-код) — це єдиний спосіб отримати доступ до файлів у Tella.Якщо ви забудете його, відновити доступ буде неможливо. Ваш вміст у Tella буде втрачено назавжди.</string>
+    <string name="onboard_lock_warning_message">Ваш ключ доступу (пароль/ключ/PIN-код) — це єдиний спосіб отримати доступ до файлів у Tella. Якщо ви забудете його, відновити доступ буде неможливо. Ваш вміст у Tella буде втрачено назавжди.</string>
     <string name="onboard_lock_warning_cta">Я розумію</string>
     <string name="onboard_lock_protect_sheet_title">Захистіть свій ключ доступу</string>
     <string name="onboard_lock_protect_sheet_message">Обов’язково запам’ятайте свій ключ доступу або збережіть його в надійному місці, наприклад, у менеджері паролів.</string>
@@ -997,22 +997,22 @@
     <string name="port">Порт</string>
     <string name="verification">Перевірка</string>
     <string name="verify_sequence_match">Переконайтеся, що ця послідовність збігається з тією, що відображається на пристрої відправника.</string>
-    <string name="nearbySharing_verifyConnection_sender">Щоб переконатися в безпеці з’єднання, перевірте, чи збігається цифрова послідовність вище з тією, що відображається на пристрої отримувача.</string>
-    <string name="nearbySharing_verifyConnection_recipient">Щоб переконатися в безпеці з’єднання, перевірте, чи збігається цифрова послідовність вище з тією, що відображається на іншому пристрої.</string>
-    <string name="nearbySharing_verifyConnection_warning">Якщо послідовності не збігаються, з’єднання може бути небезпечним, тому його слід перервати.</string>
-    <string name="confirm_and_connect">Підтвердити та під’єднатися</string>
+    <string name="nearbySharing_verifyConnection_sender">Щоб переконатися у безпеці підключення, перевірте, чи збігається наведена вище послідовність чисел із тими, що відображаються на пристрої отримувача.</string>
+    <string name="nearbySharing_verifyConnection_recipient">Щоб переконатися у безпеці підключення, перевірте, чи збігається наведена вище послідовність символів із послідовністю на пристрої відправника.</string>
+    <string name="nearbySharing_verifyConnection_warning">Якщо послідовності не збігаються, підключення може бути небезпечним і його слід скинути.</string>
+    <string name="confirm_and_connect">Підтвердити та підключитися</string>
     <string name="wifi">Wi-Fi</string>
-    <string name="get_connected">Під’єднання</string>
-    <string name="wifi_connection_instruction">Переконайтеся, що обидва пристрої під’єднані до однієї мережі Wi-Fi</string>
-    <string name="tips_to_connect_title">Поради щодо під’єднання</string>
-    <string name="tips_to_connect_body">1. Мережа Wi-Fi не обов’язково повинна мати доступ до інтернету.2. Ви можете створити власну мережу Wi-Fi, скориставшись функцією точки доступу на вашому телефоні.3. Вимкніть будь-які VPN-з’єднання.</string>
+    <string name="get_connected">Підключитися</string>
+    <string name="wifi_connection_instruction">Переконайся, що обидва пристрої підключені до однієї мережі Wi-Fi</string>
+    <string name="tips_to_connect_title">Довідка Обмін поблизу</string>
+    <string name="tips_to_connect_body">1. Мережа Wi-Fi не обов’язково повинна мати доступ до інтернету. 2. Ви можете створити власну мережу Wi-Fi, скориставшись функцією точки доступу на вашому телефоні. 3. Вимкніть будь-які VPN-з’єднання.</string>
     <string name="current_wifi_network">Поточна мережа Wi-Fi</string>
     <string name="same_wifi_text">Так, ми в одній мережі Wi-Fi</string>
     <string name="NearBySharing">Обмін поблизу</string>
     <string name="share_files_description">Діліться файлами з пристроями поблизу без під’єднання до інтернету. 1. Обидва пристрої мають бути в одній мережі Wi-Fi. 2. Переконайтеся, що ви довіряєте особі, з якою ділитеся файлами.</string>
     <string name="send_files">Надіслати файли</string>
     <string name="receive_files">Отримати файли</string>
-    <string name="learn_more_about_nearby_sharing">Дізнатися більше про обмін поблизу</string>
+    <string name="learn_more_about_nearby_sharing">Дізнайтеся більше про Обмін поблизу</string>
     <string name="nearby_sharing">Обмін поблизу</string>
     <string name="how_it_works">Обмін поблизу</string>
     <string name="peerToPeer_documentation_url" translatable="false">https://tella-app.org/nearby-sharing/</string>
@@ -1025,7 +1025,7 @@
     <string name="waiting_for_the_recipient_to_accept_files">Очікування підтвердження від отримувача</string>
     <string name="accept">ПРИЙНЯТИ</string>
     <string name="reject">ВІДХИЛИТИ</string>
-    <string name="exit_nearby_sharing">Вийти з обміну поблизу?</string>
+    <string name="exit_nearby_sharing">Вийти з Обміну поблизу?</string>
     <string name="your_progress_will_be_lost">Ваш прогрес буде втрачено.</string>
     <string name="ip_address">IP-адреса</string>
     <string name="sender_files_rejected">Файли відправника відхилено.</string>
@@ -1038,7 +1038,7 @@
     <string name="failed_to_open_location_settings">Не вдалося відкрити налаштування місцезнаходження.</string>
     <string name="try_again">Спробувати ще раз</string>
     <string name="stop_sharing_files">Припинити обмін файлами?</string>
-    <string name="nearby_sharing_will_be_stopped_the_recipient_will_not_have_access_to_files_that_were_not_fully_transferred">Обмін поблизу буде зупинено. Отримувач не матиме доступу до файлів, які не були передані повністю.</string>
+    <string name="nearby_sharing_will_be_stopped_the_recipient_will_not_have_access_to_files_that_were_not_fully_transferred">Обмін поблизу буде зупинено. Отримувач не матиме доступу до файлів, які не було передано повністю.</string>
     <string name="stop">зупинити</string>
     <string name="success_title">Успішно</string>
     <string name="failure_title">Щось пішло не так</string>
@@ -1068,14 +1068,14 @@
     <string name="waiting_for_the_recipient">Очікування отримувача…</string>
     <string name="nearby_sharing_title">Обмін поблизу</string>
     <string name="nearby_sharing_description">Увімкніть цю функцію, щоб ділитися файлами з пристроями поблизу без під’єднання до інтернету.</string>
-    <string name="nearby_sharing_intro">Діліться файлами безпосередньо з пристроєм поблизу, з під’єднанням до інтернету або без нього.Щоб розпочати, приєднайтеся до тієї самої мережі Wi-Fi, що й отримувач. Обмін поблизу працюватиме, навіть якщо мережа Wi-Fi не має доступу до інтернету.</string>
+    <string name="nearby_sharing_intro">Діліться файлами безпосередньо з пристроєм поблизу, з підключенням до інтернету або без нього. Щоб розпочати, приєднайтеся до тієї самої мережі Wi-Fi, що й отримувач. Обмін поблизу працюватиме, навіть якщо мережа Wi-Fi не має доступу до інтернету.</string>
     <string name="tips_to_connect_wifi">Дізнайтеся більше про під’єднання до Wi-Fi для Обміну поблизу.</string>
-    <string name="nearbysharing_tips_to_connect_settingup">Налаштування</string>
-    <string name="nearbysharing_tips_to_connect_settingup_expl">Є 2 способи з’єднати ваші пристрої через Wi-Fi: 1. Використання Wi-Fi роутера, наприклад, вдома \t або на роботі 2. Налаштування точки доступу Wi-Fi з пристрою,\t такого як смартфон, планшет або комп’ютер \t\ta. Один користувач створює точку доступу\t\t у налаштуваннях свого пристрою. \t\tb. Інший користувач під’єднується до цієї точки доступу.</string>
-    <string name="tips_section_join">Приєднання до однієї мережі</string>
-    <string name="tips_join_body">Щойно мережу Wi-Fi буде налаштовано, перейдіть у налаштування ваших пристроїв і переконайтеся, що ви обидва в одній мережі Wi-Fi.</string>
+    <string name="nearbysharing_tips_to_connect_settingup">Як підключитися до пристрою?</string>
+    <string name="nearbysharing_tips_to_connect_settingup_expl">Є 2 способи підключити пристрої через Wi-Fi: 1. За допомогою локальної мережі (наприклад, домашньої, робочої чи публічної мережі Wi-Fi). 2. Налаштувавши точку доступу й підключивши до неї обидва пристрої.</string>
+    <string name="tips_section_join">Чи потрібен доступ до інтернету?</string>
+    <string name="tips_join_body">Ні. Мережі Wi-Fi не потрібен доступ до інтернету. Доки роутер Wi-Fi або точка доступу увімкнені та працюють, їх можна використовувати для Обміну поблизу навіть без підключення до мережі.</string>
     <string name="tips_section_more">Додаткові поради</string>
-    <string name="tips_more_bullets">● Мережа Wi-Fi не обов’язково повинна мати \t доступ до інтернету. Поки Wi-Fi роутер \t або точка доступу увімкнені та працюють, \t їх можна використовувати для обміну поблизу навіть \t без виходу в мережу● Обов’язково вимкніть усі активні VPN-з’єднання.</string>
+    <string name="tips_more_bullets">• Вимкніть усі активні VPN-з’єднання. • Перегляньте документацію Tella, щоб дізнатися більше про Обмін поблизу.</string>
     <string name="feedback_contact_info_hint">Контактна інформація (необов’язково)</string>
     <string name="file_already_exists">Файл уже існує.</string>
     <string name="tella_foss">Tella FOSS</string>
@@ -1108,9 +1108,9 @@
     <string name="nearbysharing_tips_to_connect_item_1">Використання локальної мережі, наприклад домашньої чи робочої мережі Wi-Fi або публічного Wi-Fi.</string>
     <string name="nearbysharing_tips_to_connect_item_2">Створення точки доступу та підключення до неї обох пристроїв.</string>
     <string name="tips_more_item_1">Вимкніть усі активні VPN-з\'єднання, будь ласка.</string>
-    <string name="tips_more_item_2">Ознайомтеся з документацією Tella, щоб дізнатися більше про «Обмін поблизу».</string>
+    <string name="tips_more_item_2">Ознайомтеся з документацією Tella, щоб дізнатися більше про Обмін поблизу.</string>
     <string name="nearbysharing_stop_receiving_files">Зупинити отримання файлів?</string>
-    <string name="nearbysharing_stop_receiving_files_description">«Обмін поблизу» буде зупинено. Ви втратите доступ до файлів, які не було передано повністю.</string>
+    <string name="nearbysharing_stop_receiving_files_description">Обмін поблизу буде зупинено. Ви втратите доступ до файлів, які не було передано повністю.</string>
     <string name="collect_form_geopoint_first_load_title">Завантаження даних карти для вашої області</string>
     <string name="collect_form_geopoint_first_load_message">Зачекайте, поки карта завантажиться, перш ніж вибирати розташування.</string>
     <string name="verification.prompt_dialog.media.file.expl">У режимі перевірки для запису геоданих потрібен GPS. Увімкніть GPS, щоб Tella могла записати місцезнаходження вашого медіафайлу.</string>
@@ -1133,9 +1133,9 @@
     <string name="connection_failed">Помилка з\'єднання</string>
     <string name="peer_to_peer_manual_ping_failed">Не вдалося зв\'язатися з іншим пристроєм. Перевірте параметри підключення та переконайтеся, що обидва пристрої підключені до однієї мережі Wi-Fi.</string>
     <string name="peer_to_peer_incompatible_versions_title">Несумісні версії</string>
-    <string name="peer_to_peer_incompatible_versions_message">На іншому пристрої встановлено застарілу й несумісну версію Tella. Для використання функції «Обмін поблизу» необхідно оновити додаток на обох пристроях.</string>
-    <string name="peer_to_peer_invalid_qr_code">Цей QR-код недійсний для «Обміну поблизу».</string>
-    <string name="peer_to_peer_scan_recipient_qr_expected">Відскануйте QR-код одержувача (той, що показує його IP-адресу та PIN-код), а не QR-код відправника з кроку 1.</string>
+    <string name="peer_to_peer_incompatible_versions_message">На іншому пристрої встановлено застарілу й несумісну версію Tella. Для використання функції Обмін поблизу необхідно оновити додаток на обох пристроях.</string>
+    <string name="peer_to_peer_invalid_qr_code">Цей QR-код недійсний для Обміну поблизу.</string>
+    <string name="peer_to_peer_scan_recipient_qr_expected">Відскануйте QR-код одержувача (той, що показує його IP-адресу та PIN-код), а не QR-код відправника з Кроку 1.</string>
     <string name="peer_to_peer_scan_sender_qr_expected">Відскануйте QR-код відправника (лише сертифікат), а не QR-код підключення одержувача.</string>
     <string name="peer_to_peer_qr_scanned_number_not_json">Сканер розпізнав число, а не QR-код підключення. Помістіть квадратний QR-код з екрана одержувача по центру (не текст із PIN-кодом), за можливості уникайте сканування з екрана ноутбука чи емулятора та зачекайте, поки QR-код повністю завантажиться.</string>
     <string name="verification_step1_recipient_hash">Крок 1: Підтвердьте хеш одержувача</string>
