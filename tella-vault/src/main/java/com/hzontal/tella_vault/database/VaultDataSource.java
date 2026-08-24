@@ -507,28 +507,8 @@ public class VaultDataSource implements IVaultDatabase {
 
             case ALL:
             default:
-                return getAllFilesQuery(parentId);
+                return cn(D.C_PARENT_ID) + " = '" + parentId + "'";
         }
-    }
-
-    private String getAllFilesQuery(String parentId) {
-        String currentFolder = cn(D.C_PARENT_ID) + " = '" + parentId + "'";
-        if (!ROOT_UID.equals(parentId)) {
-            return currentFolder;
-        }
-
-        String directoriesHere = cn(D.C_TYPE) + " = '" + VaultFile.Type.DIRECTORY.getValue() + "'"
-                + " AND " + currentFolder;
-        String everyType = cn(D.C_TYPE) + " != '" + VaultFile.Type.DIRECTORY.getValue() + "'"
-                + " AND ("
-                + cn(D.C_MIME_TYPE) + " LIKE 'image/%'"
-                + " OR " + cn(D.C_MIME_TYPE) + " LIKE 'video/%'"
-                + " OR " + cn(D.C_MIME_TYPE) + " LIKE 'audio/%'"
-                + " OR (" + getDocumentsMimeTypeQuery() + ")"
-                + " OR (" + getOthersMimeTypeQuery() + ")"
-                + ")";
-
-        return "(" + directoriesHere + ") OR (" + everyType + ")";
     }
 
     private String getDocumentsMimeTypeQuery() {
