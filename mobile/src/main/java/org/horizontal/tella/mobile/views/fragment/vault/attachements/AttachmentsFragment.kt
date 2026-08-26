@@ -844,7 +844,9 @@ class AttachmentsFragment :
         attachmentsAdapter.setFiles(files)
 
         if (isEmpty) {
-            syncSelectionChromeLeavingSelectModeFully()
+            if (!isMoveModeEnabled) {
+                syncSelectionChromeLeavingSelectModeFully()
+            }
             recyclerView.visibility = View.GONE
             emptyViewContainer.visibility = View.VISIBLE
             updateEmptyStateMessage()
