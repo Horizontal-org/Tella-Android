@@ -158,16 +158,16 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
     }
 
     public void deselectMediaFile(@NonNull VaultFile vaultFile) {
-        if (!selected.contains(vaultFile)) {
+        if (!isSelectedById(vaultFile)) {
             return;
         }
 
-        selected.remove(vaultFile);
+        removeSelectedById(vaultFile.id);
         notifyItemChanged(files.indexOf(vaultFile));
     }
 
     public void selectMediaFile(@NonNull VaultFile vaultFile) {
-        if (selected.contains(vaultFile)) {
+        if (isSelectedById(vaultFile)) {
             return;
         }
 
@@ -176,8 +176,8 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
     }
 
     private void checkboxClickHandler(ViewHolder holder, VaultFile vaultFile) {
-        if (selected.contains(vaultFile)) {
-            selected.remove(vaultFile);
+        if (isSelectedById(vaultFile)) {
+            removeSelectedById(vaultFile.id);
             galleryMediaHandler.onMediaDeselected(vaultFile);
         } else {
             if (singleSelection) {
@@ -211,7 +211,7 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
 
     public void handleClickMode(ViewHolder holder, VaultFile vaultFile) {
         if (isMoveMode) {
-            if (vaultFile.type == VaultFile.Type.DIRECTORY) {
+            if (vaultFile.type == VaultFile.Type.DIRECTORY && !isSelectedById(vaultFile)) {
                 holder.itemView.setOnClickListener(v -> galleryMediaHandler.playMedia(vaultFile));
             } else {
                 holder.itemView.setOnClickListener(null);
@@ -225,6 +225,31 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
         }
     }
 
+    private boolean isSelectedById(@NonNull VaultFile vaultFile) {
+        if (vaultFile.id == null) {
+            return false;
+        }
+        for (VaultFile selectedFile : selected) {
+            if (vaultFile.id.equals(selectedFile.id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void removeSelectedById(String id) {
+        if (id == null) {
+            return;
+        }
+        java.util.Iterator<VaultFile> iterator = selected.iterator();
+        while (iterator.hasNext()) {
+            VaultFile file = iterator.next();
+            if (id.equals(file.id)) {
+                iterator.remove();
+            }
+        }
+    }
+
     private void removeAllSelections() {
         for (VaultFile selection : selected) {
             deselectMediaFile(selection);
@@ -234,7 +259,7 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
 
     public void selectAll() {
         for (VaultFile selection : files) {
-            if (!selected.contains(selection)) {
+            if (!isSelectedById(selection)) {
                 selected.add(selection);
             }
         }
@@ -249,7 +274,7 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
     }
 
     private void checkItemState(ViewHolder holder, VaultFile vaultFile) {
-        boolean checked = selected.contains(vaultFile);
+        boolean checked = isSelectedById(vaultFile);
         // holder.selectionDimmer.setVisibility(checked ? View.VISIBLE : View.GONE);
         holder.itemView.setBackgroundColor(checked ? ContextCompat.getColor(holder.itemView.getContext(), R.color.wa_white_16) :
                 isMoveMode ? ContextCompat.getColor(holder.itemView.getContext(), R.color.wa_white_12)

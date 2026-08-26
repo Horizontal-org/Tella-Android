@@ -936,7 +936,7 @@
     <string name="delete_report">Supprimer le signalement ?</string>
     <string name="report_submitted_msg">Votre</string>
     <string name="Collect_MediaWidget_Attach_File">Pièce jointe</string>
-    <string name="form_successfully_submitted">%1$d soumis avec succès.</string>
+    <string name="form_successfully_submitted">%1$s soumis avec succès.</string>
     <string name="error_file_not_found">Le fichier que vous essayez d\'importer n\'est plus disponible. Merci de réessayer.</string>
     <string name="select_file_picker">Sélectionner un gestionnaire de fichiers</string>
     <string name="gallery_toast_fail_import_no_file_manager">Pas de gestionnaire de fichiers trouvé. Merci d\'installer une application de gestion de fichiers (comme Google Files, Fossify File Manager, ou n\'importe quel autre gestionnaire de fichiers) pour importer des fichiers.</string>

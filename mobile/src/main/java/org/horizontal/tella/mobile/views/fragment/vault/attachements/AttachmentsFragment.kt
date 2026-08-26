@@ -354,10 +354,12 @@ class AttachmentsFragment :
     }
 
     private fun handleMoveHereClick() {
-        if (attachmentsAdapter.selectedMediaFiles.isNotEmpty()) {
-            viewModel.moveFiles(
-                currentRootID, attachmentsAdapter.selectedMediaFiles
-            )
+        val destinationId = currentRootID ?: return
+        val selected = attachmentsAdapter.selectedMediaFiles
+        if (selected.any { it.id == destinationId }) return
+        val toMove = selected.filter { it.id != destinationId }
+        if (toMove.isNotEmpty()) {
+            viewModel.moveFiles(destinationId, toMove)
         }
     }
 
@@ -542,7 +544,7 @@ class AttachmentsFragment :
     }
 
     private fun handleDirectory(vaultFile: VaultFile) {
-        if (isMoveModeEnabled && attachmentsAdapter.selectedMediaFiles.contains(vaultFile)) return
+        if (isMoveModeEnabled && isSelectedForMove(vaultFile.id)) return
 
         if (!isMoveModeEnabled) {
             attachmentsAdapter.clearSelected()
@@ -844,7 +846,9 @@ class AttachmentsFragment :
         attachmentsAdapter.setFiles(files)
 
         if (isEmpty) {
-            syncSelectionChromeLeavingSelectModeFully()
+            if (!isMoveModeEnabled) {
+                syncSelectionChromeLeavingSelectModeFully()
+            }
             recyclerView.visibility = View.GONE
             emptyViewContainer.visibility = View.VISIBLE
             updateEmptyStateMessage()
@@ -1278,6 +1282,9 @@ class AttachmentsFragment :
         binding.breadcrumbsView.removeLastItem()
         currentRootID = binding.breadcrumbsView.getCurrentItem<BreadcrumbItem>().selectedItem.id
         onMediaFilesAdded()
+        if (isMoveModeEnabled) {
+            highlightMoveBackground()
+        }
     }
 
     private fun navigateToCameraAndFinish() {
@@ -1292,13 +1299,19 @@ class AttachmentsFragment :
     }
 
     private fun highlightMoveBackground() {
-        if (currentMove != currentRootID) {
+        val canMoveHere = currentMove != currentRootID && !isSelectedForMove(currentRootID)
+        if (canMoveHere) {
             binding.moveHere.setOnClickListener(this)
             binding.moveHere.setTextColor(getColor(activity, R.color.wa_white))
         } else {
             binding.moveHere.setOnClickListener(null)
             binding.moveHere.setTextColor(getColor(activity, R.color.wa_white_12))
         }
+    }
+
+    private fun isSelectedForMove(fileId: String?): Boolean {
+        if (fileId == null) return false
+        return attachmentsAdapter.selectedMediaFiles.any { it.id == fileId }
     }
 
     private fun deleteFileFromExternalStorage(uri: Uri, afterConsent: Boolean = false) {

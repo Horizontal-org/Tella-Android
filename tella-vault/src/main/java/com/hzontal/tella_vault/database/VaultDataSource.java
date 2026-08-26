@@ -359,6 +359,13 @@ public class VaultDataSource implements IVaultDatabase {
      */
     @Override
     public boolean move(VaultFile vaultFile, String newParent) {
+        if (vaultFile == null || vaultFile.id == null || newParent == null) {
+            return false;
+        }
+        if (vaultFile.id.equals(newParent)) {
+            return false;
+        }
+
         ContentValues values = new ContentValues();
         values.put(D.C_PARENT_ID, newParent);
 

@@ -122,9 +122,13 @@ class AttachmentsViewModel @Inject constructor(
             vaultFile?.let { moveFile(parentId, it) }?.let { completable.add(it) }
         }
 
+        if (completable.isEmpty()) return
+
         disposables.add(Single.zip(
             completable
-        ) { objects: Array<Any?> -> objects.size }.observeOn(AndroidSchedulers.mainThread())
+        ) { objects: Array<Any?> ->
+            objects.count { it is Boolean && it }
+        }.observeOn(AndroidSchedulers.mainThread())
             .subscribe({ _filesSize.postValue(it) }) { throwable: Throwable? ->
                 CrashReporterProvider.get().recordException(throwable!!)
                 _moveFilesError.postValue(throwable)
