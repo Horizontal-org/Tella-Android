@@ -14,4 +14,6 @@
     <string name="action_hide_pin">cacher le pin</string>
     <string name="action_delete">Supprimer</string>
     <string name="action_go_back">Retour</string>
+    <string name="Home_BottomNav_Uwazi">Uwazi</string>
+    <string name="onboarding_info_icon_content_description">Information</string>
 </resources>

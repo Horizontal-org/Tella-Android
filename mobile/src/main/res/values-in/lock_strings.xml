@@ -46,4 +46,11 @@
     <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">Masukkan PIN Anda saat ini untuk mengubah kamuflase Anda</string>
     <string name="Settings_Action_SetLock">Lock</string>
     <string name="Settings_Message_LockChanged">Kunci Anda telah diubah!</string>
+    <string name="unlock">Buka kunci</string>
+    <string name="attempts_remaining_plural">Anda memilii %1$d kesempatan tersisa hingga semua yang ada di dalam Tella Anda dihapus.</string>
+    <string name="exceeded_max_attempts">You have exceeded the maximum number of incorrect login attempts. All your Tella data has been deleted.</string>
+    <string name="attempts_remaining_singular">Anda memilii kesempatan tersisa sampai semua yang ada di dalam Tella Anda dihapus.</string>
+    <string name="incorrect_pin">Pin Salah. &#13;\n&#13;\n</string>
+    <string name="incorrect_password">Kata Sandi Salah. &#13;\n&#13;\n</string>
+    <string name="incorrect_pattern">Pola Salah.&#13;\n&#13;\n</string>
 </resources>

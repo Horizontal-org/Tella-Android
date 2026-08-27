@@ -9,7 +9,7 @@
     <string name="settings_menu.item_contact">Ti swake/Batanidzai nesu.</string>
     <string name="collect_dialog.text_download.progress">Djirikutorwa ndau djo mashoko.</string>
     <string name="collect_toast_download.completed">Kutola mashoko ka pera.</string>
-    <string name="collect.draft_tab.title">Swassala</string>
+    <string name="collect.draft_tab.title">Drafts</string>
     <string name="collect.blank_action_download.form">Kuthola</string>
     <string name="settings_text_empty.field">Pandiwani kugala passina chiro.</string>
     <string name="home_toast_back.exit">Keta pa batani lo viha surre kuti umbunde pa albamu.</string>
@@ -363,12 +363,12 @@
     <string name="recorder_toast_recording.saved">Mazwi a thepwa a vigwa pa swikwama pa Tella</string>
     <string name="onboard.intro_title">Wavia swakanaka pa Tella</string>
     <string name="onboard.intro_get_started">Kuthanga</string>
-    <string name="onboard.title_camera">Camera lo vhissa pikija</string>
-    <string name="onboard.expl_camera">Vissa mupikija no bassikopo pa Tella streti. Swikwama iswi swinozo vigwa chiriporipocho pa Tella aswizooneki pa albamu yo foni.</string>
+    <string name="onboard.title_camera">Swanhorwa</string>
+    <string name="onboard.expl_camera">Capture photos, videos and audio directly in Tella.</string>
     <string name="onboard.title_recorder">Kuthepa</string>
     <string name="onboard.expl_recorder">Thepa mazwi paunegue uri ngomucrofoni pa Tella. Swikwama swo mazwi swinogwarissiswa chiriporipocho no vigwa pa Tella.</string>
-    <string name="onboard.title_files">Swikwama no mukwaka ndja gwatissiswa</string>
-    <string name="onboard.expl_files">Chengetedzai nekunatsa kuronga mafaira enyu ese. Chero bedzi Tella yakakiyiwa, mafaira enyu nemaforodha acharamba asingasvikike kumunhu angatora kana kutsvaga mudziyo.</string>
+    <string name="onboard.title_files">Store files safely</string>
+    <string name="onboard.expl_files">Your Tella files are encrypted. As long as Tella is locked, no one else (not even the Tella team) can access your data.</string>
     <string name="onboard.title_lock_finish">Mujagari.</string>
     <string name="onboard.expl_lock_finish">Mujagari wako wanaka unokwanissa kuginja guvo haunodha.</string>
     <string name="onboard.title_all_done">Swanaka!</string>
@@ -433,7 +433,7 @@
     <string name="collect.outbox_tab.title">Kubhudha</string>
     <string name="Collect_RemoveForm_SheetTitle">Kulassa ndau</string>
     <string name="fragment_uwazi">Panovhigwa mashoko nokumagwarira</string>
-    <string name="Uwazi_Dowload_Temapltes_Header_Title">Kutola mufananigjo</string>
+    <string name="Uwazi_Dowload_Temapltes_Header_Title">Add Templates</string>
     <string name="Uwazi_RemoveTemplate_SheetTitle">Kulassa pa foni</string>
     <string name="Uwazi_Action_FillEntity">Kuvhaka zina</string>
     <string name="Uwazi_Action_RemoveTemplate">Kulassa mufananidjo</string>
@@ -861,8 +861,8 @@
     <string name="Settings_Analytics_turn_on_dialog">Hewe wa swinhoressa kuti u paurerane maonero. Unokwanissa kuswijinja pa maitiro eku shandisa.</string>
     <string name="Settings_Analytics_turn_off_dialog">Ussa paurira maonero unokuanissa kuswichinja pa maitiro eku shandisa.</string>
     <string name="unlock">Kuvhala</string>
-    <string name="Onboard_Collect_Data">Tola mashoko</string>
-    <string name="Onboard_Collect_Data_Exp">Kana weshanda no batho timira chikomichiro cho mashoko pa chikwama.</string>
+    <string name="Onboard_Collect_Data">Share data</string>
+    <string name="Onboard_Collect_Data_Exp">Send reports, forms and files to your organization, or back up files to a personal cloud.</string>
     <string name="action_flip_vertically">Kwemessa</string>
     <string name="action_flip_horizontally">Kumbimbika</string>
     <string name="settings.docu_add.server_dialog.select_tella_google_drive" translatable="false">Google drive</string>
@@ -1110,4 +1110,13 @@
     <string name="verification_step2_sender_hash">Step 2: Confirm sender hash</string>
     <string name="confirm_and_continue">Confirm and continue</string>
     <string name="collect_form_geopoint_first_load_message_secondary">This may take some time, depending on your Internet connection.</string>
+    <string name="settings_invalid_url">Error: The server URL is incorrect</string>
+    <string name="onboard.expl_files_info">By default, your Tella files are stored only on your device, not online.</string>
+    <string name="Uwazi_Subtitle_RemoveOutboxEntity">Are you sure you want to delete this entity?</string>
+    <string name="onboard.share_data_connections">Tella supports server Connections to:</string>
+    <string name="onboard.expl_camera_info">These files are saved in Tella, and cannot be seen from your phone’s regular gallery.</string>
+    <string name="Uwazi_RemoveTemplate_ConfirmTitle">Remove \"%1$s\"?</string>
+    <string name="Uwazi_Template_Removed_Toast">\"%1$s\" has been removed from your device.</string>
+    <string name="onboard.title_nearby_sharing">Share files nearby</string>
+    <string name="peer_to_peer_invalid_details_message">Please ask the sender to verify their connection details and try again.</string>
 </resources>

@@ -9,7 +9,7 @@
     <string name="settings_menu.item_contact">Hubungi kami</string>
     <string name="collect_dialog.text_download.progress">Mengunduh formulir</string>
     <string name="collect_toast_download.completed">Unduhan selesai</string>
-    <string name="collect.draft_tab.title">Bagan</string>
+    <string name="collect.draft_tab.title">Drafts</string>
     <string name="collect.blank_action_download.form">Unduh</string>
     <string name="settings_text_empty.field">Kolom ini tidak boleh kosong.</string>
     <string name="home_toast_back.exit">Ketuk lagi tombol \"Kembali\" untuk keluar dari aplikasi</string>
@@ -361,12 +361,12 @@
     <string name="recorder_toast_recording.saved">The audio recording was saved to your Tella files</string>
     <string name="onboard.intro_title">Welcome to Tella</string>
     <string name="onboard.intro_get_started">Get started</string>
-    <string name="onboard.title_camera">Kamera</string>
-    <string name="onboard.expl_camera">Take photos and videos directly in Tella. These files are automatically encrypted and saved in Tella, and will not be visible from your phone’s regular gallery.</string>
+    <string name="onboard.title_camera">Rekam</string>
+    <string name="onboard.expl_camera">Capture photos, videos and audio directly in Tella.</string>
     <string name="onboard.title_recorder">Perekam</string>
     <string name="onboard.expl_recorder">Rekam wawancara atau suara apapun di sekitar Anda dengan perekam suara di Tella. Berkas audio dienkripsi secara otomatis dan disimpan di folder tersembunyi di dalam Tella.</string>
-    <string name="onboard.title_files">Encrypted files &amp; folders</string>
-    <string name="onboard.expl_files">Simpan dan atur semua berkas Anda dengan aman. Selama Tella terkunci, berkas dan folder Anda tidak akan bisa diakses oleh seseorang yang menyita atau menggeledah perangkat tersebut.</string>
+    <string name="onboard.title_files">Store files safely</string>
+    <string name="onboard.expl_files">Your Tella files are encrypted. As long as Tella is locked, no one else (not even the Tella team) can access your data.</string>
     <string name="onboard.title_lock_finish">Lock</string>
     <string name="onboard.expl_lock_finish">Your lock is set up! You can change it anytime in Settings.</string>
     <string name="onboard.title_all_done">You’re all done!</string>
@@ -430,7 +430,7 @@
     <string name="collect.outbox_tab.title">Kotak keluar</string>
     <string name="Collect_RemoveForm_SheetTitle">Hapus formulir?</string>
     <string name="fragment_uwazi">Uwazi</string>
-    <string name="Uwazi_Dowload_Temapltes_Header_Title">Unduh templat</string>
+    <string name="Uwazi_Dowload_Temapltes_Header_Title">Add Templates</string>
     <string name="Uwazi_RemoveTemplate_SheetTitle">Hapus dari perangkat</string>
     <string name="Uwazi_Action_FillEntity">Buat sebuah entitas</string>
     <string name="Uwazi_Action_RemoveTemplate">Hapus Templat</string>
@@ -848,8 +848,8 @@
     <string name="Settings_Analytics_turn_on_dialog">Anda telah mendaftar untuk membagikan analitik. Anda selalu bisa mengubah ini di Pengaturan.</string>
     <string name="Settings_Analytics_turn_off_dialog">Anda tidak lagi bisa membagikan analitik. Anda selalu bisa mengubah ini di Pengaturan.</string>
     <string name="unlock">Buka kunci</string>
-    <string name="Onboard_Collect_Data">Kumpulkan data</string>
-    <string name="Onboard_Collect_Data_Exp">Jika Anda bekerja dengan organisasi, kirimkan formulir, laporan, dan berkas langsung dari Tella ke organisasi Anda.</string>
+    <string name="Onboard_Collect_Data">Share data</string>
+    <string name="Onboard_Collect_Data_Exp">Send reports, forms and files to your organization, or back up files to a personal cloud.</string>
     <string name="action_flip_vertically">Balik secara vertikal</string>
     <string name="action_flip_horizontally">Balik secara horizontal</string>
     <string name="settings.docu_add.server_dialog.select_tella_google_drive" translatable="false">Google drive</string>
@@ -1094,4 +1094,13 @@
     <string name="verification_step2_sender_hash">Step 2: Confirm sender hash</string>
     <string name="confirm_and_continue">Confirm and continue</string>
     <string name="collect_form_geopoint_first_load_message_secondary">This may take some time, depending on your Internet connection.</string>
+    <string name="settings_invalid_url">Error: The server URL is incorrect</string>
+    <string name="onboard.expl_files_info">By default, your Tella files are stored only on your device, not online.</string>
+    <string name="Uwazi_Subtitle_RemoveOutboxEntity">Are you sure you want to delete this entity?</string>
+    <string name="onboard.share_data_connections">Tella supports server Connections to:</string>
+    <string name="onboard.expl_camera_info">These files are saved in Tella, and cannot be seen from your phone’s regular gallery.</string>
+    <string name="Uwazi_RemoveTemplate_ConfirmTitle">Remove \"%1$s\"?</string>
+    <string name="Uwazi_Template_Removed_Toast">\"%1$s\" has been removed from your device.</string>
+    <string name="onboard.title_nearby_sharing">Share files nearby</string>
+    <string name="peer_to_peer_invalid_details_message">Please ask the sender to verify their connection details and try again.</string>
 </resources>

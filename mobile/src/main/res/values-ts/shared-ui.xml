@@ -14,4 +14,6 @@
     <string name="action_hide_pin">fihla PIN</string>
     <string name="action_delete">Tima</string>
     <string name="action_go_back">tlhelela ndzhaku</string>
+    <string name="Home_BottomNav_Uwazi">Uwazi</string>
+    <string name="onboarding_info_icon_content_description">Information</string>
 </resources>
