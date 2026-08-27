@@ -46,11 +46,4 @@
     <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">أدخل رقم التعريف الشخصي لتغيير طريقة التمويه</string>
     <string name="Settings_Action_SetLock">قفل</string>
     <string name="Settings_Message_LockChanged">تم تغيير القفل الخاص بك!</string>
-    <string name="unlock">فتح</string>
-    <string name="attempts_remaining_plural">لديك %1$d محاولات متبقية حتى يتم حذف كل شيء في Tella الخاص بك.</string>
-    <string name="exceeded_max_attempts">لقد تجاوزت الحد الأقصى لعدد محاولات تسجيل دخول غير الصحيحة. قد تم حذف جميع بيانات Tella الخاصة بك.</string>
-    <string name="attempts_remaining_singular">لديك محاولة واحدة متبقية حتى يتم حذف كل شيء في Tella الخاص بك.</string>
-    <string name="incorrect_pin">رقم التعريف الشخصي غير صحيح. &#13;\n&#13;\n</string>
-    <string name="incorrect_password">كلمة سر خاطئة. &#13;\n&#13;\n</string>
-    <string name="incorrect_pattern">نمط غير صحيح.&#13;\n&#13;\n</string>
 </resources>
