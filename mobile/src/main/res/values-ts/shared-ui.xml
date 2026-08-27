@@ -16,7 +16,4 @@
     <string name="action_go_back">tlhelela ndzhaku</string>
     <string name="Home_BottomNav_Uwazi">Uwazi</string>
     <string name="onboarding_info_icon_content_description">Information</string>
-    <string name="Migration_Failed_Description" translatable="false"></string>
-    <string name="Migration_Failed_Title" translatable="false"></string>
-    <string name="Home_BottomNav_Settings" translatable="false"></string>
 </resources>
