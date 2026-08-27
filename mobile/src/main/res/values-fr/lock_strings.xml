@@ -46,11 +46,4 @@
     <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">Entrez votre code PIN actuel pour changer votre camouflage</string>
     <string name="Settings_Action_SetLock">Verrou</string>
     <string name="Settings_Message_LockChanged">Votre verrou a été changée !</string>
-    <string name="unlock">Déverrouiller</string>
-    <string name="attempts_remaining_plural">Il vous reste %1$d essai(s) jusqu\'à ce que tout ce qui se trouve dans votre Tella soit supprimé.</string>
-    <string name="exceeded_max_attempts">Vous avez dépassé le nombre maximum de tentatives de connexion infructueuses. Toutes vos données Tella ont été supprimées.</string>
-    <string name="attempts_remaining_singular">Il vous reste 1 tentative jusqu\'à ce que tout ce qui se trouve dans votre Tella soit supprimé.</string>
-    <string name="incorrect_pin">Code PIN incorrect. &#13;\n&#13;\n</string>
-    <string name="incorrect_password">Mot de passe incorrect. &#13;\n&#13;\n</string>
-    <string name="incorrect_pattern">Le schéma est incorrect.&#13;\n&#13;\n</string>
 </resources>

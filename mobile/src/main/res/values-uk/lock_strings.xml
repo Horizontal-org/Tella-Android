@@ -46,11 +46,4 @@
     <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">Введіть поточний PIN-код, щоб змінити маскування</string>
     <string name="Settings_Action_SetLock">Блокування</string>
     <string name="Settings_Message_LockChanged">Блокування змінено!</string>
-    <string name="unlock">Розблокувати</string>
-    <string name="attempts_remaining_plural">У вас залишилося %1$d спроб, перш ніж увесь вміст Tella буде видалено.</string>
-    <string name="exceeded_max_attempts">Ви перевищили максимально допустиму кількість невдалих спроб входу. Усі ваші дані в Tella видалено.</string>
-    <string name="attempts_remaining_singular">У вас залишилася 1 спроба, перш ніж увесь вміст Tella буде видалено.</string>
-    <string name="incorrect_pin">Неправильний PIN-код. &#13;\n&#13;\n</string>
-    <string name="incorrect_password">Неправильний пароль. &#13;\n&#13;\n</string>
-    <string name="incorrect_pattern">Неправильний графічний ключ.&#13;\n&#13;\n</string>
 </resources>

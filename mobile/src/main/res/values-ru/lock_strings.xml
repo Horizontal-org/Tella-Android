@@ -46,11 +46,4 @@
     <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">Enter your current PIN to change your camouflage</string>
     <string name="Settings_Action_SetLock">Lock</string>
     <string name="Settings_Message_LockChanged">Your lock has been changed!</string>
-    <string name="unlock">Unlock</string>
-    <string name="attempts_remaining_plural">У вас есть %1$d попытка, пока пока не будет удалено все, что находится в Вашей Телле.</string>
-    <string name="exceeded_max_attempts">You have exceeded the maximum number of incorrect login attempts. All your Tella data has been deleted.</string>
-    <string name="attempts_remaining_singular">У вас осталась 1 попытка, пока пока не будет удалено все, что находится в Вашей Телле.</string>
-    <string name="incorrect_pin">Неправильный PIN. &#13;\n&#13;\n</string>
-    <string name="incorrect_password">Неверный пароль. &#13;\n&#13;\n</string>
-    <string name="incorrect_pattern">Неправильный паттерн.&#13;\n&#13;\n</string>
 </resources>
