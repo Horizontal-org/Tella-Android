@@ -1,0 +1,5 @@
+• Translations are now managed on Weblate, please help localize Tella.
+• Updated onboarding and advanced settings, including camouflage.
+• Uwazi: tab counts, swipe between tabs, clearer copy, accessibility tweaks, shared UI, server URL validation, warning when deleting media pending submission, confirmation snackbars.
+• Fixed a Google Drive crash and wrong “problem creating folder” error after the first report.
+• Full notes: https://tella-app.org/releases
