@@ -64,4 +64,5 @@
     <string name="Vault_FileEdit_SheetAction">编辑</string>
     <string name="Vault_SaveToDevice_SheetTitle">将“%1$s”保存到设备？</string>
     <string name="Vault_SaveToDevice_SheetAction">保存到设备</string>
+    <string name="Vault_Folder_Empty_Msg">此文件夹为空！点击下方的 + 按钮以导入文件或创建文件夹。</string>
 </resources>

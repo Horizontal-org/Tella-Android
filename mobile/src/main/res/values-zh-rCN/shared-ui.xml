@@ -14,4 +14,6 @@
     <string name="action_hide_pin">隐藏 pin 码</string>
     <string name="action_delete">删除</string>
     <string name="action_go_back">返回</string>
+    <string name="Home_BottomNav_Uwazi">Uwazi</string>
+    <string name="onboarding_info_icon_content_description">Information</string>
 </resources>
