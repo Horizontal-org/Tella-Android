@@ -165,13 +165,13 @@ public class UwaziFormEndView extends FrameLayout {
         item.setPartName(mediaFile.name);
         item.setPartSize(mediaFile.size);
 
-        if (MediaFile.INSTANCE.isImageFileType(mediaFile.mimeType) || (MediaFile.INSTANCE.isVideoFileType(mediaFile.mimeType))) {
+        if (mediaFile.mimeType != null && (MediaFile.INSTANCE.isImageFileType(mediaFile.mimeType) || MediaFile.INSTANCE.isVideoFileType(mediaFile.mimeType))) {
             Glide.with(getContext())
                     .load(mediaFile.thumb)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(thumbView);
-        } else if (MediaFile.INSTANCE.isAudioFileType(mediaFile.mimeType)) {
+        } else if (mediaFile.mimeType != null && MediaFile.INSTANCE.isAudioFileType(mediaFile.mimeType)) {
             item.setPartIcon(R.drawable.ic_headset_white_24dp);
         } else {
             item.setPartIcon(R.drawable.ic_attach_file_white_24dp);

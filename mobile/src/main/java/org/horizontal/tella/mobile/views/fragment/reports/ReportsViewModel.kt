@@ -1,8 +1,7 @@
 package org.horizontal.tella.mobile.views.fragment.reports
 
-import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
-import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.horizontal.tella.mobile.MyApplication
@@ -19,11 +18,11 @@ import org.horizontal.tella.mobile.domain.usecases.reports.GetReportBundleUseCas
 import org.horizontal.tella.mobile.domain.usecases.reports.GetReportsServersUseCase
 import org.horizontal.tella.mobile.domain.usecases.reports.GetReportsUseCase
 import org.horizontal.tella.mobile.domain.usecases.reports.SaveReportFormInstanceUseCase
+import com.hzontal.tella_vault.VaultFile
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.ReportCounts
 import org.horizontal.tella.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
 import org.horizontal.tella.mobile.views.fragment.reports.mappers.toViewEntityInstanceItem
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,7 +33,8 @@ class ReportsViewModel @Inject constructor(
     private val deleteReportUseCase: DeleteReportUseCase,
     private val getReportBundleUseCase: GetReportBundleUseCase,
     private val reportsRepository: ReportsRepository,
-    private val dataSource: DataSource) : BaseReportsViewModel() {
+    private val dataSource: DataSource
+) : BaseReportsViewModel() {
 
     val reportProcess = reportsRepository.getReportProgress()
     val instanceProgress = reportsRepository.geInstanceProgress()
@@ -97,7 +97,8 @@ class ReportsViewModel @Inject constructor(
 
             result.map { instance ->
                 resultList.add(
-                    instance.toViewEntityInstanceItem(onOpenClicked = { openInstance(instance) },
+                    instance.toViewEntityInstanceItem(
+                        onOpenClicked = { openInstance(instance) },
                         onMoreClicked = { onMoreClicked(instance) })
                 )
             }
@@ -116,7 +117,8 @@ class ReportsViewModel @Inject constructor(
             val resultList = mutableListOf<ViewEntityTemplateItem>()
             result.map { instance ->
                 resultList.add(
-                    instance.toViewEntityInstanceItem(onOpenClicked = { openInstance(instance) },
+                    instance.toViewEntityInstanceItem(
+                        onOpenClicked = { openInstance(instance) },
                         onMoreClicked = { onMoreClicked(instance) })
                 )
             }
@@ -131,54 +133,22 @@ class ReportsViewModel @Inject constructor(
     override fun listDraftsOutboxAndSubmitted() {
         _progress.postValue(true)
 
-        // Initialize counters for lengths
-        var draftLength: Int = 0
-        var outboxLength: Int = 0
-        var submittedLength: Int = 0
-
-        // Execute the Draft report retrieval
-        getReportsUseCase.setEntityStatus(EntityStatus.DRAFT)
-        getReportsUseCase.execute(
-            onSuccess = { draftResult ->
-                draftLength = draftResult.size // Get the length of drafts
-
-                // Now execute the Outbox report retrieval
-                getReportsUseCase.setEntityStatus(EntityStatus.FINALIZED)
-                getReportsUseCase.execute(
-                    onSuccess = { outboxResult ->
-                        outboxLength = outboxResult.size // Get the length of outbox
-
-                        // Now execute the Submitted report retrieval
-                        getReportsUseCase.setEntityStatus(EntityStatus.SUBMITTED)
-                        getReportsUseCase.execute(
-                            onSuccess = { submittedResult ->
-                                submittedLength = submittedResult.size // Get the length of submitted
-
-                                // Post the combined lengths to LiveData
-                                _reportCounts.postValue(ReportCounts(outboxLength, submittedLength,draftLength))
-                            },
-                            onError = {
-                                _error.postValue(it)
-                            },
-                            onFinished = {
-                                _progress.postValue(false)
-                            }
-                        )
-                    },
-                    onError = {
-                        _error.postValue(it)
-                    },
-                    onFinished = {
-                        // Handle progress here if needed
-                    }
-                )
-            },
-            onError = {
-                _error.postValue(it)
-            },
-            onFinished = {
-                // Handle progress here if needed
+        disposables.add(
+            Single.zip(
+                dataSource.listDraftReportInstances(),
+                dataSource.listOutboxReportInstances(),
+                dataSource.listSubmittedReportInstances()
+            ) { drafts, outbox, submitted ->
+                ReportCounts(outbox.size, submitted.size, drafts.size)
             }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally { _progress.postValue(false) }
+                .subscribe({ counts ->
+                    _reportCounts.postValue(counts)
+                }) { throwable ->
+                    _error.postValue(throwable)
+                }
         )
     }
 
@@ -189,7 +159,8 @@ class ReportsViewModel @Inject constructor(
             val resultList = mutableListOf<ViewEntityTemplateItem>()
             result.map { instance ->
                 resultList.add(
-                    instance.toViewEntityInstanceItem(onOpenClicked = { openInstance(instance) },
+                    instance.toViewEntityInstanceItem(
+                        onOpenClicked = { openInstance(instance) },
                         onMoreClicked = { onMoreClicked(instance) })
                 )
             }
@@ -200,6 +171,7 @@ class ReportsViewModel @Inject constructor(
             _progress.postValue(false)
         })
     }
+
     override fun deleteReport(instance: ReportInstance) {
         _progress.postValue(true)
         deleteReportUseCase.setId(instance.id)
@@ -227,7 +199,11 @@ class ReportsViewModel @Inject constructor(
                                 .flatMap { rxVault ->
                                     rxVault.get(result.fileIds)
                                         .map { vaultFiles ->
-                                            ProcessedFiles(result.instance, files, vaultFiles ?: emptyList())
+                                            ProcessedFiles(
+                                                result.instance,
+                                                files,
+                                                vaultFiles ?: emptyList()
+                                            )
                                         }
                                 }
                         }
@@ -237,17 +213,20 @@ class ReportsViewModel @Inject constructor(
                             instance.widgetMediaFiles = processFiles(files, vaultFiles)
                             _reportInstance.postValue(instance)
                         }, { throwable ->
-                            Timber.e(throwable, "Error getting report bundle")
-                            CrashReporterProvider.get().run {
-                                recordException(throwable)
-                                log("Failed to get report bundle for instance ${instance.id}")
-                            }
-                            _error.postValue(throwable)
+                            openInstanceAfterUnexpectedFailure(
+                                instance,
+                                throwable,
+                                "Failed to get report bundle for instance ${instance.id}"
+                            )
                         })
                 )
             },
             onError = { error ->
-                _error.postValue(error)
+                openInstanceAfterUnexpectedFailure(
+                    instance,
+                    error,
+                    "Failed to get report bundle for instance ${instance.id}"
+                )
             },
             onFinished = {
                 _progress.postValue(false)
@@ -262,17 +241,10 @@ class ReportsViewModel @Inject constructor(
     )
 
     private fun processFiles(
-        formFiles: List<FormMediaFile>,
-        vaultFiles: List<VaultFile>
+        formFiles: List<FormMediaFile>?,
+        vaultFiles: List<VaultFile>?
     ): List<FormMediaFile> {
-        return formFiles.mapNotNull { formFile ->
-            vaultFiles.firstOrNull { it.id == formFile.id }?.let { vaultFile ->
-                FormMediaFile.fromMediaFile(vaultFile).apply {
-                    status = formFile.status
-                    uploadedSize = formFile.uploadedSize
-                }
-            }
-        }
+        return mergeReportAttachments(formFiles, vaultFiles)
     }
 
     override fun getFormInstance(
@@ -315,14 +287,15 @@ class ReportsViewModel @Inject constructor(
     }
 
     override fun submitReport(instance: ReportInstance, backButtonPressed: Boolean) {
-        getReportsServersUseCase.execute(onSuccess = { servers ->
-            val server = servers.first { it.id == instance.serverId }
-            reportsRepository.submitReport(
-                server,
-                instance,
-                backButtonPressed
-            )
-        },
+        getReportsServersUseCase.execute(
+            onSuccess = { servers ->
+                val server = servers.first { it.id == instance.serverId }
+                reportsRepository.submitReport(
+                    server,
+                    instance,
+                    backButtonPressed
+                )
+            },
             onError = { throwable ->
                 if (throwable is NoConnectivityException) {
                     instance.status = EntityStatus.SUBMISSION_PENDING

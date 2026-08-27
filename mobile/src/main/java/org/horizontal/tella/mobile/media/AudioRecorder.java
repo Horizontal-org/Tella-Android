@@ -64,7 +64,7 @@ public class AudioRecorder {
             RxVaultFileBuilder rxVaultFileBuilder = rxVault.builder()
                     .setName(filename)
                     .setMimeType("audio/aac");
-            if (parent == null) {
+            if (parent == null || parent.isEmpty()) {
                 vaultFile = rxVaultFileBuilder.
                         build()
                         .blockingGet();

@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/wa_purple"
-    android:padding="21dp"
     app:behavior_hideable="true">
 
     <androidx.constraintlayout.widget.Guideline
@@ -31,16 +30,15 @@
 
     <TextView
         android:id="@+id/onboard_title"
+        style="@style/Typography.Heading1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:fontFamily="@font/open_sans"
         android:gravity="center_vertical"
         android:paddingStart="12dp"
         android:paddingEnd="0dp"
         android:text="@string/settings.servers_hide_tella_title"
         android:textColor="@color/wa_white"
-        android:textSize="18sp"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/standard_sheet_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,17 +46,15 @@
 
     <TextView
         android:id="@+id/standard_sheet_content"
+        style="@style/Typography.Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:fontFamily="@font/open_sans"
         android:gravity="center_vertical"
-        android:paddingStart="12dp"
-        android:paddingEnd="0dp"
+        android:paddingHorizontal="@dimen/onboarding_get_started_horizontal_margin"
         android:text="@string/onboard.expl_hide_tella"
         android:textAlignment="center"
         android:textColor="@color/wa_white"
-        android:textSize="14sp"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/guidelineCenter"
         app:layout_constraintEnd_toEndOf="parent"
@@ -67,19 +63,15 @@
 
     <TextView
         android:id="@+id/startBtn"
+        style="@style/OnboardingGetStarted"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/round_orange_button_selector"
-        android:fontFamily="@font/open_sans"
-        android:gravity="center"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
+        android:layout_marginHorizontal="@dimen/onboarding_get_started_horizontal_margin"
         android:text="@string/settings.servers_hide_tella_title"
-        android:textAllCaps="true"
-        android:textColor="@color/btn_dark_letter"
-        android:textSize="16sp"
-        android:textStyle="bold"
         app:backgroundTint="@color/wa_orange"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -94,6 +86,8 @@
         android:background="@drawable/round_button_selector"
         android:gravity="center"
         android:minHeight="74dp"
+        android:layout_marginHorizontal="@dimen/onboarding_get_started_horizontal_margin"
+
         android:orientation="vertical"
         android:paddingStart="16dp"
         android:paddingTop="4dp"
@@ -104,34 +98,30 @@
         app:layout_constraintTop_toBottomOf="@+id/startBtn">
 
         <TextView
+            style="@style/OnboardingGetStarted"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/open_sans"
             android:gravity="center"
             android:padding="4dp"
             android:text="@string/onboard.default_btn_title_hide_tella"
-            android:textAllCaps="true"
             android:textColor="@color/wa_white"
-            android:textSize="16sp"
-            android:textStyle="bold"
             app:layout_constraintHorizontal_chainStyle="packed" />
 
         <TextView
+            style="@style/Typography.Body2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/open_sans"
             android:gravity="center"
             android:padding="4dp"
             android:text="@string/onboard.default_btn_subtitle_hide_tella"
             android:textColor="@color/wa_white"
-            android:textSize="12sp"
             app:layout_constraintHorizontal_chainStyle="packed" />
 
     </LinearLayout>
 
     <TextView
         android:id="@+id/back_btn"
-        style="@style/Unlock_White_Text_Back"
+        style="@style/Onboarding_BottomNavButton"
         android:text="@string/LockSelect_Action_Back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"

@@ -76,9 +76,13 @@ abstract class BasePinActivity : BaseActivity(), PinLockListener, View.OnClickLi
         pinEditText.setText(intermediatePin)
     }
 
-    private fun onLeftButtonClickListener() {
+    protected open fun onPinBackPressed() {
         finish()
         overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left)
+    }
+
+    private fun onLeftButtonClickListener() {
+        onPinBackPressed()
     }
 
     private fun onRightButtonClickListener() {

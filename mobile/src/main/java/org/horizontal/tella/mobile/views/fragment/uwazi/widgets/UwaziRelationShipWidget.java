@@ -157,7 +157,10 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
 
     private void showSelectEntitiesScreen() {
         waitingForAData = true;
-        ((OnSelectEntitiesClickListener) getContext()).onSelectEntitiesClicked(formEntryPrompt, getEntitiesNames());
+        OnSelectEntitiesClickListener listener = findContextAs(OnSelectEntitiesClickListener.class);
+        if (listener != null) {
+            listener.onSelectEntitiesClicked(formEntryPrompt, getEntitiesNames());
+        }
     }
 
     @Override

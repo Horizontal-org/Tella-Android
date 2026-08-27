@@ -1,5 +1,6 @@
 package org.horizontal.tella.mobile.views.fragment.uwazi.widgets.searchable_multi_select
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,6 +8,7 @@ import android.widget.CheckBox
 import android.widget.Filter
 import android.widget.Filterable
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import org.horizontal.tella.mobile.R
 import java.util.Locale
@@ -29,14 +31,14 @@ class SearchableAdapter(
         private val checkBox: CheckBox = view.findViewById(R.id.checkBox)
 
         init {
-            checkBox.setOnCheckedChangeListener { _, isChecked ->
-                val position = this.adapterPosition
-                val item = filteredList[position]
-                item.isSelected = isChecked
-                itemClickListener.onItemClicked(item, position, isChecked)
-            }
             itemView.setOnClickListener {
-                checkBox.isChecked = !checkBox.isChecked
+                val position = bindingAdapterPosition
+                if (position == RecyclerView.NO_POSITION) return@setOnClickListener
+                val item = filteredList[position]
+                val isChecked = !item.isSelected
+                item.isSelected = isChecked
+                updateSelectionUi(isChecked)
+                itemClickListener.onItemClicked(item, position, isChecked)
             }
         }
 
@@ -44,6 +46,18 @@ class SearchableAdapter(
             titleTextView.text = item.text
             checkBox.isChecked = item.isSelected
             checkBox.visibility = if (singleSelection) View.GONE else View.VISIBLE
+            updateSelectionUi(item.isSelected)
+        }
+
+        private fun updateSelectionUi(isSelected: Boolean) {
+            checkBox.isChecked = isSelected
+            itemView.setBackgroundColor(
+                if (isSelected) {
+                    ContextCompat.getColor(itemView.context, R.color.wa_white_15)
+                } else {
+                    Color.TRANSPARENT
+                }
+            )
         }
     }
 

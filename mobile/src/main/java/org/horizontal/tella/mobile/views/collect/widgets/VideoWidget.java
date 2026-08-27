@@ -164,7 +164,7 @@ public class VideoWidget extends MediaFileBinaryWidget {
                 null, //getContext().getString(R.string.Vault_RecordAudio_SheetAction),
                 getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Device),
                 getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Tella),
-                getContext().getString(R.string.Uwazi_Widget_Sheet_Description),
+                null,
                 getContext().getString(R.string.Collect_WidgetVideo_Select_Text),
                 new  VaultSheetUtils.IVaultFilesSelector() {
 

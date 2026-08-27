@@ -359,6 +359,13 @@ public class VaultDataSource implements IVaultDatabase {
      */
     @Override
     public boolean move(VaultFile vaultFile, String newParent) {
+        if (vaultFile == null || vaultFile.id == null || newParent == null) {
+            return false;
+        }
+        if (vaultFile.id.equals(newParent)) {
+            return false;
+        }
+
         ContentValues values = new ContentValues();
         values.put(D.C_PARENT_ID, newParent);
 
@@ -377,16 +384,20 @@ public class VaultDataSource implements IVaultDatabase {
     @Override
     public List<VaultFile> get(String[] ids) {
         List<VaultFile> files = new ArrayList<>();
-
+        if (ids == null) {
+            return files;
+        }
         try {
             for (String id : ids) {
-                files.add(get(id));
+                VaultFile file = get(id);
+                if (file != null) {
+                    files.add(file);
+                }
             }
-            return files;
         } catch (Exception e) {
             Timber.d(e, getClass().getName());
         }
-        return null;
+        return files;
     }
 
     /**
@@ -486,50 +497,58 @@ public class VaultDataSource implements IVaultDatabase {
                 return cn(D.C_MIME_TYPE) + " LIKE 'image/%'";
 
             case OTHERS:
-                return cn(D.C_MIME_TYPE) + " NOT LIKE 'audio/%' AND "
-                        + cn(D.C_MIME_TYPE) + " NOT LIKE 'video/%' AND "
-                        + cn(D.C_MIME_TYPE) + " NOT LIKE 'image/%' AND "
-                        + cn(D.C_MIME_TYPE) + " NOT LIKE 'text/%' AND "
-                        + cn(D.C_MIME_TYPE) + " != 'application/pdf' AND "
-                        + cn(D.C_MIME_TYPE) + " != 'application/msword' AND "
-                        + cn(D.C_MIME_TYPE) + " != 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' AND "
-                        + cn(D.C_MIME_TYPE) + " != 'application/vnd.ms-excel' AND "
-                        + cn(D.C_MIME_TYPE) + " != 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' AND "
-                        + cn(D.C_MIME_TYPE) + " != 'application/vnd.oasis.opendocument.text' AND "
-                        + cn(D.C_MIME_TYPE) + " != 'application/vnd.oasis.opendocument.spreadsheet' AND "
-                        + cn(D.C_MIME_TYPE) + " != 'application/rtf' AND "
-                        + cn(D.C_MIME_TYPE) + " != 'application/vnd.ms-powerpoint' AND "
-                        + cn(D.C_MIME_TYPE) + " != 'application/vnd.openxmlformats-officedocument.presentationml.presentation'";
+                return getOthersMimeTypeQuery();
 
             case AUDIO_VIDEO:
-                return cn(D.C_MIME_TYPE) + " LIKE 'audio/%' OR " + cn(D.C_MIME_TYPE) + " LIKE 'video/%'";
+                return "(" + cn(D.C_MIME_TYPE) + " LIKE 'audio/%' OR " + cn(D.C_MIME_TYPE) + " LIKE 'video/%')";
 
             case DOCUMENTS:
-                return cn(D.C_MIME_TYPE) + " LIKE 'text/%' OR " + cn(D.C_MIME_TYPE) + " IN (" +
-                        "'application/pdf'," +
-                        "'application/msword'," +
-                        "'application/vnd.openxmlformats-officedocument.wordprocessingml.document'," +
-                        "'application/vnd.ms-excel'," +
-                        "'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'," +
-                        "'application/vnd.oasis.opendocument.text'," +
-                        "'application/vnd.oasis.opendocument.spreadsheet'," +
-                        "'application/rtf'," +
-                        "'application/vnd.ms-powerpoint'," +
-                        "'application/vnd.openxmlformats-officedocument.presentationml.presentation'" +
-                        ")";
+                return getDocumentsMimeTypeQuery();
 
             case ALL_WITHOUT_DIRECTORY:
                 return cn(D.C_TYPE) + " != '" + VaultFile.Type.DIRECTORY.getValue() + "' AND "
                         + cn(D.C_MIME_TYPE) + " NOT LIKE 'resource/%'";
 
             case PHOTO_VIDEO:
-                return cn(D.C_MIME_TYPE) + " LIKE 'image/%' OR " + cn(D.C_MIME_TYPE) + " LIKE 'video/%'";
+                return "(" + cn(D.C_MIME_TYPE) + " LIKE 'image/%' OR " + cn(D.C_MIME_TYPE) + " LIKE 'video/%')";
 
+            case ALL:
             default:
                 return cn(D.C_PARENT_ID) + " = '" + parentId + "'";
         }
     }
 
+    private String getDocumentsMimeTypeQuery() {
+        return cn(D.C_MIME_TYPE) + " LIKE 'text/%' OR " + cn(D.C_MIME_TYPE) + " IN (" +
+                "'application/pdf'," +
+                "'application/msword'," +
+                "'application/vnd.openxmlformats-officedocument.wordprocessingml.document'," +
+                "'application/vnd.ms-excel'," +
+                "'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'," +
+                "'application/vnd.oasis.opendocument.text'," +
+                "'application/vnd.oasis.opendocument.spreadsheet'," +
+                "'application/rtf'," +
+                "'application/vnd.ms-powerpoint'," +
+                "'application/vnd.openxmlformats-officedocument.presentationml.presentation'" +
+                ")";
+    }
+
+    private String getOthersMimeTypeQuery() {
+        return cn(D.C_MIME_TYPE) + " NOT LIKE 'audio/%' AND "
+                + cn(D.C_MIME_TYPE) + " NOT LIKE 'video/%' AND "
+                + cn(D.C_MIME_TYPE) + " NOT LIKE 'image/%' AND "
+                + cn(D.C_MIME_TYPE) + " NOT LIKE 'text/%' AND "
+                + cn(D.C_MIME_TYPE) + " != 'application/pdf' AND "
+                + cn(D.C_MIME_TYPE) + " != 'application/msword' AND "
+                + cn(D.C_MIME_TYPE) + " != 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' AND "
+                + cn(D.C_MIME_TYPE) + " != 'application/vnd.ms-excel' AND "
+                + cn(D.C_MIME_TYPE) + " != 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' AND "
+                + cn(D.C_MIME_TYPE) + " != 'application/vnd.oasis.opendocument.text' AND "
+                + cn(D.C_MIME_TYPE) + " != 'application/vnd.oasis.opendocument.spreadsheet' AND "
+                + cn(D.C_MIME_TYPE) + " != 'application/rtf' AND "
+                + cn(D.C_MIME_TYPE) + " != 'application/vnd.ms-powerpoint' AND "
+                + cn(D.C_MIME_TYPE) + " != 'application/vnd.openxmlformats-officedocument.presentationml.presentation'";
+    }
 
     /**
      * Deletes all records from a table except the root directory.

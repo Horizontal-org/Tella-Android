@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentDownloadedTemplatesBinding
-import org.horizontal.tella.mobile.util.StringUtils
 import org.horizontal.tella.mobile.views.base_ui.BaseFragment
 import org.horizontal.tella.mobile.views.fragment.uwazi.download.adapter.TemplateContainerAdapter
 
@@ -38,8 +37,6 @@ class DownloadedTemplatesFragment : BaseFragment() {
           }
 
           toolbar.backClickListener = {nav().popBackStack()}
-
-          tvDescription.text = StringUtils.fromHtml(getString(R.string.Donwload_Templates_Title_Description))
 
           toolbar.onRightClickListener = {viewModel.refreshTemplateList()}
       }

@@ -24,7 +24,6 @@ import org.horizontal.tella.mobile.presentation.uwazi.UwaziValue;
 import org.horizontal.tella.mobile.views.collect.widgets.QuestionWidget;
 import org.horizontal.tella.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
 
-@SuppressLint("ViewConstructor")
 public class UwaziLinkWidget extends UwaziQuestionWidget {
 
     protected boolean readOnly;
@@ -119,7 +118,7 @@ public class UwaziLinkWidget extends UwaziQuestionWidget {
             this.setConstraintValidationText(getContext().getString(R.string.Uwazi_Info_UrlLabelEmpty));
         }
 
-        if (TextUtils.isEmpty(l) && TextUtils.isEmpty(u)) {
+        if (TextUtils.isEmpty(l) && isEmptyUrl(u)) {
             return null;
         } else {
             UwaziLink link = new UwaziLink(l, u);

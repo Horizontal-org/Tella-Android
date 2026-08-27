@@ -9,23 +9,21 @@ import com.google.android.material.snackbar.Snackbar
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentReportsListBinding
+import org.horizontal.tella.mobile.domain.entity.IEntityInstance
 import org.horizontal.tella.mobile.domain.entity.reports.ReportInstance
 import org.horizontal.tella.mobile.util.show
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
-import org.horizontal.tella.mobile.views.fragment.main_connexions.base.SharedLiveData.updateOutboxTitle
-import org.horizontal.tella.mobile.views.fragment.main_connexions.base.SharedLiveData.updateSubmittedTitle
 import org.horizontal.tella.mobile.views.fragment.reports.adapter.EntityAdapter
 import org.horizontal.tella.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
 
-abstract class BaseReportsFragment<VM : BaseReportsViewModel> :
+abstract class BaseReportsFragment<I : IEntityInstance> :
     BaseBindingFragment<FragmentReportsListBinding>(FragmentReportsListBinding::inflate) {
-
-    // Child classes provide the specific ViewModel through this method
-    protected abstract fun getViewModel(): VM
+        
+    protected abstract fun getViewModel(): BaseEntityListViewModel<I>
     protected abstract fun getEmptyMessage(): Int // Child classes define specific empty messages
     protected abstract fun getHeaderRecyclerViewMessage(): Int
     protected abstract fun getEmptyMessageIcon(): Int
-    protected abstract fun navigateToReportScreen(reportInstance: ReportInstance) // Navigation method to be implemented by subclasses
+    protected abstract fun navigateToReportScreen(reportInstance: I) // Navigation method to be implemented by subclasses
     protected abstract fun initData()
     private val entityAdapter: EntityAdapter by lazy { EntityAdapter() }
 
@@ -76,22 +74,11 @@ abstract class BaseReportsFragment<VM : BaseReportsViewModel> :
         getViewModel().onOpenClickedInstance.observe(viewLifecycleOwner) { instance ->
             loadEntityInstance(instance)
         }
-
-        getViewModel().outboxReportListFormInstance.observe(viewLifecycleOwner) { outboxes ->
-            handleReportList(outboxes)
-            updateOutboxTitle.postValue(outboxes.size)
-        }
-
-
-        getViewModel().submittedReportListFormInstance.observe(viewLifecycleOwner) { submitted ->
-            handleReportList(submitted)
-            updateSubmittedTitle.postValue(submitted.size)
-        }
     }
 
     @SuppressLint("BinaryOperationInTimber")
-    protected fun handleReportList(reports: List<ViewEntityTemplateItem>) {
-        if (reports.isEmpty()) {
+    protected fun handleReportList(reports: List<ViewEntityTemplateItem>?) {
+        if (reports.isNullOrEmpty()) {
             showEmptyMessage()
         } else {
             entityAdapter.setEntities(
@@ -123,20 +110,22 @@ abstract class BaseReportsFragment<VM : BaseReportsViewModel> :
     }
 
     protected fun showMenu(
-        instance: ReportInstance,
+        instance: I,
         title: String,
         viewText: String,
         deleteText: String,
         deleteConfirmation: String,
         deleteActionText: String,
+        confirmButtonLabel: String = getString(R.string.action_delete),
+        cancelButtonLabel: String = getString(R.string.action_cancel),
     ) {
 
         BottomSheetUtils.showEditDeleteMenuSheet(
-            requireActivity().supportFragmentManager,
-            title,
-            viewText,
-            deleteText,
-            object : BottomSheetUtils.ActionSeleceted {
+            fragmentManager = requireActivity().supportFragmentManager,
+            titleText = title,
+            actionEditLabel = viewText,
+            actionDeleteLabel = deleteText,
+            consumer = object : BottomSheetUtils.ActionSeleceted {
                 override fun accept(action: BottomSheetUtils.Action) {
                     when (action) {
                         BottomSheetUtils.Action.EDIT -> loadEntityInstance(instance)
@@ -146,21 +135,22 @@ abstract class BaseReportsFragment<VM : BaseReportsViewModel> :
                     }
                 }
             },
-            deleteActionText,
-            deleteConfirmation,
-            getString(R.string.action_delete),
-            getString(R.string.action_cancel),
-            R.drawable.ic_eye_white
+            titleText2 = deleteActionText,
+            descriptionText = deleteConfirmation,
+            actionButtonLabel = confirmButtonLabel,
+            cancelButtonLabel = cancelButtonLabel,
+            iconView = R.drawable.ic_eye_white
         )
     }
 
-    // Method to be used by subclasses to define how the navigation is handled
-    private fun openEntityInstance(reportInstance: ReportInstance) {
-        bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
+    private fun openEntityInstance(reportInstance: I) {
+        if (reportInstance is ReportInstance) {
+            bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
+        }
         navigateToReportScreen(reportInstance)
     }
 
-    protected fun loadEntityInstance(reportInstance: ReportInstance) {
+    protected fun loadEntityInstance(reportInstance: I) {
         getViewModel().getReportBundle(reportInstance)
     }
 

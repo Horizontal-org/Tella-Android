@@ -1,6 +1,7 @@
 package com.hzontal.tella_locking_ui.ui.pattern
 
 import android.graphics.Color
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
+import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.TellaKeysUI
 import com.hzontal.tella_locking_ui.common.CommonStates
@@ -83,6 +85,15 @@ class PatternSetConfirmActivity : SetPatternActivity() {
                 onCanceled()
             }
         })
+    }
+
+    override fun onCanceled() {
+        if (!isFromSettings) {
+            startActivity(
+                Intent(this, PatternSetActivity::class.java).putExtra(IS_FROM_SETTINGS, false)
+            )
+        }
+        super.onCanceled()
     }
 
 }

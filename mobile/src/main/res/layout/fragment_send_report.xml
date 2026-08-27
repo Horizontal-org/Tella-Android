@@ -7,18 +7,6 @@
     android:background="@color/wa_purple"
     tools:context=".views.fragment.uwazi.send.UwaziSendFragment">
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/endViewContainer"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_alignParentTop="true"
-        android:clipToPadding="false"
-        android:scrollbarStyle="outsideOverlay"
-        android:scrollbars="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
-
     <org.hzontal.shared_ui.appbar.ToolbarComponent
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -31,21 +19,87 @@
         app:rightIconContentDescription="@string/action_delete"
         app:startTitle="@string/Reports_Title_Screen" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/next_btn"
-        style="@style/Submit_Text_Button"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/endViewContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingBottom="102dp"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/buttons_bottom"
         android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="@dimen/activity_horizontal_large_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_large_margin"
-        android:layout_marginBottom="18dp"
-        android:background="@drawable/action_button_background"
-        android:text="@string/Reports_Pause"
-        android:textStyle="bold"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_bottom_action_gradient"
+        android:elevation="4dp"
+        android:paddingStart="@dimen/activity_horizontal_large_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingEnd="@dimen/activity_horizontal_large_margin"
+        android:paddingBottom="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/cancel_btn"
+            style="@style/Unlock_White_Text"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/bg_submit_later_button"
+            android:gravity="center"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:insetLeft="0dp"
+            android:insetRight="0dp"
+            android:maxLines="1"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:stateListAnimator="@null"
+            android:text="@string/Uwazi_Submit_Later"
+            android:textSize="14sp"
+            android:fontFamily="@font/open_sans_semibold"
+            android:letterSpacing="0.0214"
+            android:textAllCaps="true"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/next_btn"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/next_btn"
+            style="@style/Submit_Text_Button"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/action_button_background"
+            android:gravity="center"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:insetLeft="0dp"
+            android:insetRight="0dp"
+            android:maxLines="1"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:stateListAnimator="@null"
+            android:text="@string/Reports_Pause"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@id/cancel_btn"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_goneMarginStart="0dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progress"

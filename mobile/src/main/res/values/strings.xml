@@ -9,7 +9,7 @@
 <string name="settings_menu.item_contact">Contact us</string>
   <string name="collect_dialog.text_download.progress">Downloading the form</string>
   <string name="collect_toast_download.completed">Download completed</string>
-<string name="collect.draft_tab.title">Draft</string>
+<string name="collect.draft_tab.title">Drafts</string>
   <string name="collect.blank_action_download.form">Download</string>
   <string name="settings_text_empty.field">This field cannot be empty.</string>
   <string name="home_toast_back.exit">Tap the \"Back\" button again to exit the app</string>
@@ -48,7 +48,7 @@ mode activation</string>
   <string name="collect_toast_draft.saved">Draft saved</string>
   <string name="collect_toast_fail.sending.form">There was an error submitting the form. Please try again</string>
   <string name="collect_toast_fail.form.submission.generic">There was an error submitting the form: %s</string>
-  <string name="collect.form_toast_validation.generic.error">There were validation errors in some answers</string>
+  <string name="collect.form_toast_validation.generic.error">There was a problem with one or more of your answers.</string>
   <string name="permission_dialog.expl_GPS">In order to make your files verifiable, Tella needs to record your location and needs permission to access your GPS.</string>
   <string name="collect.form_action_select.time">Select time</string>
   <string name="collect.form_action_select.date">Select date</string>
@@ -65,7 +65,7 @@ mode activation</string>
   <string name="action_play">Play</string>
   <string name="action_record">Record</string>
   <string name="play.audio_app.bar">Play Audio</string>
-  <string name="collect_dialog.text_delete.sent.form">Are you sure you want to delete this form from your device? Note that because it was already submitted, the data will remain on your organization\'s server.</string>
+  <string name="collect_dialog.text_delete.sent.form">Are you sure you want to delete this from your device? Note that because it was already submitted, the data will remain on your organization\'s server.</string>
   <string name="collect_dialog.text_delete.draft.form">Are you sure you want to delete this draft form?</string>
   <string name="collect_toast_form.deleted">The form was deleted</string>
   <string name="settings.lang_select.expl_default">Keep Tella in the same language as my device</string>
@@ -104,6 +104,7 @@ mode activation</string>
   <string name="collect.form_exit_dialog.action_save.exit">SAVE AND EXIT</string>
   <string name="collect.form_exit_dialog.action_exit.anyway">EXIT ANYWAY</string>
   <string name="settings.docu_error_not.valid.URL">This is not a valid URL.</string>
+  <string name="settings_invalid_url">Error: The server URL is incorrect</string>
   <string name="home_action.label_quick.delete">Delete</string>
   <string name="gallery_subheading_sort.by">Sort by</string>
   <string name="gallery_list.item_newest.to.oldest">Newest to oldest</string>
@@ -368,12 +369,14 @@ Turn on GPS so Tella can record the position of your evidence.</string>
   <string name="recorder_toast_recording.saved">The audio recording was saved to your Tella files</string>
   <string name="onboard.intro_title">Welcome to Tella</string>
   <string name="onboard.intro_get_started">Get started</string>
-  <string name="onboard.title_camera">Camera</string>
-  <string name="onboard.expl_camera">Take photos and videos directly in Tella. These files are automatically encrypted and saved in Tella, and will not be visible from your phone’s regular gallery.</string>
+  <string name="onboard.title_camera">Record</string>
+  <string name="onboard.expl_camera">Capture photos, videos and audio directly in Tella.</string>
+  <string name="onboard.expl_camera_info">These files are saved in Tella, and cannot be seen from your phone\'s regular gallery.</string>
   <string name="onboard.title_recorder">Recorder</string>
   <string name="onboard.expl_recorder">Record interviews or any sound around you with Tella’s voice recorder.  The audio files are automatically encrypted and saved in Tella’s hidden folder.</string>
-  <string name="onboard.title_files">Encrypted files &amp; folders</string>
-  <string name="onboard.expl_files">Securely store and organize all your files. As long as Tella is locked, your files and folders will remain inaccessible to someone seizing or searching the device.</string>
+  <string name="onboard.title_files">Store files safely</string>
+  <string name="onboard.expl_files">Your Tella files are encrypted. As long as Tella is locked, no one else (not even the Tella team) can access your data.</string>
+  <string name="onboard.expl_files_info">By default, your Tella files are stored only on your device, not online.</string>
   <string name="onboard.title_lock_finish">Lock</string>
   <string name="onboard.expl_lock_finish">Your lock is set up! You can change it anytime in Settings.</string>
   <string name="onboard.title_all_done">You’re all done!</string>
@@ -439,13 +442,14 @@ connecting to a server</string>
   <string name="collect.outbox_tab.title">Outbox</string>
   <string name="Collect_RemoveForm_SheetTitle">Remove form?</string>
   <string name="fragment_uwazi">Uwazi</string>
-  <string name="Uwazi_Dowload_Temapltes_Header_Title">Download templates</string>
+  <string name="Uwazi_Dowload_Temapltes_Header_Title">Add Templates</string>
   <string name="Uwazi_RemoveTemplate_SheetTitle">Remove from device</string>
   <string name="Uwazi_Action_FillEntity">Create an entity</string>
-  <string name="Uwazi_Action_RemoveTemplate">Delete Template</string>
-  <string name="Uwazi_Subtitle_RemoveTemplate">Are you sure you want to remove this template? </string>
+  <string name="Uwazi_Action_RemoveTemplate">Remove template</string>
+  <string name="Uwazi_RemoveTemplate_ConfirmTitle">Remove \"%1$s\"?</string>
+  <string name="Uwazi_Subtitle_RemoveTemplate">Are you sure you want to remove this template?</string>
   <string name="UWAZI_Language_Header_Title">Uwazi language</string>
-  <string name="Uwazi_Language_Screen_Description">This Uwazi collection is available in several languages. Please select the language in which you would like to download templates. </string>
+  <string name="Uwazi_Language_Screen_Description">This Uwazi collection is available in several languages. Please select the language in which you would like to download templates.</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Expl">Show shortcuts to your favorite templates on Tella’s homescreen.</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Title">Favorite templates</string>
   <string name="Uwazi_Templates_Empty_Description">Your have no saved templates. Tap the “+”
@@ -456,6 +460,7 @@ button to add a new template.</string>
   <string name="Uwazi_Draft_Entities_Empty_Description">You have no draft entities.</string>
   <string name="Uwazi_Action_Save_Draft">Save draft</string>
   <string name="Uwazi_Subtitle_RemoveDraft">Are you sure you want to remove this draft?</string>
+  <string name="Uwazi_Subtitle_RemoveOutboxEntity">Are you sure you want to delete this entity?</string>
   <string name="Uwazi_Form_MediaHeader">Attached file</string>
   <string name="Uwazi_EntryInstance_SavedInfo">Entity is saved as draft.</string>
   <string name="Uwazi_Action_EditDraft">Edit draft</string>
@@ -479,7 +484,7 @@ button to add a new template.</string>
   <string name="Uwazi_MiltiFileWidget_Show">Show Files</string>
   <string name="Uwazi_MiltiFileWidget_Hide">Hide Files</string>
   <string name="Uwazi_MiltiFileWidget_Help">Select as many files as you wish</string>
-  <string name="Uwazi_WidgetMedia_Select_Text">Select audio or video file</string>
+  <string name="Uwazi_WidgetMedia_Select_Text">Select video or audio file</string>
   <string name="Uwazi_WidgetMedia_Select_Photos_Text">Select photos</string>
   <string name="Uwazi_WidgetMedia_Description_Text">Attach a video or audio file</string>
   <string name="Uwazi_WidgetImage_Select_Text">Select image file</string>
@@ -901,10 +906,9 @@ Would you like to share analytics with the Tella team?</string>
   <string name="Settings_Analytics_turn_on_dialog"> You have signed up to share analytics. You can always change this in Settings.</string>
   <string name="Settings_Analytics_turn_off_dialog">You will not longer be sharing analytics. You can always change this in Settings.</string>
 <string name="unlock">Unlock</string>
-  <string name="Onboard_Collect_Data">Collect data</string>
-  <string name="Onboard_Collect_Data_Exp">If you work with an organization, send
- forms, reports, and files directly from Tella
- to your organization.</string>
+  <string name="Onboard_Collect_Data">Share data</string>
+  <string name="Onboard_Collect_Data_Exp">Send reports, forms and files to your organization, or back up files to a personal cloud.</string>
+  <string name="onboard.share_data_connections">Tella supports server Connections to:</string>
   <string name="action_flip_vertically">Flip vertically</string>
   <string name="action_flip_horizontally">Flip horizontally</string>
   <string name="settings.docu_add.server_dialog.select_tella_google_drive" translatable="false">Google drive</string>
@@ -1004,13 +1008,15 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="onboard_lock_success_message">Your lock is set up! You can change it anytime in the Tella Settings.</string>
   <string name="onboard_lock_success_learn_more">Learn more about Tella\'s lock</string>
   <string name="Uwazi_DeleteEntity_SheetTitle">Delete entity?</string>
-  <string name="Uwazi_Subtitle_RemoveSubmittedEntity">Are you sure you want to delete this form from your device? Note that because it was already submitted, the data will remain on your organization\'s server.</string>
+  <string name="Uwazi_Subtitle_RemoveSubmittedEntity">Are you sure you want to delete this from your device? Note that because it was already submitted, the data will remain on your organization\'s server.</string>
   <string name="Uwazi_Entity_Deleted_Toast">\"%1$s\" has been deleted.</string>
+  <string name="Uwazi_Template_Removed_Toast">\"%1$s\" has been removed from your device.</string>
   <string name="google_drive_shared_drive_migration_sheet_title">Create a new Google Drive folder</string>
   <string name="google_drive_shared_drive_migration_sheet_message">Tella no longer supports shared drives. To continue submitting reports to Google Drive, please create a new personal folder.</string>
   <string name="google_drive_reconnect_sheet_title">Reconnect Google Drive</string>
   <string name="google_drive_reconnect_sheet_message">This folder is no longer accessible. To continue submitting reports, please create a new folder or reconnect your account.</string>
-  <string name="onboard.nearby_sharing_expl">Share files with devices near you, without an Internet connection.</string>
+  <string name="onboard.title_nearby_sharing">Share files nearby</string>
+  <string name="onboard.nearby_sharing_expl">With Nearby Sharing, send files to people near you, without needing an internet connection.</string>
   <string name="Snackbar_Submit_Files_Error">To submit a report, please type in a title and attach a file.</string>
   <string name="connect_to_device">Connect to device</string>
   <string name="qr_code_sender_instruction">Show this QR code for the sender to scan</string>
@@ -1131,6 +1137,7 @@ No. The Wi-Fi network does not need to have internet access. As long as the Wi-F
   <string name="nearby_sharing_sender_transfer_content_too_large">Transfer is too large. Remove some files or shrink file sizes and try again.</string>
   <string name="peer_to_peer_error_too_many_requests">Too many requests. Wait a moment and try again.</string>
   <string name="peer_to_peer_invalid_pin">Invalid PIN.</string>
+  <string name="peer_to_peer_invalid_details_message">Please ask the sender to verify their connection details and try again.</string>
   <string name="peer_to_peer_invalid_request_format">Invalid request format.</string>
   <string name="peer_to_peer_active_session_exists">A session is already active on the other device. Try again later.</string>
   <string name="peer_to_peer_server_error_try_later">Server error. Try again later.</string>

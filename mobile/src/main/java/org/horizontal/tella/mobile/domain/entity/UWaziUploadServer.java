@@ -9,6 +9,7 @@ public class UWaziUploadServer extends Server implements Serializable {
     private String connectCookie;
     private String localeCookie = "en";
     private String token = null;
+
     public UWaziUploadServer() {
         this(0);
     }
@@ -28,7 +29,7 @@ public class UWaziUploadServer extends Server implements Serializable {
             return true;
         }
 
-        if (! (obj instanceof UWaziUploadServer)) {
+        if (!(obj instanceof UWaziUploadServer)) {
             return false;
         }
 

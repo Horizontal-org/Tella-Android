@@ -25,7 +25,6 @@ import org.horizontal.tella.mobile.data.database.DataSource
 import org.horizontal.tella.mobile.data.database.KeyDataSource
 import org.horizontal.tella.mobile.domain.entity.background_activity.BackgroundActivityModel
 import org.horizontal.tella.mobile.domain.entity.background_activity.BackgroundActivityStatus
-import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
 import org.horizontal.tella.mobile.media.MediaFileHandler
 import org.horizontal.tella.mobile.util.getDuplicateErrorMessageResId
 import org.horizontal.tella.mobile.util.isDuplicateNameOrFileExistsError
@@ -123,9 +122,13 @@ class AttachmentsViewModel @Inject constructor(
             vaultFile?.let { moveFile(parentId, it) }?.let { completable.add(it) }
         }
 
+        if (completable.isEmpty()) return
+
         disposables.add(Single.zip(
             completable
-        ) { objects: Array<Any?> -> objects.size }.observeOn(AndroidSchedulers.mainThread())
+        ) { objects: Array<Any?> ->
+            objects.count { it is Boolean && it }
+        }.observeOn(AndroidSchedulers.mainThread())
             .subscribe({ _filesSize.postValue(it) }) { throwable: Throwable? ->
                 CrashReporterProvider.get().recordException(throwable!!)
                 _moveFilesError.postValue(throwable)
@@ -369,12 +372,11 @@ class AttachmentsViewModel @Inject constructor(
     fun deleteFilesAfterConfirmation(
         vaultFiles: List<VaultFile?>
     ) {
+        val vaultFileIds = vaultFiles.mapNotNull { it?.id }
         disposables.add(keyDataSource.dataSource.flatMapSingle { dataSource: DataSource ->
-            dataSource.reportMediaFiles
+            dataSource.areVaultFilesUsedInConnections(vaultFileIds)
         }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ files: List<FormMediaFile> ->
-                val doesFileExist =
-                    files.any { file -> vaultFiles.any { vaultFile -> vaultFile?.id == file.id } }
+            .subscribe({ doesFileExist: Boolean ->
                 _onConfirmDeleteFiles.postValue(Pair(vaultFiles, doesFileExist))
             }) { throwable: Throwable? ->
                 if (throwable != null) {

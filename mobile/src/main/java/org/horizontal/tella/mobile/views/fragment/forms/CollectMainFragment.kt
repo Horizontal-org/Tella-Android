@@ -29,10 +29,10 @@ import org.horizontal.tella.mobile.util.StringUtils
 import org.horizontal.tella.mobile.views.activity.FormSubmitActivity
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.forms.viewpager.BLANK_LIST_PAGE_INDEX
-import org.horizontal.tella.mobile.views.fragment.uwazi.SharedLiveData
-import org.horizontal.tella.mobile.views.fragment.uwazi.viewpager.DRAFT_LIST_PAGE_INDEX
-import org.horizontal.tella.mobile.views.fragment.uwazi.viewpager.OUTBOX_LIST_PAGE_INDEX
-import org.horizontal.tella.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
+import org.horizontal.tella.mobile.views.fragment.forms.viewpager.DRAFT_LIST_PAGE_INDEX
+import org.horizontal.tella.mobile.views.fragment.forms.viewpager.OUTBOX_LIST_PAGE_INDEX
+import org.horizontal.tella.mobile.views.fragment.forms.viewpager.CollectSharedLiveData
+import org.horizontal.tella.mobile.views.fragment.forms.viewpager.SUBMITTED_LIST_PAGE_INDEX
 import timber.log.Timber
 
 const val LOCATION_REQUEST_CODE = 1003
@@ -108,7 +108,7 @@ class CollectMainFragment :
 
         }
 
-        SharedLiveData.updateViewPagerPosition.observe(baseActivity) { position ->
+        CollectSharedLiveData.updateViewPagerPosition.observe(baseActivity) { position ->
             when (position) {
                 BLANK_LIST_PAGE_INDEX -> setCurrentTab(BLANK_LIST_PAGE_INDEX)
                 DRAFT_LIST_PAGE_INDEX -> setCurrentTab(DRAFT_LIST_PAGE_INDEX)

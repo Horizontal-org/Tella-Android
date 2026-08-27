@@ -1,7 +1,6 @@
 package org.horizontal.tella.mobile.views.fragment.uwazi.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -31,6 +30,7 @@ import org.horizontal.tella.mobile.presentation.uwazi.UwaziValue;
 import org.horizontal.tella.mobile.util.C;
 import org.horizontal.tella.mobile.util.LocationUtil;
 import org.horizontal.tella.mobile.views.activity.LocationMapActivity;
+import org.horizontal.tella.mobile.views.base_ui.BaseActivity;
 import org.horizontal.tella.mobile.views.collect.widgets.QuestionWidget;
 import org.horizontal.tella.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
 
@@ -248,13 +248,16 @@ public class UwaziGeoPointWidget extends UwaziQuestionWidget implements ILocatio
             }
             pendingLocationAction = PENDING_NONE;
 
-            Activity activity = (Activity) getContext();
+            BaseActivity activity = getBaseActivity();
+            if (activity == null) {
+                return;
+            }
             waitingForAData = true;
 
             MyLocation myLocation = locationString != null ? parseLocationString() : null;
 
             activity.startActivityForResult(
-                    new Intent(getContext(), LocationMapActivity.class)
+                    new Intent(activity, LocationMapActivity.class)
                             .putExtra(LocationMapActivity.SELECTED_LOCATION, myLocation)
                             .putExtra(LocationMapActivity.CURRENT_LOCATION_ONLY, currentLocationOnly),
                     C.SELECTED_LOCATION

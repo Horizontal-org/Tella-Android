@@ -35,17 +35,17 @@ class OnBoardLockFragment : BaseFragment() {
         return inflater.inflate(R.layout.onboard_lock_fragment, container, false)
     }
 
+    override fun applyEdgeToEdgeIfNeeded(view: View) {
+        if (arguments?.getBoolean(IS_FROM_SETTINGS, false) == true) {
+            OnboardingInsets.applyFullscreenOverlay(view, baseActivity)
+        } else {
+            OnboardingInsets.applyCarouselSlide(view)
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView(view)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        (baseActivity as OnBoardActivityInterface).enableSwipe(
-            isSwipeable = true, isTabLayoutVisible = true)
-        (baseActivity as OnBoardActivityInterface).showButtons(
-            isNextButtonVisible = false, isBackButtonVisible = true)
     }
 
     override fun initView(view: View) {
@@ -76,7 +76,6 @@ class OnBoardLockFragment : BaseFragment() {
         }
 
         cancelBtn.setOnClickListener {
-            (baseActivity as OnBoardActivityInterface).setCurrentIndicator(2)
             baseActivity.onBackPressed()
         }
     }
@@ -93,7 +92,7 @@ class OnBoardLockFragment : BaseFragment() {
      */
     private fun proceedWithSelection(lockType: OnBoardLockWarningFragment.LockType) {
         if (!isFromSettings) (baseActivity as OnBoardingActivity).hideViewpager()
-        baseActivity.addFragment(
+        baseActivity.addFragmentWithoutPopAnimation(
             this,
             OnBoardLockWarningFragment.newInstance(lockType, isFromSettings),
             R.id.rootOnboard

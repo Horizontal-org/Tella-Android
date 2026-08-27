@@ -33,6 +33,7 @@ import com.hzontal.tella_locking_ui.ui.AppCompatActivityUnlocker;
 import com.hzontal.tella_locking_ui.ui.DeviceCredentialsUnlockActivity;
 import com.hzontal.tella_locking_ui.ui.password.PasswordUnlockActivity;
 import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity;
+import org.horizontal.tella.mobile.views.activity.onboarding.OnboardingLockProtectSheet;
 import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity;
 import com.hzontal.tella_vault.Vault;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -327,6 +328,15 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         mainKeyStore = TellaKeysUI.getMainKeyStore();
         unlockRegistry = TellaKeysUI.getUnlockRegistry();
         keyDataSource.initKeyDataSource();
+    }
+
+    @Override
+    public void onOnboardingLockSetupComplete(Activity activity, Runnable onContinue) {
+        if (activity instanceof androidx.appcompat.app.AppCompatActivity) {
+            OnboardingLockProtectSheet.show((androidx.appcompat.app.AppCompatActivity) activity, onContinue);
+        } else {
+            onContinue.run();
+        }
     }
 
     @Override

@@ -158,9 +158,10 @@ class ToolbarComponent @JvmOverloads constructor(
 
     fun setRightIcon(icon: Int){
         if (icon != -1){
-            rightImg.setBackgroundResource(icon)
+            rightImg.setImageResource(icon)
             rightImg.isVisible = true
         }else{
+            rightImg.setImageDrawable(null)
             rightImg.isVisible = false
         }
     }
@@ -213,7 +214,7 @@ class ToolbarComponent @JvmOverloads constructor(
             endTitleTv.isVisible = true
         }
         if (rightIcon != -1){
-            rightImg.setBackgroundResource(rightIcon)
+            rightImg.setImageResource(rightIcon)
             rightImg.isVisible = true
         }
         if (leftIcon != -1){

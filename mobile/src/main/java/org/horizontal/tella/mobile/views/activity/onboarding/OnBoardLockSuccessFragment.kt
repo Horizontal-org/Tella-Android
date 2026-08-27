@@ -9,14 +9,13 @@ import androidx.core.net.toUri
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.OnboardLockSuccessFragmentBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseFragment
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 
 private const val TELLA_LOCK_DOCS_URL = "https://tella-app.org/features?_highlight=lock#app-lock"
 
 class OnBoardLockSuccessFragment : BaseFragment() {
 
     private lateinit var binding: OnboardLockSuccessFragmentBinding
-    private var protectSheetShown = false
+    private var hasNavigatedForward = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,50 +26,38 @@ class OnBoardLockSuccessFragment : BaseFragment() {
         return binding.root
     }
 
+    override fun applyEdgeToEdgeIfNeeded(view: View) {
+        OnboardingInsets.applyFullscreenOverlay(view, baseActivity)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Keep success content hidden until user taps "Continue" on the bottom sheet
-        binding.successContent.visibility = View.GONE
         initView(view)
     }
 
     override fun onResume() {
         super.onResume()
-        when {
-            binding.successContent.visibility == View.VISIBLE -> { /* already showing success */ }
-            !protectSheetShown -> {
-                protectSheetShown = true
-                showProtectYourLockSheet()
-            }
-            else -> binding.successContent.visibility = View.VISIBLE
-        }
+        hasNavigatedForward = false
+        bindOverlayNext()
     }
 
     override fun initView(view: View) {
-        (baseActivity as OnBoardActivityInterface).apply {
-            enableSwipe(isSwipeable = false, isTabLayoutVisible = false)
-            showButtons(isNextButtonVisible = false, isBackButtonVisible = false)
-        }
+        (baseActivity as OnBoardActivityInterface).enableSwipe(
+            isSwipeable = false,
+            isTabLayoutVisible = false
+        )
+        bindOverlayNext()
 
         binding.learnMoreLink.setOnClickListener {
             openLockDocs()
         }
-        binding.nextBtn.setOnClickListener {
-            goToLockSetFragment()
-        }
     }
 
-    private fun showProtectYourLockSheet() {
-        BottomSheetUtils.showStandardSheet(
-            fragmentManager = baseActivity.supportFragmentManager,
-            titleText = getString(R.string.onboard_lock_protect_sheet_title),
-            descriptionText = getString(R.string.onboard_lock_protect_sheet_message),
-            actionButtonLabel = getString(R.string.onboard_lock_protect_sheet_continue),
-            cancelButtonLabel = null,
-            onConfirmClick = {
-                binding.successContent.visibility = View.VISIBLE
-            },
-            onCancelClick = null
+    private fun bindOverlayNext() {
+        (baseActivity as OnBoardActivityInterface).showOverlayProgress(
+            activeIndex = OnboardingProgress.LOCK_INDEX,
+            showNextButton = true,
+            onNextClick = { goToAllDoneFragment() }
         )
     }
 
@@ -80,11 +67,13 @@ class OnBoardLockSuccessFragment : BaseFragment() {
         } catch (_: Exception) { }
     }
 
-    private fun goToLockSetFragment() {
-        baseActivity.addFragment(
-            this,
-            OnBoardAllDoneFragment(),
-            R.id.rootOnboard
-        )
+    private fun goToAllDoneFragment() {
+        if (!isAdded || hasNavigatedForward) return
+        hasNavigatedForward = true
+        baseActivity.supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.rootOnboard, OnBoardAllDoneFragment())
+            .addToBackStack(null)
+            .commitAllowingStateLoss()
     }
 }

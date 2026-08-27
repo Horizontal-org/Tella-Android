@@ -2,7 +2,6 @@ package org.horizontal.tella.mobile.views.fragment.googledrive
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Flowable
@@ -22,14 +21,13 @@ import org.horizontal.tella.mobile.domain.usecases.googledrive.DeleteReportUseCa
 import org.horizontal.tella.mobile.domain.usecases.googledrive.GetReportBundleUseCase
 import org.horizontal.tella.mobile.domain.usecases.googledrive.GetReportsServersUseCase
 import org.horizontal.tella.mobile.domain.usecases.googledrive.GetReportsUseCase
+import com.google.api.client.googleapis.json.GoogleJsonResponseException
 import org.horizontal.tella.mobile.domain.usecases.googledrive.SaveReportFormInstanceUseCase
-import org.horizontal.tella.mobile.data.sharedpref.Preferences
 import org.horizontal.tella.mobile.util.StatusProvider
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.ReportCounts
 import org.horizontal.tella.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
 import org.horizontal.tella.mobile.views.fragment.reports.mappers.toViewEntityInstanceItem
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -262,28 +260,30 @@ class GoogleDriveViewModel @Inject constructor(
                             instance.widgetMediaFiles = filesResult
                             _reportInstance.postValue(instance)
                         }, { throwable ->
-                            Timber.d(throwable)
-                            CrashReporterProvider.get().recordException(throwable)
+                            openInstanceAfterUnexpectedFailure(
+                                instance,
+                                throwable,
+                                "Failed to get report bundle for instance ${instance.id}"
+                            )
                         })
                 )
             },
-            onError = { _error.postValue(it) },
+            onError = { error ->
+                openInstanceAfterUnexpectedFailure(
+                    instance,
+                    error,
+                    "Failed to get report bundle for instance ${instance.id}"
+                )
+            },
             onFinished = { _progress.postValue(false) }
         )
     }
 
     private fun processMediaFiles(
-        files: List<FormMediaFile>,
-        vaultFiles: List<VaultFile>
+        files: List<FormMediaFile>?,
+        vaultFiles: List<VaultFile>?
     ): ArrayList<FormMediaFile> {
-        return files.mapNotNull { formMediaFile ->
-            vaultFiles.firstOrNull { it.id == formMediaFile.id }?.let { vaultFile ->
-                FormMediaFile.fromMediaFile(vaultFile).apply {
-                    status = formMediaFile.status
-                    uploadedSize = formMediaFile.uploadedSize
-                }
-            }
-        }.toCollection(ArrayList())
+        return mergeReportAttachments(files, vaultFiles).toCollection(ArrayList())
     }
 
     override fun getFormInstance(
@@ -325,12 +325,6 @@ class GoogleDriveViewModel @Inject constructor(
         getReportsServersUseCase.execute(
             onSuccess = { result ->
                 val driveServer = result.firstOrNull() as? GoogleDriveServer ?: return@execute
-                if (!Preferences.isGoogleDriveReconnectPromptShown()) {
-                    Preferences.setGoogleDriveReconnectPromptShown(true)
-                    _showReconnectSheet.postValue(driveServer)
-                    _progress.postValue(false)
-                    return@execute
-                }
                 proceedWithSubmit(instance, driveServer, backButtonPressed)
             },
             onError = { error ->
@@ -392,15 +386,35 @@ class GoogleDriveViewModel @Inject constructor(
                     updateInstanceStatus(instance, EntityStatus.SUBMISSION_IN_PROGRESS)
                     submitFiles(instance, server, folderId)
                 }, { error ->
-                    handleSubmissionError(instance, error)
+                    handleSubmissionError(instance, error, server)
                 })
         )
     }
 
-    private fun handleSubmissionError(instance: ReportInstance, error: Throwable) {
-        // We already validated via API (isFolderOnSharedDrive) before submit; 403 here is something else (quota, token, etc.)
-        _error.postValue(error)
+    private fun handleSubmissionError(
+        instance: ReportInstance,
+        error: Throwable,
+        driveServer: GoogleDriveServer? = null
+    ) {
+        if (driveServer != null && isFolderAccessError(error)) {
+            _showReconnectSheet.postValue(driveServer)
+        } else {
+            _error.postValue(error)
+        }
         updateInstanceStatus(instance, EntityStatus.SUBMISSION_ERROR)
+    }
+
+    private fun isFolderAccessError(error: Throwable): Boolean {
+        var current: Throwable? = error
+        while (current != null) {
+            if (current is GoogleJsonResponseException &&
+                (current.statusCode == 403 || current.statusCode == 404)
+            ) {
+                return true
+            }
+            current = current.cause
+        }
+        return false
     }
 
 
@@ -446,8 +460,8 @@ class GoogleDriveViewModel @Inject constructor(
                 }
                 .doOnTerminate { handleInstanceOnTerminate(instance) }
                 .doOnCancel { handleInstanceStatus(instance, EntityStatus.PAUSED) }
-                .doOnError {
-                    handleInstanceStatus(instance, EntityStatus.SUBMISSION_ERROR)
+                .doOnError { error ->
+                    handleSubmissionError(instance, error, server)
                 }
                 .doOnNext { progressInfo: UploadProgressInfo ->
                     updateFileStatus(instance, progressInfo) // Ensure this block is efficient
@@ -462,15 +476,11 @@ class GoogleDriveViewModel @Inject constructor(
     }
 
     private fun updateFileStatus(instance: ReportInstance, progressInfo: UploadProgressInfo) {
-        val file = instance.widgetMediaFiles.first { it.id == progressInfo.fileId }
+        val file = instance.widgetMediaFiles.firstOrNull { it.id == progressInfo.fileId } ?: return
         file.apply {
             status =
                 if (progressInfo.status == UploadProgressInfo.Status.FINISHED) FormMediaFileStatus.SUBMITTED else FormMediaFileStatus.NOT_SUBMITTED
             uploadedSize = progressInfo.current
-        }
-        instance.widgetMediaFiles.first { it.id == progressInfo.fileId }.apply {
-            status = file.status
-            uploadedSize = file.uploadedSize
         }
         googleDriveDataSource.saveInstance(instance).subscribe()
     }

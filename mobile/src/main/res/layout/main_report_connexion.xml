@@ -35,4 +35,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="RtlCompat" />
 
+    <org.horizontal.tella.mobile.views.custom.TellaFloatingActionButton
+        android:id="@+id/fab_button"
+        style="@style/Main_Floating_Action_Button_Style"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="60dp"
+        android:contentDescription="@string/action_add"
+        android:visibility="gone"
+        app:fabIcon="@drawable/ic_plus"
+        app:fabIconTint="@color/wa_white"
+        tools:visibility="visible" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

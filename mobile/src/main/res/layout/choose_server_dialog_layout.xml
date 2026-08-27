@@ -10,7 +10,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:padding="4dp"
-        android:text="@string/settings.docu_add.server_dialog.expl" />
+        android:text="@string/settings.docu_add.server_dialog.expl"
+        android:textColor="?android:attr/textColorPrimary" />
 
     <RadioGroup
         android:id="@+id/radio_group"

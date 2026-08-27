@@ -10,7 +10,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import org.horizontal.tella.mobile.R
-import org.horizontal.tella.mobile.views.fragment.uwazi.adapters.ViewEntityTemplateItem
+import org.horizontal.tella.mobile.views.fragment.uwazi.adapters.ViewUwaziTemplateItem
 
 const val VIEW_TYPE_HEADER = 0
 const val VIEW_TYPE_LIST = 1
@@ -37,7 +37,7 @@ class UwaziTemplatesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         if (position == 0){
             (holder as EntityMessageViewHolder ).bind(message = templates[0] as Int)
         }else{
-            (holder as EntityViewHolder ).bind(entityRow = templates[position] as ViewEntityTemplateItem)
+            (holder as EntityViewHolder ).bind(entityRow = templates[position] as ViewUwaziTemplateItem)
         }
     }
 
@@ -46,7 +46,7 @@ class UwaziTemplatesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     inner class EntityViewHolder(val view : View) : RecyclerView.ViewHolder(view) {
-        fun bind(entityRow: ViewEntityTemplateItem) {
+        fun bind(entityRow: ViewUwaziTemplateItem) {
             view.apply{
                 view.findViewById<TextView>(R.id.name).text = entityRow.translatedTemplateName
                 view.findViewById<TextView>(R.id.organization).text = entityRow.serverName

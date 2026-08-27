@@ -1,7 +1,9 @@
 package com.hzontal.tella_locking_ui.ui.pin
 
+import android.content.Intent
 import android.os.Bundle
 import org.hzontal.shared_ui.utils.DialogUtils
+import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.TellaKeysUI
 import com.hzontal.tella_locking_ui.ui.pin.base.BasePinActivity
@@ -14,6 +16,7 @@ import javax.crypto.spec.PBEKeySpec
 class ConfirmPinActivity  : BasePinActivity() {
 
     private val mConfirmPin by lazy { intent.getStringExtra(CONFIRM_PIN) }
+    private var isProcessingConfirm = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         pinTopText.text = getString(R.string.LockPinSet_Message_Confirm)
@@ -22,14 +25,19 @@ class ConfirmPinActivity  : BasePinActivity() {
     }
 
     override fun onSuccessSetPin(pin: String?) {
+       if (isProcessingConfirm) return
        if (mConfirmPin == pin) {
+           isProcessingConfirm = true
            val keySpec = PBEKeySpec(pin?.toCharArray())
            // Use target method config without setActiveMethod first: prefs must still reflect the
            // previous lock until store succeeds, otherwise process death can leave TELLA_PIN with a
            // pattern-wrapped key (or inconsistent prefs).
            val config =
                TellaKeysUI.getUnlockRegistry().getRegisteredConfig(UnlockRegistry.Method.TELLA_PIN)
-           val mainKey = generateOrGetMainKey() ?: return
+           val mainKey = generateOrGetMainKey() ?: run {
+               isProcessingConfirm = false
+               return
+           }
            TellaKeysUI.getMainKeyStore().store(mainKey, config.wrapper, keySpec, object : MainKeyStore.IMainKeyStoreCallback {
                override fun onSuccess(mainKey: MainKey) {
                    Timber.d("** MainKey stored: %s **", mainKey)
@@ -41,6 +49,7 @@ class ConfirmPinActivity  : BasePinActivity() {
                    onSuccessConfirmUnlock()
                }
                override fun onError(throwable: Throwable) {
+                   isProcessingConfirm = false
                    onFailureSetPin("General error occurred")
                    Timber.e(throwable, "** MainKey store error **")
                }
@@ -53,5 +62,18 @@ class ConfirmPinActivity  : BasePinActivity() {
 
     override fun onFailureSetPin(error: String) {
         DialogUtils.showBottomMessage(this,error,false)
+    }
+
+    override fun onOnboardingProtectSheetClosed() {
+        isProcessingConfirm = false
+    }
+
+    override fun onPinBackPressed() {
+        if (!isFromSettings) {
+            startActivity(
+                Intent(this, SetPinActivity::class.java).putExtra(IS_FROM_SETTINGS, false)
+            )
+        }
+        super.onPinBackPressed()
     }
 }

@@ -473,11 +473,6 @@ object VaultSheetUtils {
                 override fun onBind(holder: VaultSelectFilesSheetHolder) {
                     with(holder) {
                         title.text = titleText
-                        if (descriptionText != null) {
-                            descriptionTV.text = descriptionText
-                        } else {
-                            descriptionTV.isVisible = false
-                        }
 
                         //Go to camera action
                         if (cameraLabel != null) {
@@ -527,12 +522,10 @@ object VaultSheetUtils {
         lateinit var importActionTV: TextView
         lateinit var importVaultActionTV: TextView
         lateinit var title: TextView
-        lateinit var descriptionTV: TextView
 
         override fun bindView(view: View) {
             cameraActionTV = view.findViewById(R.id.cameraActionTV)
             recordAudioActionTV = view.findViewById(R.id.recordActionTV)
-            descriptionTV = view.findViewById(R.id.sheetTitleDescTv)
             importActionTV = view.findViewById(R.id.selectDeviceFilesActionTV)
             importVaultActionTV = view.findViewById(R.id.selectTellaFilesActionTV)
             title = view.findViewById(R.id.sheetTitleTv)

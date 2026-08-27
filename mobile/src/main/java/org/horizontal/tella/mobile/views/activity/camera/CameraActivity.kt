@@ -177,6 +177,21 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         initView()
         overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
         metadataAttacher = MetadataAttacher(this)
+        applyCaptureIntent(intent)
+        setupCameraView()
+        setupCameraModeButton()
+        setupImagePreview()
+        initObservers()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        applyCaptureIntent(intent)
+    }
+
+    private fun applyCaptureIntent(intent: Intent?) {
+        if (intent == null) return
         if (intent.hasExtra(CAMERA_MODE)) {
             mode = CameraMode.valueOf(intent.getStringExtra(CAMERA_MODE)!!)
             modeLocked = true
@@ -188,13 +203,13 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         if (intent.hasExtra(VAULT_CURRENT_ROOT_PARENT)) {
             currentRootParent = intent.getStringExtra(VAULT_CURRENT_ROOT_PARENT)
         }
-        if (intent.hasExtra(CAPTURE_WITH_AUTO_UPLOAD)) {
-            captureWithAutoUpload = intent.getBooleanExtra(CAPTURE_WITH_AUTO_UPLOAD, false)
+        val capturingAsAttachment =
+            intentMode == IntentMode.COLLECT || intentMode == IntentMode.ODK
+        captureWithAutoUpload = if (intent.hasExtra(CAPTURE_WITH_AUTO_UPLOAD)) {
+            intent.getBooleanExtra(CAPTURE_WITH_AUTO_UPLOAD, false) && !capturingAsAttachment
+        } else {
+            !capturingAsAttachment
         }
-        setupCameraView()
-        setupCameraModeButton()
-        setupImagePreview()
-        initObservers()
     }
 
     private fun initObservers() {
@@ -323,7 +338,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         } else {
             returnIntent(file)
         }
-        if (captureWithAutoUpload) {
+        if (shouldScheduleAutoUpload()) {
             capturedMediaFile?.let { vaultFile -> scheduleFileUpload(vaultFile) }
         }
         MyApplication.bus().post(CaptureEvent())
@@ -808,12 +823,18 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         }
     }
 
-    private fun scheduleFileUpload(vaultFile: VaultFile) {
-        if (Preferences.isAutoUploadEnabled()) {
-            uploadViewModel.scheduleUploadReportFiles(
-                vaultFile, Preferences.getAutoUploadServerId()
-            )
+    private fun shouldScheduleAutoUpload(): Boolean {
+        if (intentMode == IntentMode.COLLECT || intentMode == IntentMode.ODK) {
+            return false
         }
+        return captureWithAutoUpload && Preferences.isAutoUploadEnabled()
+    }
+
+    private fun scheduleFileUpload(vaultFile: VaultFile) {
+        if (!shouldScheduleAutoUpload()) return
+        uploadViewModel.scheduleUploadReportFiles(
+            vaultFile, Preferences.getAutoUploadServerId()
+        )
     }
 
     private fun initView() {

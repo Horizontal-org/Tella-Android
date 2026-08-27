@@ -81,9 +81,13 @@ abstract class BasePasswordActivity : BaseActivity(), View.OnClickListener, OnVa
         onSuccessSetPassword(mPassword)
     }
 
-    private fun onLeftButtonClickListener() {
+    protected open fun onPasswordBackPressed() {
         finish()
         overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left)
+    }
+
+    private fun onLeftButtonClickListener() {
+        onPasswordBackPressed()
     }
 
     private fun hiLightLeftButton(isHiLighted: Boolean) {

@@ -1,74 +1,70 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="Vault_AllFiles_Title">All files</string>
-  <string name="Vault_Images_Title">Images</string>
-  <string name="Vault_Files_Title">Tella files</string>
-  <string name="Vault_Documents_Title">Documents</string>
-  <string name="Vault_Audios_Title">Audio</string>
-  <string name="Vault_Videos_Title">Vídeos</string>
-  <string name="Vault_Others_Title">Others</string>
-  <string name="Vault_Select_Title">Selecionar arquivos</string>
-  <string name="Vault_RecentFiles">Recent files</string>
-  <string name="Vault_PhotosAndVideos_Title">Photos and Videos</string>
-  <string name="Vault_FavoriteForms_Title">Favorite forms</string>
-  <string name="Vault_Empty_Msg">Tap the \"+\" button below to import your first file, or go to the Camera or Recorder to create one. You can also create folders to keep your files organized.</string>
-  <string name="Vault_Move_SheetDesc">Move to another folder</string>
-  <string name="Vault_Rename_SheetAction">Rename</string>
-  <string name="Vault_Save_SheetAction">Salvar</string>
-  <string name="Vault_Delete_SheetAction">Excluir</string>
-  <string name="Vault_Share_SheetAction">Compartilhar</string>
-  <string name="Vault_Upload_SheetAction">Subir</string>
-  <string name="Vault_File_SheetAction">File information</string>
-  <string name="Vault_FileInfo">Informações do arquivo</string>
-  <string name="Vault_FileSize">Size</string>
-  <string name="Vault_FileFormat">Format</string>
-  <string name="Vault_FileCreated">Created</string>
-  <string name="Vault_FileResolution">Resolution</string>
-  <string name="Vault_FileLength">Length</string>
-  <string name="Vault_FilePath">Caminho do arquivo</string>
-  <string name="Vault_RenameFile_SheetTitle">Rename file</string>
-  <plurals name="Vault_DeleteFile_SheetTitle">
-    <item quantity="one">Delete file?</item>
-    <item quantity="other"></item>
-  </plurals>
-  <plurals name="Vault_deleteFile_SheetDesc">
-    <item quantity="one">The selected file will be permanently delated from Tella.</item>
-    <item quantity="other"></item>
-  </plurals>
-  <string name="Vault_SortNameAsc_SheetAction">Name A &gt; Z</string>
-  <string name="Vault_SortNameDesc_SheetAction">Name Z &gt; A</string>
-  <string name="Vault_SortDateAsc_SheetAction">Mais novo para mais antigo</string>
-  <string name="Vault_SortDateDesc_SheetAction">Mais antigo para o mais novo</string>
-  <string name="Vault_ManageFiles_SheetTitle">Manage files</string>
-  <string name="Vault_DeleteFile_SheetDesc">After importing the file to Tella, the original file will be deleted from your device. The only remaining copy will be the one in Tella.</string>
-  <string name="Vault_TakePhotoVideo_SheetAction">Take photo/video</string>
-  <string name="Vault_RecordAudio_SheetAction">Record audio</string>
-  <string name="Vault_Import_SheetAction">Import from device</string>
-  <string name="Vault_ImportDelete_SheetAction">Import and delete original file</string>
-  <string name="Vault_CreateFolder_SheetTitle">Create a new folder</string>
-  <string name="Vault_MoveHere">move here</string>
-  <string name="Vault_ViewerOther_SheetDesc">This file format cannot be opened in Tella. Would you like to save the file to your device to open it through a different app? This may expose the content of the file.</string>
-  <string name="Vault_Export_SheetAction">Export</string>
-  <plurals name="Vault_Items">
-    <item quantity="one">item</item>
-    <item quantity="other">items</item>
-  </plurals>
-  <string name="Vault_No_Files_Title">You don’t have any files in Tella yet.</string>
-  <string name="Vault_FavoriteTemplates_Title">Modelos favoritos</string>
-  <plurals name="Vault_File_Successfully_Moved">
-    <item quantity="one">File successfully moved</item>
-    <item quantity="other">Files successfully moved</item>
-  </plurals>
-  <string name="Vault_Confirm_delete_Description">Alguns dos arquivos selecionados são usados atualmente em suas conexões. A exclusão pode afetar formulários e relatórios que ainda não foram enviados.</string>
-  <string name="Vault_Warning_Title">Aviso</string>
-  <string name="Vault_Delete_anyway">Excluir mesmo assim</string>
-  <string name="Vault_Keep_Original">MANTENHA-SE ORIGINAL</string>
-  <string name="Vault_Delete_Original">EXCLUIR ORIGINAL</string>
-  <string name="Vault_deleteFileImported_SheetDesc">Após importar o arquivo para o Tella, você deseja manter o arquivo original no seu dispositivo ou excluí-lo? 
-
- Se você excluí-lo, o arquivo importado para o Tella será a única cópia restante.</string>
-  <string name="Vault_FileEdit_SheetAction">Editar</string>
-  <string name="Vault_SaveToDevice_SheetTitle">Save \"%1$s\" to device?</string>
-  <string name="Vault_SaveToDevice_SheetAction">SAVE TO DEVICE</string>
-  <string name="Vault_Folder_Empty_Msg">This folder is empty! Tap the + button below to import a file or create a folder.</string>
+    <string name="Vault_AllFiles_Title">All files</string>
+    <string name="Vault_Images_Title">Images</string>
+    <string name="Vault_Files_Title">Tella files</string>
+    <string name="Vault_Documents_Title">Documents</string>
+    <string name="Vault_Audios_Title">Audio</string>
+    <string name="Vault_Videos_Title">Vídeos</string>
+    <string name="Vault_Others_Title">Others</string>
+    <string name="Vault_Select_Title">Selecionar arquivos</string>
+    <string name="Vault_RecentFiles">Recent files</string>
+    <string name="Vault_PhotosAndVideos_Title">Photos and Videos</string>
+    <string name="Vault_FavoriteForms_Title">Favorite forms</string>
+    <string name="Vault_Empty_Msg">Tap the \"+\" button below to import your first file, or go to the Camera or Recorder to create one. You can also create folders to keep your files organized.</string>
+    <string name="Vault_Move_SheetDesc">Move to another folder</string>
+    <string name="Vault_Rename_SheetAction">Rename</string>
+    <string name="Vault_Save_SheetAction">Salvar</string>
+    <string name="Vault_Delete_SheetAction">Excluir</string>
+    <string name="Vault_Share_SheetAction">Compartilhar</string>
+    <string name="Vault_Upload_SheetAction">Subir</string>
+    <string name="Vault_File_SheetAction">File information</string>
+    <string name="Vault_FileInfo">Informações do arquivo</string>
+    <string name="Vault_FileSize">Size</string>
+    <string name="Vault_FileFormat">Format</string>
+    <string name="Vault_FileCreated">Created</string>
+    <string name="Vault_FileResolution">Resolution</string>
+    <string name="Vault_FileLength">Length</string>
+    <string name="Vault_FilePath">Caminho do arquivo</string>
+    <string name="Vault_RenameFile_SheetTitle">Rename file</string>
+    <plurals name="Vault_DeleteFile_SheetTitle">
+        <item quantity="one">Delete file?</item>
+    </plurals>
+    <plurals name="Vault_deleteFile_SheetDesc">
+        <item quantity="one">The selected file will be permanently delated from Tella.</item>
+    </plurals>
+    <string name="Vault_SortNameAsc_SheetAction">Name A &gt; Z</string>
+    <string name="Vault_SortNameDesc_SheetAction">Name Z &gt; A</string>
+    <string name="Vault_SortDateAsc_SheetAction">Mais novo para mais antigo</string>
+    <string name="Vault_SortDateDesc_SheetAction">Mais antigo para o mais novo</string>
+    <string name="Vault_ManageFiles_SheetTitle">Manage files</string>
+    <string name="Vault_DeleteFile_SheetDesc">After importing the file to Tella, the original file will be deleted from your device. The only remaining copy will be the one in Tella.</string>
+    <string name="Vault_TakePhotoVideo_SheetAction">Take photo/video</string>
+    <string name="Vault_RecordAudio_SheetAction">Record audio</string>
+    <string name="Vault_Import_SheetAction">Import from device</string>
+    <string name="Vault_ImportDelete_SheetAction">Import and delete original file</string>
+    <string name="Vault_CreateFolder_SheetTitle">Create a new folder</string>
+    <string name="Vault_MoveHere">move here</string>
+    <string name="Vault_ViewerOther_SheetDesc">This file format cannot be opened in Tella. Would you like to save the file to your device to open it through a different app? This may expose the content of the file.</string>
+    <string name="Vault_Export_SheetAction">Export</string>
+    <plurals name="Vault_Items">
+        <item quantity="one">item</item>
+        <item quantity="other">items</item>
+    </plurals>
+    <string name="Vault_No_Files_Title">You don’t have any files in Tella yet.</string>
+    <string name="Vault_FavoriteTemplates_Title">Modelos favoritos</string>
+    <plurals name="Vault_File_Successfully_Moved">
+        <item quantity="one">File successfully moved</item>
+        <item quantity="other">Files successfully moved</item>
+    </plurals>
+    <string name="Vault_Confirm_delete_Description">Alguns dos arquivos selecionados são usados atualmente em suas conexões. A exclusão pode afetar formulários e relatórios que ainda não foram enviados.</string>
+    <string name="Vault_Warning_Title">Aviso</string>
+    <string name="Vault_Delete_anyway">Excluir mesmo assim</string>
+    <string name="Vault_Keep_Original">MANTENHA-SE ORIGINAL</string>
+    <string name="Vault_Delete_Original">EXCLUIR ORIGINAL</string>
+    <string name="Vault_deleteFileImported_SheetDesc">Após importar o arquivo para o Tella, você deseja manter o arquivo original no seu dispositivo ou excluí-lo? Se você excluí-lo, o arquivo importado para o Tella será a única cópia restante.</string>
+    <string name="Vault_FileEdit_SheetAction">Editar</string>
+    <string name="Vault_SaveToDevice_SheetTitle">Save \"%1$s\" to device?</string>
+    <string name="Vault_SaveToDevice_SheetAction">SAVE TO DEVICE</string>
+    <string name="Vault_Folder_Empty_Msg">This folder is empty! Tap the + button below to import a file or create a folder.</string>
 </resources>

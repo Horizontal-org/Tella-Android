@@ -124,12 +124,11 @@ class SharedMediaFileViewModel @Inject constructor(
     fun confirmDeleteMediaFile(vaultFile: VaultFile) {
         disposables.add(
             keyDataSource.dataSource
-                .flatMapSingle { it.reportMediaFiles }
+                .flatMapSingle { it.areVaultFilesUsedInConnections(listOf(vaultFile.id)) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                    { formMediaFileList ->
-                        val isShowConfirmation = formMediaFileList.any { it.id == vaultFile.id }
+                    { isShowConfirmation ->
                         mediaFileDeleteConfirmation =
                             MediaFileDeleteConfirmation(vaultFile, isShowConfirmation)
                         _onMediaFileDeleteConfirmed.postValue(mediaFileDeleteConfirmation)
