@@ -1,0 +1,11 @@
+<!-- Plus path from Figma export attachment.svg -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <path
+        android:fillColor="@color/wa_orange"
+        android:fillType="evenOdd"
+        android:pathData="M61.237,48.378C62.132,48.378 62.857,49.104 62.857,50C62.857,50.9 62.133,51.623 61.237,51.623H51.623V61.238C51.623,62.133 50.896,62.857 50,62.857C49.1,62.857 48.377,62.134 48.377,61.238V51.623H38.762C37.867,51.623 37.143,50.896 37.143,50C37.143,49.101 37.866,48.378 38.762,48.378H48.377V38.763C48.377,37.868 49.104,37.143 50,37.143C50.899,37.143 51.623,37.867 51.623,38.763V48.378H61.237Z" />
+</vector>

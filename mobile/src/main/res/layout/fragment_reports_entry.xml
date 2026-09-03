@@ -87,22 +87,25 @@
                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="16dp"
                 android:textColorHint="@color/wa_white"
+                app:errorTextAppearance="@style/TextEntryLayoutErrorStyle"
+                app:hintTextAppearance="@style/ReportFormFieldTextAppearance"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:errorTextAppearance="@style/TextEntryLayoutErrorStyle"
                 app:layout_constraintTop_toBottomOf="@id/separator">
 
                 <EditText
                     android:id="@+id/report_title_et"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/open_sans"
                     android:hint="@string/Reports_Select_Title"
                     android:imeOptions="actionDone"
                     android:inputType="text"
                     android:maxLines="1"
                     android:textColor="@color/wa_white"
-                    app:errorTextAppearance="@style/TextEntryLayoutErrorStyle"
-                    app:backgroundTint="@color/wa_white" />
+                    android:textSize="14sp"
+                    app:backgroundTint="@color/wa_white"
+                    app:errorTextAppearance="@style/TextEntryLayoutErrorStyle" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -114,9 +117,10 @@
                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/activity_vertical_large_margin"
                 android:textColorHint="@color/wa_white"
+                app:errorTextAppearance="@style/TextEntryLayoutErrorStyle"
+                app:hintTextAppearance="@style/ReportFormFieldTextAppearance"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:errorTextAppearance="@style/TextEntryLayoutErrorStyle"
                 app:layout_constraintTop_toBottomOf="@id/report_title_layout">
 
                 <EditText
@@ -124,10 +128,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:autofillHints="description"
+                    android:fontFamily="@font/open_sans"
                     android:hint="@string/Reports_Select_Description"
                     android:imeOptions="actionDone"
                     android:inputType="text|textMultiLine"
                     android:textColor="@color/wa_white"
+                    android:textSize="14sp"
                     app:backgroundTint="@color/wa_white"
                     app:errorTextAppearance="@style/TextEntryLayoutErrorStyle"
                     tools:text="felf,ef,lk,frlezf,elfelkferf,er,ff
@@ -136,10 +142,13 @@ knkerfkefkfekfkekekl,f,klferkl,f,lkefe,fe,lf,lef,lef,lef,er,f,ref,f,,llkf,elk,f,
 
             <TextView
                 android:id="@+id/attach_files_text"
-                style="@style/Tella_Main_White_Text.Meduim"
+                style="@style/Typography.Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/activity_vertical_large_margin"
                 android:text="@string/Reports_Attach_files_Here"
+                android:textColor="@color/wa_white"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/report_description_layout" />
 

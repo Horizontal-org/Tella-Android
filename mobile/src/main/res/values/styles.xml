@@ -438,6 +438,11 @@
         <item name="android:textColorHint">@color/wa_white</item>
     </style>
 
+    <style name="ReportFormFieldTextAppearance" parent="TextAppearance.Tella.Body1">
+        <item name="android:textColor">@color/wa_white</item>
+        <item name="android:textColorHint">@color/wa_white</item>
+    </style>
+
     <style name="TextEntryLayoutErrorStyle">
         <item name="android:textColor">@color/light_red</item>
     </style>
