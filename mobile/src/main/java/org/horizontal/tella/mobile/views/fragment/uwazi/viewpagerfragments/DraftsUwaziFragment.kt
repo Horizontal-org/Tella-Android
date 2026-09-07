@@ -49,9 +49,9 @@ class DraftsUwaziFragment : BaseReportsFragment<UwaziEntityInstance>() {
                     instance = instance,
                     title = instance.title,
                     viewText = getString(R.string.Uwazi_Action_EditDraft),
-                    deleteText = getString(R.string.action_delete),
+                    deleteText = getString(R.string.Uwazi_Action_DeleteEntity),
                     deleteConfirmation = getString(R.string.Uwazi_Subtitle_RemoveDraft),
-                    deleteActionText = getString(R.string.action_delete) + " \"" + instance.title + "\"?",
+                    deleteActionText = getString(R.string.Uwazi_DeleteEntity_SheetTitle),
                 )
             }
 

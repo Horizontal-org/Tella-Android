@@ -65,11 +65,12 @@ abstract class BaseReportSubmittedFragment :
     private fun showDeleteBottomSheet(entityInstance: ReportInstance) {
         showStandardSheet(
             baseActivity.supportFragmentManager,
+            getString(R.string.delete_report),
             getString(R.string.Delete_Report_Confirmation),
-            getString(R.string.action_delete) + " \"" + entityInstance.title + "\"?",
             getString(R.string.action_delete),
             getString(R.string.action_cancel),
-            { viewModel.deleteReport(entityInstance) })
+            { viewModel.deleteReport(entityInstance) }
+        )
     }
 
     private fun showFormEndView() {
