@@ -17,6 +17,7 @@ import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.dialog.googledrive.SharedGoogleDriveViewModel
 import org.horizontal.tella.mobile.views.dialog.IS_UPDATE_SERVER
 import org.horizontal.tella.mobile.views.dialog.googledrive.setp0.OBJECT_KEY
+import org.hzontal.shared_ui.bottomsheet.KeyboardUtil
 import org.hzontal.shared_ui.utils.DialogUtils
 import timber.log.Timber
 
@@ -35,6 +36,7 @@ class CreateFolderFragment : BaseBindingFragment<FragmentCreateFolderBinding>(
         setupAuthorizationLauncher()
         binding.nextBtn.setOnClickListener(this)
         binding.backBtn.setOnClickListener(this)
+        KeyboardUtil(binding.root)
 
         arguments?.getString(OBJECT_KEY)?.let {
             googleDriveServer = Gson().fromJson(it, GoogleDriveServer::class.java)

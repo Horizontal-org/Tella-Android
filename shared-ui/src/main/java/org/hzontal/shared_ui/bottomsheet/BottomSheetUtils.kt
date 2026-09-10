@@ -1142,12 +1142,14 @@ object BottomSheetUtils {
     }
 
     class RenameFileSheetHolder : PageHolder() {
+        lateinit var sheetRoot: View
         lateinit var actionCancel: TextView
         lateinit var actionRename: TextView
         lateinit var title: TextView
         lateinit var renameEditText: EditText
 
         override fun bindView(view: View) {
+            sheetRoot = view
             actionRename = view.findViewById(R.id.standard_sheet_confirm_btn)
             actionCancel = view.findViewById(R.id.standard_sheet_cancel_btn)
             title = view.findViewById(R.id.standard_sheet_title)
@@ -1173,6 +1175,8 @@ object BottomSheetUtils {
                 with(holder) {
                     title.text = titleText
                     renameEditText.setText(fileName)
+                    KeyboardUtil(sheetRoot, cursorAtEnd = true)
+                    KeyboardUtil.focusAndShowKeyboard(renameEditText)
                     //Cancel action
                     actionCancel.text = cancelLabel
                     actionCancel.setOnClickListener { renameFileSheet.dismiss() }

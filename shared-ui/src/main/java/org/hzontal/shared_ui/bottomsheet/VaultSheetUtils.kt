@@ -1,10 +1,7 @@
 package org.hzontal.shared_ui.bottomsheet
 
 import android.app.Activity
-import android.content.Context
-import android.graphics.Rect
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -173,9 +170,8 @@ object VaultSheetUtils {
                 with(holder) {
                     title.text = titleText
                     renameEditText.setText(fileName)
-                    keepRenameActionsVisibleAboveKeyboard(sheetRoot)
-                    focusAndShowKeyboard(renameEditText)
-
+                    KeyboardUtil(sheetRoot, cursorAtEnd = true)
+                    KeyboardUtil.focusAndShowKeyboard(renameEditText)
                     renameEditText.onTextChanged { text ->
                         if (text.isEmpty()) {
                             actionRename.setTextColor(context.getColor(R.color.wa_white_40))
@@ -228,9 +224,8 @@ object VaultSheetUtils {
                 with(holder) {
                     title.text = titleText
                     renameEditText.setText(fileName)
-                    keepRenameActionsVisibleAboveKeyboard(sheetRoot)
-                    focusAndShowKeyboard(renameEditText)
-
+                    KeyboardUtil(sheetRoot, cursorAtEnd = true)
+                    KeyboardUtil.focusAndShowKeyboard(renameEditText)
                     renameEditText.onTextChanged { text ->
                         if (text.isEmpty()) {
                             actionRename.setTextColor(ContextCompat.getColor(context,R.color.wa_white_40))
@@ -262,46 +257,6 @@ object VaultSheetUtils {
         })
         vaultActionSheet.transparentBackground()
         vaultActionSheet.launch()
-    }
-
-    private fun focusAndShowKeyboard(editText: EditText) {
-        editText.requestFocus()
-        editText.post {
-            val imm =
-                editText.context.getSystemService(Activity.INPUT_METHOD_SERVICE) as? InputMethodManager
-            imm?.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
-        }
-    }
-
-    private fun keepRenameActionsVisibleAboveKeyboard(sheetRoot: View) {
-        val initialPaddingBottom = sheetRoot.paddingBottom
-        var appliedOverlap = 0
-        sheetRoot.viewTreeObserver.addOnPreDrawListener {
-            val visibleFrame = Rect()
-            sheetRoot.getWindowVisibleDisplayFrame(visibleFrame)
-            val screenHeight = sheetRoot.resources.displayMetrics.heightPixels
-            val keypadHeight = (screenHeight - visibleFrame.bottom).coerceAtLeast(0)
-            val keyboardOpen = keypadHeight > screenHeight * 0.15
-
-            var overlap = 0
-            if (keyboardOpen) {
-                val location = IntArray(2)
-                sheetRoot.getLocationOnScreen(location)
-                val contentBottom = location[1] + sheetRoot.height - appliedOverlap
-                overlap = (contentBottom - visibleFrame.bottom).coerceAtLeast(0)
-            }
-
-            if (overlap != appliedOverlap) {
-                appliedOverlap = overlap
-                sheetRoot.setPadding(
-                    sheetRoot.paddingLeft,
-                    sheetRoot.paddingTop,
-                    sheetRoot.paddingRight,
-                    initialPaddingBottom + overlap
-                )
-            }
-            true
-        }
     }
 
     class VaultRenameSheetHolder : PageHolder() {
