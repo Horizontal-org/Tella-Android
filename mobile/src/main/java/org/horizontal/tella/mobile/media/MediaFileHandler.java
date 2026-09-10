@@ -51,10 +51,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -69,9 +67,12 @@ import org.horizontal.tella.mobile.MyApplication;
 import org.horizontal.tella.mobile.R;
 import org.horizontal.tella.mobile.data.provider.EncryptedFileProvider;
 import org.horizontal.tella.mobile.data.sharedpref.Preferences;
-import org.horizontal.tella.mobile.presentation.entity.mapper.PublicMetadataMapper;
 import org.horizontal.tella.mobile.util.C;
 import org.horizontal.tella.mobile.util.FileUtil;
+import org.horizontal.tella.mobile.util.VaultFolderPath;
+
+import com.hzontal.tella_vault.database.VaultDataSource;
+import com.hzontal.tella_vault.exceptions.FileNameAlreadyExistsException;
 
 import timber.log.Timber;
 
@@ -804,23 +805,121 @@ public class MediaFileHandler {
         }
     }
 
-    //TODO CHECK CSV FILE
+    /**
+     * Temporary CSV used when sharing or exporting to the device. Not registered as a vault file.
+     * Use {@link #saveVerificationMetadataToVault} to persist a CSV in the encrypted vault.
+     */
     public static VaultFile maybeCreateMetadataMediaFile(VaultFile vaultFile) {
         VaultFile mmf = new VaultFile();
-        String name = vaultFile.name.substring(0, vaultFile.name.lastIndexOf('.'));
-        mmf.name = name + ".csv";
-        mmf.id = name;
-        mmf.mimeType = "text/csv";
+        mmf.name = VerificationMetadataCsv.INSTANCE.fileNameFor(vaultFile.name);
+        mmf.id = mmf.name;
+        mmf.mimeType = VerificationMetadataCsv.MIME_TYPE;
 
         try {
             OutputStream os = getMetadataOutputStream(mmf);
-
-
-            createMetadataFile(os, vaultFile);
+            if (os != null) {
+                os.write(VerificationMetadataCsv.INSTANCE.toCsvBytes(vaultFile));
+                os.close();
+            }
         } catch (Exception e) {
             Timber.d(e);
         }
         return mmf;
+    }
+
+    /**
+     * Persists verification metadata as a CSV in the vault (same folder when {@code parentId} is set).
+     * Named like the original file so the pair stays identifiable after Nearby Sharing or re-import.
+     * The CSV is linked to the original via {@link VaultFile#sourceFileId}. If that CSV already
+     * exists anywhere in the vault, throws {@link VerificationMetadataAlreadySavedException}.
+     */
+    public static Single<VaultFile> saveVerificationMetadataToVault(
+            @NonNull VaultFile vaultFile,
+            @Nullable String parentId
+    ) {
+        return Single.fromCallable((Callable<VaultFile>) () -> {
+                    if (vaultFile.metadata == null) {
+                        throw new IllegalArgumentException("Vault file has no verification metadata");
+                    }
+                    String name = VerificationMetadataCsv.INSTANCE.fileNameFor(vaultFile.name);
+                    String folderId = VerificationMetadataCsv.INSTANCE.parentFolderId(
+                            parentId, vaultFile.parentId);
+                    RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
+                    VaultFile existing = findLinkedVerificationCsv(rxVault, vaultFile, folderId);
+                    if (existing != null) {
+                        throw alreadySavedException(rxVault, existing);
+                    }
+                    byte[] csv = VerificationMetadataCsv.INSTANCE.toCsvBytes(vaultFile);
+                    RxVaultFileBuilder builder = rxVault
+                            .builder(new ByteArrayInputStream(csv))
+                            .setMimeType(VerificationMetadataCsv.MIME_TYPE)
+                            .setName(name)
+                            .setAnonymous(true)
+                            .setType(VaultFile.Type.FILE)
+                            .setSourceFileId(vaultFile.id);
+                    try {
+                        return builder.build(folderId).blockingGet();
+                    } catch (Exception e) {
+                        if (isFileNameAlreadyExists(e)) {
+                            VaultFile linked = findLinkedVerificationCsv(rxVault, vaultFile, folderId);
+                            if (linked != null) {
+                                throw alreadySavedException(rxVault, linked);
+                            }
+                            throw alreadySavedException(rxVault, folderId, name);
+                        }
+                        throw e;
+                    }
+                })
+                .subscribeOn(Schedulers.io());
+    }
+
+    @Nullable
+    private static VaultFile findLinkedVerificationCsv(
+            RxVault rxVault,
+            VaultFile original,
+            String folderId
+    ) {
+        VaultFile linked = rxVault.findBySourceFileId(original.id);
+        VaultFile parent = new VaultFile();
+        parent.id = folderId != null ? folderId : VaultDataSource.ROOT_UID;
+        List<VaultFile> siblings = rxVault.list(parent).blockingGet();
+        VaultFile existing = VerificationMetadataCsv.INSTANCE.existingCsv(
+                linked, siblings, original.name);
+        if (existing != null && linked == null && original.id != null) {
+            rxVault.linkToSourceFile(existing.id, original.id);
+        }
+        return existing;
+    }
+
+    private static VerificationMetadataAlreadySavedException alreadySavedException(
+            RxVault rxVault,
+            VaultFile existing
+    ) {
+        String folderId = existing.parentId != null ? existing.parentId : VaultDataSource.ROOT_UID;
+        String csvName = existing.name != null
+                ? existing.name
+                : VerificationMetadataCsv.INSTANCE.fileNameFor(null);
+        return alreadySavedException(rxVault, folderId, csvName);
+    }
+
+    private static VerificationMetadataAlreadySavedException alreadySavedException(
+            RxVault rxVault,
+            String folderId,
+            String csvName
+    ) {
+        return new VerificationMetadataAlreadySavedException(
+                VaultFolderPath.fileLocationInFolder(folderId, csvName, rxVault));
+    }
+
+    private static boolean isFileNameAlreadyExists(Throwable throwable) {
+        Throwable current = throwable;
+        while (current != null) {
+            if (current instanceof FileNameAlreadyExistsException) {
+                return true;
+            }
+            current = current.getCause();
+        }
+        return false;
     }
 
 
@@ -838,16 +937,6 @@ public class MediaFileHandler {
 
     private static long getSize(File file) {
         return file.length() - EncryptedFileProvider.IV_SIZE;
-    }
-
-    private static void createMetadataFile(@NonNull OutputStream os, @NonNull VaultFile vaultFile) {
-        LinkedHashMap<String, String> map = PublicMetadataMapper.transformToMap(vaultFile);
-
-        PrintStream ps = new PrintStream(os);
-        ps.println(TextUtils.join(",", map.keySet()));
-        ps.println(TextUtils.join(",", map.values()));
-        ps.flush();
-        ps.close();
     }
 
     @Nullable

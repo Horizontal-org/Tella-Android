@@ -2,6 +2,8 @@ package com.hzontal.tella_vault.rx;
 
 import android.content.Context;
 
+import androidx.annotation.Nullable;
+
 import com.hzontal.tella_vault.BaseVault;
 import com.hzontal.tella_vault.BaseVaultFileBuilder;
 import com.hzontal.tella_vault.IVaultDatabase;
@@ -123,6 +125,15 @@ public class RxVault extends BaseVault {
                 return Single.error(e);
             }
         });
+    }
+
+    @Nullable
+    public VaultFile findBySourceFileId(String sourceFileId) {
+        return baseGetBySourceFileId(sourceFileId);
+    }
+
+    public void linkToSourceFile(String fileId, String sourceFileId) {
+        baseUpdateSourceFileId(fileId, sourceFileId);
     }
 
     public Single<List<VaultFile>> get(String[] ids) {

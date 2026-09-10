@@ -66,7 +66,7 @@ public class PublicMetadataMapper {
             if (publicMetadata.cells != null) {
                 metadata.put("Cells", rc(StringUtils.join(" ", publicMetadata.cells)));
             }
-            if (publicMetadata.cells != null) {
+            if (publicMetadata.wifis != null) {
                 metadata.put("WiFis", rc(StringUtils.join(" ", publicMetadata.wifis)));
             }
         } catch (Exception e) {

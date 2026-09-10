@@ -7,6 +7,7 @@ public class VaultFile  implements Serializable {
     public Type type;
     public String hash;
     public String path;
+    public String parentId;
     public String mimeType = null;
     public String name;
     public long size;
@@ -15,6 +16,7 @@ public class VaultFile  implements Serializable {
     public boolean anonymous;
     public Metadata metadata;
     public byte[] thumb = null;
+    public String sourceFileId;
 
     public VaultFile() {
     }
@@ -31,6 +33,7 @@ public class VaultFile  implements Serializable {
         this.hash = builder.hash;
         this.duration = builder.duration;
         this.size = builder.size;
+        this.sourceFileId = builder.sourceFileId;
     }
 
     public enum Type {

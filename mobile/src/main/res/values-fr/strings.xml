@@ -814,7 +814,7 @@
     <string name="Resources_AvailableInfoMessage">Ce sont les ressources disponibles au téléchargement depuis vos projets Tella Web.</string>
     <string name="Resources_AvailableEmptyMessage">Aucune ressource n\'est disponible au téléchargement à partir de vos projets Tella Web.</string>
     <string name="Resources_RemoveFromDownloads">Supprimer des téléchargements</string>
-    <string name="Resources_RemovedResource">\"%1$d\" a été supprimé de vos téléchargements.</string>
+    <string name="Resources_RemovedResource">\"%1$s\" a été supprimé de vos téléchargements.</string>
     <string name="Resources_DialogTitle_StopDownload">Arrêter le téléchargement et quitter ?</string>
     <string name="Resources_DialogMsg_StopDownload">La progression de votre téléchargement sera perdue. Vous pouvez toujours revenir télécharger plus tard la ressource.</string>
     <string name="Resources_KeepDownloading">CONTINUER DE TÉLÉCHARGER</string>
@@ -952,7 +952,7 @@
     <string name="onboard_lock_success_learn_more">En savoir plus sur les modes de déverouillage de Tella.</string>
     <string name="Uwazi_DeleteEntity_SheetTitle">Supprimer l\'entité ?</string>
     <string name="Uwazi_Subtitle_RemoveSubmittedEntity">Voulez-vous vraiment supprimer ce formulaire de l’appareil ? Comme les données ont déjà été envoyées, elles resteront sur le serveur de votre organisation.</string>
-    <string name="Uwazi_Entity_Deleted_Toast">\"%1$d\" a été supprimé.</string>
+    <string name="Uwazi_Entity_Deleted_Toast">\"%1$s\" a été supprimé.</string>
     <string name="google_drive_shared_drive_migration_sheet_title">Créer un nouveau dossier Google Drive</string>
     <string name="google_drive_shared_drive_migration_sheet_message">Tella no longer supports shared drives. To continue submitting reports to Google Drive, please create a new personal folder.</string>
     <string name="google_drive_reconnect_sheet_title">Reconnecter Google Drive</string>

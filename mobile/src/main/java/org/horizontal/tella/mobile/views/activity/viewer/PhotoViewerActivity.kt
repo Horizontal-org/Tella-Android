@@ -28,6 +28,7 @@ import org.horizontal.tella.mobile.media.MediaFileHandler
 import org.horizontal.tella.mobile.util.configureAppBar
 import org.horizontal.tella.mobile.views.activity.MetadataViewerActivity
 import org.horizontal.tella.mobile.views.activity.viewer.PermissionsActionsHelper.initContracts
+import org.horizontal.tella.mobile.views.activity.viewer.VaultActionsHelper.observeVerificationMetadataSave
 import org.horizontal.tella.mobile.views.activity.viewer.VaultActionsHelper.showVaultActionsDialog
 import org.horizontal.tella.mobile.views.base_ui.BaseLockActivity
 import org.horizontal.tella.mobile.views.fragment.vault.edit.VaultEditFragment
@@ -125,6 +126,7 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
                     mediaFileDeletedConfirmation.showConfirmDelete
                 )
             }
+            observeVerificationMetadataSave(this@with)
         }
     }
 
@@ -195,7 +197,8 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
                                 isInfoShown = true
                                 onVisibilityChanged(View.VISIBLE)
                             },
-                            toolbar = toolbar
+                            toolbar = toolbar,
+                            parentId = currentParent
                         )
                     }
                     false
@@ -338,6 +341,7 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
     private fun showMetadata() {
         val viewMetadata = Intent(this, MetadataViewerActivity::class.java)
         viewMetadata.putExtra(Metadata.VIEW_METADATA, vaultFile)
+        currentParent?.let { viewMetadata.putExtra(MetadataViewerActivity.PARENT_ID, it) }
         startActivity(viewMetadata)
     }
 

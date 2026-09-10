@@ -15,8 +15,10 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
+import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.data.database.KeyDataSource
 import org.horizontal.tella.mobile.media.MediaFileHandler
+import org.horizontal.tella.mobile.media.asVerificationMetadataAlreadySaved
 import org.horizontal.tella.mobile.util.getDuplicateErrorMessageResId
 import org.horizontal.tella.mobile.util.isDuplicateNameOrFileExistsError
 import javax.inject.Inject
@@ -48,6 +50,12 @@ class SharedMediaFileViewModel @Inject constructor(
 
     private val _onMediaFileGot = MutableLiveData<VaultFile>()
     val onMediaFileGot: LiveData<VaultFile> get() = _onMediaFileGot
+
+    private val _verificationMetadataSaved = SingleLiveEvent<VaultFile>()
+    val verificationMetadataSaved: LiveData<VaultFile> get() = _verificationMetadataSaved
+
+    private val _verificationMetadataAlreadySaved = SingleLiveEvent<String>()
+    val verificationMetadataAlreadySaved: LiveData<String> get() = _verificationMetadataAlreadySaved
 
     fun exportNewMediaFile(withMetadata: Boolean, vaultFile: VaultFile, path: Uri?) {
         disposables.add(
@@ -155,6 +163,32 @@ class SharedMediaFileViewModel @Inject constructor(
                     { throwable ->
                         CrashReporterProvider.get().recordException(throwable)
                         _error.postValue(R.string.default_error_msg)
+                    }
+                )
+        )
+    }
+
+    fun saveVerificationMetadata(vaultFile: VaultFile, parentId: String?) {
+        if (vaultFile.metadata == null) {
+            _error.postValue(R.string.verification_save_csv_vault_fail)
+            return
+        }
+        disposables.add(
+            MediaFileHandler.saveVerificationMetadataToVault(vaultFile, parentId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { saved -> _verificationMetadataSaved.postValue(saved) },
+                    { throwable ->
+                        val alreadySaved = throwable.asVerificationMetadataAlreadySaved()
+                        if (alreadySaved != null) {
+                            _verificationMetadataAlreadySaved.postValue(alreadySaved.path)
+                            return@subscribe
+                        }
+                        CrashReporterProvider.get().recordException(throwable)
+                        _error.postValue(
+                            if (throwable.isDuplicateNameOrFileExistsError()) throwable.getDuplicateErrorMessageResId()
+                            else R.string.verification_save_csv_vault_fail
+                        )
                     }
                 )
         )

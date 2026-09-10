@@ -17,9 +17,11 @@
   <string name="Vault_Save_SheetAction">Save</string>
   <string name="Vault_Delete_SheetAction">Delete</string>
   <string name="Vault_Share_SheetAction">Share</string>
+  <string name="Vault_SaveVerification_SheetAction">Verification information</string>
   <string name="Vault_Upload_SheetAction">Upload</string>
   <string name="Vault_File_SheetAction">File information</string>
   <string name="Vault_FileInfo">File info</string>
+  <string name="Vault_General">General</string>
   <string name="Vault_FileSize">Size</string>
   <string name="Vault_FileFormat">Format</string>
   <string name="Vault_FileCreated">Created</string>

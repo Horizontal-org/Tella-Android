@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/generalSection"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/generalHeaderTv"
+        style="@style/Tella_Main_White_Text.MeduimbBold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/tella_main_vertical"
+        android:paddingTop="20dp"
+        android:text="@string/Vault_General" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/labelsBarrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="end"
+            app:constraint_referenced_ids="fileInfoLabelTv,fileSizeLabelTv,fileFormatLabelTv,fileCreatedLabelTv,fileResolutionLabelTv,fileLengthLabelTv,filePathLabel" />
+
+        <TextView
+            android:id="@+id/fileInfoLabelTv"
+            style="@style/Tella_Main_White_Text.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:paddingHorizontal="@dimen/tella_main_vertical"
+            android:text="@string/verification.info_field_filename"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/fileInfoTv"
+            style="@style/Tella_Main_White_Text.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:paddingHorizontal="@dimen/tella_main_vertical"
+            android:textSize="11sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/fileInfoLabelTv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/labelsBarrier"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Traffic light" />
+
+        <TextView
+            android:id="@+id/fileSizeLabelTv"
+            style="@style/Tella_Main_White_Text.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:paddingHorizontal="@dimen/tella_main_vertical"
+            android:text="@string/Vault_FileSize"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fileInfoTv" />
+
+        <TextView
+            android:id="@+id/fileSizeTv"
+            style="@style/Tella_Main_White_Text.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:paddingHorizontal="@dimen/tella_main_vertical"
+            android:textSize="11sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/fileSizeLabelTv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/labelsBarrier"
+            app:layout_constraintTop_toBottomOf="@id/fileInfoTv"
+            tools:text="35.8 MB" />
+
+        <TextView
+            android:id="@+id/fileFormatLabelTv"
+            style="@style/Tella_Main_White_Text.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:paddingHorizontal="@dimen/tella_main_vertical"
+            android:text="@string/Vault_FileFormat"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fileSizeTv" />
+
+        <TextView
+            android:id="@+id/fileFormatTv"
+            style="@style/Tella_Main_White_Text.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:paddingHorizontal="@dimen/tella_main_vertical"
+            android:textSize="11sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/fileFormatLabelTv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/labelsBarrier"
+            app:layout_constraintTop_toBottomOf="@id/fileSizeTv"
+            tools:text="MP4" />
+
+        <TextView
+            android:id="@+id/fileCreatedLabelTv"
+            style="@style/Tella_Main_White_Text.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:paddingHorizontal="@dimen/tella_main_vertical"
+            android:text="@string/Vault_FileCreated"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fileFormatTv" />
+
+        <TextView
+            android:id="@+id/fileCreatedTv"
+            style="@style/Tella_Main_White_Text.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:paddingHorizontal="@dimen/tella_main_vertical"
+            android:textSize="11sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/fileCreatedLabelTv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/labelsBarrier"
+            app:layout_constraintTop_toBottomOf="@id/fileFormatTv"
+            tools:text="08-03-2021 09:33:35 +0500" />
+
+        <TextView
+            android:id="@+id/fileResolutionLabelTv"
+            style="@style/Tella_Main_White_Text.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:paddingHorizontal="@dimen/tella_main_vertical"
+            android:text="@string/Vault_FileResolution"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fileCreatedTv" />
+
+        <TextView
+            android:id="@+id/fileResolutionTv"
+            style="@style/Tella_Main_White_Text.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:paddingHorizontal="@dimen/tella_main_vertical"
+            android:textSize="11sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/fileResolutionLabelTv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/labelsBarrier"
+            app:layout_constraintTop_toBottomOf="@id/fileCreatedTv"
+            tools:text="1024x768" />
+
+        <TextView
+            android:id="@+id/fileLengthLabelTv"
+            style="@style/Tella_Main_White_Text.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:paddingHorizontal="@dimen/tella_main_vertical"
+            android:text="@string/Vault_FileLength"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fileResolutionTv" />
+
+        <TextView
+            android:id="@+id/fileLengthTv"
+            style="@style/Tella_Main_White_Text.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:paddingHorizontal="@dimen/tella_main_vertical"
+            android:textSize="11sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/fileLengthLabelTv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/labelsBarrier"
+            app:layout_constraintTop_toBottomOf="@id/fileResolutionTv"
+            tools:text="3:42" />
+
+        <TextView
+            android:id="@+id/filePathLabel"
+            style="@style/Tella_Main_White_Text.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:paddingHorizontal="@dimen/tella_main_vertical"
+            android:text="@string/Vault_FilePath"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fileLengthTv" />
+
+        <TextView
+            android:id="@+id/filePathTv"
+            style="@style/Tella_Main_White_Text.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:paddingHorizontal="@dimen/tella_main_vertical"
+            android:textSize="11sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/filePathLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/labelsBarrier"
+            app:layout_constraintTop_toBottomOf="@id/fileLengthTv"
+            tools:text="Tella/video" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

@@ -19,6 +19,8 @@ public interface IVaultDatabase {
     List<VaultFile> get(String[] ids);
     boolean delete(VaultFile file, IVaultFileDeleter deleter);
     VaultFile getByHash(String hash);
+    VaultFile getBySourceFileId(String sourceFileId);
+    void updateSourceFileId(String fileId, String sourceFileId);
     void destroy();
     interface IVaultFileDeleter {
         boolean delete(VaultFile vaultFile);
