@@ -159,11 +159,11 @@ mode activation</string>
   <string name="verification.info_field_network">Network</string>
   <string name="verification.info_field_data.type">Data type</string>
   <string name="verification.info_field_notes">Notes</string>
-  <string name="verification.info_field_location.latitude">Location latitude</string>
-  <string name="verification.info_field_location.longitude">Location longitude</string>
-  <string name="verification.info_field_location.accuracy">Location accuracy</string>
-  <string name="verification.info_field_location.altitude">Location altitude</string>
-  <string name="verification.info_field_location.time.value">Location time</string>
+  <string name="verification.info_field_location.latitude">Latitude</string>
+  <string name="verification.info_field_location.longitude">Longitude</string>
+  <string name="verification.info_field_location.accuracy">Accuracy</string>
+  <string name="verification.info_field_location.altitude">Altitude</string>
+  <string name="verification.info_field_location.time.value">Timestamp of GPS reading</string>
   <string name="verification.info_field_manufacturer">Manufacturer</string>
   <string name="verification.info_field_hardware">Hardware</string>
   <string name="verification.info_field_device.id">Device ID</string>
@@ -178,7 +178,9 @@ mode activation</string>
   <string name="verification.collecting_list.item_location">Location</string>
   <string name="verification.info_field_location">Location</string>
   <string name="verification.info_field_location.provider">Location provider</string>
-  <string name="verification.info_field_location.speed">Location speed</string>
+  <string name="verification.info_field_location.speed">Speed</string>
+  <string name="verification.info_field_ambient.temperature">Ambient temperature</string>
+  <string name="verification.info_field_light">Light</string>
   <string name="verification.info_field_cell.towers">Cell info</string>
   <string name="settings.camo_calculator2">Calculator</string>
   <string name="verification.info_subheading_file.metadata">File</string>
@@ -188,7 +190,7 @@ mode activation</string>
   <string name="verification.info_subheading_other.metadata">Other</string>
   <string name="verification.info_subheading_general">General</string>
   <string name="verification.info_subheading_context.metadata">Context</string>
-  <string name="verification.info_field_metadata.not.available">NONE</string>
+  <string name="verification.info_field_metadata.not.available">Not available</string>
   <string name="verification.info_field_latitude">Latitude:</string>
   <string name="verification.info_field_longitude">Longitude:</string>
   <string name="verification.info_field_altitude">Altitude:</string>
@@ -255,6 +257,7 @@ Turn on GPS so Tella can record the position of your evidence.</string>
   <string name="verification.help.location.bar">Location help</string>
   <string name="verification.help.other.bar">Other help</string>
   <string name="gallery_action.desc_metadata.help">Verification Help</string>
+  <string name="verification.info_filename.expl">The name of the file in Tella.</string>
   <string name="verification.info_file.path.expl">Where the file is in the Tella vault.</string>
   <string name="verification.info_hash.expl">SHA-256 hash of the media file.</string>
   <string name="verification.info_file.created.expl">When the file was created in Tella, if available.</string>
@@ -283,6 +286,8 @@ Turn on GPS so Tella can record the position of your evidence.</string>
   <string name="verification.info_location.speed.expl">The speed at which the device is traveling in meters per second.</string>
   <string name="verification.info_cell.towers.expl">The identifying numbers of all the cell towers the device is connected to.</string>
   <string name="verification.info_wifi.expl">The name of all Wi-Fi networks in the vicinity of the device.</string>
+  <string name="verification.info_ambient.temperature.expl">Temperature around the device, from the phone sensor if available.</string>
+  <string name="verification.info_light.expl">Ambient light around the device, from the phone sensor if available.</string>
   <string name="verification.save_as.csv">Save as CSV</string>
   <string name="verification.save_csv_vault_success">Verification information saved as %s</string>
   <string name="verification.save_csv_vault_fail">There was an error saving verification information. Please try again</string>

@@ -34,20 +34,20 @@ object VerificationHelpRows {
     private fun fileRows(): List<VerificationHelpField> {
         return listOf(
             VerificationHelpField(
-                R.string.verification_info_field_hash_sha256,
-                R.string.verification_info_hash_expl
-            ),
-            VerificationHelpField(
-                R.string.verification_info_field_file_created,
-                R.string.verification_info_file_created_expl
-            ),
-            VerificationHelpField(
-                R.string.verification_info_field_file_modified,
-                R.string.verification_info_date_time_modified_expl
+                R.string.verification_info_field_filename,
+                R.string.verification_info_filename_expl
             ),
             VerificationHelpField(
                 R.string.verification_info_field_file_path,
                 R.string.verification_info_file_path_expl
+            ),
+            VerificationHelpField(
+                R.string.verification_info_field_hash,
+                R.string.verification_info_hash_expl
+            ),
+            VerificationHelpField(
+                R.string.verification_info_field_file_modified,
+                R.string.verification_info_date_time_modified_expl
             ),
             VerificationHelpField(
                 R.string.verification_info_field_proof_generated,
@@ -59,24 +59,32 @@ object VerificationHelpRows {
     private fun deviceRows(): List<VerificationHelpField> {
         return listOf(
             VerificationHelpField(
-                R.string.verification_info_field_hardware,
-                R.string.verification_info_device_model_expl
-            ),
-            VerificationHelpField(
                 R.string.verification_info_field_manufacturer,
                 R.string.verification_info_manufacturer_expl
+            ),
+            VerificationHelpField(
+                R.string.verification_info_field_hardware,
+                R.string.verification_info_device_model_expl
             ),
             VerificationHelpField(
                 R.string.verification_info_field_device_id,
                 R.string.verification_info_device_id_expl
             ),
             VerificationHelpField(
+                R.string.verification_info_field_screen_size,
+                R.string.verification_info_screen_size_expl
+            ),
+            VerificationHelpField(
                 R.string.verification_info_field_wifi_mac,
                 R.string.verification_info_wifi_mac_expl
             ),
             VerificationHelpField(
-                R.string.verification_info_field_screen_size,
-                R.string.verification_info_screen_size_expl
+                R.string.verification_info_field_language,
+                R.string.verification_info_language_expl
+            ),
+            VerificationHelpField(
+                R.string.verification_info_field_locale,
+                R.string.verification_info_locale_expl
             )
         )
     }
@@ -84,7 +92,7 @@ object VerificationHelpRows {
     private fun networkRows(): List<VerificationHelpField> {
         return listOf(
             VerificationHelpField(
-                R.string.verification_info_field_network,
+                R.string.verification_info_field_connection_status,
                 R.string.verification_info_connection_status_expl
             ),
             VerificationHelpField(
@@ -96,16 +104,16 @@ object VerificationHelpRows {
                 R.string.verification_info_data_type_expl
             ),
             VerificationHelpField(
-                R.string.verification_info_field_cell_towers,
-                R.string.verification_info_cell_towers_expl
-            ),
-            VerificationHelpField(
                 R.string.verification_info_field_ipv4,
                 R.string.verification_info_ipv4_expl
             ),
             VerificationHelpField(
                 R.string.verification_info_field_ipv6,
                 R.string.verification_info_ipv6_expl
+            ),
+            VerificationHelpField(
+                R.string.verification_info_field_cell_towers,
+                R.string.verification_info_cell_towers_expl
             ),
             VerificationHelpField(
                 R.string.verification_info_wifi,
@@ -129,16 +137,16 @@ object VerificationHelpRows {
                 R.string.verification_info_location_longitude_expl
             ),
             VerificationHelpField(
+                R.string.verification_info_field_location_altitude,
+                R.string.verification_info_location_altitude_expl
+            ),
+            VerificationHelpField(
                 R.string.verification_info_field_location_accuracy,
                 R.string.verification_info_location_accuracy_expl
             ),
             VerificationHelpField(
                 R.string.verification_info_field_location_speed,
                 R.string.verification_info_location_speed_expl
-            ),
-            VerificationHelpField(
-                R.string.verification_info_field_location_altitude,
-                R.string.verification_info_location_altitude_expl
             ),
             VerificationHelpField(
                 R.string.verification_info_field_location_time_value,
@@ -150,16 +158,12 @@ object VerificationHelpRows {
     private fun otherRows(): List<VerificationHelpField> {
         return listOf(
             VerificationHelpField(
-                R.string.verification_info_field_language,
-                R.string.verification_info_language_expl
+                R.string.verification_info_field_ambient_temperature,
+                R.string.verification_info_ambient_temperature_expl
             ),
             VerificationHelpField(
-                R.string.verification_info_field_locale,
-                R.string.verification_info_locale_expl
-            ),
-            VerificationHelpField(
-                R.string.verification_info_field_notes,
-                R.string.verification_info_notes_expl
+                R.string.verification_info_field_light,
+                R.string.verification_info_light_expl
             )
         )
     }
