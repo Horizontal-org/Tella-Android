@@ -6,6 +6,7 @@ import com.hzontal.tella_vault.MyLocation
 import com.hzontal.tella_vault.VaultFile
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.util.Util
+import org.horizontal.tella.mobile.util.VaultFolderPath
 
 data class VerificationField(
     @StringRes val labelRes: Int,
@@ -15,10 +16,15 @@ data class VerificationField(
 object VerificationMetadataRows {
     private const val DATE_FORMAT = "dd-MM-yyyy HH:mm:ss Z"
 
-    fun rows(vaultFile: VaultFile, category: VerificationCategory): List<VerificationField> {
+    @JvmOverloads
+    fun rows(
+        vaultFile: VaultFile,
+        category: VerificationCategory,
+        fileLocation: String? = null
+    ): List<VerificationField> {
         val metadata = vaultFile.metadata
         return when (category) {
-            VerificationCategory.FILE -> fileRows(vaultFile, metadata)
+            VerificationCategory.FILE -> fileRows(vaultFile, metadata, fileLocation)
             VerificationCategory.DEVICE -> deviceRows(metadata)
             VerificationCategory.NETWORK -> networkRows(metadata)
             VerificationCategory.LOCATION -> locationRows(metadata?.myLocation)
@@ -26,7 +32,11 @@ object VerificationMetadataRows {
         }
     }
 
-    private fun fileRows(vaultFile: VaultFile, metadata: Metadata?): List<VerificationField> {
+    private fun fileRows(
+        vaultFile: VaultFile,
+        metadata: Metadata?,
+        fileLocation: String?
+    ): List<VerificationField> {
         return listOf(
             VerificationField(
                 R.string.verification_info_field_filename,
@@ -34,7 +44,7 @@ object VerificationMetadataRows {
             ),
             VerificationField(
                 R.string.verification_info_field_file_path,
-                vaultFile.path?.takeIf { it.isNotBlank() }
+                fileLocation?.takeIf { it.isNotBlank() } ?: VaultFolderPath.ROOT
             ),
             VerificationField(
                 R.string.verification_info_field_hash,

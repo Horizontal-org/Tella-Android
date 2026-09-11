@@ -49,6 +49,11 @@ object VaultFolderPath {
     }
 
     @JvmStatic
+    fun resolve(fileId: String?, vault: RxVault): String {
+        return resolve(fileId) { id -> lookupFile(vault, id) }
+    }
+
+    @JvmStatic
     fun fileLocation(folderPath: String, fileName: String?): String {
         val name = fileName?.takeIf { it.isNotBlank() } ?: return folderPath.ifBlank { ROOT }
         val folder = folderPath.ifBlank { ROOT }

@@ -34,8 +34,9 @@ object VerificationMetadataCsv {
         return linkedBySource ?: existingIn(siblings, originalName)
     }
 
-    fun toCsvBytes(vaultFile: VaultFile): ByteArray {
-        val map = PublicMetadataMapper.transformToMap(vaultFile)
+    @JvmOverloads
+    fun toCsvBytes(vaultFile: VaultFile, fileLocation: String? = null): ByteArray {
+        val map = PublicMetadataMapper.transformToMap(vaultFile, fileLocation)
         val csv = buildString {
             append(map.keys.joinToString(","))
             append('\n')

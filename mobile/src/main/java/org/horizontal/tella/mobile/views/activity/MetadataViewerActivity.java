@@ -23,6 +23,7 @@ import com.hzontal.tella_vault.VaultFile;
 
 import org.horizontal.tella.mobile.R;
 import org.horizontal.tella.mobile.databinding.ActivityMetadataViewerBinding;
+import org.horizontal.tella.mobile.util.VaultFolderPath;
 import org.horizontal.tella.mobile.views.activity.viewer.SharedMediaFileViewModel;
 import org.horizontal.tella.mobile.views.activity.viewer.VaultActionsHelper;
 import org.horizontal.tella.mobile.views.activity.viewer.VerificationCategory;
@@ -31,6 +32,9 @@ import org.horizontal.tella.mobile.views.activity.viewer.VerificationField;
 import org.horizontal.tella.mobile.views.activity.viewer.VerificationMetadataRows;
 import org.horizontal.tella.mobile.views.base_ui.BaseLockActivity;
 import org.hzontal.shared_ui.utils.DialogUtils;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -49,6 +53,7 @@ public class MetadataViewerActivity extends BaseLockActivity {
     private ActivityMetadataViewerBinding binding;
     private boolean openedDirectlyToCategory;
     private boolean showingDetail;
+    private final CompositeDisposable disposables = new CompositeDisposable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +136,12 @@ public class MetadataViewerActivity extends BaseLockActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        disposables.clear();
+        super.onDestroy();
+    }
+
+    @Override
     public void finish() {
         super.finish();
         overridePendingTransition(R.anim.slide_in_end, R.anim.slide_out_start);
@@ -191,7 +202,33 @@ public class MetadataViewerActivity extends BaseLockActivity {
         metadataList.removeAllViews();
         binding.content.saveCsvButton.setVisibility(View.GONE);
 
-        for (VerificationField field : VerificationMetadataRows.INSTANCE.rows(vaultFile, category)) {
+        if (category == VerificationCategory.FILE) {
+            bindFileCategory(category);
+            return;
+        }
+        bindRows(category, null);
+    }
+
+    private void bindFileCategory(VerificationCategory category) {
+        disposables.clear();
+        disposables.add(
+                VaultFolderPath.resolveAsync(vaultFile.id)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                path -> bindRows(category, path),
+                                ignored -> bindRows(category, VaultFolderPath.ROOT)
+                        )
+        );
+    }
+
+    private void bindRows(VerificationCategory category, String fileLocation) {
+        if (isFinishing() || vaultFile == null) {
+            return;
+        }
+        metadataList.removeAllViews();
+        for (VerificationField field : VerificationMetadataRows.INSTANCE.rows(
+                vaultFile, category, fileLocation
+        )) {
             metadataList.addView(createMetadataItem(field.getValue(), getString(field.getLabelRes())));
         }
     }

@@ -818,13 +818,24 @@ public class MediaFileHandler {
         try {
             OutputStream os = getMetadataOutputStream(mmf);
             if (os != null) {
-                os.write(VerificationMetadataCsv.INSTANCE.toCsvBytes(vaultFile));
+                os.write(VerificationMetadataCsv.INSTANCE.toCsvBytes(
+                        vaultFile,
+                        vaultFolderPath(vaultFile)
+                ));
                 os.close();
             }
         } catch (Exception e) {
             Timber.d(e);
         }
         return mmf;
+    }
+
+    private static String vaultFolderPath(VaultFile vaultFile) {
+        try {
+            return VaultFolderPath.resolveAsync(vaultFile.id).blockingGet();
+        } catch (Exception e) {
+            return VaultFolderPath.ROOT;
+        }
     }
 
     /**
@@ -849,7 +860,10 @@ public class MediaFileHandler {
                     if (existing != null) {
                         throw alreadySavedException(rxVault, existing);
                     }
-                    byte[] csv = VerificationMetadataCsv.INSTANCE.toCsvBytes(vaultFile);
+                    byte[] csv = VerificationMetadataCsv.INSTANCE.toCsvBytes(
+                            vaultFile,
+                            VaultFolderPath.resolve(vaultFile.id, rxVault)
+                    );
                     RxVaultFileBuilder builder = rxVault
                             .builder(new ByteArrayInputStream(csv))
                             .setMimeType(VerificationMetadataCsv.MIME_TYPE)
