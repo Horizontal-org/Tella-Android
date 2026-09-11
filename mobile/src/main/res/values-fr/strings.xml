@@ -64,7 +64,7 @@
     <string name="action_play">Lire</string>
     <string name="action_record">Enregistrer</string>
     <string name="play.audio_app.bar">Lecture d’un contenu son</string>
-    <string name="collect_dialog.text_delete.sent.form">Voulez-vous vraiment supprimer ce formulaire de l’appareil ? Comme les données ont déjà été envoyées, elles resteront sur le serveur de votre organisation.</string>
+    <string name="collect_dialog.text_delete.sent.form">Voulez-vous vraiment supprimer ce formulaire de l’appareil ? Comme les données ont déjà été envoyées, elles resteront sur le serveur de votre organisation.</string>
     <string name="collect_dialog.text_delete.draft.form">Le brouillon sera supprimé.</string>
     <string name="collect_toast_form.deleted">Le formulaire a été supprimé</string>
     <string name="settings.lang_select.expl_default">Garder Tella dans la même langue que mon appareil</string>
@@ -951,7 +951,7 @@
     <string name="onboard_lock_success_message">Votre mode de déverrouillage est activé! Vous pouvez le changer à tout moment dans les paramètres de Tella.</string>
     <string name="onboard_lock_success_learn_more">En savoir plus sur les modes de déverouillage de Tella.</string>
     <string name="Uwazi_DeleteEntity_SheetTitle">Supprimer l\'entité ?</string>
-    <string name="Uwazi_Subtitle_RemoveSubmittedEntity">Voulez-vous vraiment supprimer ce formulaire de l’appareil ? Comme les données ont déjà été envoyées, elles resteront sur le serveur de votre organisation.</string>
+    <string name="Uwazi_Subtitle_RemoveSubmittedEntity">Voulez-vous vraiment supprimer ce formulaire de l’appareil ? Comme les données ont déjà été envoyées, elles resteront sur le serveur de votre organisation.</string>
     <string name="Uwazi_Entity_Deleted_Toast">\"%1$d\" a été supprimé.</string>
     <string name="google_drive_shared_drive_migration_sheet_title">Créer un nouveau dossier Google Drive</string>
     <string name="google_drive_shared_drive_migration_sheet_message">Tella no longer supports shared drives. To continue submitting reports to Google Drive, please create a new personal folder.</string>
@@ -1116,7 +1116,7 @@
     <string name="onboard.share_data_connections">Tella supports server Connections to:</string>
     <string name="onboard.expl_camera_info">These files are saved in Tella, and cannot be seen from your phone’s regular gallery.</string>
     <string name="Uwazi_RemoveTemplate_ConfirmTitle">Remove \"%1$s\"?</string>
-    <string name="Uwazi_Template_Removed_Toast">\"%1$s\" has been removed from your device.</string>
-    <string name="onboard.title_nearby_sharing">Share files nearby</string>
+    <string name="Uwazi_Template_Removed_Toast">\"%1$d\" a été supprimé de vos téléchargements.</string>
+    <string name="onboard.title_nearby_sharing">Ne partager que les fichiers</string>
     <string name="peer_to_peer_invalid_details_message">Please ask the sender to verify their connection details and try again.</string>
 </resources>
