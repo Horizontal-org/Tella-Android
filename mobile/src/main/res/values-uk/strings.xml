@@ -895,7 +895,7 @@
     <string name="create_new_folder">СТВОРИТИ НОВУ ПАПКУ</string>
     <string name="use_shared_drive">ВИКОРИСТОВУВАТИ СПІЛЬНИЙ ДИСК</string>
     <string name="go_to_google_drive">ПЕРЕЙТИ ДО GOOGLE ДИСКУ</string>
-    <string name="select_google_drive">Виберіть Google диск</string>
+    <string name="select_google_drive">Виберіть Google Диск</string>
     <string name="google_drive" translatable="false">Google Drive</string>
     <string name="learn_more_about_the_types_of_drives">Дізнайтеся більше про типи дисків.</string>
     <string name="description_google_drive">Ви можете під’єднатися до спільного диска організації або створити нову папку на своєму особистому диску.</string>

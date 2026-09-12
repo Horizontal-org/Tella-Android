@@ -28,10 +28,16 @@
     <string name="Vault_FilePath">Шлях до файлу</string>
     <string name="Vault_RenameFile_SheetTitle">Перейменувати файл</string>
     <plurals name="Vault_DeleteFile_SheetTitle">
-        <item quantity="one">Delete file?</item>
+        <item quantity="one">Видалити файл?</item>
+        <item quantity="few">Видалити файли?</item>
+        <item quantity="many">Видалити файлів?</item>
+        <item quantity="other">Видалити файлів?</item>
     </plurals>
     <plurals name="Vault_deleteFile_SheetDesc">
-        <item quantity="one">The selected file will be permanently delated from Tella.</item>
+        <item quantity="one">Обраний файл буде назавжди видалено з Tella.</item>
+        <item quantity="few">Обрані файли будуть назавжди видалені з Tella.</item>
+        <item quantity="many">Обрані файлів будуть назавжди видалені з Tella.</item>
+        <item quantity="other">Обрані файлів будуть назавжди видалені з Tella.</item>
     </plurals>
     <string name="Vault_SortNameAsc_SheetAction">Назва: А – Я</string>
     <string name="Vault_SortNameDesc_SheetAction">Назва: Я – А</string>
@@ -48,12 +54,18 @@
     <string name="Vault_ViewerOther_SheetDesc">Цей формат файлу неможливо відкрити в Tella. Бажаєте зберегти файл на пристрій, щоб відкрити його через іншу програму? Це може зробити вміст файлу доступним для інших.</string>
     <string name="Vault_Export_SheetAction">Експортувати</string>
     <plurals name="Vault_Items">
-        <item quantity="one">item</item>
+        <item quantity="one">елемент</item>
+        <item quantity="few">елементи</item>
+        <item quantity="many">елементів</item>
+        <item quantity="other">елементів</item>
     </plurals>
     <string name="Vault_No_Files_Title">У вас ще немає файлів у Tella.</string>
     <string name="Vault_FavoriteTemplates_Title">Обрані шаблони</string>
     <plurals name="Vault_File_Successfully_Moved">
         <item quantity="one">Файл успішно переміщено</item>
+        <item quantity="few">Файли успішно переміщено</item>
+        <item quantity="many">Файлів успішно переміщено</item>
+        <item quantity="other">Файлів успішно переміщено</item>
     </plurals>
     <string name="Vault_Confirm_delete_Description">Деякі з вибраних файлів наразі використовуються у ваших з’єднаннях. Видалення може вплинути на форми та звіти, які ще не були надіслані.</string>
     <string name="Vault_Warning_Title">Попередження</string>
@@ -64,5 +76,5 @@
     <string name="Vault_FileEdit_SheetAction">Редагувати</string>
     <string name="Vault_SaveToDevice_SheetTitle">Зберегти \"%1$s\" на пристрій?</string>
     <string name="Vault_SaveToDevice_SheetAction">ЗБЕРЕГТИ НА ПРИСТРІЙ</string>
-    <string name="Vault_Folder_Empty_Msg">This folder is empty! Tap the + button below to import a file or create a folder.</string>
+    <string name="Vault_Folder_Empty_Msg">Ця папка порожня! Натисніть кнопку + нижче, щоб імпортувати файл або створити папку.</string>
 </resources>

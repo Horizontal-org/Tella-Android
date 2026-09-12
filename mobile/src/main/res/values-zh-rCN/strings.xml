@@ -1065,7 +1065,7 @@
     <string name="peer_to_peer_missing_file_hash">Some files are missing a checksum and can\'t be sent. Try again later or re-add the files.</string>
     <string name="peer_to_peer_error_too_many_requests">Too many requests. Wait a moment and try again.</string>
     <string name="onboard.expl_camera_info">这些文件保存在 Tella 中，无法从手机的常规相册中查看。</string>
-    <string name="onboard.title_nearby_sharing">Share files nearby</string>
+    <string name="onboard.title_nearby_sharing">仅分享文件</string>
     <string name="peer_to_peer_invalid_pin">Invalid PIN</string>
     <string name="peer_to_peer_invalid_request_format">Invalid request format.</string>
     <string name="peer_to_peer_active_session_exists">A session is already active on the other device. Try again later.</string>
@@ -1081,14 +1081,14 @@
     <string name="tips_more_item_2">Check out Tella’s documentation to learn more about Nearby Sharing.</string>
     <string name="collect_form_geopoint_first_load_title">Loading map data for your area</string>
     <string name="collect_form_geopoint_first_load_message">Please wait until the map finishes loading before selecting a location.</string>
-    <string name="verification.prompt_dialog.media.file.expl">In verification mode, GPS is required to record geolocation information. Turn on GPS so Tella can record the geolocation of your media file.</string>
+    <string name="verification.prompt_dialog.media.file.expl">验证模式开启但 GPS 关闭。为了记录证据的位置，请打开 GPS。</string>
     <string name="camera_shutter_dnd_dialog_expl">To enable camera silent mode, please go to your device’s settings and turn on “Do Not Disturb” mode for the Tella app.</string>
     <string name="camera_shutter_dnd_camera_dialog_expl">For added security, you can silence the shutter sound on Tella’s camera. To enable camera silent mode, please go to your device’s settings and turn on “Do Not Disturb” for the Tella app.</string>
     <string name="camera_shutter_dnd_enable_action">启用</string>
     <string name="camera_shutter_dnd_disable_action">禁用</string>
     <string name="Show_Project_Url_Sheet_Show_Url">Show URL</string>
     <string name="action_go_to_settings">前往设置</string>
-    <string name="scan_recipient_qr_code">Scan recipient QR code</string>
+    <string name="scan_recipient_qr_code">扫描接收人的二维码</string>
     <string name="peer_to_peer_manual_ping_failed">Could not reach the other device. Check the connection details and that both devices are on the same Wi-Fi network.</string>
     <string name="peer_to_peer_incompatible_versions_title">Incompatible versions</string>
     <string name="peer_to_peer_incompatible_versions_message">The other device is running an older, incompatible version of Tella. Both devices need to be updated to use Nearby Sharing.</string>
@@ -1097,7 +1097,7 @@
     <string name="peer_to_peer_qr_scanned_number_not_json">The scanner read a number, not a connection QR. Center the square QR on the recipient screen (not the PIN text), avoid scanning a laptop/emulator display if possible, and wait until the QR fully loads.</string>
     <string name="collect_form_geopoint_first_load_message_secondary">This may take some time, depending on your Internet connection.</string>
     <string name="Uwazi_RemoveTemplate_ConfirmTitle">Remove \"%1$s\"?</string>
-    <string name="Uwazi_Template_Removed_Toast">\"%1$s\" has been removed from your device.</string>
+    <string name="Uwazi_Template_Removed_Toast">“%s”已从您的下载中移除。</string>
     <string name="peer_to_peer_invalid_details_message">Please ask the sender to verify their connection details and try again.</string>
     <string name="Foss_Feature_Unavailable_Description">This feature is not compatible with the Free and Open Source version of Tella you are using.</string>
     <string name="Show_Project_Url_Sheet_Hide_Url">Hide URL</string>
