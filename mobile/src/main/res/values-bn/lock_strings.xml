@@ -52,4 +52,5 @@
     <string name="incorrect_pin">ভুল পিন। &#13;\n&#13;\n</string>
     <string name="incorrect_password">ভুল পাসওয়ার্ড। &#13;\n&#13;\n</string>
     <string name="incorrect_pattern">ভুল প্যাটার্ন।&#13;\n&#13;\n</string>
+    <string name="unlock">আনলক করুন</string>
 </resources>
