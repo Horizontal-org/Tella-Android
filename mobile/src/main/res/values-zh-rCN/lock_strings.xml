@@ -52,4 +52,5 @@
     <string name="incorrect_pin">Pin 码错误。 &#13;\n&#13;\n</string>
     <string name="incorrect_password">密码错误。 &#13;\n&#13;\n</string>
     <string name="incorrect_pattern">图案错误。&#13;\n&#13;\n</string>
+    <string name="unlock">解锁</string>
 </resources>
