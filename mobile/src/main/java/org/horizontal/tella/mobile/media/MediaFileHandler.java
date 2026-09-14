@@ -4,10 +4,12 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,6 +20,7 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.provider.DocumentsContract;
 import android.provider.OpenableColumns;
 import android.text.TextUtils;
@@ -89,6 +92,7 @@ public class MediaFileHandler {
     private static File tmpPath;
     private static final String CONTENT_SCHEME = "content";
     private static final String MIME_TYPE_COLUMN = "mime_type";
+    private static final String SIGNAL_PACKAGE = "org.thoughtcrime.securesms";
 
 
     public MediaFileHandler() {
@@ -1000,8 +1004,10 @@ public class MediaFileHandler {
 
     @SuppressLint("CheckResult")
     public static void startShareActivity(Context context, List<VaultFile> mediaFiles, boolean includeMetadata) {
-        if (!includeMetadata || !hasVerificationMetadata(mediaFiles)) {
-            launchShare(context, collectShareUris(context, mediaFiles, false), "*/*", true);
+        boolean withVerification = includeMetadata && hasVerificationMetadata(mediaFiles);
+        ArrayList<Uri> uris = collectShareUris(context, mediaFiles, withVerification);
+        if (!withVerification || !isSignalShareAvailable(context)) {
+            launchShare(context, uris, "*/*", uris.size() > 1, null);
             return;
         }
 
@@ -1010,16 +1016,10 @@ public class MediaFileHandler {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        uri -> launchShare(context, Collections.singletonList(uri),
-                                VerificationMetadataCsv.MIME_TYPE_ZIP, false),
+                        zipUri -> launchShare(context, uris, "*/*", uris.size() > 1, zipUri),
                         error -> {
                             Timber.e(error, MediaFileHandler.class.getName());
-                            launchShare(
-                                    context,
-                                    collectShareUris(context, mediaFiles, true),
-                                    "*/*",
-                                    true
-                            );
+                            launchShare(context, uris, "*/*", uris.size() > 1, null);
                         }
                 );
     }
@@ -1148,6 +1148,16 @@ public class MediaFileHandler {
             String mimeType,
             boolean multiple
     ) {
+        launchShare(context, uris, mimeType, multiple, null);
+    }
+
+    private static void launchShare(
+            Context context,
+            List<Uri> uris,
+            String mimeType,
+            boolean multiple,
+            @Nullable Uri signalZipUri
+    ) {
         if (uris.isEmpty()) {
             return;
         }
@@ -1169,6 +1179,9 @@ public class MediaFileHandler {
 
         Intent chooser = Intent.createChooser(shareIntent, context.getText(R.string.action_share));
         chooser.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        if (signalZipUri != null) {
+            attachSignalZipShare(context, chooser, shareIntent, signalZipUri);
+        }
         if (!(context instanceof Activity)) {
             chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
@@ -1177,6 +1190,78 @@ public class MediaFileHandler {
         } catch (Exception e) {
             Timber.e(e, MediaFileHandler.class.getName());
         }
+    }
+
+    private static boolean isSignalShareAvailable(Context context) {
+        Intent probe = new Intent(Intent.ACTION_SEND);
+        probe.setType(VerificationMetadataCsv.MIME_TYPE_ZIP);
+        probe.setPackage(SIGNAL_PACKAGE);
+        return !queryShareActivities(context, probe).isEmpty();
+    }
+
+    private static void attachSignalZipShare(
+            Context context,
+            Intent chooser,
+            Intent defaultShare,
+            Uri zipUri
+    ) {
+        Intent signalIntent = new Intent(Intent.ACTION_SEND);
+        signalIntent.setType(VerificationMetadataCsv.MIME_TYPE_ZIP);
+        signalIntent.putExtra(Intent.EXTRA_STREAM, zipUri);
+        signalIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        signalIntent.setClipData(ClipData.newRawUri(null, zipUri));
+        signalIntent.setPackage(SIGNAL_PACKAGE);
+
+        List<ResolveInfo> signalActivities = queryShareActivities(context, signalIntent);
+        if (signalActivities.isEmpty()) {
+            return;
+        }
+
+        ResolveInfo target = signalActivities.get(0);
+        signalIntent.setPackage(null);
+        signalIntent.setComponent(new ComponentName(
+                target.activityInfo.packageName,
+                target.activityInfo.name
+        ));
+        context.grantUriPermission(
+                SIGNAL_PACKAGE,
+                zipUri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+        );
+        chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Parcelable[]{signalIntent});
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            ArrayList<ComponentName> exclude = new ArrayList<>();
+            for (ResolveInfo info : queryShareActivities(context, defaultShare)) {
+                if (SIGNAL_PACKAGE.equals(info.activityInfo.packageName)) {
+                    exclude.add(new ComponentName(
+                            info.activityInfo.packageName,
+                            info.activityInfo.name
+                    ));
+                }
+            }
+            if (!exclude.isEmpty()) {
+                chooser.putExtra(
+                        Intent.EXTRA_EXCLUDE_COMPONENTS,
+                        exclude.toArray(new ComponentName[0])
+                );
+            }
+        }
+    }
+
+    private static List<ResolveInfo> queryShareActivities(Context context, Intent intent) {
+        PackageManager packageManager = context.getPackageManager();
+        int flags = PackageManager.MATCH_DEFAULT_ONLY;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            flags = PackageManager.MATCH_ALL;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            return packageManager.queryIntentActivities(
+                    intent,
+                    PackageManager.ResolveInfoFlags.of(flags)
+            );
+        }
+        return packageManager.queryIntentActivities(intent, flags);
     }
 
     private static File getFile(VaultFile vaultFile) {

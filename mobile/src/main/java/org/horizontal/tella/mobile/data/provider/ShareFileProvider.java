@@ -5,7 +5,7 @@ import androidx.core.content.FileProvider;
 import org.horizontal.tella.mobile.BuildConfig;
 
 /**
- * Serves plaintext files from cache for sharing (e.g. a zip of media + verification CSV).
+ * Serves plaintext files from cache for sharing (e.g. a Signal zip of media + verification CSV).
  * Encrypted vault files stay on {@link EncryptedFileProvider}.
  */
 public class ShareFileProvider extends FileProvider {

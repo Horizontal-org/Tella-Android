@@ -249,7 +249,7 @@ Turn on GPS so Tella can record the position of your evidence.</string>
   <string name="verification.collecting_list.item_network">Network information</string>
   <string name="verification.collecting_dialog.expl">Tella is recording information to make your file verifiable. It can take several minutes. Make sure your device\'s view of the sky is unobstructed for better results.</string>
   <string name="verification.help.info_app.bar">Verification help</string>
-  <string name="verification.help.intro">Verification mode enables users to make photos, videos, and audio captured in Tella verifiable by collecting metadata, notarizing, and signing the files. Using Verification Mode increases the likelihood that evidence collected on Tella can be used in the media, research, or in court. %1$s</string>
+  <string name="verification.help.intro">Verification mode enables users to make photos, videos, and audio captured in Tella verifiable by collecting metadata. Using Verification Mode increases the likelihood that evidence collected on Tella can be used in the media, research, or in court. %1$s</string>
   <string name="verification.help.categories">The verification information can be divided into five categories:</string>
   <string name="verification.help.file.bar">File help</string>
   <string name="verification.help.device.bar">Device help</string>
