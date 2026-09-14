@@ -996,7 +996,8 @@ Would you like to share analytics with the Tella team?</string>
   <string name="select_file_picker">Select a file manager</string>
   <string name="gallery_toast_fail_import_no_file_manager">No file manager app found. Please install a file manager app (like Google Files, Fossify File Manager, or any other file manager) to import files.</string>
   <string name="onboard_lock_warning_title">Don\'t lose your files</string>
-  <string name="onboard_lock_warning_message">Your lock is the only way to access your Tella files.\n\nIf you forget your lock, there is currently no way to recover it. Your data inside Tella will be lost forever.</string>
+  <string name="onboard_lock_warning_message">Your lock is the only way to access your Tella files.</string>
+  <string name="onboard_lock_warning_message_recover">If you forget your lock, there is currently no way to recover it. Your data inside Tella will be lost forever.</string>
   <string name="onboard_lock_warning_cta">I understand</string>
   <string name="onboard_lock_protect_sheet_title">Protect your lock</string>
   <string name="onboard_lock_protect_sheet_message">Make sure to remember your lock or save it somewhere safe like a password manager.</string>
