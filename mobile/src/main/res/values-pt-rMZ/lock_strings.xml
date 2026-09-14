@@ -52,4 +52,5 @@
     <string name="incorrect_pin">Pin incorrecto. &#13;\n&#13;\n</string>
     <string name="incorrect_password">Palavra-passe incorrecta. &#13;\n&#13;\n</string>
     <string name="incorrect_pattern">Padrão incorrecto.&#13;\n&#13;\n</string>
+    <string name="unlock">Desbloquear</string>
 </resources>
