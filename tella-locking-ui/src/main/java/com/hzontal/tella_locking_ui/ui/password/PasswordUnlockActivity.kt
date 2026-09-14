@@ -44,6 +44,8 @@ class PasswordUnlockActivity : BasePasswordActivity() {
         enterPasswordTextView.isVisible = false
         passwordLeftButton.isVisible = false
         passwordRightButton.isVisible = false
+        passwordMsgHintSecond.isVisible = false
+        passwordMsgHintThird.isVisible = false
         passwordEditText.setOnKeyListener { _, keyCode, keyEvent ->
             if (keyEvent.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
                 if (isHiLighted) onSuccessSetPassword(mPassword)

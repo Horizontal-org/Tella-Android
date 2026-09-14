@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -85,8 +84,6 @@ abstract class BaseReportsEntryFragment :
             layoutManager = gridLayoutManager
             adapter = filesRecyclerViewAdapter
         }
-        binding.toolbar.findViewById<TextView>(org.hzontal.shared_ui.R.id.startTitleTv)
-            ?.setTextAppearance(org.hzontal.shared_ui.R.style.TextAppearance_Tella_Heading1)
         binding.toolbar.backClickListener = {
             exitOrSave()
         }

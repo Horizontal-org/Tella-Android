@@ -25,6 +25,7 @@ class ConfirmPinActivity  : BasePinActivity() {
         pinMsgText.gravity = Gravity.CENTER
         pinMsgText.textAlignment = View.TEXT_ALIGNMENT_CENTER
         pinMsgText.text = getString(R.string.LockPinConfirm_Message_Confirm)
+        pinMsgHintSecond.visibility = View.GONE
         pinEditText.setHint(R.string.LockPinSet_Message_Confirm)
     }
 

@@ -71,30 +71,28 @@
 
         <TextView
             android:id="@+id/back_btn"
+            style="@style/Typography.ButtonL"
             android:layout_width="120dp"
             android:layout_height="54dp"
             android:layout_marginEnd="12dp"
             android:background="@drawable/bg_uwazi_language_cancel_btn"
-            android:fontFamily="@font/open_sans"
             android:gravity="center"
             android:includeFontPadding="false"
             android:text="@string/action_cancel"
             android:textAllCaps="true"
-            android:textColor="@color/btn_dark_letter"
-            android:textSize="16sp" />
+            android:textColor="@color/btn_dark_letter" />
 
         <TextView
             android:id="@+id/next_btn"
+            style="@style/Typography.ButtonL"
             android:layout_width="120dp"
             android:layout_height="54dp"
             android:background="@drawable/bg_uwazi_language_ok_btn"
-            android:fontFamily="@font/open_sans"
             android:gravity="center"
             android:includeFontPadding="false"
             android:text="@string/action_ok"
             android:textAllCaps="true"
-            android:textColor="@color/wa_white"
-            android:textSize="16sp" />
+            android:textColor="@color/wa_white" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

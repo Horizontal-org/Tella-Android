@@ -48,7 +48,7 @@
         android:id="@+id/startTitleTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Tella_Main_White_Text.Meduim"
+        style="@style/Typography.Heading1"
         android:visibility="gone"
         android:layout_marginStart="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
