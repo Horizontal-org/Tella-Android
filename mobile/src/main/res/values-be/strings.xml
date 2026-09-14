@@ -1101,6 +1101,6 @@
     <string name="onboard.expl_camera_info">These files are saved in Tella, and cannot be seen from your phone’s regular gallery.</string>
     <string name="peer_to_peer_invalid_details_message">Please ask the sender to verify their connection details and try again.</string>
     <string name="Uwazi_RemoveTemplate_ConfirmTitle">Remove \"%1$s\"?</string>
-    <string name="Uwazi_Template_Removed_Toast">\"%1$s\" has been removed from your device.</string>
-    <string name="onboard.title_nearby_sharing">Share files nearby</string>
+    <string name="Uwazi_Template_Removed_Toast">\"%s\" has been removed from your downloads.</string>
+    <string name="onboard.title_nearby_sharing">Падзяліцца толькі мультымедыйным файлам</string>
 </resources>
