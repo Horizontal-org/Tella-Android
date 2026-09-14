@@ -1,11 +1,15 @@
 package org.horizontal.tella.mobile.media;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.ClipData;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,6 +20,7 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.provider.DocumentsContract;
 import android.provider.OpenableColumns;
 import android.text.TextUtils;
@@ -51,27 +56,34 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Callable;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 import org.horizontal.tella.mobile.MyApplication;
 import org.horizontal.tella.mobile.R;
 import org.horizontal.tella.mobile.data.provider.EncryptedFileProvider;
+import org.horizontal.tella.mobile.data.provider.ShareFileProvider;
 import org.horizontal.tella.mobile.data.sharedpref.Preferences;
-import org.horizontal.tella.mobile.presentation.entity.mapper.PublicMetadataMapper;
 import org.horizontal.tella.mobile.util.C;
 import org.horizontal.tella.mobile.util.FileUtil;
+import org.horizontal.tella.mobile.util.VaultFolderPath;
+
+import com.hzontal.tella_vault.database.VaultDataSource;
+import com.hzontal.tella_vault.exceptions.FileNameAlreadyExistsException;
 
 import timber.log.Timber;
 
@@ -80,6 +92,7 @@ public class MediaFileHandler {
     private static File tmpPath;
     private static final String CONTENT_SCHEME = "content";
     private static final String MIME_TYPE_COLUMN = "mime_type";
+    private static final String SIGNAL_PACKAGE = "org.thoughtcrime.securesms";
 
 
     public MediaFileHandler() {
@@ -282,9 +295,6 @@ public class MediaFileHandler {
             throw new IOException("Failed to create directory: " + basePath);
         }
 
-        if (basePath == null) {
-            throw new IOException("External files dir unavailable for: " + envDirType);
-        }
         if (!basePath.exists() && !basePath.mkdirs()) {
             throw new IOException("Failed to create directory: " + basePath);
         }
@@ -804,23 +814,153 @@ public class MediaFileHandler {
         }
     }
 
-    //TODO CHECK CSV FILE
+    /**
+     * Temporary CSV used when sharing or exporting to the device. Not registered as a vault file.
+     * Use {@link #saveVerificationMetadataToVault} to persist a CSV in the encrypted vault.
+     */
     public static VaultFile maybeCreateMetadataMediaFile(VaultFile vaultFile) {
         VaultFile mmf = new VaultFile();
-        String name = vaultFile.name.substring(0, vaultFile.name.lastIndexOf('.'));
-        mmf.name = name + ".csv";
-        mmf.id = name;
-        mmf.mimeType = "text/csv";
+        mmf.name = VerificationMetadataCsv.INSTANCE.fileNameFor(vaultFile.name);
+        mmf.id = mmf.name;
+        mmf.mimeType = VerificationMetadataCsv.MIME_TYPE;
 
         try {
             OutputStream os = getMetadataOutputStream(mmf);
-
-
-            createMetadataFile(os, vaultFile);
+            if (os != null) {
+                os.write(VerificationMetadataCsv.INSTANCE.toCsvBytes(
+                        vaultFile,
+                        vaultFolderPath(vaultFile)
+                ));
+                os.close();
+            }
         } catch (Exception e) {
             Timber.d(e);
         }
         return mmf;
+    }
+
+    private static String vaultFolderPath(VaultFile vaultFile) {
+        try {
+            return VaultFolderPath.resolveAsync(vaultFile.id).blockingGet();
+        } catch (Exception e) {
+            return VaultFolderPath.ROOT;
+        }
+    }
+
+    /**
+     * Persists verification metadata as a CSV in the vault (same folder when {@code parentId} is set).
+     * Named like the original file so the pair stays identifiable after Nearby Sharing or re-import.
+     * The CSV is linked to the original via {@link VaultFile#sourceFileId}. If that CSV already
+     * exists anywhere in the vault, throws {@link VerificationMetadataAlreadySavedException}.
+     */
+    public static Single<VaultFile> saveVerificationMetadataToVault(
+            @NonNull VaultFile vaultFile,
+            @Nullable String parentId
+    ) {
+        return Single.fromCallable(() -> {
+                    if (vaultFile.metadata == null) {
+                        throw new IllegalArgumentException("Vault file has no verification metadata");
+                    }
+                    String name = VerificationMetadataCsv.INSTANCE.fileNameFor(vaultFile.name);
+                    String folderId = VerificationMetadataCsv.INSTANCE.parentFolderId(
+                            parentId, vaultFile.parentId);
+                    RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
+                    VaultFile existing = findLinkedVerificationCsv(rxVault, vaultFile, folderId);
+                    if (existing != null) {
+                        throw alreadySavedException(rxVault, existing);
+                    }
+                    byte[] csv = VerificationMetadataCsv.INSTANCE.toCsvBytes(
+                            vaultFile,
+                            VaultFolderPath.resolve(vaultFile.id, rxVault)
+                    );
+                    RxVaultFileBuilder builder = rxVault
+                            .builder(new ByteArrayInputStream(csv))
+                            .setMimeType(VerificationMetadataCsv.MIME_TYPE)
+                            .setName(name)
+                            .setAnonymous(true)
+                            .setType(VaultFile.Type.FILE)
+                            .setSourceFileId(vaultFile.id);
+                    try {
+                        return builder.build(folderId).blockingGet();
+                    } catch (Exception e) {
+                        if (isFileNameAlreadyExists(e)) {
+                            VaultFile linked = findLinkedVerificationCsv(rxVault, vaultFile, folderId);
+                            if (linked != null) {
+                                throw alreadySavedException(rxVault, linked);
+                            }
+                            throw alreadySavedException(rxVault, folderId, name);
+                        }
+                        throw e;
+                    }
+                })
+                .subscribeOn(Schedulers.io());
+    }
+
+    /**
+     * Saves the verification CSV in the vault if it is not already there.
+     * Already-saved is ignored so device export can still complete.
+     */
+    public static void saveVerificationMetadataToVaultIfMissing(@NonNull VaultFile vaultFile) {
+        if (vaultFile.metadata == null) {
+            return;
+        }
+        try {
+            saveVerificationMetadataToVault(vaultFile, vaultFile.parentId).blockingGet();
+        } catch (Exception e) {
+            if (VerificationMetadataAlreadySavedExceptionKt.asVerificationMetadataAlreadySaved(e) != null) {
+                return;
+            }
+            Timber.e(e, "Could not save verification CSV to vault during export");
+        }
+    }
+
+    @Nullable
+    private static VaultFile findLinkedVerificationCsv(
+            RxVault rxVault,
+            VaultFile original,
+            String folderId
+    ) {
+        VaultFile linked = rxVault.findBySourceFileId(original.id);
+        VaultFile parent = new VaultFile();
+        parent.id = folderId != null ? folderId : VaultDataSource.ROOT_UID;
+        List<VaultFile> siblings = rxVault.list(parent).blockingGet();
+        VaultFile existing = VerificationMetadataCsv.INSTANCE.existingCsv(
+                linked, siblings, original.name);
+        if (existing != null && linked == null && original.id != null) {
+            rxVault.linkToSourceFile(existing.id, original.id);
+        }
+        return existing;
+    }
+
+    private static VerificationMetadataAlreadySavedException alreadySavedException(
+            RxVault rxVault,
+            VaultFile existing
+    ) {
+        String folderId = existing.parentId != null ? existing.parentId : VaultDataSource.ROOT_UID;
+        String csvName = existing.name != null
+                ? existing.name
+                : VerificationMetadataCsv.INSTANCE.fileNameFor(null);
+        return alreadySavedException(rxVault, folderId, csvName);
+    }
+
+    private static VerificationMetadataAlreadySavedException alreadySavedException(
+            RxVault rxVault,
+            String folderId,
+            String csvName
+    ) {
+        return new VerificationMetadataAlreadySavedException(
+                VaultFolderPath.fileLocationInFolder(folderId, csvName, rxVault));
+    }
+
+    private static boolean isFileNameAlreadyExists(Throwable throwable) {
+        Throwable current = throwable;
+        while (current != null) {
+            if (current instanceof FileNameAlreadyExistsException) {
+                return true;
+            }
+            current = current.getCause();
+        }
+        return false;
     }
 
 
@@ -838,16 +978,6 @@ public class MediaFileHandler {
 
     private static long getSize(File file) {
         return file.length() - EncryptedFileProvider.IV_SIZE;
-    }
-
-    private static void createMetadataFile(@NonNull OutputStream os, @NonNull VaultFile vaultFile) {
-        LinkedHashMap<String, String> map = PublicMetadataMapper.transformToMap(vaultFile);
-
-        PrintStream ps = new PrintStream(os);
-        ps.println(TextUtils.join(",", map.keySet()));
-        ps.println(TextUtils.join(",", map.values()));
-        ps.flush();
-        ps.close();
     }
 
     @Nullable
@@ -869,42 +999,269 @@ public class MediaFileHandler {
         }
 
         Uri mediaFileUri = getEncryptedUri(context, vaultFile);
-        Intent shareIntent = new Intent();
-        shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.setType(vaultFile.mimeType);
-        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-        Intent chooser = Intent.createChooser(shareIntent, context.getText(R.string.action_share));
-        chooser.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
-        shareIntent.putExtra(Intent.EXTRA_STREAM, mediaFileUri);
-
-        context.startActivity(chooser);
+        launchShare(context, Collections.singletonList(mediaFileUri), vaultFile.mimeType, false);
     }
 
+    @SuppressLint("CheckResult")
     public static void startShareActivity(Context context, List<VaultFile> mediaFiles, boolean includeMetadata) {
-        ArrayList<Uri> uris = new ArrayList<>();
+        boolean withVerification = includeMetadata && hasVerificationMetadata(mediaFiles);
+        ArrayList<Uri> uris = collectShareUris(context, mediaFiles, withVerification);
+        if (!withVerification || !isSignalShareAvailable(context)) {
+            launchShare(context, uris, "*/*", uris.size() > 1, null);
+            return;
+        }
 
+        Context appContext = context.getApplicationContext();
+        Single.fromCallable(() -> createVerificationShareZip(appContext, mediaFiles))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        zipUri -> launchShare(context, uris, "*/*", uris.size() > 1, zipUri),
+                        error -> {
+                            Timber.e(error, MediaFileHandler.class.getName());
+                            launchShare(context, uris, "*/*", uris.size() > 1, null);
+                        }
+                );
+    }
+
+    private static boolean hasVerificationMetadata(List<VaultFile> mediaFiles) {
+        for (VaultFile vaultFile : mediaFiles) {
+            if (vaultFile != null && vaultFile.metadata != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static ArrayList<Uri> collectShareUris(
+            Context context,
+            List<VaultFile> mediaFiles,
+            boolean includeMetadata
+    ) {
+        ArrayList<Uri> uris = new ArrayList<>();
         for (VaultFile vaultFile : mediaFiles) {
             uris.add(getEncryptedUri(context, vaultFile));
-
-            if (includeMetadata && vaultFile.metadata != null) {
+            if (includeMetadata && vaultFile.metadata != null &&
+                    VerificationMetadataCsv.INSTANCE.csvInSelection(vaultFile, mediaFiles) == null) {
                 Uri metadataUri = getMetadataUri(context, vaultFile);
                 if (metadataUri != null) {
                     uris.add(metadataUri);
                 }
             }
         }
+        return uris;
+    }
 
+    private static Uri createVerificationShareZip(Context context, List<VaultFile> mediaFiles)
+            throws IOException {
+        File shareDir = new File(context.getCacheDir(), "share");
+        if (shareDir.exists()) {
+            File[] existing = shareDir.listFiles();
+            if (existing != null) {
+                for (File file : existing) {
+                    //noinspection ResultOfMethodCallIgnored
+                    file.delete();
+                }
+            }
+        } else if (!FileUtil.mkdirs(shareDir)) {
+            throw new IOException("Could not create share cache");
+        }
+
+        String zipName = VerificationMetadataCsv.INSTANCE.zipNameFor(mediaFiles);
+        File zipFile = new File(shareDir, zipName);
+        Set<String> usedNames = new HashSet<>();
+
+        try (ZipOutputStream zip = new ZipOutputStream(
+                new BufferedOutputStream(new FileOutputStream(zipFile)))) {
+            for (VaultFile vaultFile : mediaFiles) {
+                if (vaultFile == null || vaultFile.type == VaultFile.Type.DIRECTORY) {
+                    continue;
+                }
+                addVaultFileToZip(zip, vaultFile, usedNames);
+                if (vaultFile.metadata != null &&
+                        VerificationMetadataCsv.INSTANCE.csvInSelection(vaultFile, mediaFiles) == null) {
+                    addCsvToZip(zip, vaultFile, usedNames);
+                }
+            }
+        }
+
+        return FileProvider.getUriForFile(context, ShareFileProvider.AUTHORITY, zipFile, zipName);
+    }
+
+    private static void addVaultFileToZip(
+            ZipOutputStream zip,
+            VaultFile vaultFile,
+            Set<String> usedNames
+    ) throws IOException {
+        InputStream source = getStream(vaultFile);
+        if (source == null) {
+            throw new IOException("Vault stream is null for file: " + vaultFile.id);
+        }
+        ZipEntry entry = new ZipEntry(uniqueZipEntryName(vaultFile.name, usedNames));
+        zip.putNextEntry(entry);
+        try {
+            copyStream(source, zip);
+        } finally {
+            source.close();
+            zip.closeEntry();
+        }
+    }
+
+    private static void addCsvToZip(
+            ZipOutputStream zip,
+            VaultFile vaultFile,
+            Set<String> usedNames
+    ) throws IOException {
+        byte[] csv = VerificationMetadataCsv.INSTANCE.toCsvBytes(
+                vaultFile,
+                vaultFolderPath(vaultFile)
+        );
+        ZipEntry entry = new ZipEntry(
+                uniqueZipEntryName(VerificationMetadataCsv.INSTANCE.fileNameFor(vaultFile.name), usedNames)
+        );
+        zip.putNextEntry(entry);
+        zip.write(csv);
+        zip.closeEntry();
+    }
+
+    private static String uniqueZipEntryName(String preferred, Set<String> usedNames) {
+        String name = new File(preferred != null ? preferred : "file").getName();
+        if (TextUtils.isEmpty(name)) {
+            name = "file";
+        }
+        if (usedNames.add(name)) {
+            return name;
+        }
+        String base = FileUtil.getBaseName(name);
+        String extension = name.substring(base.length());
+        int index = 1;
+        String candidate;
+        do {
+            candidate = base + "-" + index++ + extension;
+        } while (!usedNames.add(candidate));
+        return candidate;
+    }
+
+    private static void launchShare(
+            Context context,
+            List<Uri> uris,
+            String mimeType,
+            boolean multiple
+    ) {
+        launchShare(context, uris, mimeType, multiple, null);
+    }
+
+    private static void launchShare(
+            Context context,
+            List<Uri> uris,
+            String mimeType,
+            boolean multiple,
+            @Nullable Uri signalZipUri
+    ) {
+        if (uris.isEmpty()) {
+            return;
+        }
         Intent shareIntent = new Intent();
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
-        shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
-        shareIntent.setType("*/*");
+        shareIntent.setType(mimeType);
+        if (multiple || uris.size() > 1) {
+            shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
+            shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, new ArrayList<>(uris));
+        } else {
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, uris.get(0));
+        }
+        ClipData clipData = ClipData.newRawUri(null, uris.get(0));
+        for (int i = 1; i < uris.size(); i++) {
+            clipData.addItem(new ClipData.Item(uris.get(i)));
+        }
+        shareIntent.setClipData(clipData);
 
         Intent chooser = Intent.createChooser(shareIntent, context.getText(R.string.action_share));
-        chooser.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+        chooser.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        if (signalZipUri != null) {
+            attachSignalZipShare(context, chooser, shareIntent, signalZipUri);
+        }
+        if (!(context instanceof Activity)) {
+            chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        try {
+            context.startActivity(chooser);
+        } catch (Exception e) {
+            Timber.e(e, MediaFileHandler.class.getName());
+        }
+    }
 
-        context.startActivity(chooser);
+    private static boolean isSignalShareAvailable(Context context) {
+        Intent probe = new Intent(Intent.ACTION_SEND);
+        probe.setType(VerificationMetadataCsv.MIME_TYPE_ZIP);
+        probe.setPackage(SIGNAL_PACKAGE);
+        return !queryShareActivities(context, probe).isEmpty();
+    }
+
+    private static void attachSignalZipShare(
+            Context context,
+            Intent chooser,
+            Intent defaultShare,
+            Uri zipUri
+    ) {
+        Intent signalIntent = new Intent(Intent.ACTION_SEND);
+        signalIntent.setType(VerificationMetadataCsv.MIME_TYPE_ZIP);
+        signalIntent.putExtra(Intent.EXTRA_STREAM, zipUri);
+        signalIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        signalIntent.setClipData(ClipData.newRawUri(null, zipUri));
+        signalIntent.setPackage(SIGNAL_PACKAGE);
+
+        List<ResolveInfo> signalActivities = queryShareActivities(context, signalIntent);
+        if (signalActivities.isEmpty()) {
+            return;
+        }
+
+        ResolveInfo target = signalActivities.get(0);
+        signalIntent.setPackage(null);
+        signalIntent.setComponent(new ComponentName(
+                target.activityInfo.packageName,
+                target.activityInfo.name
+        ));
+        context.grantUriPermission(
+                SIGNAL_PACKAGE,
+                zipUri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+        );
+        chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Parcelable[]{signalIntent});
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            ArrayList<ComponentName> exclude = new ArrayList<>();
+            for (ResolveInfo info : queryShareActivities(context, defaultShare)) {
+                if (SIGNAL_PACKAGE.equals(info.activityInfo.packageName)) {
+                    exclude.add(new ComponentName(
+                            info.activityInfo.packageName,
+                            info.activityInfo.name
+                    ));
+                }
+            }
+            if (!exclude.isEmpty()) {
+                chooser.putExtra(
+                        Intent.EXTRA_EXCLUDE_COMPONENTS,
+                        exclude.toArray(new ComponentName[0])
+                );
+            }
+        }
+    }
+
+    private static List<ResolveInfo> queryShareActivities(Context context, Intent intent) {
+        PackageManager packageManager = context.getPackageManager();
+        int flags = PackageManager.MATCH_DEFAULT_ONLY;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            flags = PackageManager.MATCH_ALL;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            return packageManager.queryIntentActivities(
+                    intent,
+                    PackageManager.ResolveInfoFlags.of(flags)
+            );
+        }
+        return packageManager.queryIntentActivities(intent, flags);
     }
 
     private static File getFile(VaultFile vaultFile) {
@@ -1037,15 +1394,6 @@ public class MediaFileHandler {
         return fileWalker.walk(vaultFile);
     }
 
-    @Nullable
-    public InputStream getThumbnailStream(final VaultFile vaultFile) {
-        if (vaultFile.thumb != null) {
-            return new ByteArrayInputStream(vaultFile.thumb);
-        }
-
-        return null;
-    }
-
     private static void copyStream(InputStream source, OutputStream destination) throws IOException {
         byte[] buf = new byte[8192];
         int bytesRead;
@@ -1071,8 +1419,7 @@ public class MediaFileHandler {
                 }
             }
         } else if ("file".equals(uri.getScheme())) {
-            String fileName = uri.getLastPathSegment();
-            file.name = fileName;
+            file.name = uri.getLastPathSegment();
             file.mimeType = null;
         }
         return file;

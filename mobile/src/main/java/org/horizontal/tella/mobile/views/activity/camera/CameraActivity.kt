@@ -134,8 +134,8 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     private var flashSupportsTorch = true
     private var gridEnabled = false
     private var shutterSound: MediaActionSound? = null
-    private var hasResumedOnce = false
-    private var pendingPhotoCaptureAfterLocationCheck = false
+    private var cameraStopped = false
+    private var pendingCaptureAfterLocationCheck = PendingCapture.NONE
     private var gpsPromptIgnoredForCurrentSession = false
 
     private lateinit var binding: ActivityCameraBinding
@@ -252,10 +252,14 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        startLocationMetadataListening()
+    }
+
     override fun onResume() {
         super.onResume()
         mOrientationEventListener?.enable()
-        startLocationMetadataListening()
         mSeekBar.progress = zoomLevel
         viewModel.getLastMediaFile()
         if (ContextCompat.checkSelfPermission(
@@ -263,20 +267,24 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             maybeChangeTemporaryTimeout()
-        } else if (hasResumedOnce) {
+        } else if (cameraStopped) {
             resumeCameraPreview()
         }
-        hasResumedOnce = true
     }
 
     override fun onPause() {
         super.onPause()
-        stopLocationMetadataListening()
         mOrientationEventListener?.disable()
+    }
+
+    override fun onStop() {
         if (videoRecording) {
             captureButton.performClick()
         }
         cameraProvider?.unbindAll()
+        cameraStopped = true
+        stopLocationMetadataListening()
+        super.onStop()
     }
 
     override fun onDestroy() {
@@ -286,6 +294,13 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         shutterSound?.release()
         shutterSound = null
         cameraProvider?.unbindAll()
+    }
+
+    override fun resumePendingLocationSettingsCheck() {
+        if (cameraStopped) {
+            return
+        }
+        super.resumePendingLocationSettingsCheck()
     }
 
     private fun resumeCameraPreview() {
@@ -863,31 +878,14 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         binding.captureButton.setOnClickListener {
             if (mode == CameraMode.PHOTO) {
                 maybeCapturePhoto()
-            } else {
-                if (videoRecording) {
-                    if (System.currentTimeMillis() - lastClickTime >= CLICK_DELAY) {
-                        playCameraSound(MediaActionSound.STOP_VIDEO_RECORDING)
-                        recordVideo()
-                        divviupUtils.runVideoTakenEvent()
-                    }
-                } else {
-                    if (videoCapture == null) {
-                        Toast.makeText(context, "Error starting camera", Toast.LENGTH_SHORT).show()
-                        return@setOnClickListener
-                    }
-                    videoRecording = true
-                    lastClickTime = System.currentTimeMillis()
-                    playCameraSound(MediaActionSound.START_VIDEO_RECORDING)
-                    if (!recordVideo()) {
-                        videoRecording = false
-                        return@setOnClickListener
-                    }
-                    durationView.start()
-                    captureButton.displayStopVideo()
-                    gridButton.visibility = View.GONE
-                    switchButton.visibility = View.GONE
-                    resolutionButton.visibility = View.GONE
+            } else if (videoRecording) {
+                if (System.currentTimeMillis() - lastClickTime >= CLICK_DELAY) {
+                    playCameraSound(MediaActionSound.STOP_VIDEO_RECORDING)
+                    recordVideo()
+                    divviupUtils.runVideoTakenEvent()
                 }
+            } else {
+                maybeStartVideoRecording()
             }
         }
 
@@ -901,53 +899,89 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     }
 
     private fun maybeCapturePhoto() {
-        if (!shouldCheckLocationBeforePhotoCapture()) {
-            takePhoto()
+        maybeCaptureAfterLocationCheck(PendingCapture.PHOTO)
+    }
+
+    private fun maybeStartVideoRecording() {
+        if (videoCapture == null) {
+            Toast.makeText(context, "Error starting camera", Toast.LENGTH_SHORT).show()
+            return
+        }
+        maybeCaptureAfterLocationCheck(PendingCapture.VIDEO)
+    }
+
+    private fun maybeCaptureAfterLocationCheck(pendingCapture: PendingCapture) {
+        if (!shouldCheckLocationBeforeCapture()) {
+            completePendingCapture(pendingCapture)
             return
         }
 
-        pendingPhotoCaptureAfterLocationCheck = true
+        pendingCaptureAfterLocationCheck = pendingCapture
         if (!hasLocationPermission()) {
             maybeChangeTemporaryTimeout()
             requestLocationPermission(C.LOCATION_PERMISSION)
             return
         }
 
-        continuePhotoCaptureAfterLocationCheck()
+        continueCaptureAfterLocationCheck()
     }
 
-    private fun continuePhotoCaptureAfterLocationCheck() {
-        if (!pendingPhotoCaptureAfterLocationCheck) return
+    private fun continueCaptureAfterLocationCheck() {
+        if (pendingCaptureAfterLocationCheck == PendingCapture.NONE) return
 
-        if (!hasLocationPermission()) {
-            takePhoto()
-            return
-        }
-
-        if (gpsPromptIgnoredForCurrentSession) {
-            takePhoto()
+        if (!hasLocationPermission() || gpsPromptIgnoredForCurrentSession) {
+            completePendingCapture()
             return
         }
 
         startLocationMetadataListening()
         checkLocationSettings(C.START_CAMERA_CAPTURE) {
-            takePhoto()
+            completePendingCapture()
+        }
+    }
+
+    private fun completePendingCapture(pendingCapture: PendingCapture = pendingCaptureAfterLocationCheck) {
+        pendingCaptureAfterLocationCheck = PendingCapture.NONE
+        when (pendingCapture) {
+            PendingCapture.PHOTO -> takePhoto()
+            PendingCapture.VIDEO -> startVideoRecording()
+            PendingCapture.NONE -> {}
         }
     }
 
     private fun takePhoto() {
-        pendingPhotoCaptureAfterLocationCheck = false
+        pendingCaptureAfterLocationCheck = PendingCapture.NONE
         playCameraSound(MediaActionSound.SHUTTER_CLICK)
         captureImage()
         divviupUtils.runPhotoTakenEvent()
     }
 
-    private fun shouldCheckLocationBeforePhotoCapture(): Boolean {
+    private fun startVideoRecording() {
+        pendingCaptureAfterLocationCheck = PendingCapture.NONE
+        videoRecording = true
+        lastClickTime = System.currentTimeMillis()
+        playCameraSound(MediaActionSound.START_VIDEO_RECORDING)
+        if (!recordVideo()) {
+            videoRecording = false
+            return
+        }
+        durationView.start()
+        captureButton.displayStopVideo()
+        gridButton.visibility = View.GONE
+        switchButton.visibility = View.GONE
+        resolutionButton.visibility = View.GONE
+    }
+
+    private fun shouldCheckLocationBeforeCapture(): Boolean {
         return !Preferences.isAnonymousMode()
     }
 
     enum class CameraMode {
         PHOTO, VIDEO
+    }
+
+    private enum class PendingCapture {
+        NONE, PHOTO, VIDEO
     }
 
     enum class IntentMode {
@@ -1053,6 +1087,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
                 )
                 preview?.setSurfaceProvider(viewFinder.surfaceProvider)
                 updateCameraControlVisibility(localCameraProvider)
+                onCameraUseCasesBound()
             } catch (e: Exception) {
                 Timber.e("Failed to bind use cases %s", e.message)
             }
@@ -1080,9 +1115,15 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
             )
             preview?.setSurfaceProvider(viewFinder.surfaceProvider)
             updateCameraControlVisibility(localCameraProvider)
+            onCameraUseCasesBound()
         } catch (e: Exception) {
             Timber.e("Failed to bind use cases")
         }
+    }
+
+    private fun onCameraUseCasesBound() {
+        cameraStopped = false
+        resumePendingLocationSettingsCheck()
     }
 
     private fun playCameraSound(soundName: Int) {
@@ -1240,14 +1281,14 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if (requestCode != C.LOCATION_PERMISSION || !pendingPhotoCaptureAfterLocationCheck) {
+        if (requestCode != C.LOCATION_PERMISSION || pendingCaptureAfterLocationCheck == PendingCapture.NONE) {
             return
         }
 
         if (grantResults.firstOrNull() == PackageManager.PERMISSION_GRANTED) {
-            continuePhotoCaptureAfterLocationCheck()
+            continueCaptureAfterLocationCheck()
         } else {
-            takePhoto()
+            completePendingCapture()
         }
     }
 

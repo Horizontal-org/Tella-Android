@@ -37,10 +37,20 @@ public class MetadataUtils {
 
             double diagonalInches = Math.sqrt(xInches * xInches + yInches * yInches);
 
-            return String.valueOf(diagonalInches);
+            return formatScreenSize(String.valueOf(diagonalInches));
         } catch (Exception e) {
             return "-1";
         }
+    }
+
+    public static String formatScreenSize(String screenSize) {
+        if (screenSize == null || screenSize.isEmpty() || "-1".equals(screenSize)) {
+            return screenSize;
+        }
+        if (screenSize.endsWith("\"") || screenSize.endsWith("\u2033") || screenSize.endsWith("\u201D")) {
+            return screenSize;
+        }
+        return screenSize + "\"";
     }
 
     public static String getManufacturer() {

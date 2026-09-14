@@ -11,6 +11,7 @@ import com.hzontal.tella_vault.filter.FilterType
 import org.hzontal.shared_ui.appbar.ToolbarComponent
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.media.MediaFileHandler
+import org.horizontal.tella.mobile.media.VerificationMetadataCsv
 import org.horizontal.tella.mobile.views.base_ui.BaseActivity
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.AttachmentsSheetHelper.showShareFileWithMetadataDialog
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.AttachmentsSheetHelper.showShareWithMetadataDialog
@@ -36,9 +37,7 @@ object AttachmentsHelper {
     internal fun shareVaultFiles(selected: List<VaultFile>, activity: BaseActivity) {
         if (selected.isNullOrEmpty()) return
 
-        val hasMetadata = selected.any { file -> file.metadata != null }
-
-        if (hasMetadata) {
+        if (VerificationMetadataCsv.needsVerificationSharePrompt(selected)) {
             showShareWithMetadataDialog(activity, selected)
         } else {
             startShareActivity(false, selected, activity)

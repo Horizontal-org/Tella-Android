@@ -144,11 +144,19 @@ public abstract class BaseVault {
     }
 
     /**
-     * Deletes a VaultFile.
+     * Deletes a VaultFile. Linked verification CSVs (files whose sourceFileId is this file)
+     * are deleted first so removing the original also removes its CSV. Deleting a CSV does
+     * not remove the original.
      *
      * @param file VaultFile to delete.
      */
     protected boolean baseDelete(VaultFile file) {
+        if (file != null && file.id != null) {
+            VaultFile linkedCsv = database.getBySourceFileId(file.id);
+            if (linkedCsv != null && !file.id.equals(linkedCsv.id)) {
+                baseDelete(linkedCsv);
+            }
+        }
         return database.delete(file, deleted ->
                 deleted.type == VaultFile.Type.DIRECTORY || getFile(deleted).delete());
     }
@@ -196,6 +204,14 @@ public abstract class BaseVault {
         return database.get(id);
     }
 
+    protected VaultFile baseGetBySourceFileId(String sourceFileId) {
+        return database.getBySourceFileId(sourceFileId);
+    }
+
+    protected void baseUpdateSourceFileId(String fileId, String sourceFileId) {
+        database.updateSourceFileId(fileId, sourceFileId);
+    }
+
     protected List<VaultFile> baseGet(String[] ids) {
         return database.get(ids);
     }
@@ -211,6 +227,7 @@ public abstract class BaseVault {
         }
         try {
             VaultFile vaultFile = new VaultFile(builder);
+            vaultFile.parentId = parentId;
 
             // Check for duplicate name in parent first (so same name + same hash shows "Name already exists")
             VaultFile parent = database.get(parentId);
