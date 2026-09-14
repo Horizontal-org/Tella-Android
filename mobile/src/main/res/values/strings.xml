@@ -104,7 +104,7 @@ mode activation</string>
   <string name="collect.form_exit_dialog.action_save.exit">SAVE AND EXIT</string>
   <string name="collect.form_exit_dialog.action_exit.anyway">EXIT ANYWAY</string>
   <string name="settings.docu_error_not.valid.URL">This is not a valid URL.</string>
-  <string name="settings_invalid_url">Error: The server URL is incorrect</string>
+  <string name="settings_invalid_url">The server URL is incorrect</string>
   <string name="home_action.label_quick.delete">Delete</string>
   <string name="gallery_subheading_sort.by">Sort by</string>
   <string name="gallery_list.item_newest.to.oldest">Newest to oldest</string>

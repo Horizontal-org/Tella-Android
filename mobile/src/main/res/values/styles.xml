@@ -432,10 +432,23 @@
     </style>
 
     <style name="DialogDataCollectionTextEntryLayout" parent="Theme.AppCompat.Light.NoActionBar">
-
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColorHint">@color/wa_white</item>
+    </style>
+
+    <style name="ServerConnectTextEntryLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColorHint">@color/wa_white</item>
+        <item name="hintTextColor">@color/wa_white</item>
+        <item name="hintTextAppearance">@style/TextAppearance.Tella.Body3</item>
+        <item name="hintEnabled">true</item>
+        <item name="hintAnimationEnabled">true</item>
+        <item name="errorEnabled">false</item>
+        <item name="helperTextEnabled">false</item>
+        <item name="helperTextTextAppearance">@style/ServerConnectErrorStyle</item>
+        <item name="helperTextTextColor">@color/wa_red_error_48</item>
     </style>
 
     <style name="ReportFormFieldTextAppearance" parent="TextAppearance.Tella.Body1">
@@ -445,6 +458,10 @@
 
     <style name="TextEntryLayoutErrorStyle">
         <item name="android:textColor">@color/light_red</item>
+    </style>
+
+    <style name="ServerConnectErrorStyle" parent="TextAppearance.Tella.Body3">
+        <item name="android:textColor">@color/wa_red_error_48</item>
     </style>
 
     <style name="CollectDialogAnimation" parent="@android:style/Animation.Activity">

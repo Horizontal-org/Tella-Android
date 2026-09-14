@@ -20,6 +20,7 @@ import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentEnterServerBinding
 import org.horizontal.tella.mobile.domain.entity.UWaziUploadServer
 import org.horizontal.tella.mobile.views.base_ui.BaseFragment
+import org.horizontal.tella.mobile.views.dialog.ConnectFlowUtils
 import org.horizontal.tella.mobile.views.dialog.ID_KEY
 import org.horizontal.tella.mobile.views.dialog.IS_UPDATE_SERVER
 import org.horizontal.tella.mobile.views.dialog.OBJECT_KEY
@@ -81,7 +82,7 @@ class EnterServerFragment : BaseFragment() {
         binding.url.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                binding.urlLayout.error = null
+                ConnectFlowUtils.setUrlFieldError(binding.urlLayout, null)
             }
 
             override fun afterTextChanged(s: Editable?) {}
@@ -113,15 +114,15 @@ class EnterServerFragment : BaseFragment() {
     private fun validateUrl(field: EditText, layout: TextInputLayout) {
         validated = true
         var url = field.text.toString()
-        layout.error = null
+        ConnectFlowUtils.setUrlFieldError(layout, null)
         if (TextUtils.isEmpty(url)) {
-            layout.error = getString(R.string.settings_text_empty_field)
+            ConnectFlowUtils.setUrlFieldError(layout, getString(R.string.settings_text_empty_field))
             validated = false
         } else {
             url = url.trim { it <= ' ' }.trimEnd('/')
             field.setText(url)
             if (!Patterns.WEB_URL.matcher(url).matches()) {
-                layout.error = getString(R.string.settings_invalid_url)
+                ConnectFlowUtils.setUrlFieldError(layout, getString(R.string.invalid_url))
                 validated = false
             }
             server.url = url
@@ -158,8 +159,11 @@ class EnterServerFragment : BaseFragment() {
                 binding.progressBar.isVisible = it
             }
 
-            serverUrlError.observe(viewLifecycleOwner) { messageResId ->
-                binding.urlLayout.error = getString(messageResId)
+            serverUrlError.observe(viewLifecycleOwner) {
+                ConnectFlowUtils.setUrlFieldError(
+                    binding.urlLayout,
+                    getString(R.string.settings_invalid_url)
+                )
             }
         }
     }
