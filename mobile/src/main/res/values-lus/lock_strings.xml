@@ -52,4 +52,5 @@
     <string name="incorrect_pin">Pin a dik lo. &#13;\n&#13;\n</string>
     <string name="incorrect_password">Password a dik lo. &#13;\n&#13;\n</string>
     <string name="incorrect_pattern">Pattern a dik lo.&#13;\n&#13;\n</string>
+    <string name="unlock">Hawng rawh</string>
 </resources>
