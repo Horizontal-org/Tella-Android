@@ -52,4 +52,5 @@
     <string name="incorrect_pin">ತಪ್ಪಾದ PIN. &#13;\n&#13;\n</string>
     <string name="incorrect_password">ತಪ್ಪಾದ ಗುಪ್ತಪದ. &#13;\n&#13;\n</string>
     <string name="incorrect_pattern">ತಪ್ಪಾದ ಮಾದರಿ.&#13;\n&#13;\n</string>
+    <string name="unlock">Unlock</string>
 </resources>
