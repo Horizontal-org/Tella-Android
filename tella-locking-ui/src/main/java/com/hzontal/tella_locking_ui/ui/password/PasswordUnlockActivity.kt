@@ -75,13 +75,14 @@ class PasswordUnlockActivity : BasePasswordActivity() {
             }
 
             else -> {
-                passwordMsgTextView.text = getText(R.string.UnlockPassword_Message_EnterPassword)
+                enterPasswordTextView.isVisible = true
+                enterPasswordTextView.text = getText(R.string.UnlockPassword_Message_EnterPassword)
+                passwordMsgTextView.isVisible = false
                 passwordEditText.hint = getString(R.string.UnlockPassword_Message_EnterPassword)
                 passwordRightButton.text = getString(R.string.unlock)
                 passwordRightButton.isVisible = true
                 passwordEditText.onChange {
-                    passwordMsgTextView.text =
-                        getText(R.string.UnlockPassword_Message_EnterPassword)
+                    passwordMsgTextView.isVisible = false
                 }
             }
         }

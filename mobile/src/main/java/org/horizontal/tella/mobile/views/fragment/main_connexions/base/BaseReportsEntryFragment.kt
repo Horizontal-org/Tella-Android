@@ -4,7 +4,11 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -87,6 +91,7 @@ abstract class BaseReportsEntryFragment :
         binding.toolbar.backClickListener = {
             exitOrSave()
         }
+        binding.reportTitleLayout.hint = requiredTitleHint()
 
         arguments?.let { bundle ->
             if (bundle.get(BUNDLE_REPORT_FORM_INSTANCE) != null) {
@@ -192,11 +197,24 @@ abstract class BaseReportsEntryFragment :
         val disabled: Float = context?.getString(R.string.alpha_disabled)?.toFloat() ?: 1.0f
         val enabled: Float = context?.getString(R.string.alpha_enabled)?.toFloat() ?: 1.0f
 
-        binding.sendReportBtn.setBackgroundResource(if (isSubmitEnabled) R.drawable.bg_round_orange_btn else R.drawable.bg_round_orange_disabled)
+        binding.sendReportBtn.setBackgroundResource(R.drawable.bg_round_orange_btn)
+        binding.sendReportBtn.alpha = if (isSubmitEnabled) 1f else 0.32f
         binding.sendLaterBtn.alpha = (if (isSubmitEnabled) enabled else disabled)
-        binding.sendReportBtn.alpha = (if (isSubmitEnabled) enabled else disabled)
 
         initClickListeners(isSubmitEnabled)
+    }
+
+    private fun requiredTitleHint(): SpannableStringBuilder {
+        val builder = SpannableStringBuilder(getString(R.string.Reports_Select_Title))
+        val start = builder.length
+        builder.append(" *")
+        builder.setSpan(
+            ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.wa_orange)),
+            start,
+            builder.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        return builder
     }
 
     private fun initClickListeners(isSubmitEnabled: Boolean) {

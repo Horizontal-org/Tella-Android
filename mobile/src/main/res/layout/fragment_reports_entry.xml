@@ -218,24 +218,30 @@ knkerfkefkfekfkekekl,f,klferkl,f,lkefe,fe,lf,lef,lef,lef,er,f,ref,f,,llkf,elk,f,
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <Button
+        <TextView
             android:id="@+id/send_report_btn"
-            android:layout_width="wrap_content"
+            style="@style/Typography.ButtonL"
+            android:layout_width="match_parent"
             android:layout_height="54dp"
             android:layout_alignParentEnd="true"
             android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/tella_main_vertical"
             android:layout_marginVertical="@dimen/activity_vertical_large_margin"
             android:layout_toEndOf="@+id/send_later_btn"
+            android:alpha="0.32"
             android:background="@drawable/bg_round_orange_btn"
-            android:fontFamily="@font/open_sans_semibold"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/open_sans_bold"
             android:gravity="center"
+            android:includeFontPadding="false"
+            android:letterSpacing="0.03125"
             android:text="@string/collect.end_action_submit"
             android:textAlignment="center"
             android:textAllCaps="true"
             android:textColor="@color/btn_dark_letter"
-            android:textSize="14sp"
-            android:letterSpacing="0.0214"
+            android:textSize="16sp"
+            android:textStyle="bold"
             tools:ignore="RtlCompat" />
 
     </RelativeLayout>

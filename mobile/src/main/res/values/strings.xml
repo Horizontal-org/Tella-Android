@@ -673,7 +673,7 @@ WARNING: If enabled, Tella will remain unlocked until all reports are fully uplo
   <string name="Outbox_Reports_Empty_Message">Your Outbox is currently empty. Reports that are ready to be sent will appear here.</string>
   <string name="Submitted_Reports_Empty_Message">You have no submitted reports.</string>
   <string name="New_Reports_Text">NEW REPORT</string>
-  <string name="Reports_Title_Screen">REPORT</string>
+  <string name="Reports_Title_Screen">Report</string>
   <string name="Reports_Send_To_Text">Send report to:</string>
   <string name="Reports_Select_Your_Project">Select your project</string>
   <string name="Reports_Select_Title">Title</string>
