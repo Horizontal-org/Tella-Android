@@ -38,9 +38,15 @@
 
     <TextView
         android:id="@+id/pl_message_text"
-        style="@style/Unlock_White_Text"
+        style="@style/Typography.Heading1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
         android:text="@string/UnLockPattern_Message_DrawPattern"
+        android:textColor="@color/wa_white"
         app:layout_constraintBottom_toTopOf="@+id/pl_pattern"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -51,6 +57,8 @@
         android:id="@+id/pl_pattern"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:padding="16dp"
         app:layout_constraintBottom_toTopOf="@+id/pl_left_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="@dimen/pattern_height_percent"
@@ -58,9 +66,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pl_message_text"
         app:pl_aspect="square"
-        app:pl_errorColor="@color/light_red"
+        app:pl_errorColor="@color/wa_white"
         app:pl_regularColor="@color/wa_white"
-        app:pl_successColor="@color/tigers_eye" />
+        app:pl_successColor="@color/wa_white" />
 
 
     <TextView

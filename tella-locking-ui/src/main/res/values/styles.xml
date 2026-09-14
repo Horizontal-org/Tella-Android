@@ -9,9 +9,9 @@
     </style>
 
     <style name="PatternView" parent="Base.PatternView">
-        <item name="pl_regularColor">?colorControlNormal</item>
-        <item name="pl_errorColor">#fff4511e</item>
-        <item name="pl_successColor">?colorControlActivated</item>
+        <item name="pl_regularColor">@color/wa_white</item>
+        <item name="pl_errorColor">@color/wa_white</item>
+        <item name="pl_successColor">@color/wa_white</item>
     </style>
 
     <style name="Unlock_White_Text">

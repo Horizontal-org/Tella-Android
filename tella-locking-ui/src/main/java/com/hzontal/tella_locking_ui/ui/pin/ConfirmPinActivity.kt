@@ -2,6 +2,8 @@ package com.hzontal.tella_locking_ui.ui.pin
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Gravity
+import android.view.View
 import org.hzontal.shared_ui.utils.DialogUtils
 import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
 import com.hzontal.tella_locking_ui.R
@@ -20,6 +22,8 @@ class ConfirmPinActivity  : BasePinActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         pinTopText.text = getString(R.string.LockPinSet_Message_Confirm)
+        pinMsgText.gravity = Gravity.CENTER
+        pinMsgText.textAlignment = View.TEXT_ALIGNMENT_CENTER
         pinMsgText.text = getString(R.string.LockPinConfirm_Message_Confirm)
         pinEditText.setHint(R.string.LockPinSet_Message_Confirm)
     }
