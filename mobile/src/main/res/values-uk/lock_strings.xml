@@ -52,4 +52,5 @@
     <string name="incorrect_pin">Неправильний PIN-код. &#13;\n&#13;\n</string>
     <string name="incorrect_password">Неправильний пароль. &#13;\n&#13;\n</string>
     <string name="incorrect_pattern">Неправильний графічний ключ.&#13;\n&#13;\n</string>
+    <string name="unlock">Розблокувати</string>
 </resources>
