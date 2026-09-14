@@ -71,6 +71,7 @@ class SharedMediaFileViewModel @Inject constructor(
                         MediaFileHandler.maybeCreateMetadataMediaFile(vaultFile),
                         path
                     )
+                    MediaFileHandler.saveVerificationMetadataToVaultIfMissing(vaultFile)
                 }
                 null
             }

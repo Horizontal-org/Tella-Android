@@ -11,12 +11,26 @@ import java.nio.charset.StandardCharsets
  */
 object VerificationMetadataCsv {
     const val MIME_TYPE = "text/csv"
+    const val MIME_TYPE_ZIP = "application/zip"
+    private const val ZIP_FALLBACK_NAME = "tella.zip"
 
     fun fileNameFor(originalName: String?): String {
         val name = originalName?.takeIf { it.isNotBlank() } ?: "file"
         val dot = name.lastIndexOf('.')
         val base = if (dot > 0) name.substring(0, dot) else name
         return "$base.csv"
+    }
+
+    fun zipNameFor(originalName: String?): String {
+        val name = originalName?.takeIf { it.isNotBlank() } ?: "file"
+        val dot = name.lastIndexOf('.')
+        val base = if (dot > 0) name.substring(0, dot) else name
+        return "$base.zip"
+    }
+
+    fun zipNameFor(files: List<VaultFile>): String {
+        val shareable = files.filter { it.type != VaultFile.Type.DIRECTORY }
+        return if (shareable.size == 1) zipNameFor(shareable[0].name) else ZIP_FALLBACK_NAME
     }
 
     fun parentFolderId(parentId: String?, vaultFileParentId: String?): String {
@@ -32,6 +46,22 @@ object VerificationMetadataCsv {
 
     fun existingCsv(linkedBySource: VaultFile?, siblings: List<VaultFile>?, originalName: String?): VaultFile? {
         return linkedBySource ?: existingIn(siblings, originalName)
+    }
+
+    fun csvInSelection(original: VaultFile, selected: List<VaultFile>?): VaultFile? {
+        val others = selected?.filter { candidate ->
+            candidate !== original && (original.id.isNullOrBlank() || candidate.id != original.id)
+        }
+        val linked = others?.firstOrNull { candidate ->
+            !original.id.isNullOrBlank() && candidate.sourceFileId == original.id
+        }
+        return existingCsv(linked, others, original.name)
+    }
+
+    fun needsVerificationSharePrompt(selected: List<VaultFile>): Boolean {
+        return selected.any { file ->
+            file.metadata != null && csvInSelection(file, selected) == null
+        }
     }
 
     @JvmOverloads

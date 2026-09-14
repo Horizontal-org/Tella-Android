@@ -5,6 +5,7 @@ import com.hzontal.tella_vault.MyLocation
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.database.VaultDataSource
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
@@ -32,6 +33,26 @@ class VerificationMetadataCsvTest {
     @Test
     fun fileNameFor_keepsLeadingDotNames() {
         assertEquals(".hidden.csv", VerificationMetadataCsv.fileNameFor(".hidden"))
+    }
+
+    @Test
+    fun zipNameFor_replacesExtensionWithZip() {
+        assertEquals("evidence.zip", VerificationMetadataCsv.zipNameFor("evidence.mp4"))
+        assertEquals("photo.zip", VerificationMetadataCsv.zipNameFor("photo.jpg"))
+        assertEquals("notes.zip", VerificationMetadataCsv.zipNameFor("notes"))
+        assertEquals("file.zip", VerificationMetadataCsv.zipNameFor(null))
+    }
+
+    @Test
+    fun zipNameFor_usesFileNameForSingleFileAndFallbackForMany() {
+        val photo = VaultFile()
+        photo.name = "photo.jpg"
+        photo.type = VaultFile.Type.FILE
+        val video = VaultFile()
+        video.name = "clip.mp4"
+        video.type = VaultFile.Type.FILE
+        assertEquals("photo.zip", VerificationMetadataCsv.zipNameFor(listOf(photo)))
+        assertEquals("tella.zip", VerificationMetadataCsv.zipNameFor(listOf(photo, video)))
     }
 
     @Test
@@ -73,6 +94,50 @@ class VerificationMetadataCsvTest {
             VerificationMetadataCsv.existingCsv(null, listOf(siblingCsv), "photo.jpg")
         )
         assertNull(VerificationMetadataCsv.existingCsv(null, emptyList(), "photo.jpg"))
+    }
+
+    @Test
+    fun needsVerificationSharePrompt_skipsWhenCsvAlreadySelected() {
+        val photo = VaultFile()
+        photo.id = "photo-id"
+        photo.name = "photo.jpg"
+        photo.metadata = Metadata()
+        val csv = VaultFile()
+        csv.id = "csv-id"
+        csv.name = "photo.csv"
+        csv.sourceFileId = "photo-id"
+        assertTrue(VerificationMetadataCsv.needsVerificationSharePrompt(listOf(photo)))
+        assertFalse(VerificationMetadataCsv.needsVerificationSharePrompt(listOf(photo, csv)))
+        val csvByName = VaultFile()
+        csvByName.name = "photo.csv"
+        assertFalse(VerificationMetadataCsv.needsVerificationSharePrompt(listOf(photo, csvByName)))
+        assertFalse(VerificationMetadataCsv.needsVerificationSharePrompt(listOf(csv)))
+    }
+
+    @Test
+    fun needsVerificationSharePrompt_whenOnlySomeFilesHaveCsvSelected() {
+        val photo = VaultFile()
+        photo.id = "photo-id"
+        photo.name = "photo.jpg"
+        photo.metadata = Metadata()
+        val photoCsv = VaultFile()
+        photoCsv.id = "photo-csv"
+        photoCsv.name = "photo.csv"
+        photoCsv.sourceFileId = "photo-id"
+        val video = VaultFile()
+        video.id = "video-id"
+        video.name = "clip.mp4"
+        video.metadata = Metadata()
+        assertTrue(
+            VerificationMetadataCsv.needsVerificationSharePrompt(listOf(photo, photoCsv, video))
+        )
+        val videoCsv = VaultFile()
+        videoCsv.name = "clip.csv"
+        assertFalse(
+            VerificationMetadataCsv.needsVerificationSharePrompt(
+                listOf(photo, photoCsv, video, videoCsv)
+            )
+        )
     }
 
     @Test

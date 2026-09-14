@@ -9,6 +9,7 @@ import com.hzontal.tella_vault.VaultFile;
 import java.util.LinkedHashMap;
 
 import org.horizontal.tella.mobile.presentation.entity.PublicMetadata;
+import org.horizontal.tella.mobile.util.MetadataUtils;
 import org.horizontal.tella.mobile.util.StringUtils;
 import org.horizontal.tella.mobile.util.VaultFolderPath;
 import timber.log.Timber;
@@ -106,7 +107,7 @@ public class PublicMetadataMapper {
         metadata.put("Manufacturer", rc(publicMetadata.manufacturer));
         metadata.put("Data type", rc(publicMetadata.dataType));
         metadata.put("Hardware", rc(publicMetadata.hardware));
-        metadata.put("Screen size", rc(publicMetadata.screenSize));
+        metadata.put("Screen size", rc(MetadataUtils.formatScreenSize(publicMetadata.screenSize)));
         metadata.put("WiFi MAC", rc(publicMetadata.wifiMac));
         metadata.put("Device ID", rc(publicMetadata.deviceID));
 

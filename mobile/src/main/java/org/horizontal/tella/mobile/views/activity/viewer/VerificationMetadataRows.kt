@@ -5,6 +5,7 @@ import com.hzontal.tella_vault.Metadata
 import com.hzontal.tella_vault.MyLocation
 import com.hzontal.tella_vault.VaultFile
 import org.horizontal.tella.mobile.R
+import org.horizontal.tella.mobile.util.MetadataUtils
 import org.horizontal.tella.mobile.util.Util
 import org.horizontal.tella.mobile.util.VaultFolderPath
 
@@ -66,7 +67,10 @@ object VerificationMetadataRows {
             VerificationField(R.string.verification_info_field_manufacturer, metadata?.manufacturer),
             VerificationField(R.string.verification_info_field_hardware, metadata?.hardware),
             VerificationField(R.string.verification_info_field_device_id, metadata?.deviceID),
-            VerificationField(R.string.verification_info_field_screen_size, metadata?.screenSize),
+            VerificationField(
+                R.string.verification_info_field_screen_size,
+                MetadataUtils.formatScreenSize(metadata?.screenSize)
+            ),
             VerificationField(R.string.verification_info_field_wifi_mac, metadata?.wifiMac),
             VerificationField(R.string.verification_info_field_language, metadata?.language),
             VerificationField(R.string.verification_info_field_locale, metadata?.locale)

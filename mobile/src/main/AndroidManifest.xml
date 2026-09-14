@@ -83,6 +83,16 @@
                 android:resource="@xml/encrypted_file_paths" />
         </provider>
 
+        <provider
+            android:name=".data.provider.ShareFileProvider"
+            android:authorities="${applicationId}.ShareFileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/share_file_paths" />
+        </provider>
+
         <activity
             android:name=".views.activity.SplashActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"

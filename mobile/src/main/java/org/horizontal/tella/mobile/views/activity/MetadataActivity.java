@@ -302,7 +302,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements Senso
         return locationManager != null && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
-    protected void checkLocationSettings(
+    public void checkLocationSettings(
             final int requestCode,
             final LocationSettingsCheckDoneListener listener
     ) {
@@ -531,7 +531,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements Senso
         }
     }
 
-    interface LocationSettingsCheckDoneListener {
+    public interface LocationSettingsCheckDoneListener {
         void onContinue();
     }
 
