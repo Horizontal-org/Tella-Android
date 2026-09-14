@@ -17,8 +17,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
@@ -94,13 +94,15 @@ public class PatternView extends View {
     private final int mDotSize;
     private final int mDotSizeActivated;
     private final int mPathWidth;
-    private final float mDotGlowRadius;
+    private final int mDotBorder;
+    private final int mRegularRingColor;
+    private final int mSuccessRingColor;
+    private final int mErrorRingColor;
 
     private boolean mDrawingProfilingStarted = false;
 
     private final Paint mPaint = new Paint();
     private final Paint mPathPaint = new Paint();
-    private final Paint mGlowPaint = new Paint();
 
     /**
      * How many milliseconds we spend animating each circle of a lock pattern
@@ -143,6 +145,7 @@ public class PatternView extends View {
     private boolean mInputEnabled = true;
     private boolean mInStealthMode = false;
     private boolean mPatternInProgress = false;
+    private boolean mPatternMatched = false;
 
     private float mHitFactor = 0.6f;
 
@@ -302,10 +305,6 @@ public class PatternView extends View {
         mRegularColor = a.getColor(R.styleable.PatternView_pl_regularColor, mRegularColor);
         mErrorColor = a.getColor(R.styleable.PatternView_pl_errorColor, mErrorColor);
         mSuccessColor = a.getColor(R.styleable.PatternView_pl_successColor, mSuccessColor);
-        int patternWhite = ContextCompat.getColor(context, R.color.wa_white);
-        mRegularColor = patternWhite;
-        mErrorColor = patternWhite;
-        mSuccessColor = patternWhite;
 
         a.recycle();
 
@@ -319,16 +318,13 @@ public class PatternView extends View {
         mDotSize = getResources().getDimensionPixelSize(R.dimen.pl_pattern_dot_size);
         mDotSizeActivated = getResources().getDimensionPixelSize(
                 R.dimen.pl_pattern_dot_size_activated);
-        mDotGlowRadius = getResources().getDimension(R.dimen.pl_pattern_dot_glow_radius);
+        mDotBorder = getResources().getDimensionPixelSize(R.dimen.pl_pattern_dot_border);
+        mRegularRingColor = ContextCompat.getColor(context, R.color.wa_white_32);
+        mSuccessRingColor = ContextCompat.getColor(context, R.color.tigers_eye_70);
+        mErrorRingColor = ContextCompat.getColor(context, R.color.wa_red_error_32);
 
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);
-
-        setLayerType(LAYER_TYPE_SOFTWARE, null);
-        mGlowPaint.setAntiAlias(true);
-        mGlowPaint.setDither(true);
-        mGlowPaint.setStyle(Paint.Style.FILL);
-        mGlowPaint.setMaskFilter(new BlurMaskFilter(mDotGlowRadius, BlurMaskFilter.Blur.NORMAL));
 
         updatePatternSize();
 
@@ -451,6 +447,14 @@ public class PatternView extends View {
         return mPatternDisplayMode;
     }
 
+    public void setPatternMatched(boolean matched) {
+        if (mPatternMatched == matched) {
+            return;
+        }
+        mPatternMatched = matched;
+        invalidate();
+    }
+
     /**
      * Set the display mode of the current pattern.  This can be useful, for
      * instance, after detecting a pattern to tell this view whether change the
@@ -459,7 +463,10 @@ public class PatternView extends View {
      */
     public void setDisplayMode(DisplayMode displayMode) {
         mPatternDisplayMode = displayMode;
-        if (displayMode == DisplayMode.   Animate) {
+        if (displayMode == DisplayMode.Wrong) {
+            mPatternMatched = false;
+        }
+        if (displayMode == DisplayMode.Animate) {
             if (mPattern.size() == 0) {
                 throw new IllegalStateException("you must have a pattern to "
                         + "animate if you want to set the display mode to animate");
@@ -570,6 +577,7 @@ public class PatternView extends View {
         mPattern.clear();
         clearPatternDrawLookup();
         mPatternDisplayMode = DisplayMode.Correct;
+        mPatternMatched = false;
         invalidate();
     }
 
@@ -1211,10 +1219,11 @@ public class PatternView extends View {
             // unselected circle
             return mRegularColor;
         } else if (mPatternDisplayMode == DisplayMode.Wrong) {
-            return mRegularColor;
+            // the pattern is wrong
+            return mErrorColor;
         } else if (mPatternDisplayMode == DisplayMode.Correct ||
                 mPatternDisplayMode == DisplayMode.Animate) {
-            return mSuccessColor;
+            return mPatternMatched ? mSuccessColor : mRegularColor;
         } else {
             throw new IllegalStateException("unknown display mode " + mPatternDisplayMode);
         }
@@ -1225,21 +1234,26 @@ public class PatternView extends View {
      */
     private void drawCircle(Canvas canvas, float centerX, float centerY, float radius,
                             boolean partOfPattern, float alpha) {
-        int color = getCurrentColor(partOfPattern);
-        if (!mInStealthMode) {
-            mGlowPaint.setColor(color);
-            mGlowPaint.setAlpha((int) (alpha * (partOfPattern ? 90 : 50)));
-            canvas.drawCircle(centerX, centerY, radius + mDotGlowRadius, mGlowPaint);
+        int fillColor = (!partOfPattern || mInStealthMode)
+                ? mRegularColor
+                : (mPatternDisplayMode == DisplayMode.Wrong ? mErrorColor : mRegularColor);
+
+        if (partOfPattern && !mInStealthMode) {
+            int ringColor;
+            if (mPatternDisplayMode == DisplayMode.Wrong) {
+                ringColor = mErrorRingColor;
+            } else if (mPatternMatched) {
+                ringColor = mSuccessRingColor;
+            } else {
+                ringColor = mRegularRingColor;
+            }
+            mPaint.setColor(ringColor);
+            mPaint.setAlpha((int) (Color.alpha(ringColor) * alpha));
+            canvas.drawCircle(centerX, centerY, radius + mDotBorder, mPaint);
         }
-        mPaint.setColor(color);
+        mPaint.setColor(fillColor);
         mPaint.setAlpha((int) (alpha * 255));
-        if (!mInStealthMode) {
-            mPaint.setShadowLayer(mDotGlowRadius, 0f, 0f, (color & 0x00FFFFFF) | 0x66000000);
-        } else {
-            mPaint.clearShadowLayer();
-        }
         canvas.drawCircle(centerX, centerY, radius, mPaint);
-        mPaint.clearShadowLayer();
     }
 
     @Override

@@ -1,21 +1,12 @@
 package com.hzontal.tella_locking_ui.ui.pattern
 
-import android.graphics.Color
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
-import androidx.core.view.updatePadding
 import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.TellaKeysUI
-import com.hzontal.tella_locking_ui.common.CommonStates
 import com.hzontal.tella_locking_ui.patternlock.PatternUtils
 import com.hzontal.tella_locking_ui.patternlock.PatternView
 import com.hzontal.tella_locking_ui.patternlock.SetPatternActivity
@@ -44,10 +35,11 @@ class PatternSetConfirmActivity : SetPatternActivity() {
         when (mStage) {
             Stage.Confirm, Stage.ConfirmWrong -> {
                 if (PatternUtils.patternToSha1String(mPattern, mPattern.size) == pattern) {
-                    updateStage(Stage.ConfirmCorrect);
+                    mPatternView.setPatternMatched(true)
+                    updateStage(Stage.ConfirmCorrect)
                     onSetPattern(newPattern)
                 } else {
-                    updateStage(Stage.ConfirmWrong);
+                    updateStage(Stage.ConfirmWrong)
                 }
             }
             else -> {
