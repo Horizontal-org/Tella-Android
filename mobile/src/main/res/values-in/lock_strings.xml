@@ -52,4 +52,5 @@
     <string name="incorrect_pin">Pin Salah. &#13;\n&#13;\n</string>
     <string name="incorrect_password">Kata Sandi Salah. &#13;\n&#13;\n</string>
     <string name="incorrect_pattern">Pola Salah.&#13;\n&#13;\n</string>
+    <string name="unlock">Buka kunci</string>
 </resources>
