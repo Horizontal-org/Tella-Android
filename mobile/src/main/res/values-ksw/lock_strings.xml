@@ -52,4 +52,5 @@
     <string name="incorrect_pin">PIN နီၣ်ဂံၢ်အံၤ ကမၣ်ဝဲလီၤ. &#13;\n&#13;\n</string>
     <string name="incorrect_password">လံာ်ဖျၢၣ်ခူသူၣ်အံၤ ကမၣ်ဝဲလီၤ. &#13;\n&#13;\n</string>
     <string name="incorrect_pattern">တၢ်ဒဲးကံၣ်ဒဲးဝ့ၤအက့ၢ်အဂီၤ ကမၣ်ဝဲလီၤ.&#13;\n&#13;\n</string>
+    <string name="unlock">Unlock</string>
 </resources>
