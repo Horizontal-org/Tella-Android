@@ -16,7 +16,4 @@
     <string name="action_go_back">повернутися</string>
     <string name="Home_BottomNav_Uwazi">Uwazi</string>
     <string name="onboarding_info_icon_content_description">Інформація</string>
-    <string name="Migration_Failed_Description" translatable="false"></string>
-    <string name="Migration_Failed_Title" translatable="false"></string>
-    <string name="Home_BottomNav_Settings" translatable="false"></string>
 </resources>
