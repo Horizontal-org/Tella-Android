@@ -22,6 +22,7 @@ object VaultSheetUtils {
         fun info()
         fun delete()
         fun edit()
+        fun showVerificationInformation() {}
     }
 
     @JvmStatic
@@ -41,6 +42,8 @@ object VaultSheetUtils {
         isUploadVisible: Boolean = false,
         isMoveVisible: Boolean = false,
         isEditVisible: Boolean = false,
+        isVerificationInfoVisible: Boolean = false,
+        verificationInfoLabel: String = "",
         action: IVaultActions
     ) {
         val vaultActionSheet = CustomBottomSheetFragment.with(fragmentManager)
@@ -56,16 +59,19 @@ object VaultSheetUtils {
                         if (!isEditVisible) {
                             actionEdit.visibility = View.GONE
                         }
+                        actionVerificationInfo.isVisible = isVerificationInfoVisible
                         if (isDirectory) {
                             seperator.visibility = View.GONE
                             actionShare.visibility = View.GONE
                             actionUpload.visibility = View.GONE
                             actionEdit.visibility = View.GONE
+                            actionVerificationInfo.visibility = View.GONE
                         }
                         if (isMultipleFiles) {
                             actionRename.visibility = View.GONE
                             actionInfo.visibility = View.GONE
                             actionEdit.visibility = View.GONE
+                            actionVerificationInfo.visibility = View.GONE
                         }
                         //Rename action
                         actionRename.text = renameLabel
@@ -100,6 +106,11 @@ object VaultSheetUtils {
                             vaultActionSheet.dismiss()
                             action.share()
                         }
+                        actionVerificationInfo.text = verificationInfoLabel
+                        actionVerificationInfo.setOnClickListener {
+                            vaultActionSheet.dismiss()
+                            action.showVerificationInformation()
+                        }
                         //Move action
                         actionMove.isVisible = isMoveVisible
                         actionMove.text = moveLabel
@@ -132,6 +143,7 @@ object VaultSheetUtils {
         lateinit var actionDelete: TextView
         lateinit var actionUpload: TextView
         lateinit var actionShare: TextView
+        lateinit var actionVerificationInfo: TextView
         lateinit var actionMove: TextView
         lateinit var actionInfo: TextView
         lateinit var actionSave: TextView
@@ -144,6 +156,7 @@ object VaultSheetUtils {
             actionDelete = view.findViewById(R.id.deleteActionTV)
             actionUpload = view.findViewById(R.id.uploadActionTV)
             actionShare = view.findViewById(R.id.shareActionTV)
+            actionVerificationInfo = view.findViewById(R.id.verificationInfoActionTV)
             actionMove = view.findViewById(R.id.moveActionTV)
             actionInfo = view.findViewById(R.id.infoActionTV)
             actionSave = view.findViewById(R.id.saveActionTV)

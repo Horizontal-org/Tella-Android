@@ -63,11 +63,15 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
         // DBv1
         createVaultFileTable(db);
         insertRootVaultFile(db);
+        createSourceFileIndex(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        //Upgrade here
+        if (oldVersion < 2) {
+            addSourceFileIdColumn(db);
+            createSourceFileIndex(db);
+        }
     }
 
     private void createVaultFileTable(SQLiteDatabase db) {
@@ -85,8 +89,20 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_DURATION, D.INTEGER, true, 0) + ", " +
                 cddl(D.C_ANONYMOUS, D.INTEGER, true, 0) + ", " +
                 cddl(D.C_SIZE, D.INTEGER, true, 0) + ", " +
+                cddl(D.C_SOURCE_FILE_ID, D.TEXT) + ", " +
                 "UNIQUE(" + sq(D.C_PARENT_ID) + ", " + sq(D.C_NAME) + ")" +
                 ");");
+    }
+
+    static void addSourceFileIdColumn(SQLiteDatabase db) {
+        db.execSQL("ALTER TABLE " + sq(D.T_VAULT_FILE) + " ADD COLUMN " +
+                cddl(D.C_SOURCE_FILE_ID, D.TEXT) + ";");
+    }
+
+    static void createSourceFileIndex(SQLiteDatabase db) {
+        db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `idx_vault_file_source_file_id` ON " +
+                sq(D.T_VAULT_FILE) + "(" + sq(D.C_SOURCE_FILE_ID) + ") " +
+                "WHERE " + sq(D.C_SOURCE_FILE_ID) + " IS NOT NULL;");
     }
 
     private void insertRootVaultFile(SQLiteDatabase db) {

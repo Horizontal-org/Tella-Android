@@ -17,6 +17,7 @@ import org.horizontal.tella.mobile.databinding.ActivityPdfReaderBinding
 import org.horizontal.tella.mobile.media.MediaFileHandler
 import org.horizontal.tella.mobile.views.activity.MetadataViewerActivity
 import org.horizontal.tella.mobile.views.activity.viewer.PermissionsActionsHelper.initContracts
+import org.horizontal.tella.mobile.views.activity.viewer.VaultActionsHelper.observeVerificationMetadataSave
 import org.horizontal.tella.mobile.views.activity.viewer.VaultActionsHelper.showVaultActionsDialog
 import org.horizontal.tella.mobile.views.base_ui.BaseLockActivity
 import java.io.InputStream
@@ -97,6 +98,7 @@ class PDFReaderActivity : BaseLockActivity() {
                 )
             }
 
+            observeVerificationMetadataSave(this@with)
         }
     }
 

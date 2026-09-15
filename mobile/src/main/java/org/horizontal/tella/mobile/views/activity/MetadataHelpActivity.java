@@ -3,25 +3,35 @@ package org.horizontal.tella.mobile.views.activity;
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
-
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+
 import org.horizontal.tella.mobile.R;
 import org.horizontal.tella.mobile.databinding.ActivityMetadataHelpBinding;
+import org.horizontal.tella.mobile.util.Util;
+import org.horizontal.tella.mobile.views.activity.viewer.VerificationCategory;
+import org.horizontal.tella.mobile.views.activity.viewer.VerificationCategoryBinder;
+import org.horizontal.tella.mobile.views.activity.viewer.VerificationHelpField;
+import org.horizontal.tella.mobile.views.activity.viewer.VerificationHelpRows;
 import org.horizontal.tella.mobile.views.base_ui.BaseLockActivity;
 
-
 public class MetadataHelpActivity extends BaseLockActivity {
-    Toolbar toolbar;
-    LinearLayout metadataList;
+    private ActivityMetadataHelpBinding binding;
+    private boolean showingCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,38 +39,38 @@ public class MetadataHelpActivity extends BaseLockActivity {
 
         overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out);
 
-        ActivityMetadataHelpBinding binding = ActivityMetadataHelpBinding.inflate(getLayoutInflater());
+        binding = ActivityMetadataHelpBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         applyEdgeToEdgeDarkBackground(binding.getRoot());
 
-        metadataList = binding.content.metadataHelpList;
-        toolbar = binding.toolbar;
+        Toolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.verification_help_info_app_bar);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            findViewById(R.id.appbar).setOutlineProvider(null);
+            binding.appbar.setOutlineProvider(null);
         } else {
-            findViewById(R.id.appbar).bringToFront();
+            binding.appbar.bringToFront();
         }
 
-        showMetadataHelp();
+        bindIntro();
+        VerificationCategoryBinder.bind(
+                binding.content.verificationCategories.getRoot(),
+                this::showCategoryHelp
+        );
+        showOverview();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == android.R.id.home) {
+        if (item.getItemId() == android.R.id.home) {
             onBackPressed();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -72,70 +82,79 @@ public class MetadataHelpActivity extends BaseLockActivity {
 
     @Override
     public void onBackPressed() {
+        if (showingCategory) {
+            showOverview();
+            return;
+        }
         finish();
     }
 
-    private View createMetadataTitle(@StringRes int titleResId) {
-        @SuppressLint("InflateParams")
-        TextView textView = (TextView) LayoutInflater.from(this)
-                .inflate(R.layout.metadata_header, null);
-        textView.setText(titleResId);
-        return textView;
+    private void bindIntro() {
+        String learnMore = getString(R.string.action_learn_more);
+        String intro = getString(R.string.verification_help_intro, learnMore);
+        SpannableString spannable = new SpannableString(intro);
+        int start = intro.lastIndexOf(learnMore);
+        if (start >= 0) {
+            spannable.setSpan(new ClickableSpan() {
+                @Override
+                public void onClick(@NonNull View widget) {
+                    Util.startBrowserIntent(
+                            MetadataHelpActivity.this,
+                            getString(R.string.config_verification_url)
+                    );
+                }
+
+                @Override
+                public void updateDrawState(@NonNull TextPaint ds) {
+                    ds.setColor(ContextCompat.getColor(MetadataHelpActivity.this, R.color.wa_orange));
+                    ds.setUnderlineText(false);
+                }
+            }, start, start + learnMore.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        binding.content.helpIntroTv.setText(spannable);
+        binding.content.helpIntroTv.setMovementMethod(LinkMovementMethod.getInstance());
+        binding.content.helpIntroTv.setHighlightColor(android.graphics.Color.TRANSPARENT);
     }
 
-    private View createMetadataItem(CharSequence value, String name) {
+    private void showOverview() {
+        showingCategory = false;
+        setScreenTitle(R.string.verification_help_info_app_bar);
+        binding.content.helpOverview.setVisibility(View.VISIBLE);
+        binding.content.metadataHelpList.setVisibility(View.GONE);
+        binding.content.metadataHelpList.removeAllViews();
+    }
+
+    private void showCategoryHelp(VerificationCategory category) {
+        showingCategory = true;
+        setScreenTitle(VerificationHelpRows.INSTANCE.titleRes(category));
+        binding.content.helpOverview.setVisibility(View.GONE);
+        binding.content.metadataHelpList.setVisibility(View.VISIBLE);
+        binding.content.metadataHelpList.removeAllViews();
+
+        for (VerificationHelpField field : VerificationHelpRows.INSTANCE.rows(category)) {
+            binding.content.metadataHelpList.addView(
+                    createHelpItem(getString(field.getLabelRes()), getString(field.getExplanationRes()))
+            );
+        }
+    }
+
+    private void setScreenTitle(@StringRes int titleResId) {
+        binding.toolbar.setTitle(titleResId);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(titleResId);
+        }
+    }
+
+    private View createHelpItem(String name, String explanation) {
         @SuppressLint("InflateParams")
         LinearLayout layout = (LinearLayout) LayoutInflater.from(this)
                 .inflate(R.layout.metadata_item, null);
 
         TextView dataName = layout.findViewById(R.id.name);
         TextView dataValue = layout.findViewById(R.id.data);
-
         dataName.setText(name);
-        if (value == null || value.length() < 1) {
-            dataValue.setText(R.string.verification_info_field_metadata_not_available);
-        } else {
-            dataValue.setText(value);
-        }
-
+        dataValue.setText(explanation);
         return layout;
-    }
-
-    private LinearLayout createMetadataLine() {
-        @SuppressLint("InflateParams")
-        LinearLayout layout = (LinearLayout) LayoutInflater.from(this)
-                .inflate(R.layout.metadata_line, null);
-
-        return layout;
-    }
-
-    private void showMetadataHelp() {
-
-        metadataList.addView(createMetadataTitle(R.string.verification_info_subheading_file_metadata));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_file_path_expl), getResources().getString(R.string.verification_info_field_file_path)));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_hash_expl), getResources().getString(R.string.verification_info_field_hash)));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_date_time_modified_expl), getResources().getString(R.string.verification_info_field_file_modified)));
-        metadataList.addView(createMetadataLine());
-
-        metadataList.addView(createMetadataTitle(R.string.verification_info_subheading_device_metadata));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_manufacturer_expl), getResources().getString(R.string.verification_info_field_manufacturer)));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_device_model_expl), getResources().getString(R.string.verification_info_field_hardware)));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_device_id_expl), getResources().getString(R.string.verification_info_field_device_id)));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_screen_size_expl), getResources().getString(R.string.verification_info_field_screen_size)));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_language_expl), getResources().getString(R.string.verification_info_field_language)));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_locale_expl), getResources().getString(R.string.verification_info_field_locale)));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_connection_status_expl), getResources().getString(R.string.verification_info_field_connection_status)));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_network_type_expl), getResources().getString(R.string.verification_info_field_network_type)));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_wifi_mac_expl), getResources().getString(R.string.verification_info_field_wifi_mac)));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_ipv4_expl), getResources().getString(R.string.verification_info_field_ipv4)));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_ipv6_expl), getResources().getString(R.string.verification_info_field_ipv6)));
-        metadataList.addView(createMetadataLine());
-
-        metadataList.addView(createMetadataTitle(R.string.verification_info_subheading_context_metadata));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_location_expl), getResources().getString(R.string.verification_info_field_location)));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_location_provider_expl), getResources().getString(R.string.verification_info_field_location_provider)));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_location_speed_expl), getResources().getString(R.string.verification_info_field_location_speed)));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_cell_towers_expl), getResources().getString(R.string.verification_info_field_cell_towers)));
-        metadataList.addView(createMetadataItem(getResources().getString(R.string.verification_info_wifi_expl), getResources().getString(R.string.verification_info_wifi)));
     }
 }

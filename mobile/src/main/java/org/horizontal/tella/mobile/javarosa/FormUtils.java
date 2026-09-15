@@ -27,6 +27,7 @@ import org.horizontal.tella.mobile.R;
 import org.horizontal.tella.mobile.domain.entity.IErrorBundle;
 import org.horizontal.tella.mobile.domain.entity.IErrorCode;
 import org.horizontal.tella.mobile.domain.entity.collect.CollectFormInstance;
+import org.horizontal.tella.mobile.util.MetadataUtils;
 import org.horizontal.tella.mobile.util.StringUtils;
 import org.horizontal.tella.mobile.util.Util;
 
@@ -124,7 +125,7 @@ public class FormUtils {
         mds.add(mdSingleProperty(context, R.string.verification_info_field_hash, metadata.getFileHashSHA256()));
         mds.add(mdSingleProperty(context, R.string.verification_info_field_file_modified, Util.getDateTimeString(metadata.getTimestamp(), FORM_METADATA_PROPERTY_TIME_FORMAT)));
         mds.add(mdSingleProperty(context, R.string.verification_info_field_manufacturer, metadata.getManufacturer()));
-        mds.add(mdSingleProperty(context, R.string.verification_info_field_screen_size, metadata.getScreenSize()));
+        mds.add(mdSingleProperty(context, R.string.verification_info_field_screen_size, MetadataUtils.formatScreenSize(metadata.getScreenSize())));
         mds.add(mdSingleProperty(context, R.string.verification_info_field_language, metadata.getLanguage()));
         mds.add(mdSingleProperty(context, R.string.verification_info_field_locale, metadata.getLocale()));
         mds.add(mdSingleProperty(context, R.string.verification_info_field_connection_status, metadata.getNetwork()));
