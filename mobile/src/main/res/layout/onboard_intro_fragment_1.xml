@@ -15,12 +15,13 @@
         app:layout_constraintGuide_percent="0.5" />
 
     <ImageView
-        android:id="@+id/welcome_illustration"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:id="@+id/welcome_icon"
+        android:layout_width="@dimen/onboarding_welcome_icon_width"
+        android:layout_height="@dimen/onboarding_welcome_icon_height"
         android:layout_marginBottom="24dp"
         android:importantForAccessibility="no"
         android:src="@drawable/ic_welcome"
+        android:translationX="@dimen/onboarding_welcome_icon_optical_offset"
         app:layout_constraintBottom_toTopOf="@+id/onboard_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,24 +32,32 @@
         style="@style/OnboardingWelcomeTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/onboarding_get_started_horizontal_margin"
         android:layout_marginBottom="8dp"
+        android:gravity="center"
         android:text="@string/onboard.intro_title"
+        android:textAlignment="center"
+        app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toTopOf="@+id/standard_sheet_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_max="@dimen/onboarding_get_started_width" />
 
     <TextView
         android:id="@+id/standard_sheet_content"
         style="@style/Typography.Link1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/onboarding_get_started_horizontal_margin"
         android:gravity="center"
         android:text="@string/intro_document_protect"
         android:textAlignment="center"
         android:textColor="@color/wa_white"
+        app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guidelineCenter" />
+        app:layout_constraintTop_toBottomOf="@+id/guidelineCenter"
+        app:layout_constraintWidth_max="@dimen/onboarding_get_started_width" />
 
     <TextView
         android:id="@+id/startBtn"

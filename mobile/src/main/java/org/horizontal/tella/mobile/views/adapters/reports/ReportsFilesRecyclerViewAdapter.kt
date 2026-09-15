@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -93,6 +92,7 @@ open class ReportsFilesRecyclerViewAdapter(
             }
 
             if (vaultFile!!.type != VaultFile.Type.UNKNOWN) {
+                resetAttachmentPreview()
                 removeBtn.setOnClickListener {
                     removeFile(position = layoutPosition)
                 }
@@ -111,6 +111,14 @@ open class ReportsFilesRecyclerViewAdapter(
                 removeBtn.visibility = View.GONE
                 showAddLink()
             }
+        }
+
+        private fun resetAttachmentPreview() {
+            filePreviewImg.scaleType = ImageView.ScaleType.CENTER_CROP
+            filePreviewImg.setBackgroundResource(R.color.light_purple)
+            filePreviewImg.imageTintList = null
+            filePreviewImg.setImageDrawable(null)
+            filePreviewImg.setOnClickListener(null)
         }
 
         private fun showVideoInfo(vaultFile: VaultFile) {
@@ -141,9 +149,10 @@ open class ReportsFilesRecyclerViewAdapter(
         }
 
         private fun showAddLink() {
-            filePreviewImg.background =
-                ResourcesCompat.getDrawable(context.resources, R.drawable.transparent_solid, null)
-            filePreviewImg.setImageResource(R.drawable.upload_box_btn)
+            filePreviewImg.scaleType = ImageView.ScaleType.CENTER_INSIDE
+            filePreviewImg.setBackgroundResource(R.drawable.upload_box_btn)
+            filePreviewImg.setImageResource(R.drawable.ic_report_attach_add)
+            filePreviewImg.imageTintList = null
             filePreviewImg.setOnClickListener {
                 iAttachmentsMediaHandler.addFiles()
             }

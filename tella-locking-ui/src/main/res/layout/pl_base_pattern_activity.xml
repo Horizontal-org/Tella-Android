@@ -38,9 +38,15 @@
 
     <TextView
         android:id="@+id/pl_message_text"
-        style="@style/Unlock_White_Text"
+        style="@style/Typography.Heading1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
         android:text="@string/UnLockPattern_Message_DrawPattern"
+        android:textColor="@color/wa_white"
         app:layout_constraintBottom_toTopOf="@+id/pl_pattern"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

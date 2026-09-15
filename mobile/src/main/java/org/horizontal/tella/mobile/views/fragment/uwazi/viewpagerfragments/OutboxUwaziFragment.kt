@@ -53,8 +53,7 @@ class OutboxUwaziFragment : BaseReportsFragment<UwaziEntityInstance>() {
                     viewText = getString(R.string.Uwazi_Action_ViewEntity),
                     deleteText = getString(R.string.Uwazi_Action_DeleteEntity),
                     deleteConfirmation = getString(R.string.Uwazi_Subtitle_RemoveOutboxEntity),
-                    deleteActionText = getString(R.string.action_delete)
-                        .replaceFirstChar { it.uppercaseChar() } + " \"" + instance.title + "\"?",
+                    deleteActionText = getString(R.string.Uwazi_DeleteEntity_SheetTitle),
                 )
             }
 

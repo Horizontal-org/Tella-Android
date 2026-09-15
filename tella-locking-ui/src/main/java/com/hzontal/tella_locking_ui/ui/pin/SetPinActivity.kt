@@ -3,8 +3,6 @@ package com.hzontal.tella_locking_ui.ui.pin
 import android.app.Activity
 import android.content.Intent
 import com.hzontal.tella_locking_ui.FINISH_ACTIVITY_REQUEST_CODE
-import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
-import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.ui.pin.base.BasePinActivity
 
 const val CONFIRM_PIN = "confirm_pin"

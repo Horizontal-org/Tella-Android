@@ -2,6 +2,8 @@ package com.hzontal.tella_locking_ui.ui.password
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Gravity
+import android.view.View
 import org.hzontal.shared_ui.utils.DialogUtils
 import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
 import com.hzontal.tella_locking_ui.R
@@ -20,6 +22,8 @@ class ConfirmPasswordActivity : BasePasswordActivity() {
         super.onCreate(savedInstanceState)
         setTopText(getString(R.string.LockPasswordConfirm_Message_ConfirmPassword))
         passwordEditText.hint = getString(R.string.LockPasswordConfirm_Message_ConfirmPassword)
+        passwordMsgTextView.gravity = Gravity.CENTER
+        passwordMsgTextView.textAlignment = View.TEXT_ALIGNMENT_CENTER
         setMessageText(getString(R.string.LockPasswordConfirm_Message_EnterPasswordAgain))
     }
 
@@ -28,23 +32,26 @@ class ConfirmPasswordActivity : BasePasswordActivity() {
             val keySpec = PBEKeySpec(password.toCharArray())
             val config = TellaKeysUI.getUnlockRegistry()
                 .getRegisteredConfig(UnlockRegistry.Method.TELLA_PASSWORD)
-            val mainKey = generateOrGetMainKey() ?: return
-            TellaKeysUI.getMainKeyStore().store(mainKey, config.wrapper, keySpec, object : MainKeyStore.IMainKeyStoreCallback {
-                override fun onSuccess(mainKey: MainKey) {
-                    Timber.d("** MainKey stored: %s **", mainKey)
-                    TellaKeysUI.getUnlockRegistry().setActiveMethod(
-                        this@ConfirmPasswordActivity,
-                        UnlockRegistry.Method.TELLA_PASSWORD
-                    )
-                    TellaKeysUI.getMainKeyHolder().set(mainKey)
-                    onSuccessConfirmUnlock()
-                }
+            val persist = persist@{
+                val mainKey = generateOrGetMainKey() ?: return@persist
+                TellaKeysUI.getMainKeyStore().store(mainKey, config.wrapper, keySpec, object : MainKeyStore.IMainKeyStoreCallback {
+                    override fun onSuccess(mainKey: MainKey) {
+                        Timber.d("** MainKey stored: %s **", mainKey)
+                        TellaKeysUI.getUnlockRegistry().setActiveMethod(
+                            this@ConfirmPasswordActivity,
+                            UnlockRegistry.Method.TELLA_PASSWORD
+                        )
+                        TellaKeysUI.getMainKeyHolder().set(mainKey)
+                        onSuccessConfirmUnlock()
+                    }
 
-                override fun onError(throwable: Throwable) {
-                    Timber.e(throwable, "** MainKey store error **")
-                    onFailureSetPassword("General error occurred")
-                }
-            })
+                    override fun onError(throwable: Throwable) {
+                        Timber.e(throwable, "** MainKey store error **")
+                        onFailureSetPassword("General error occurred")
+                    }
+                })
+            }
+            if (isFromSettings) persist() else showOnboardingProtectSheet(persist)
         } else
             onFailureSetPassword(getString(R.string.LockPasswordConfirm_Message_Error_PasswordsNotMatch))
     }

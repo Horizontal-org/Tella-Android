@@ -1,7 +1,6 @@
 package org.hzontal.shared_ui.bottomsheet
 
 import android.app.Activity
-import android.content.Context
 import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
@@ -184,7 +183,8 @@ object VaultSheetUtils {
                 with(holder) {
                     title.text = titleText
                     renameEditText.setText(fileName)
-
+                    KeyboardUtil(sheetRoot, cursorAtEnd = true)
+                    KeyboardUtil.focusAndShowKeyboard(renameEditText)
                     renameEditText.onTextChanged { text ->
                         if (text.isEmpty()) {
                             actionRename.setTextColor(context.getColor(R.color.wa_white_40))
@@ -237,9 +237,8 @@ object VaultSheetUtils {
                 with(holder) {
                     title.text = titleText
                     renameEditText.setText(fileName)
-
-                    renameEditText.requestFocus()
-
+                    KeyboardUtil(sheetRoot, cursorAtEnd = true)
+                    KeyboardUtil.focusAndShowKeyboard(renameEditText)
                     renameEditText.onTextChanged { text ->
                         if (text.isEmpty()) {
                             actionRename.setTextColor(ContextCompat.getColor(context,R.color.wa_white_40))
@@ -274,12 +273,14 @@ object VaultSheetUtils {
     }
 
     class VaultRenameSheetHolder : PageHolder() {
+        lateinit var sheetRoot: View
         lateinit var actionCancel: TextView
         lateinit var actionRename: TextView
         lateinit var title: TextView
         lateinit var renameEditText: EditText
 
         override fun bindView(view: View) {
+            sheetRoot = view
             actionRename = view.findViewById(R.id.standard_sheet_confirm_btn)
             actionCancel = view.findViewById(R.id.standard_sheet_cancel_btn)
             title = view.findViewById(R.id.standard_sheet_title)

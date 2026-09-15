@@ -104,7 +104,7 @@ mode activation</string>
   <string name="collect.form_exit_dialog.action_save.exit">SAVE AND EXIT</string>
   <string name="collect.form_exit_dialog.action_exit.anyway">EXIT ANYWAY</string>
   <string name="settings.docu_error_not.valid.URL">This is not a valid URL.</string>
-  <string name="settings_invalid_url">Error: The server URL is incorrect</string>
+  <string name="settings_invalid_url">The server URL is incorrect</string>
   <string name="home_action.label_quick.delete">Delete</string>
   <string name="gallery_subheading_sort.by">Sort by</string>
   <string name="gallery_list.item_newest.to.oldest">Newest to oldest</string>
@@ -483,13 +483,13 @@ connecting to a server</string>
   <string name="settings.docu_add.server_dialog.select_tella_web">Tella Web</string>
   <string name="settings.docu_add.server_dialog.select_tella_uwazi">Uwazi</string>
   <string name="collect.outbox_tab.title">Outbox</string>
-  <string name="Collect_RemoveForm_SheetTitle">Remove form?</string>
+  <string name="Collect_RemoveForm_SheetTitle">Delete form?</string>
   <string name="fragment_uwazi">Uwazi</string>
   <string name="Uwazi_Dowload_Temapltes_Header_Title">Add Templates</string>
   <string name="Uwazi_RemoveTemplate_SheetTitle">Remove from device</string>
   <string name="Uwazi_Action_FillEntity">Create an entity</string>
   <string name="Uwazi_Action_RemoveTemplate">Remove template</string>
-  <string name="Uwazi_RemoveTemplate_ConfirmTitle">Remove \"%1$s\"?</string>
+  <string name="Uwazi_RemoveTemplate_ConfirmTitle">Remove template?</string>
   <string name="Uwazi_Subtitle_RemoveTemplate">Are you sure you want to remove this template?</string>
   <string name="UWAZI_Language_Header_Title">Uwazi language</string>
   <string name="Uwazi_Language_Screen_Description">This Uwazi collection is available in several languages. Please select the language in which you would like to download templates.</string>
@@ -716,7 +716,7 @@ WARNING: If enabled, Tella will remain unlocked until all reports are fully uplo
   <string name="Outbox_Reports_Empty_Message">Your Outbox is currently empty. Reports that are ready to be sent will appear here.</string>
   <string name="Submitted_Reports_Empty_Message">You have no submitted reports.</string>
   <string name="New_Reports_Text">NEW REPORT</string>
-  <string name="Reports_Title_Screen">REPORT</string>
+  <string name="Reports_Title_Screen">Report</string>
   <string name="Reports_Send_To_Text">Send report to:</string>
   <string name="Reports_Select_Your_Project">Select your project</string>
   <string name="Reports_Select_Title">Title</string>
@@ -1039,9 +1039,8 @@ Would you like to share analytics with the Tella team?</string>
   <string name="select_file_picker">Select a file manager</string>
   <string name="gallery_toast_fail_import_no_file_manager">No file manager app found. Please install a file manager app (like Google Files, Fossify File Manager, or any other file manager) to import files.</string>
   <string name="onboard_lock_warning_title">Don\'t lose your files</string>
-  <string name="onboard_lock_warning_message">Your lock is the only way to access your Tella files.
-
-If you forget your lock, there is currently no way to recover it. Your data inside Tella will be lost forever.</string>
+  <string name="onboard_lock_warning_message">Your lock is the only way to access your Tella files.</string>
+  <string name="onboard_lock_warning_message_recover">If you forget your lock, there is currently no way to recover it. Your data inside Tella will be lost forever.</string>
   <string name="onboard_lock_warning_cta">I understand</string>
   <string name="onboard_lock_protect_sheet_title">Protect your lock</string>
   <string name="onboard_lock_protect_sheet_message">Make sure to remember your lock or save it somewhere safe like a password manager.</string>

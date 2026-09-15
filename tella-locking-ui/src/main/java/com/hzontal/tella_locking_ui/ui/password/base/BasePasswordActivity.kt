@@ -25,6 +25,8 @@ abstract class BasePasswordActivity : BaseActivity(), View.OnClickListener, OnVa
     lateinit var topImageView: ImageView
     lateinit var passwordLeftButton: TextView
     lateinit var passwordMsgTextView: TextView
+    lateinit var passwordMsgHintSecond: TextView
+    lateinit var passwordMsgHintThird: TextView
     lateinit var passwordRightButton: TextView
     private var isPasswordMode = true
     var isHiLighted = false
@@ -48,6 +50,8 @@ abstract class BasePasswordActivity : BaseActivity(), View.OnClickListener, OnVa
         passwordRightButton = findViewById(R.id.password_right_button)
         enterPasswordTextView = findViewById(R.id.password_enterTV)
         passwordMsgTextView = findViewById(R.id.password_msgTV)
+        passwordMsgHintSecond = findViewById(R.id.password_msgHintSecond)
+        passwordMsgHintThird = findViewById(R.id.password_msgHintThird)
         passwordLeftButton.text = if(isFromSettings) getString(R.string.LockSelect_Action_Cancel) else getString(R.string.LockSelect_Action_Back)
     }
 
@@ -125,5 +129,7 @@ abstract class BasePasswordActivity : BaseActivity(), View.OnClickListener, OnVa
 
     fun setMessageText(text: String) {
         passwordMsgTextView.text = text
+        passwordMsgHintSecond.visibility = View.GONE
+        passwordMsgHintThird.visibility = View.GONE
     }
 }

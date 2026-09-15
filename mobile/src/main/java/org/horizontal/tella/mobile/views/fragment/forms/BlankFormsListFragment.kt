@@ -529,7 +529,7 @@ class BlankFormsListFragment :
                 requireContext().resources.getString(R.string.Collect_Subtitle_RemoveForm),
                 collectForm.form.name
             ),
-            requireContext().getString(R.string.action_remove),
+            requireContext().getString(R.string.action_delete),
             requireContext().getString(R.string.action_cancel)
         )
     }
