@@ -37,28 +37,31 @@ class ConfirmPinActivity  : BasePinActivity() {
            // Use target method config without setActiveMethod first: prefs must still reflect the
            // previous lock until store succeeds, otherwise process death can leave TELLA_PIN with a
            // pattern-wrapped key (or inconsistent prefs).
-           val config =
-               TellaKeysUI.getUnlockRegistry().getRegisteredConfig(UnlockRegistry.Method.TELLA_PIN)
-           val mainKey = generateOrGetMainKey() ?: run {
-               isProcessingConfirm = false
-               return
-           }
-           TellaKeysUI.getMainKeyStore().store(mainKey, config.wrapper, keySpec, object : MainKeyStore.IMainKeyStoreCallback {
-               override fun onSuccess(mainKey: MainKey) {
-                   Timber.d("** MainKey stored: %s **", mainKey)
-                   TellaKeysUI.getUnlockRegistry().setActiveMethod(
-                       this@ConfirmPinActivity,
-                       UnlockRegistry.Method.TELLA_PIN
-                   )
-                   TellaKeysUI.getMainKeyHolder().set(mainKey)
-                   onSuccessConfirmUnlock()
-               }
-               override fun onError(throwable: Throwable) {
+           val persist = persist@{
+               val config =
+                   TellaKeysUI.getUnlockRegistry().getRegisteredConfig(UnlockRegistry.Method.TELLA_PIN)
+               val mainKey = generateOrGetMainKey() ?: run {
                    isProcessingConfirm = false
-                   onFailureSetPin("General error occurred")
-                   Timber.e(throwable, "** MainKey store error **")
+                   return@persist
                }
-           })
+               TellaKeysUI.getMainKeyStore().store(mainKey, config.wrapper, keySpec, object : MainKeyStore.IMainKeyStoreCallback {
+                   override fun onSuccess(mainKey: MainKey) {
+                       Timber.d("** MainKey stored: %s **", mainKey)
+                       TellaKeysUI.getUnlockRegistry().setActiveMethod(
+                           this@ConfirmPinActivity,
+                           UnlockRegistry.Method.TELLA_PIN
+                       )
+                       TellaKeysUI.getMainKeyHolder().set(mainKey)
+                       onSuccessConfirmUnlock()
+                   }
+                   override fun onError(throwable: Throwable) {
+                       isProcessingConfirm = false
+                       onFailureSetPin("General error occurred")
+                       Timber.e(throwable, "** MainKey store error **")
+                   }
+               })
+           }
+           if (isFromSettings) persist() else showOnboardingProtectSheet(persist)
         }
        else{
             onFailureSetPin(getString(R.string.LockPinConfirm_Message_Error_TryAgain))

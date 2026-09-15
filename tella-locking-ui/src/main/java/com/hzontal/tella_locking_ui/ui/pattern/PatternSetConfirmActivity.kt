@@ -59,24 +59,26 @@ class PatternSetConfirmActivity : SetPatternActivity() {
         val mNewPassphrase = PatternUtils.patternToSha1String(pattern)
         // holder.unlockRegistry.setActiveMethod(applicationContext, UnlockRegistry.Method.TELLA_PATTERN)
         // I've put this in LockApp - for holder.unlockRegistry.getActiveConfig(this) to work
-        TellaKeysUI.getUnlockRegistry().setActiveMethod(this@PatternSetConfirmActivity, UnlockRegistry.Method.TELLA_PATTERN)
-        val keySpec = PBEKeySpec(mNewPassphrase.toCharArray())
-        val config = TellaKeysUI.getUnlockRegistry().getActiveConfig(this@PatternSetConfirmActivity)
+        val persist = persist@{
+            TellaKeysUI.getUnlockRegistry().setActiveMethod(this@PatternSetConfirmActivity, UnlockRegistry.Method.TELLA_PATTERN)
+            val keySpec = PBEKeySpec(mNewPassphrase.toCharArray())
+            val config = TellaKeysUI.getUnlockRegistry().getActiveConfig(this@PatternSetConfirmActivity)
+            val mainKey = generateOrGetMainKey() ?: return@persist
+            TellaKeysUI.getMainKeyStore().store(mainKey, config.wrapper, keySpec, object : MainKeyStore.IMainKeyStoreCallback {
+                override fun onSuccess(mainKey: MainKey) {
+                    Timber.d("** MainKey stored: %s **", mainKey.key)
+                    // here, we store MainKey in memory -> unlock the app
+                    TellaKeysUI.getMainKeyHolder().set(mainKey)
+                    onSuccessConfirmUnlock()
+                }
 
-        val mainKey = generateOrGetMainKey() ?: return
-        TellaKeysUI.getMainKeyStore().store(mainKey, config.wrapper, keySpec, object : MainKeyStore.IMainKeyStoreCallback {
-            override fun onSuccess(mainKey: MainKey) {
-                Timber.d("** MainKey stored: %s **", mainKey.key)
-                // here, we store MainKey in memory -> unlock the app
-                TellaKeysUI.getMainKeyHolder().set(mainKey)
-                onSuccessConfirmUnlock()
-            }
-
-            override fun onError(throwable: Throwable) {
-                Timber.e(throwable, "** MainKey store error **")
-                onCanceled()
-            }
-        })
+                override fun onError(throwable: Throwable) {
+                    Timber.e(throwable, "** MainKey store error **")
+                    onCanceled()
+                }
+            })
+        }
+        if (isFromSettings) persist() else showOnboardingProtectSheet(persist)
     }
 
     override fun onCanceled() {
