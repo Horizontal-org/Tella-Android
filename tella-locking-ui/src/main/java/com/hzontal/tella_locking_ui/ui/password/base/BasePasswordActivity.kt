@@ -3,6 +3,7 @@ package com.hzontal.tella_locking_ui.ui.password.base
 import android.app.Activity
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
+import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -56,6 +57,13 @@ abstract class BasePasswordActivity : BaseActivity(), View.OnClickListener, OnVa
         passwordMsgHintSecond.text = "• ${getString(R.string.LockPasswordSet_Message_Hint_guessable)}"
         passwordMsgHintThird.text = "• ${getString(R.string.LockPasswordSet_Message_Hint_length)}"
         passwordLeftButton.text = if(isFromSettings) getString(R.string.LockSelect_Action_Cancel) else getString(R.string.LockSelect_Action_Back)
+        centerPasswordText()
+    }
+
+    private fun centerPasswordText() {
+        passwordEditText.gravity = Gravity.CENTER
+        passwordEditText.textAlignment = View.TEXT_ALIGNMENT_GRAVITY
+        passwordEditText.includeFontPadding = false
     }
 
     private fun initListeners() {
@@ -108,6 +116,7 @@ abstract class BasePasswordActivity : BaseActivity(), View.OnClickListener, OnVa
         passwordEditText.transformationMethod = if (isPasswordMode) PasswordTransformationMethod() else null
         passwordEyeImageView.background = if (isPasswordMode) ContextCompat.getDrawable(this@BasePasswordActivity, R.drawable.eye) else ContextCompat.getDrawable(this@BasePasswordActivity, R.drawable.eye_off)
         passwordClickView.contentDescription = if (isPasswordMode) getString(R.string.action_show_password) else getString(R.string.action_hide_password)
+        centerPasswordText()
         passwordEditText.setSelection(passwordEditText.text.length)
     }
 

@@ -60,8 +60,6 @@ class PasswordUnlockActivity : BasePasswordActivity() {
                 backBtn.setOnClickListener { finish() }
                 passwordMsgTextView.text =
                     getString(R.string.LockPasswordSet_Settings_EnterCurrentPassword)
-                passwordEditText.hint =
-                    getString(R.string.LockPasswordSet_Settings_EnterCurrentPassword)
             }
 
             ReturnActivity.CAMOUFLAGE.getActivityOrder() -> {
@@ -70,15 +68,12 @@ class PasswordUnlockActivity : BasePasswordActivity() {
                 backBtn.setOnClickListener { finish() }
                 passwordMsgTextView.text =
                     getString(R.string.LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage)
-                passwordEditText.hint =
-                    getString(R.string.LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage)
             }
 
             else -> {
                 enterPasswordTextView.isVisible = true
                 enterPasswordTextView.text = getText(R.string.UnlockPassword_Message_EnterPassword)
                 passwordMsgTextView.isVisible = false
-                passwordEditText.hint = getString(R.string.UnlockPassword_Message_EnterPassword)
                 passwordRightButton.text = getString(R.string.unlock)
                 passwordRightButton.isVisible = true
                 passwordEditText.onChange {
