@@ -983,7 +983,7 @@
     <string name="google_drive_shared_drive_migration_sheet_message">Tella більше не підтримує спільні диски. Щоб продовжити надсилання звітів на Google Диск, будь ласка, створіть нову особисту папку.</string>
     <string name="google_drive_reconnect_sheet_title">Повторно під’єднайте Google Диск</string>
     <string name="google_drive_reconnect_sheet_message">Ця папка більше не доступна. Щоб продовжити надсилання звітів, будь ласка, створіть нову папку або перепідключіть свій обліковий запис.</string>
-    <string name="onboard.nearby_sharing_expl">Діліться файлами з пристроями поблизу без під’єднання до інтернету.</string>
+    <string name="onboard.nearby_sharing_expl">За допомогою функції Обмін поблизу надсилайте файли людям поблизу без підключення до Інтернету.</string>
     <string name="Snackbar_Submit_Files_Error">Щоб надіслати звіт, будь ласка, введіть заголовок і прикріпіть файл.</string>
     <string name="connect_to_device">Під’єднатися до пристрою</string>
     <string name="qr_code_sender_instruction">Покажіть цей QR-код відправнику для сканування</string>
