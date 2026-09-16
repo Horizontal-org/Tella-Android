@@ -3,6 +3,7 @@ package com.hzontal.tella_locking_ui.ui.pin.base
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.AppCompatImageView
@@ -21,6 +22,8 @@ abstract class BasePinActivity : BaseActivity(), PinLockListener, View.OnClickLi
     lateinit var pinRightButton: TextView
     lateinit var pinTopText: TextView
     lateinit var pinMsgText: TextView
+    lateinit var pinMsgHintSecond: TextView
+    lateinit var pinMsgContainer: LinearLayout
     lateinit var pinTopImageView: AppCompatImageView
     lateinit var pinEditText: NoImeEditText
     private lateinit var pinEyeImageView: AppCompatImageButton
@@ -46,6 +49,8 @@ abstract class BasePinActivity : BaseActivity(), PinLockListener, View.OnClickLi
         pinEyeImageView = findViewById(R.id.pin_eye)
         pinTopText = findViewById(R.id.pin_enterTV)
         pinMsgText = findViewById(R.id.pin_msgTV)
+        pinMsgHintSecond = findViewById(R.id.pin_msgHintSecond)
+        pinMsgContainer = findViewById(R.id.pin_msgContainer)
         pinClickView = findViewById(R.id.pinClickView)
         pinTopImageView = findViewById(R.id.pin_TopImg)
         pinLeftButton.text =

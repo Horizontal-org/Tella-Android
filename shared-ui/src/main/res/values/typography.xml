@@ -82,6 +82,7 @@
 
     <style name="Typography.Heading1">
         <item name="android:textAppearance">@style/TextAppearance.Tella.Heading1</item>
+        <item name="android:letterSpacing">0</item>
     </style>
 
     <style name="Typography.Heading2">

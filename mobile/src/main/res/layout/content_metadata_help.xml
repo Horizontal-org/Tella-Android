@@ -11,13 +11,55 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/metadata_help_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"/>
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="24dp">
+
+            <LinearLayout
+                android:id="@+id/help_overview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="@dimen/tella_main_vertical">
+
+                <TextView
+                    android:id="@+id/helpIntroTv"
+                    style="@style/Tella_Main_White_Text.Meduim"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingMultiplier="1.2"
+                    android:textColor="@color/wa_white"
+                    tools:text="Verification mode enables users to make photos, videos, and audio captured in Tella verifiable." />
+
+                <TextView
+                    android:id="@+id/helpCategoriesTv"
+                    style="@style/Tella_Main_White_Text.Meduim"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="12dp"
+                    android:text="@string/verification.help.categories"
+                    android:textColor="@color/wa_white" />
+
+                <include
+                    android:id="@+id/verificationCategories"
+                    layout="@layout/include_verification_categories"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/metadata_help_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone" />
+        </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
 </FrameLayout>
