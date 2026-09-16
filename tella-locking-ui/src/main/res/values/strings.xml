@@ -27,8 +27,8 @@ unlock Tella</string>
     <string name="LockPinSet_Message_EnterPin">Enter your PIN</string>
     <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock
 Tella</string>
-    <string name="LockPinSet_Message_Hint">• Use at least 6 digits</string>
-    <string name="LockPinSet_Message_Hint_guessable">• Avoid using numbers that can be guessed easily, such as your birthday.</string>
+    <string name="LockPinSet_Message_Hint">Use at least 6 digits</string>
+    <string name="LockPinSet_Message_Hint_guessable">Avoid using numbers that can be guessed easily, such as your birthday.</string>
     <string name="LockPinSet_Message_Confirm">Confirm your PIN</string>
     <string name="LockPinConfirm_Message_Confirm">Please enter your PIN one more time,
  just to be sure.</string>
@@ -36,9 +36,9 @@ Tella</string>
     <string name="LockPinConfirm_Message_Error_IncorrectPin">Incorrect PIN,
  please try again</string>
     <string name="UnlockPassword_Message_EnterYourPassword">Enter your password</string>
-    <string name="LockPasswordSet_Message_Hint">• Use at least 6 characters.</string>
-    <string name="LockPasswordSet_Message_Hint_guessable">• Avoid using passwords that can be guessed easily, such as “password.”</string>
-    <string name="LockPasswordSet_Message_Hint_length">• The longer your password, the more secure it is.</string>
+    <string name="LockPasswordSet_Message_Hint">Use at least 6 characters.</string>
+    <string name="LockPasswordSet_Message_Hint_guessable">Avoid using passwords that can be guessed easily, such as “password.”</string>
+    <string name="LockPasswordSet_Message_Hint_length">The longer your password, the more secure it is.</string>
     <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">Please try again. Your passwords do not match.</string>
     <string name="LockSuccess_Message_AllDone">You\'re all
 done!</string>

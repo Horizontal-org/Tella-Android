@@ -50,6 +50,8 @@ abstract class BasePinActivity : BaseActivity(), PinLockListener, View.OnClickLi
         pinTopText = findViewById(R.id.pin_enterTV)
         pinMsgText = findViewById(R.id.pin_msgTV)
         pinMsgHintSecond = findViewById(R.id.pin_msgHintSecond)
+        pinMsgText.text = "• ${getString(R.string.LockPinSet_Message_Hint)}"
+        pinMsgHintSecond.text = "• ${getString(R.string.LockPinSet_Message_Hint_guessable)}"
         pinMsgContainer = findViewById(R.id.pin_msgContainer)
         pinClickView = findViewById(R.id.pinClickView)
         pinTopImageView = findViewById(R.id.pin_TopImg)

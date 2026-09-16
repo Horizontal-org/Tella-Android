@@ -52,6 +52,9 @@ abstract class BasePasswordActivity : BaseActivity(), View.OnClickListener, OnVa
         passwordMsgTextView = findViewById(R.id.password_msgTV)
         passwordMsgHintSecond = findViewById(R.id.password_msgHintSecond)
         passwordMsgHintThird = findViewById(R.id.password_msgHintThird)
+        passwordMsgTextView.text = "• ${getString(R.string.LockPasswordSet_Message_Hint)}"
+        passwordMsgHintSecond.text = "• ${getString(R.string.LockPasswordSet_Message_Hint_guessable)}"
+        passwordMsgHintThird.text = "• ${getString(R.string.LockPasswordSet_Message_Hint_length)}"
         passwordLeftButton.text = if(isFromSettings) getString(R.string.LockSelect_Action_Cancel) else getString(R.string.LockSelect_Action_Back)
     }
 
