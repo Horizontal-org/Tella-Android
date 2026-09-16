@@ -378,6 +378,9 @@ object MediaFile {
             "text/plain",
             MtpConstants.FORMAT_TEXT
         )
+        addFileType("CSV", FILE_TYPE_TEXT, "text/comma-separated-values")
+        addFileType("CSV", FILE_TYPE_TEXT, "application/csv")
+        addFileType("CSV", FILE_TYPE_TEXT, "text/csv")
         addFileType(
             "HTM",
             FILE_TYPE_HTML,
