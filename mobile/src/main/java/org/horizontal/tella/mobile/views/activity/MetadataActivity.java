@@ -453,7 +453,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements Senso
         if (holder.getLocation().isEmpty()) {
             return false;
         }
-        return wifiScanReceived || isWifiScanUnavailable();
+        return !holder.getWifis().isEmpty() || wifiScanReceived || isWifiScanUnavailable();
     }
 
     private boolean isWifiScanUnavailable() {

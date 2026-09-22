@@ -440,7 +440,7 @@ public abstract class MetaDataFragment extends BaseFragment implements SensorEve
         if (holder.getLocation().isEmpty()) {
             return false;
         }
-        return wifiScanReceived || isWifiScanUnavailable();
+        return !holder.getWifis().isEmpty() || wifiScanReceived || isWifiScanUnavailable();
     }
 
     private boolean isWifiScanUnavailable() {
