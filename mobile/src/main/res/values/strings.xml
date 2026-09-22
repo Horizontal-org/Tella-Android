@@ -260,7 +260,7 @@ Turn on GPS so Tella can record the position of your evidence.</string>
   <string name="gallery_action.desc_metadata.help">Verification Help</string>
   <string name="verification.info_filename.expl">The file\'s name.</string>
   <string name="verification.info_file.path.expl">Where the file was located in the Tella directory.</string>
-  <string name="verification.info_hash.expl">A unique number to identify the file.</string>
+  <string name="verification.info_hash.expl">A unique alphanumeric sequence to identify the file.</string>
   <string name="verification.info_file.created.expl">When the file was created in Tella, if available.</string>
   <string name="verification.info_date.time.modified.expl">The date and time when the file was last modified on the device.</string>
   <string name="verification.info_manufacturer.expl">The name of the device manufacturer.</string>
