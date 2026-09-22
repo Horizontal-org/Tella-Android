@@ -146,6 +146,8 @@ public class MetadataUtils {
                     return "Mobile Data CDMA";
                 case TelephonyManager.NETWORK_TYPE_LTE:
                     return "Mobile Data LTE";
+                case TelephonyManager.NETWORK_TYPE_NR:
+                    return "Mobile Data 5G";
                 case TelephonyManager.NETWORK_TYPE_HSDPA:
                     return "Mobile Data 3G";
                 case TelephonyManager.NETWORK_TYPE_HSPAP:
