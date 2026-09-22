@@ -280,7 +280,7 @@ Turn on GPS so Tella can record the position of your evidence.</string>
   <string name="verification.info_location.provider.expl">How location is determined. \"Fused\" means it\'s using a mix of methods, including GPS and network connections.</string>
   <string name="verification.info_location.latitude.expl">The exact latitude of the device in degrees.</string>
   <string name="verification.info_location.longitude.expl">The exact longitude of the device in degrees.</string>
-  <string name="verification.info_location.accuracy.expl">The accuracy of the location reading.</string>
+  <string name="verification.info_location.accuracy.expl">The accuracy of the location reading in meters.</string>
   <string name="verification.info_location.altitude.expl">The exact altitude of the device in meters.</string>
   <string name="verification.info_location.time.expl">The date and time when the GPS reading was created on the device.</string>
   <string name="verification.info_location.speed.expl">The speed at which the device is traveling in meters per second.</string>

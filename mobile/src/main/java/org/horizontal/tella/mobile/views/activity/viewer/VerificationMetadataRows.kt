@@ -104,11 +104,11 @@ object VerificationMetadataRows {
             ),
             VerificationField(
                 R.string.verification_info_field_location_latitude,
-                loc?.latitude?.toString()
+                degreeString(loc?.latitude)
             ),
             VerificationField(
                 R.string.verification_info_field_location_longitude,
-                loc?.longitude?.toString()
+                degreeString(loc?.longitude)
             ),
             VerificationField(
                 R.string.verification_info_field_location_altitude,
@@ -167,6 +167,11 @@ object VerificationMetadataRows {
         } else {
             value.toString()
         }
+    }
+
+    private fun degreeString(value: Number?): String? {
+        val number = numberString(value) ?: return null
+        return "$number°"
     }
 
     private fun unitString(value: Number?, unit: String): String? {

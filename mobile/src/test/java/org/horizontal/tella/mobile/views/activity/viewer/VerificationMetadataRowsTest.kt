@@ -107,8 +107,8 @@ class VerificationMetadataRowsTest {
         val rows = VerificationMetadataRows.rows(vaultFile, VerificationCategory.LOCATION)
 
         assertEquals("GPS", rows[0].value)
-        assertEquals("40.8630502", rows[1].value)
-        assertEquals("-73.93083805", rows[2].value)
+        assertEquals("40.8630502°", rows[1].value)
+        assertEquals("-73.93083805°", rows[2].value)
         assertEquals("-1 m", rows[3].value)
         assertEquals("21 m", rows[4].value)
         assertEquals("0 m/s", rows[5].value)
