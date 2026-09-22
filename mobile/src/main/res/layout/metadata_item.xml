@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:gravity="top"
     android:orientation="horizontal"
     android:paddingStart="16dp"
     android:paddingTop="10dp"
@@ -11,21 +12,20 @@
 
     <TextView
         android:id="@+id/name"
-        android:layout_width="0dp"
+        style="@style/Typography.Body2"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_weight="0.42"
         android:paddingEnd="8dp"
         android:textColor="@color/wa_white"
-        android:textSize="14sp"
         tools:ignore="RtlSymmetry"
-        tools:text="File hash SHA256" />
+        tools:text="Manufacturer" />
 
     <TextView
         android:id="@+id/data"
+        style="@style/Typography.ButtonDetailRegular"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="0.58"
-        android:textColor="@color/wa_white"
-        android:textSize="14sp"
-        tools:text="9356a357139168599b...." />
+        android:layout_weight="1"
+        android:textColor="@color/wa_white_80"
+        tools:text="Samsung" />
 </LinearLayout>
