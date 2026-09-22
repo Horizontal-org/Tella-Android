@@ -76,6 +76,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements Senso
     private boolean locationListenerRegistered;
     private boolean wifiReceiverRegistered;
     private boolean sensorListenerRegistered;
+    private boolean wifiScanReceived;
 
     private AlertDialog metadataAlertDialog;
     private AlertDialog locationAlertDialog;
@@ -134,6 +135,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements Senso
                     return;
                 }
 
+                wifiScanReceived = true;
                 wifiSubject.onNext(getWifiStrings(wifiManager.getScanResults()));
             }
         };
@@ -444,7 +446,18 @@ public abstract class MetadataActivity extends BaseLockActivity implements Senso
                 )
                 .filter(mh -> !mh.getWifis().isEmpty() || !mh.getLocation().isEmpty())
                 .take((5 * 60 * 1000) / (int) LOCATION_REQUEST_INTERVAL)
-                .takeUntil(mh -> !mh.getWifis().isEmpty() && !mh.getLocation().isEmpty());
+                .takeUntil(this::hasAllRequestedMetadata);
+    }
+
+    private boolean hasAllRequestedMetadata(MetadataHolder holder) {
+        if (holder.getLocation().isEmpty()) {
+            return false;
+        }
+        return wifiScanReceived || isWifiScanUnavailable();
+    }
+
+    private boolean isWifiScanUnavailable() {
+        return isAirplaneModeOn(this) && wifiManager != null && !wifiManager.isWifiEnabled();
     }
 
     public void attachMediaFileMetadata(
@@ -455,6 +468,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements Senso
             return;
         }
 
+        wifiScanReceived = false;
         startWifiScan();
 
         final Metadata metadata = new Metadata();
