@@ -52,6 +52,10 @@ object VerificationMetadataRows {
                 vaultFile.hash ?: metadata?.fileHashSHA256
             ),
             VerificationField(
+                R.string.verification_info_field_file_created,
+                formatTimestamp(vaultFile.created)
+            ),
+            VerificationField(
                 R.string.verification_info_field_file_modified,
                 formatTimestamp(vaultFile.created)
             )

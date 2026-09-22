@@ -46,6 +46,10 @@ object VerificationHelpRows {
                 R.string.verification_info_hash_expl
             ),
             VerificationHelpField(
+                R.string.verification_info_field_file_created,
+                R.string.verification_info_file_created_expl
+            ),
+            VerificationHelpField(
                 R.string.verification_info_field_file_modified,
                 R.string.verification_info_date_time_modified_expl
             )

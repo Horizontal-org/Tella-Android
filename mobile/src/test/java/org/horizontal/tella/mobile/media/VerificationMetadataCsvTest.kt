@@ -146,6 +146,7 @@ class VerificationMetadataCsvTest {
         vaultFile.name = "clip.mp4"
         vaultFile.path = "/vault/clip.mp4"
         vaultFile.hash = "abc123"
+        vaultFile.created = 1_520_000_000_000L
         val metadata = Metadata()
         metadata.fileName = "clip.mp4"
         metadata.fileHashSHA256 = "abc123"
@@ -166,6 +167,7 @@ class VerificationMetadataCsvTest {
         assertTrue(lines[1].contains("/video"))
         assertTrue(lines[1].contains("abc123"))
         assertTrue(lines[1].contains("1.23"))
+        assertTrue(lines[0].split(",").contains("File created"))
         assertFalse(lines[0].split(",").contains("Timestamp"))
     }
 

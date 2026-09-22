@@ -30,9 +30,11 @@ class VerificationMetadataRowsTest {
         assertEquals("/video", rows[1].value)
         assertEquals(R.string.verification_info_field_hash, rows[2].labelRes)
         assertEquals("abc123", rows[2].value)
-        assertEquals(R.string.verification_info_field_file_modified, rows[3].labelRes)
+        assertEquals(R.string.verification_info_field_file_created, rows[3].labelRes)
         assertTrue(rows[3].value!!.isNotBlank())
-        assertEquals(4, rows.size)
+        assertEquals(R.string.verification_info_field_file_modified, rows[4].labelRes)
+        assertEquals(rows[3].value, rows[4].value)
+        assertEquals(5, rows.size)
     }
 
     @Test
