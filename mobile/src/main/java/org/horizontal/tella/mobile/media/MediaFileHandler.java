@@ -19,6 +19,7 @@ import android.media.MediaScannerConnection;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.DocumentsContract;
@@ -92,7 +93,8 @@ public class MediaFileHandler {
     private static File tmpPath;
     private static final String CONTENT_SCHEME = "content";
     private static final String MIME_TYPE_COLUMN = "mime_type";
-    private static final String SIGNAL_PACKAGE = "org.thoughtcrime.securesms";
+    static final String SIGNAL_PACKAGE = "org.thoughtcrime.securesms";
+    private static final String SHARE_CACHE_DIR = "share";
 
 
     public MediaFileHandler() {
@@ -118,6 +120,7 @@ public class MediaFileHandler {
     public static void emptyTmp(final Context context) {
         Completable.fromCallable((Callable<Void>) () -> {
             FileUtil.emptyDir(new File(context.getFilesDir(), C.TMP_DIR));
+            deleteShareCache(context);
             return null;
         }).subscribeOn(Schedulers.io()).subscribe();
     }
@@ -1054,16 +1057,10 @@ public class MediaFileHandler {
 
     private static Uri createVerificationShareZip(Context context, List<VaultFile> mediaFiles)
             throws IOException {
-        File shareDir = new File(context.getCacheDir(), "share");
-        if (shareDir.exists()) {
-            File[] existing = shareDir.listFiles();
-            if (existing != null) {
-                for (File file : existing) {
-                    //noinspection ResultOfMethodCallIgnored
-                    file.delete();
-                }
-            }
-        } else if (!FileUtil.mkdirs(shareDir)) {
+        VerificationShareCacheCleaner.discardActive();
+        File shareDir = new File(context.getCacheDir(), SHARE_CACHE_DIR);
+        deleteShareCache(context);
+        if (!shareDir.exists() && !FileUtil.mkdirs(shareDir)) {
             throw new IOException("Could not create share cache");
         }
 
@@ -1185,10 +1182,32 @@ public class MediaFileHandler {
         if (!(context instanceof Activity)) {
             chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
+        VerificationShareCacheCleaner cleaner = null;
+        if (signalZipUri != null && context instanceof Activity) {
+            cleaner = VerificationShareCacheCleaner.arm((Activity) context, signalZipUri);
+        }
         try {
             context.startActivity(chooser);
         } catch (Exception e) {
             Timber.e(e, MediaFileHandler.class.getName());
+            if (cleaner != null) {
+                cleaner.clearNow();
+            } else if (signalZipUri != null) {
+                deleteShareCache(context);
+            }
+        }
+    }
+
+    static void deleteShareCache(Context context) {
+        File shareDir = new File(context.getApplicationContext().getCacheDir(), SHARE_CACHE_DIR);
+        File[] existing = shareDir.listFiles();
+        if (existing == null) {
+            return;
+        }
+        for (File file : existing) {
+            if (!file.delete()) {
+                Timber.w("Failed to delete share cache file %s", file.getAbsolutePath());
+            }
         }
     }
 
