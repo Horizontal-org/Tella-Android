@@ -249,7 +249,9 @@ Turn on GPS so Tella can record the position of your evidence.</string>
   <string name="verification.collecting_list.item_network">Network information</string>
   <string name="verification.collecting_dialog.expl">Tella is recording information to make your file verifiable. It can take several minutes. Make sure your device\'s view of the sky is unobstructed for better results.</string>
   <string name="verification.help.info_app.bar">Verification help</string>
-  <string name="verification.help.intro">Tella records metadata about every photo, video, and audio you capture: the file, the device, and the environment around it.\n\nThis verification information can be used to corroborate evidence and cross-check it with other facts known about the event or the area where it was captured. %1$s\n\nSome of this information (ip, geolocation) can identify you or your device, be careful when sharing it.</string>
+  <string name="verification.help.intro">Tella records metadata about every photo, video, and audio you capture: the file, the device, and the environment around it.</string>
+  <string name="verification.help.intro.evidence">This verification information can be used to corroborate evidence and cross-check it with other facts known about the event or the area where it was captured. %1$s</string>
+  <string name="verification.help.intro.warning">Some of this information (ip, geolocation) can identify you or your device, be careful when sharing it.</string>
   <string name="verification.help.categories">The verification information can be divided into five categories:</string>
   <string name="verification.help.file.bar">File help</string>
   <string name="verification.help.device.bar">Device help</string>
@@ -268,7 +270,7 @@ Turn on GPS so Tella can record the position of your evidence.</string>
   <string name="verification.info_device.id.expl">A unique number identifying the Android device.</string>
   <string name="verification.info_screen.size.expl">The exact screen size of the device.</string>
   <string name="verification.info_language.expl">The language the device\'s operating system is set to.</string>
-  <string name="verification.info_locale.expl">The graphic region the device is set to.</string>
+  <string name="verification.info_locale.expl">The geographic region the device is set to.</string>
   <string name="verification.info_notes.expl">Optional notes attached to the file.</string>
   <string name="verification.info_connection.status.expl">Whether the device is connected to the internet.</string>
   <string name="verification.info_network.type.expl">If the device is connected, whether it is on Wi-Fi or a cellular network.</string>
@@ -278,8 +280,8 @@ Turn on GPS so Tella can record the position of your evidence.</string>
   <string name="verification.info_ipv6.expl">A more recent identifier to a device\'s internet connection.</string>
   <string name="verification.info_location.expl">The exact location of the device, includes latitude and longitude coordinates, altitude in meters, the accuracy of the measurement in meters, and the time of the measurement.</string>
   <string name="verification.info_location.provider.expl">How the device location is determined.</string>
-  <string name="verification.info_location.latitude.expl">The exact latitude of the device in meters.</string>
-  <string name="verification.info_location.longitude.expl">The exact longitude of the device in meters.</string>
+  <string name="verification.info_location.latitude.expl">The exact latitude of the device in degrees.</string>
+  <string name="verification.info_location.longitude.expl">The exact longitude of the device in degrees.</string>
   <string name="verification.info_location.accuracy.expl">The accuracy of the location reading.</string>
   <string name="verification.info_location.altitude.expl">The exact altitude of the device in meters.</string>
   <string name="verification.info_location.time.expl">The date and time when the GPS reading was created on the device.</string>

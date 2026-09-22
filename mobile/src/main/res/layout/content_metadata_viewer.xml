@@ -38,10 +38,30 @@
                         style="@style/Tella_Main_White_Text.Meduim"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="20dp"
+                        android:lineSpacingMultiplier="1.2"
+                        android:text="@string/verification.help.intro"
+                        android:textColor="@color/wa_white" />
+
+                    <TextView
+                        android:id="@+id/helpIntroEvidenceTv"
+                        style="@style/Tella_Main_White_Text.Meduim"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
                         android:lineSpacingMultiplier="1.2"
                         android:textColor="@color/wa_white"
-                        tools:text="Verification mode enables users to make photos, videos, and audio captured in Tella verifiable." />
+                        tools:text="This verification information can be used to corroborate evidence. Learn more" />
+
+                    <TextView
+                        android:id="@+id/helpIntroWarningTv"
+                        style="@style/Tella_Main_White_Text.Meduim"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="20dp"
+                        android:lineSpacingMultiplier="1.2"
+                        android:text="@string/verification.help.intro.warning"
+                        android:textColor="@color/wa_white" />
 
                     <include
                         android:id="@+id/verificationCategories"

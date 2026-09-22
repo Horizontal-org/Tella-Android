@@ -431,7 +431,7 @@ public abstract class MetaDataFragment extends BaseFragment implements SensorEve
                 )
                 .filter(mh -> !mh.getWifis().isEmpty() || !mh.getLocation().isEmpty())
                 .take((5 * 60 * 1000) / (int) LOCATION_REQUEST_INTERVAL)
-                .takeUntil(mh -> !mh.getLocation().isEmpty());
+                .takeUntil(mh -> !mh.getWifis().isEmpty() && !mh.getLocation().isEmpty());
     }
 
     public void attachMediaFileMetadata(

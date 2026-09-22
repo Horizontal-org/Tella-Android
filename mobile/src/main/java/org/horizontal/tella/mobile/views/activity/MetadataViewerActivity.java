@@ -210,9 +210,9 @@ public class MetadataViewerActivity extends BaseLockActivity {
 
     private void bindIntro() {
         String learnMore = getString(R.string.action_learn_more);
-        String intro = getString(R.string.verification_help_intro, learnMore);
-        SpannableString spannable = new SpannableString(intro);
-        int start = intro.lastIndexOf(learnMore);
+        String evidence = getString(R.string.verification_help_intro_evidence, learnMore);
+        SpannableString spannable = new SpannableString(evidence);
+        int start = evidence.lastIndexOf(learnMore);
         if (start >= 0) {
             spannable.setSpan(new ClickableSpan() {
                 @Override
@@ -230,9 +230,9 @@ public class MetadataViewerActivity extends BaseLockActivity {
                 }
             }, start, start + learnMore.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
-        binding.content.helpIntroTv.setText(spannable);
-        binding.content.helpIntroTv.setMovementMethod(LinkMovementMethod.getInstance());
-        binding.content.helpIntroTv.setHighlightColor(android.graphics.Color.TRANSPARENT);
+        binding.content.helpIntroEvidenceTv.setText(spannable);
+        binding.content.helpIntroEvidenceTv.setMovementMethod(LinkMovementMethod.getInstance());
+        binding.content.helpIntroEvidenceTv.setHighlightColor(android.graphics.Color.TRANSPARENT);
     }
 
     private void showCategoryList() {
