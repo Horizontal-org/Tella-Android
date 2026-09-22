@@ -126,41 +126,42 @@ public class MetadataUtils {
     }
 
     public static String getDataType(Context context) {
-        String type = "Mobile Data";
+        final ConnectivityManager cm = (ConnectivityManager)
+                context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm == null) {
+            return "";
+        }
+
+        final NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        if (mobile == null || !mobile.isConnected()) {
+            return "";
+        }
 
         TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         if (tm == null) {
-            return type;
+            return "Other Mobile Data type";
         }
 
         try {
             switch (tm.getNetworkType()) {
                 case TelephonyManager.NETWORK_TYPE_CDMA:
-                    type = "Mobile Data CDMA";
-                    break;
+                    return "Mobile Data CDMA";
                 case TelephonyManager.NETWORK_TYPE_LTE:
-                    type = "Mobile Data LTE";
-                    break;
+                    return "Mobile Data LTE";
                 case TelephonyManager.NETWORK_TYPE_HSDPA:
-                    type = "Mobile Data 3G";
-                    break;
+                    return "Mobile Data 3G";
                 case TelephonyManager.NETWORK_TYPE_HSPAP:
-                    type = "Mobile Data 4G";
-                    break;
+                    return "Mobile Data 4G";
                 case TelephonyManager.NETWORK_TYPE_GPRS:
-                    type = "Mobile Data GPRS";
-                    break;
+                    return "Mobile Data GPRS";
                 case TelephonyManager.NETWORK_TYPE_EDGE:
-                    type = "Mobile Data EDGE";
-                    break;
+                    return "Mobile Data EDGE";
                 default:
-                    type = "Other Mobile Data type";
-                    break;
+                    return "Other Mobile Data type";
             }
         } catch (Exception ignored) {
+            return "Other Mobile Data type";
         }
-
-        return type;
     }
 
     public static String getIPv6() {
