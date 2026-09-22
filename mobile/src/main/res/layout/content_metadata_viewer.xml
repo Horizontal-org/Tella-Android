@@ -26,13 +26,29 @@
                 android:paddingTop="16dp"
                 android:paddingBottom="16dp">
 
-                <include
-                    android:id="@+id/verificationCategories"
-                    layout="@layout/include_verification_categories"
+                <LinearLayout
+                    android:id="@+id/verification_overview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/tella_main_vertical"
-                    android:layout_marginEnd="@dimen/tella_main_vertical" />
+                    android:orientation="vertical"
+                    android:paddingHorizontal="@dimen/tella_main_vertical">
+
+                    <TextView
+                        android:id="@+id/helpIntroTv"
+                        style="@style/Tella_Main_White_Text.Meduim"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:lineSpacingMultiplier="1.2"
+                        android:textColor="@color/wa_white"
+                        tools:text="Verification mode enables users to make photos, videos, and audio captured in Tella verifiable." />
+
+                    <include
+                        android:id="@+id/verificationCategories"
+                        layout="@layout/include_verification_categories"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/metadata_list"

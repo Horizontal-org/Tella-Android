@@ -3,9 +3,13 @@ package org.horizontal.tella.mobile.views.activity;
 import static com.hzontal.tella_vault.Metadata.VIEW_METADATA;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,9 +17,11 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.hzontal.tella_vault.Metadata;
@@ -23,12 +29,15 @@ import com.hzontal.tella_vault.VaultFile;
 
 import org.horizontal.tella.mobile.R;
 import org.horizontal.tella.mobile.databinding.ActivityMetadataViewerBinding;
+import org.horizontal.tella.mobile.util.Util;
 import org.horizontal.tella.mobile.util.VaultFolderPath;
 import org.horizontal.tella.mobile.views.activity.viewer.SharedMediaFileViewModel;
 import org.horizontal.tella.mobile.views.activity.viewer.VaultActionsHelper;
 import org.horizontal.tella.mobile.views.activity.viewer.VerificationCategory;
 import org.horizontal.tella.mobile.views.activity.viewer.VerificationCategoryBinder;
 import org.horizontal.tella.mobile.views.activity.viewer.VerificationField;
+import org.horizontal.tella.mobile.views.activity.viewer.VerificationHelpField;
+import org.horizontal.tella.mobile.views.activity.viewer.VerificationHelpRows;
 import org.horizontal.tella.mobile.views.activity.viewer.VerificationMetadataRows;
 import org.horizontal.tella.mobile.views.base_ui.BaseLockActivity;
 import org.hzontal.shared_ui.utils.DialogUtils;
@@ -53,6 +62,8 @@ public class MetadataViewerActivity extends BaseLockActivity {
     private ActivityMetadataViewerBinding binding;
     private boolean openedDirectlyToCategory;
     private boolean showingDetail;
+    private boolean showingHelp;
+    private VerificationCategory currentCategory;
     private final CompositeDisposable disposables = new CompositeDisposable();
 
     @Override
@@ -123,6 +134,7 @@ public class MetadataViewerActivity extends BaseLockActivity {
             }
         });
 
+        bindIntro();
         VerificationCategoryBinder.bind(
                 binding.content.verificationCategories.getRoot(),
                 this::showCategoryDetail
@@ -149,6 +161,10 @@ public class MetadataViewerActivity extends BaseLockActivity {
 
     @Override
     public void onBackPressed() {
+        if (showingHelp && currentCategory != null) {
+            showCategoryDetail(currentCategory);
+            return;
+        }
         if (showingDetail && !openedDirectlyToCategory) {
             showCategoryList();
             return;
@@ -159,8 +175,20 @@ public class MetadataViewerActivity extends BaseLockActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.metadata_viewer_menu, menu);
-
+        MenuItem helpItem = menu.findItem(R.id.help_item);
+        if (helpItem != null) {
+            helpItem.setVisible(showingDetail && !showingHelp);
+        }
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem helpItem = menu.findItem(R.id.help_item);
+        if (helpItem != null) {
+            helpItem.setVisible(showingDetail && !showingHelp);
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -173,22 +201,52 @@ public class MetadataViewerActivity extends BaseLockActivity {
         }
 
         if (id == R.id.help_item) {
-            startMetadataHelp();
+            openCategoryHelp();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    private void bindIntro() {
+        String learnMore = getString(R.string.action_learn_more);
+        String intro = getString(R.string.verification_help_intro, learnMore);
+        SpannableString spannable = new SpannableString(intro);
+        int start = intro.lastIndexOf(learnMore);
+        if (start >= 0) {
+            spannable.setSpan(new ClickableSpan() {
+                @Override
+                public void onClick(@NonNull View widget) {
+                    Util.startBrowserIntent(
+                            MetadataViewerActivity.this,
+                            getString(R.string.config_verification_url)
+                    );
+                }
+
+                @Override
+                public void updateDrawState(@NonNull TextPaint ds) {
+                    ds.setColor(ContextCompat.getColor(MetadataViewerActivity.this, R.color.wa_orange));
+                    ds.setUnderlineText(false);
+                }
+            }, start, start + learnMore.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        binding.content.helpIntroTv.setText(spannable);
+        binding.content.helpIntroTv.setMovementMethod(LinkMovementMethod.getInstance());
+        binding.content.helpIntroTv.setHighlightColor(android.graphics.Color.TRANSPARENT);
+    }
+
     private void showCategoryList() {
         showingDetail = false;
+        showingHelp = false;
+        currentCategory = null;
         setScreenTitle(R.string.verification_info_app_bar);
-        binding.content.verificationCategories.getRoot().setVisibility(View.VISIBLE);
+        binding.content.verificationOverview.setVisibility(View.VISIBLE);
         metadataList.setVisibility(View.GONE);
         metadataList.removeAllViews();
         binding.content.saveCsvButton.setVisibility(
                 metadata != null ? View.VISIBLE : View.GONE
         );
+        invalidateOptionsMenu();
     }
 
     private void showCategoryDetail(VerificationCategory category) {
@@ -196,17 +254,38 @@ public class MetadataViewerActivity extends BaseLockActivity {
             return;
         }
         showingDetail = true;
+        showingHelp = false;
+        currentCategory = category;
         setScreenTitle(titleFor(category));
-        binding.content.verificationCategories.getRoot().setVisibility(View.GONE);
+        binding.content.verificationOverview.setVisibility(View.GONE);
         metadataList.setVisibility(View.VISIBLE);
         metadataList.removeAllViews();
         binding.content.saveCsvButton.setVisibility(View.GONE);
+        invalidateOptionsMenu();
 
         if (category == VerificationCategory.FILE) {
             bindFileCategory(category);
             return;
         }
         bindRows(category, null);
+    }
+
+    private void showCategoryHelp(VerificationCategory category) {
+        showingDetail = true;
+        showingHelp = true;
+        currentCategory = category;
+        setScreenTitle(VerificationHelpRows.INSTANCE.titleRes(category));
+        binding.content.verificationOverview.setVisibility(View.GONE);
+        metadataList.setVisibility(View.VISIBLE);
+        metadataList.removeAllViews();
+        binding.content.saveCsvButton.setVisibility(View.GONE);
+        invalidateOptionsMenu();
+
+        for (VerificationHelpField field : VerificationHelpRows.INSTANCE.rows(category)) {
+            metadataList.addView(
+                    createHelpItem(getString(field.getLabelRes()), getString(field.getExplanationRes()))
+            );
+        }
     }
 
     private void bindFileCategory(VerificationCategory category) {
@@ -277,6 +356,18 @@ public class MetadataViewerActivity extends BaseLockActivity {
         return layout;
     }
 
+    private View createHelpItem(String name, String explanation) {
+        @SuppressLint("InflateParams")
+        LinearLayout layout = (LinearLayout) LayoutInflater.from(this)
+                .inflate(R.layout.metadata_item, null);
+
+        TextView dataName = layout.findViewById(R.id.name);
+        TextView dataValue = layout.findViewById(R.id.data);
+        dataName.setText(name);
+        dataValue.setText(explanation);
+        return layout;
+    }
+
     @SuppressWarnings("deprecation")
     private VerificationCategory getCategoryExtra() {
         Object extra = getIntent().getSerializableExtra(CATEGORY);
@@ -286,7 +377,10 @@ public class MetadataViewerActivity extends BaseLockActivity {
         return null;
     }
 
-    private void startMetadataHelp() {
-        startActivity(new Intent(MetadataViewerActivity.this, MetadataHelpActivity.class));
+    private void openCategoryHelp() {
+        if (currentCategory == null) {
+            return;
+        }
+        showCategoryHelp(currentCategory);
     }
 }
