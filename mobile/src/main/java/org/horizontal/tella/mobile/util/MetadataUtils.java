@@ -1,6 +1,7 @@
 package org.horizontal.tella.mobile.util;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -13,6 +14,7 @@ import java.net.NetworkInterface;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.UUID;
 
 import org.horizontal.tella.mobile.MyApplication;
@@ -21,7 +23,34 @@ import org.horizontal.tella.mobile.data.sharedpref.Preferences;
 
 public class MetadataUtils {
     public static String getLocale() {
-        return Locale.getDefault().getISO3Country();
+        String country = countryCode(getDeviceLocale());
+        if (!country.isEmpty()) {
+            return country;
+        }
+        return countryCode(Locale.getDefault());
+    }
+
+    private static Locale getDeviceLocale() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return Resources.getSystem().getConfiguration().getLocales().get(0);
+        }
+        //noinspection deprecation
+        return Resources.getSystem().getConfiguration().locale;
+    }
+
+    private static String countryCode(Locale locale) {
+        if (locale == null) {
+            return "";
+        }
+        try {
+            String iso3 = locale.getISO3Country();
+            if (iso3 != null && !iso3.isEmpty()) {
+                return iso3;
+            }
+        } catch (MissingResourceException ignored) {
+        }
+        String iso2 = locale.getCountry();
+        return iso2 != null ? iso2 : "";
     }
 
     public static String getLanguage() {
