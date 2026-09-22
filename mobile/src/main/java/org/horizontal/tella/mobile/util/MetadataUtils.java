@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 
@@ -15,10 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
-import java.util.UUID;
-
 import org.horizontal.tella.mobile.MyApplication;
-import org.horizontal.tella.mobile.data.sharedpref.Preferences;
 
 
 public class MetadataUtils {
@@ -203,15 +201,15 @@ public class MetadataUtils {
         return "02:00:00:00:00:00";
     }
 
-    public static String getDeviceID() {
-        String deviceId = Preferences.getInstallationId();
-
-        if (deviceId == null) {
-            deviceId = UUID.randomUUID().toString();
-            Preferences.setInstallationId(deviceId);
+    public static String getDeviceID(Context context) {
+        if (context == null) {
+            return "";
         }
-
-        return deviceId;
+        String androidId = Settings.Secure.getString(
+                context.getContentResolver(),
+                Settings.Secure.ANDROID_ID
+        );
+        return androidId != null ? androidId : "";
     }
 
     private static String getIPAddresses(boolean IPv4) {

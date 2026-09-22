@@ -470,7 +470,7 @@ public abstract class MetaDataFragment extends BaseFragment implements SensorEve
                         : null
         );
         metadata.setLight(getLightSensorData().hasValue() ? getLightSensorData().getValue() : null);
-        metadata.setDeviceID(MetadataUtils.getDeviceID());
+        metadata.setDeviceID(MetadataUtils.getDeviceID(baseActivity));
         metadata.setWifiMac(MetadataUtils.getWifiMac());
         metadata.setIPv4(MetadataUtils.getIPv4());
         metadata.setIPv6(MetadataUtils.getIPv6());

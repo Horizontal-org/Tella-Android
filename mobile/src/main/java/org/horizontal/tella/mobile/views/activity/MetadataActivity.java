@@ -481,7 +481,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements Senso
                         : null
         );
         metadata.setLight(getLightSensorData().hasValue() ? getLightSensorData().getValue() : null);
-        metadata.setDeviceID(MetadataUtils.getDeviceID());
+        metadata.setDeviceID(MetadataUtils.getDeviceID(this));
         metadata.setWifiMac(MetadataUtils.getWifiMac());
         metadata.setIPv4(MetadataUtils.getIPv4());
         metadata.setIPv6(MetadataUtils.getIPv6());
