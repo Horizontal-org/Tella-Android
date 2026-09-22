@@ -149,7 +149,6 @@ class VerificationMetadataCsvTest {
         val metadata = Metadata()
         metadata.fileName = "clip.mp4"
         metadata.fileHashSHA256 = "abc123"
-        metadata.timestamp = 1_700_000_000_000L
         metadata.manufacturer = "TestCo"
         val location = MyLocation()
         location.setLatitude(1.23)
@@ -167,6 +166,7 @@ class VerificationMetadataCsvTest {
         assertTrue(lines[1].contains("/video"))
         assertTrue(lines[1].contains("abc123"))
         assertTrue(lines[1].contains("1.23"))
+        assertFalse(lines[0].split(",").contains("Timestamp"))
     }
 
     @Test

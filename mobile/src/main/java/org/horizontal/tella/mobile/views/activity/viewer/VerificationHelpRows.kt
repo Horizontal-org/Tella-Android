@@ -48,10 +48,6 @@ object VerificationHelpRows {
             VerificationHelpField(
                 R.string.verification_info_field_file_modified,
                 R.string.verification_info_date_time_modified_expl
-            ),
-            VerificationHelpField(
-                R.string.verification_info_field_proof_generated,
-                R.string.verification_info_proof_generated_expl
             )
         )
     }

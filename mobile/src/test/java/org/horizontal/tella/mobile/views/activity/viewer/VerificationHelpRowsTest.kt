@@ -10,10 +10,10 @@ class VerificationHelpRowsTest {
     fun fileHelp_matchesVerificationFileFields() {
         val rows = VerificationHelpRows.rows(VerificationCategory.FILE)
         assertEquals(R.string.verification_help_file_bar, VerificationHelpRows.titleRes(VerificationCategory.FILE))
-        assertEquals(5, rows.size)
+        assertEquals(4, rows.size)
         assertEquals(R.string.verification_info_field_filename, rows[0].labelRes)
         assertEquals(R.string.verification_info_field_file_path, rows[1].labelRes)
-        assertEquals(R.string.verification_info_field_proof_generated, rows[4].labelRes)
+        assertEquals(R.string.verification_info_field_file_modified, rows[3].labelRes)
     }
 
     @Test

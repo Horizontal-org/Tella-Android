@@ -155,7 +155,6 @@ mode activation</string>
   <string name="verification.info_field_hash">File hash</string>
   <string name="verification.info_field_hash.sha256">File hash SHA256</string>
   <string name="verification.info_field_file.created">File created</string>
-  <string name="verification.info_field_proof.generated">Proof Generated</string>
   <string name="verification.info_field_network">Network</string>
   <string name="verification.info_field_data.type">Data type</string>
   <string name="verification.info_field_notes">Notes</string>
@@ -264,7 +263,6 @@ Turn on GPS so Tella can record the position of your evidence.</string>
   <string name="verification.info_hash.expl">A unique number to identify the file.</string>
   <string name="verification.info_file.created.expl">When the file was created in Tella, if available.</string>
   <string name="verification.info_date.time.modified.expl">The date and time when the file was last modified on the device.</string>
-  <string name="verification.info_proof.generated.expl">The date and time when the proof was created on the device.</string>
   <string name="verification.info_manufacturer.expl">The name of the device manufacturer.</string>
   <string name="verification.info_device.model.expl">The exact model of the device.</string>
   <string name="verification.info_device.id.expl">A unique number identifying the Android device.</string>

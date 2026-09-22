@@ -17,7 +17,6 @@ class VerificationMetadataRowsTest {
         vaultFile.name = "clip.mp4"
         vaultFile.hash = "abc123"
         vaultFile.created = 1_520_000_000_000L
-        vaultFile.metadata?.timestamp = 1_520_000_005_000L
 
         val rows = VerificationMetadataRows.rows(
             vaultFile,
@@ -33,8 +32,7 @@ class VerificationMetadataRowsTest {
         assertEquals("abc123", rows[2].value)
         assertEquals(R.string.verification_info_field_file_modified, rows[3].labelRes)
         assertTrue(rows[3].value!!.isNotBlank())
-        assertEquals(R.string.verification_info_field_proof_generated, rows[4].labelRes)
-        assertTrue(rows[4].value!!.isNotBlank())
+        assertEquals(4, rows.size)
     }
 
     @Test

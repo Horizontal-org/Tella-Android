@@ -33,7 +33,6 @@ public class PublicMetadataMapper {
 
         metadata.cells = mfmd.getCells();
         metadata.wifis = mfmd.getWifis();
-        metadata.timestamp = mfmd.getTimestamp();
         metadata.ambientTemperature = mfmd.getAmbientTemperature();
         metadata.light = mfmd.getLight();
 
@@ -84,7 +83,6 @@ public class PublicMetadataMapper {
             Timber.e(e);
         }
 
-        metadata.put("Timestamp", rc(publicMetadata.timestamp));
         metadata.put("Ambient temperature", rc(publicMetadata.ambientTemperature));
         metadata.put("Light", rc(publicMetadata.light));
 

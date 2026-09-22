@@ -54,10 +54,6 @@ object VerificationMetadataRows {
             VerificationField(
                 R.string.verification_info_field_file_modified,
                 formatTimestamp(vaultFile.created)
-            ),
-            VerificationField(
-                R.string.verification_info_field_proof_generated,
-                metadata?.timestamp?.takeIf { it > 0 }?.let { formatTimestamp(it) }
             )
         )
     }
