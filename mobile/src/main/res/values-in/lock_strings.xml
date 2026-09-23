@@ -46,4 +46,7 @@
     <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">Masukkan PIN Anda saat ini untuk mengubah kamuflase Anda</string>
     <string name="Settings_Action_SetLock">Lock</string>
     <string name="Settings_Message_LockChanged">Kunci Anda telah diubah!</string>
+    <string name="LockPinSet_Message_Hint_guessable">Avoid using numbers that can be guessed easily, such as your birthday.</string>
+    <string name="LockPasswordSet_Message_Hint_guessable">Avoid using passwords that can be guessed easily, such as “password.”</string>
+    <string name="LockPasswordSet_Message_Hint_length">The longer your password, the more secure it is.</string>
 </resources>
