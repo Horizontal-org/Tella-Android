@@ -428,7 +428,7 @@
     <string name="settings.docu_add.server_dialog.select_tella_web">Tella Web</string>
     <string name="settings.docu_add.server_dialog.select_tella_uwazi">Uwazi</string>
     <string name="collect.outbox_tab.title">Outbox</string>
-    <string name="Collect_RemoveForm_SheetTitle">Remove form?</string>
+    <string name="Collect_RemoveForm_SheetTitle">Delete form?</string>
     <string name="fragment_uwazi">Uwazi</string>
     <string name="Uwazi_Dowload_Temapltes_Header_Title">Add Templates</string>
     <string name="Uwazi_RemoveTemplate_SheetTitle">Remove from device</string>
@@ -644,7 +644,7 @@
     <string name="Outbox_Reports_Empty_Message">Your Outbox is currently empty. Reports that are ready to be sent will appear here.</string>
     <string name="Submitted_Reports_Empty_Message">You have no submitted reports.</string>
     <string name="New_Reports_Text">NEW REPORT</string>
-    <string name="Reports_Title_Screen">REPORT</string>
+    <string name="Reports_Title_Screen">Report</string>
     <string name="Reports_Send_To_Text">Send report to:</string>
     <string name="Reports_Select_Your_Project">Select your project</string>
     <string name="Reports_Select_Title">Title</string>
@@ -928,7 +928,7 @@
     <string name="select_file_picker">Select a file manager</string>
     <string name="gallery_toast_fail_import_no_file_manager">No file manager app found. Please install a file manager app (like Google Files, Fossify File Manager, or any other file manager) to import files.</string>
     <string name="onboard_lock_warning_title">Don\'t lose your files</string>
-    <string name="onboard_lock_warning_message">Your lock is the only way to access your Tella files. If you forget your lock, there is currently no way to recover it. Your data inside Tella will be lost forever.</string>
+    <string name="onboard_lock_warning_message">Your lock is the only way to access your Tella files.</string>
     <string name="onboard_lock_warning_cta">I understand</string>
     <string name="onboard_lock_protect_sheet_title">Protect your lock</string>
     <string name="onboard_lock_protect_sheet_message">Make sure to remember your lock or save it somewhere safe like a password manager.</string>
@@ -1094,7 +1094,7 @@
     <string name="verification_step2_sender_hash">Step 2: Confirm sender hash</string>
     <string name="confirm_and_continue">Confirm and continue</string>
     <string name="collect_form_geopoint_first_load_message_secondary">This may take some time, depending on your Internet connection.</string>
-    <string name="settings_invalid_url">Error: The server URL is incorrect</string>
+    <string name="settings_invalid_url">Няправільны URL-адрас сервера.</string>
     <string name="onboard.expl_files_info">By default, your Tella files are stored only on your device, not online.</string>
     <string name="Uwazi_Subtitle_RemoveOutboxEntity">Are you sure you want to delete this entity?</string>
     <string name="onboard.share_data_connections">Tella supports server Connections to:</string>

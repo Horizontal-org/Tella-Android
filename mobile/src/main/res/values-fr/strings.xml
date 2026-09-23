@@ -64,7 +64,7 @@
     <string name="action_play">Lire</string>
     <string name="action_record">Enregistrer</string>
     <string name="play.audio_app.bar">Lecture d’un contenu son</string>
-    <string name="collect_dialog.text_delete.sent.form">Voulez-vous vraiment supprimer ce formulaire de l’appareil ? Comme les données ont déjà été envoyées, elles resteront sur le serveur de votre organisation.</string>
+    <string name="collect_dialog.text_delete.sent.form">Voulez-vous vraiment supprimer ce formulaire de l’appareil ? Comme les données ont déjà été envoyées, elles resteront sur le serveur de votre organisation.</string>
     <string name="collect_dialog.text_delete.draft.form">Le brouillon sera supprimé.</string>
     <string name="collect_toast_form.deleted">Le formulaire a été supprimé</string>
     <string name="settings.lang_select.expl_default">Garder Tella dans la même langue que mon appareil</string>
@@ -431,7 +431,7 @@
     <string name="settings.docu_add.server_dialog.select_tella_web">Tella Web</string>
     <string name="settings.docu_add.server_dialog.select_tella_uwazi">Uwazi</string>
     <string name="collect.outbox_tab.title">Boîte d\'envoi</string>
-    <string name="Collect_RemoveForm_SheetTitle">Supprimer le formulaire ?</string>
+    <string name="Collect_RemoveForm_SheetTitle">Supprimer le formulaire ?</string>
     <string name="fragment_uwazi">Uwazi</string>
     <string name="Uwazi_Dowload_Temapltes_Header_Title">Ajouter des modèles</string>
     <string name="Uwazi_RemoveTemplate_SheetTitle">Supprimer de l\'appareil</string>
@@ -656,7 +656,7 @@
     <string name="Outbox_Reports_Empty_Message">Votre boîte d\'envoi est actuellement vide. Les rapports prêts à être envoyés apparaîtront ici.</string>
     <string name="Submitted_Reports_Empty_Message">Vous n\'avez soumis aucun rapport.</string>
     <string name="New_Reports_Text">NOUVEAU RAPPORT</string>
-    <string name="Reports_Title_Screen">RAPPORT</string>
+    <string name="Reports_Title_Screen">Rapport</string>
     <string name="Reports_Send_To_Text">Envoyer le rapport à :</string>
     <string name="Reports_Select_Your_Project">Sélectionnez votre projet</string>
     <string name="Reports_Select_Title">Titre</string>
@@ -814,7 +814,7 @@
     <string name="Resources_AvailableInfoMessage">Ce sont les ressources disponibles au téléchargement depuis vos projets Tella Web.</string>
     <string name="Resources_AvailableEmptyMessage">Aucune ressource n\'est disponible au téléchargement à partir de vos projets Tella Web.</string>
     <string name="Resources_RemoveFromDownloads">Supprimer des téléchargements</string>
-    <string name="Resources_RemovedResource">\"%1$s\" a été supprimé de vos téléchargements.</string>
+    <string name="Resources_RemovedResource">\"%1$d\" a été supprimé de vos téléchargements.</string>
     <string name="Resources_DialogTitle_StopDownload">Arrêter le téléchargement et quitter ?</string>
     <string name="Resources_DialogMsg_StopDownload">La progression de votre téléchargement sera perdue. Vous pouvez toujours revenir télécharger plus tard la ressource.</string>
     <string name="Resources_KeepDownloading">CONTINUER DE TÉLÉCHARGER</string>
@@ -941,7 +941,7 @@
     <string name="select_file_picker">Sélectionner un gestionnaire de fichiers</string>
     <string name="gallery_toast_fail_import_no_file_manager">Pas de gestionnaire de fichiers trouvé. Merci d\'installer une application de gestion de fichiers (comme Google Files, Fossify File Manager, ou n\'importe quel autre gestionnaire de fichiers) pour importer des fichiers.</string>
     <string name="onboard_lock_warning_title">Ne perdez pas vos fichiers</string>
-    <string name="onboard_lock_warning_message">Votre mode de déverouillage est le seul moyen d\'accéder au fichier stockés dans Tella. Si vous oubliez ce mode de déverouillage, il n\'y a actuellement aucun moyen de le récupérer. Vos données stockées dans Tella seront perdues définitivement.</string>
+    <string name="onboard_lock_warning_message">Your lock is the only way to access your Tella files.</string>
     <string name="onboard_lock_warning_cta">Je comprends</string>
     <string name="onboard_lock_protect_sheet_title">Protégez votre mode de déverrouillage</string>
     <string name="onboard_lock_protect_sheet_message">Veillez à bien retenir votre mode de déverrouillage ou enregistrez-le quelque part où il sera en sécurité comme un gestionnaire de mots de passe.</string>
@@ -951,7 +951,7 @@
     <string name="onboard_lock_success_message">Votre mode de déverrouillage est activé! Vous pouvez le changer à tout moment dans les paramètres de Tella.</string>
     <string name="onboard_lock_success_learn_more">En savoir plus sur les modes de déverouillage de Tella.</string>
     <string name="Uwazi_DeleteEntity_SheetTitle">Supprimer l\'entité ?</string>
-    <string name="Uwazi_Subtitle_RemoveSubmittedEntity">Voulez-vous vraiment supprimer ce formulaire de l’appareil ? Comme les données ont déjà été envoyées, elles resteront sur le serveur de votre organisation.</string>
+    <string name="Uwazi_Subtitle_RemoveSubmittedEntity">Voulez-vous vraiment supprimer ce formulaire de l’appareil ? Comme les données ont déjà été envoyées, elles resteront sur le serveur de votre organisation.</string>
     <string name="Uwazi_Entity_Deleted_Toast">\"%1$d\" a été supprimé.</string>
     <string name="google_drive_shared_drive_migration_sheet_title">Créer un nouveau dossier Google Drive</string>
     <string name="google_drive_shared_drive_migration_sheet_message">Tella no longer supports shared drives. To continue submitting reports to Google Drive, please create a new personal folder.</string>
@@ -1110,7 +1110,7 @@
     <string name="verification_step2_sender_hash">Step 2: Confirm sender hash</string>
     <string name="confirm_and_continue">Confirm and continue</string>
     <string name="collect_form_geopoint_first_load_message_secondary">This may take some time, depending on your Internet connection.</string>
-    <string name="settings_invalid_url">Erreur : L\'Url du serveur est incorrecte</string>
+    <string name="settings_invalid_url">L’URL du serveur est incorrecte.</string>
     <string name="onboard.expl_files_info">By default, your Tella files are stored only on your device, not online.</string>
     <string name="Uwazi_Subtitle_RemoveOutboxEntity">Êtes-vous sûr de vouloir supprimer cette entité ?</string>
     <string name="onboard.share_data_connections">Tella supports server Connections to:</string>
