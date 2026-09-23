@@ -431,7 +431,7 @@
     <string name="settings.docu_add.server_dialog.select_tella_web">Tella ವೆಬ್</string>
     <string name="settings.docu_add.server_dialog.select_tella_uwazi">ಉವಾಜಿ</string>
     <string name="collect.outbox_tab.title">Outbox</string>
-    <string name="Collect_RemoveForm_SheetTitle">Remove form?</string>
+    <string name="Collect_RemoveForm_SheetTitle">Delete form?</string>
     <string name="fragment_uwazi">ಉವಾಜಿ</string>
     <string name="Uwazi_Dowload_Temapltes_Header_Title">Templates</string>
     <string name="Uwazi_RemoveTemplate_SheetTitle">Remove from device</string>
@@ -656,7 +656,7 @@
     <string name="Outbox_Reports_Empty_Message">ನಿಮ್ಮ ಔಟ್‌ಬಾಕ್ಸ್ ಪ್ರಸ್ತುತ ಖಾಲಿಯಾಗಿದೆ. ಕಳುಹಿಸಲು ಸಿದ್ಧವಾಗಿರುವ ವರದಿಗಳು ಇಲ್ಲಿ ಕಾಣಿಸಿಕೊಳ್ಳುತ್ತವೆ.</string>
     <string name="Submitted_Reports_Empty_Message">ನೀವು ಯಾವುದೇ ವರದಿಗಳನ್ನು ಸಲ್ಲಿಸಿಲ್ಲ.</string>
     <string name="New_Reports_Text">ಹೊಸ ವರದಿ</string>
-    <string name="Reports_Title_Screen">ವರದಿ</string>
+    <string name="Reports_Title_Screen">របាយការណ៍</string>
     <string name="Reports_Send_To_Text">Send report to:</string>
     <string name="Reports_Select_Your_Project">Select your project</string>
     <string name="Reports_Select_Title">Title</string>
