@@ -431,7 +431,7 @@
     <string name="settings.docu_add.server_dialog.select_tella_web">Tella Web</string>
     <string name="settings.docu_add.server_dialog.select_tella_uwazi">Uwazi</string>
     <string name="collect.outbox_tab.title">Outbox</string>
-    <string name="Collect_RemoveForm_SheetTitle">Remove form?</string>
+    <string name="Collect_RemoveForm_SheetTitle">Delete form?</string>
     <string name="fragment_uwazi">Uwazi</string>
     <string name="Uwazi_Dowload_Temapltes_Header_Title">Templates</string>
     <string name="Uwazi_RemoveTemplate_SheetTitle">Remove from device</string>
@@ -656,7 +656,7 @@
     <string name="Outbox_Reports_Empty_Message">Your Outbox is currently empty. Reports that are ready to be sent will appear here.</string>
     <string name="Submitted_Reports_Empty_Message">You have no submitted reports.</string>
     <string name="New_Reports_Text">NEW REPORT</string>
-    <string name="Reports_Title_Screen">REPORT</string>
+    <string name="Reports_Title_Screen">Munghtawn laika ni</string>
     <string name="Reports_Send_To_Text">Send report to:</string>
     <string name="Reports_Select_Your_Project">Select your project</string>
     <string name="Reports_Select_Title">Title</string>
