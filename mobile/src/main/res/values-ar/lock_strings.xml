@@ -23,13 +23,13 @@
     <string name="UnLockPattern_Message_IncorrectPattern">يُرجى المحاولة مرة أخرى. النمطان غير متطابقين.</string>
     <string name="LockPinSet_Message_EnterPin">أدخل رقم التعريف الشخصي</string>
     <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock Tella</string>
-    <string name="LockPinSet_Message_Hint">Use at least 6 digits. Avoid using numbers that can be guessed easily, such as your birthday.</string>
+    <string name="LockPinSet_Message_Hint">Use at least 6 digits</string>
     <string name="LockPinSet_Message_Confirm">يُرجى تأكيد رقم التعريف الشخصي</string>
     <string name="LockPinConfirm_Message_Confirm">يُرجى إدخال رقم التعريف الشخصي مرةً أخرى، فقط للتأكد.</string>
     <string name="LockPinConfirm_Message_Error_TryAgain">يُرجى المحاولة مرة أخرى. رقما التعريف الشخصي غير متطابقين.</string>
     <string name="LockPinConfirm_Message_Error_IncorrectPin">رقم التعريف الشخصي غير صحيح، يُرجى المحاولة مرة أخرى</string>
     <string name="UnlockPassword_Message_EnterYourPassword">أدخل كلمة السر</string>
-    <string name="LockPasswordSet_Message_Hint">استخدم 6 أحرف على الأقل وتجنب استخدام كلمات السر التي يسهل تخمينها، مثل \"كلمة سر\". تذكر أنه كلما زاد طول كلمة السر كلما كانت أكثر أمانًا.</string>
+    <string name="LockPasswordSet_Message_Hint">Use at least 6 characters.</string>
     <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">يُرجى المحاولة مرة أخرى. كلمتا السر غير متطابقتين.</string>
     <string name="LockSuccess_Message_AllDone">اكتمل الضبط</string>
     <string name="LockSuccess_Message_Hint">يمكنك دومًا تغيير خيار قفل التأمين وزيادة تخصيص Tella من الإعدادات.</string>
