@@ -656,7 +656,7 @@
     <string name="Outbox_Reports_Empty_Message">Votre boîte d\'envoi est actuellement vide. Les rapports prêts à être envoyés apparaîtront ici.</string>
     <string name="Submitted_Reports_Empty_Message">Vous n\'avez soumis aucun rapport.</string>
     <string name="New_Reports_Text">NOUVEAU RAPPORT</string>
-    <string name="Reports_Title_Screen">RAPPORT</string>
+    <string name="Reports_Title_Screen">Rapport</string>
     <string name="Reports_Send_To_Text">Envoyer le rapport à :</string>
     <string name="Reports_Select_Your_Project">Sélectionnez votre projet</string>
     <string name="Reports_Select_Title">Titre</string>
@@ -941,7 +941,7 @@
     <string name="select_file_picker">Sélectionner un gestionnaire de fichiers</string>
     <string name="gallery_toast_fail_import_no_file_manager">Pas de gestionnaire de fichiers trouvé. Merci d\'installer une application de gestion de fichiers (comme Google Files, Fossify File Manager, ou n\'importe quel autre gestionnaire de fichiers) pour importer des fichiers.</string>
     <string name="onboard_lock_warning_title">Ne perdez pas vos fichiers</string>
-    <string name="onboard_lock_warning_message">Votre mode de déverouillage est le seul moyen d\'accéder au fichier stockés dans Tella. Si vous oubliez ce mode de déverouillage, il n\'y a actuellement aucun moyen de le récupérer. Vos données stockées dans Tella seront perdues définitivement.</string>
+    <string name="onboard_lock_warning_message">Your lock is the only way to access your Tella files.</string>
     <string name="onboard_lock_warning_cta">Je comprends</string>
     <string name="onboard_lock_protect_sheet_title">Protégez votre mode de déverrouillage</string>
     <string name="onboard_lock_protect_sheet_message">Veillez à bien retenir votre mode de déverrouillage ou enregistrez-le quelque part où il sera en sécurité comme un gestionnaire de mots de passe.</string>
