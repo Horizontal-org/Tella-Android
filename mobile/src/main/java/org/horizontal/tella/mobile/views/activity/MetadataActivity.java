@@ -76,6 +76,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements Senso
     private boolean locationListenerRegistered;
     private boolean wifiReceiverRegistered;
     private boolean sensorListenerRegistered;
+    private boolean wifiScanReceived;
 
     private AlertDialog metadataAlertDialog;
     private AlertDialog locationAlertDialog;
@@ -134,6 +135,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements Senso
                     return;
                 }
 
+                wifiScanReceived = true;
                 wifiSubject.onNext(getWifiStrings(wifiManager.getScanResults()));
             }
         };
@@ -444,7 +446,18 @@ public abstract class MetadataActivity extends BaseLockActivity implements Senso
                 )
                 .filter(mh -> !mh.getWifis().isEmpty() || !mh.getLocation().isEmpty())
                 .take((5 * 60 * 1000) / (int) LOCATION_REQUEST_INTERVAL)
-                .takeUntil(mh -> !mh.getLocation().isEmpty());
+                .takeUntil(this::hasAllRequestedMetadata);
+    }
+
+    private boolean hasAllRequestedMetadata(MetadataHolder holder) {
+        if (holder.getLocation().isEmpty()) {
+            return false;
+        }
+        return !holder.getWifis().isEmpty() || wifiScanReceived || isWifiScanUnavailable();
+    }
+
+    private boolean isWifiScanUnavailable() {
+        return isAirplaneModeOn(this) && wifiManager != null && !wifiManager.isWifiEnabled();
     }
 
     public void attachMediaFileMetadata(
@@ -455,6 +468,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements Senso
             return;
         }
 
+        wifiScanReceived = false;
         startWifiScan();
 
         final Metadata metadata = new Metadata();
@@ -467,7 +481,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements Senso
                         : null
         );
         metadata.setLight(getLightSensorData().hasValue() ? getLightSensorData().getValue() : null);
-        metadata.setDeviceID(MetadataUtils.getDeviceID());
+        metadata.setDeviceID(MetadataUtils.getDeviceID(this));
         metadata.setWifiMac(MetadataUtils.getWifiMac());
         metadata.setIPv4(MetadataUtils.getIPv4());
         metadata.setIPv6(MetadataUtils.getIPv6());

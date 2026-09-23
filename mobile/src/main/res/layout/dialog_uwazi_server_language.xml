@@ -71,7 +71,7 @@
 
         <TextView
             android:id="@+id/back_btn"
-            style="@style/Typography.ButtonL"
+            style="@style/Typography.ButtonS"
             android:layout_width="120dp"
             android:layout_height="54dp"
             android:layout_marginEnd="12dp"
@@ -84,7 +84,7 @@
 
         <TextView
             android:id="@+id/next_btn"
-            style="@style/Typography.ButtonL"
+            style="@style/Typography.ButtonS"
             android:layout_width="120dp"
             android:layout_height="54dp"
             android:background="@drawable/bg_uwazi_language_ok_btn"

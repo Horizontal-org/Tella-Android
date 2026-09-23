@@ -264,10 +264,9 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         viewModel.getLastMediaFile()
         if (ContextCompat.checkSelfPermission(
                 this, Manifest.permission.CAMERA
-            ) != PackageManager.PERMISSION_GRANTED
+            ) == PackageManager.PERMISSION_GRANTED &&
+            (cameraStopped || cameraProvider == null)
         ) {
-            maybeChangeTemporaryTimeout()
-        } else if (cameraStopped) {
             resumeCameraPreview()
         }
     }
@@ -627,10 +626,8 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     private fun setupCameraView() {
         if (mode == CameraMode.PHOTO) {
             captureButton.displayPhotoButton()
-            startCamera()
         } else {
             captureButton.displayVideoButton()
-            startVideo()
         }
         setupCameraGridButton()
         setupPreviewTapToFocus()
@@ -643,6 +640,9 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
+        if (hasCameraPermissions(this)) {
+            resumeCameraPreview()
+        }
     }
 
     private fun displayPhotoCaptureButton() {
@@ -854,7 +854,6 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
 
     private fun initView() {
         if (!hasCameraPermissions(context)) {
-            maybeChangeTemporaryTimeout()
             requestCameraPermissions(C.CAMERA_PERMISSION)
         }
 
@@ -1257,6 +1256,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     }
 
     private fun requestCameraPermissions(requestCode: Int) {
+        maybeChangeTemporaryTimeout()
         ActivityCompat.requestPermissions(
             this,
             arrayOf(
@@ -1280,6 +1280,13 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == C.CAMERA_PERMISSION) {
+            if (hasCameraPermissions(this)) {
+                resumeCameraPreview()
+            }
+            return
+        }
 
         if (requestCode != C.LOCATION_PERMISSION || pendingCaptureAfterLocationCheck == PendingCapture.NONE) {
             return

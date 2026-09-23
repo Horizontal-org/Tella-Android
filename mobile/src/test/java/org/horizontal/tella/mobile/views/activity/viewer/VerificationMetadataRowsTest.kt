@@ -17,7 +17,6 @@ class VerificationMetadataRowsTest {
         vaultFile.name = "clip.mp4"
         vaultFile.hash = "abc123"
         vaultFile.created = 1_520_000_000_000L
-        vaultFile.metadata?.timestamp = 1_520_000_005_000L
 
         val rows = VerificationMetadataRows.rows(
             vaultFile,
@@ -31,10 +30,11 @@ class VerificationMetadataRowsTest {
         assertEquals("/video", rows[1].value)
         assertEquals(R.string.verification_info_field_hash, rows[2].labelRes)
         assertEquals("abc123", rows[2].value)
-        assertEquals(R.string.verification_info_field_file_modified, rows[3].labelRes)
+        assertEquals(R.string.verification_info_field_file_created, rows[3].labelRes)
         assertTrue(rows[3].value!!.isNotBlank())
-        assertEquals(R.string.verification_info_field_proof_generated, rows[4].labelRes)
-        assertTrue(rows[4].value!!.isNotBlank())
+        assertEquals(R.string.verification_info_field_file_modified, rows[4].labelRes)
+        assertEquals(rows[3].value, rows[4].value)
+        assertEquals(5, rows.size)
     }
 
     @Test
@@ -107,8 +107,8 @@ class VerificationMetadataRowsTest {
         val rows = VerificationMetadataRows.rows(vaultFile, VerificationCategory.LOCATION)
 
         assertEquals("GPS", rows[0].value)
-        assertEquals("40.8630502", rows[1].value)
-        assertEquals("-73.93083805", rows[2].value)
+        assertEquals("40.8630502°", rows[1].value)
+        assertEquals("-73.93083805°", rows[2].value)
         assertEquals("-1 m", rows[3].value)
         assertEquals("21 m", rows[4].value)
         assertEquals("0 m/s", rows[5].value)

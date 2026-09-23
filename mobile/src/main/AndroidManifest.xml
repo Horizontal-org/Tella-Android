@@ -564,11 +564,6 @@
             android:label="@string/verification.info_app.bar"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".views.activity.MetadataHelpActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:label="@string/verification.help.info_app.bar"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".views.activity.viewer.PhotoViewerActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/PhotoViewerTheme.NoActionBar" />

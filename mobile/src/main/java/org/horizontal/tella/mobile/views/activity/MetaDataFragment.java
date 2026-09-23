@@ -76,6 +76,7 @@ public abstract class MetaDataFragment extends BaseFragment implements SensorEve
     private boolean locationListenerRegistered;
     private boolean wifiReceiverRegistered;
     private boolean sensorListenerRegistered;
+    private boolean wifiScanReceived;
 
     private AlertDialog metadataAlertDialog;
     private AlertDialog locationAlertDialog;
@@ -133,6 +134,7 @@ public abstract class MetaDataFragment extends BaseFragment implements SensorEve
                     return;
                 }
 
+                wifiScanReceived = true;
                 wifiSubject.onNext(getWifiStrings(wifiManager.getScanResults()));
             }
         };
@@ -431,7 +433,20 @@ public abstract class MetaDataFragment extends BaseFragment implements SensorEve
                 )
                 .filter(mh -> !mh.getWifis().isEmpty() || !mh.getLocation().isEmpty())
                 .take((5 * 60 * 1000) / (int) LOCATION_REQUEST_INTERVAL)
-                .takeUntil(mh -> !mh.getLocation().isEmpty());
+                .takeUntil(this::hasAllRequestedMetadata);
+    }
+
+    private boolean hasAllRequestedMetadata(MetadataActivity.MetadataHolder holder) {
+        if (holder.getLocation().isEmpty()) {
+            return false;
+        }
+        return !holder.getWifis().isEmpty() || wifiScanReceived || isWifiScanUnavailable();
+    }
+
+    private boolean isWifiScanUnavailable() {
+        return MetadataActivity.isAirplaneModeOn(baseActivity)
+                && wifiManager != null
+                && !wifiManager.isWifiEnabled();
     }
 
     public void attachMediaFileMetadata(
@@ -442,6 +457,7 @@ public abstract class MetaDataFragment extends BaseFragment implements SensorEve
             return;
         }
 
+        wifiScanReceived = false;
         startWifiScan();
 
         final Metadata metadata = new Metadata();
@@ -454,7 +470,7 @@ public abstract class MetaDataFragment extends BaseFragment implements SensorEve
                         : null
         );
         metadata.setLight(getLightSensorData().hasValue() ? getLightSensorData().getValue() : null);
-        metadata.setDeviceID(MetadataUtils.getDeviceID());
+        metadata.setDeviceID(MetadataUtils.getDeviceID(baseActivity));
         metadata.setWifiMac(MetadataUtils.getWifiMac());
         metadata.setIPv4(MetadataUtils.getIPv4());
         metadata.setIPv6(MetadataUtils.getIPv6());

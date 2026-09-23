@@ -1,9 +1,13 @@
 package org.horizontal.tella.mobile.util;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 
@@ -13,15 +17,40 @@ import java.net.NetworkInterface;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.UUID;
-
+import java.util.MissingResourceException;
 import org.horizontal.tella.mobile.MyApplication;
-import org.horizontal.tella.mobile.data.sharedpref.Preferences;
 
 
 public class MetadataUtils {
     public static String getLocale() {
-        return Locale.getDefault().getISO3Country();
+        String country = countryCode(getDeviceLocale());
+        if (!country.isEmpty()) {
+            return country;
+        }
+        return countryCode(Locale.getDefault());
+    }
+
+    private static Locale getDeviceLocale() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return Resources.getSystem().getConfiguration().getLocales().get(0);
+        }
+        //noinspection deprecation
+        return Resources.getSystem().getConfiguration().locale;
+    }
+
+    private static String countryCode(Locale locale) {
+        if (locale == null) {
+            return "";
+        }
+        try {
+            String iso3 = locale.getISO3Country();
+            if (iso3 != null && !iso3.isEmpty()) {
+                return iso3;
+            }
+        } catch (MissingResourceException ignored) {
+        }
+        String iso2 = locale.getCountry();
+        return iso2 != null ? iso2 : "";
     }
 
     public static String getLanguage() {
@@ -69,27 +98,45 @@ public class MetadataUtils {
     }
 
     public static String getNetworkType(Context context) {
-        String networkStatus = "";
-
         final ConnectivityManager cm = (ConnectivityManager)
                 context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if (cm == null) {
-            return networkStatus;
+            return "";
         }
 
-        final NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        final NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-
-        if (wifi.isConnected()) {
-            networkStatus = "WiFi";
-        } else if (mobile.isConnected()) {
-            networkStatus = getDataType(context);
-        } else {
-            networkStatus = "No network";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Network network = cm.getActiveNetwork();
+            if (network == null) {
+                return "No network";
+            }
+            NetworkCapabilities capabilities = cm.getNetworkCapabilities(network);
+            if (capabilities == null) {
+                return "No network";
+            }
+            if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                return "WiFi";
+            }
+            if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                return getDataType(context);
+            }
+            return "No network";
         }
 
-        return networkStatus;
+        return getNetworkTypeLegacy(cm, context);
+    }
+
+    @SuppressWarnings("deprecation")
+    private static String getNetworkTypeLegacy(ConnectivityManager cm, Context context) {
+        NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        if (wifi != null && wifi.isConnected()) {
+            return "WiFi";
+        }
+        if (mobile != null && mobile.isConnected()) {
+            return getDataType(context);
+        }
+        return "No network";
     }
 
     public static String getNetwork(Context context) {
@@ -97,41 +144,62 @@ public class MetadataUtils {
     }
 
     public static String getDataType(Context context) {
-        String type = "Mobile Data";
+        final ConnectivityManager cm = (ConnectivityManager)
+                context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm == null) {
+            return "";
+        }
+
+        if (!isMobileConnected(cm)) {
+            return "";
+        }
 
         TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         if (tm == null) {
-            return type;
+            return "Other Mobile Data type";
         }
 
         try {
             switch (tm.getNetworkType()) {
                 case TelephonyManager.NETWORK_TYPE_CDMA:
-                    type = "Mobile Data CDMA";
-                    break;
+                    return "Mobile Data CDMA";
                 case TelephonyManager.NETWORK_TYPE_LTE:
-                    type = "Mobile Data LTE";
-                    break;
+                    return "Mobile Data LTE";
+                case TelephonyManager.NETWORK_TYPE_NR:
+                    return "Mobile Data 5G";
                 case TelephonyManager.NETWORK_TYPE_HSDPA:
-                    type = "Mobile Data 3G";
-                    break;
+                    return "Mobile Data 3G";
                 case TelephonyManager.NETWORK_TYPE_HSPAP:
-                    type = "Mobile Data 4G";
-                    break;
+                    return "Mobile Data 4G";
                 case TelephonyManager.NETWORK_TYPE_GPRS:
-                    type = "Mobile Data GPRS";
-                    break;
+                    return "Mobile Data GPRS";
                 case TelephonyManager.NETWORK_TYPE_EDGE:
-                    type = "Mobile Data EDGE";
-                    break;
+                    return "Mobile Data EDGE";
                 default:
-                    type = "Other Mobile Data type";
-                    break;
+                    return "Other Mobile Data type";
             }
         } catch (Exception ignored) {
+            return "Other Mobile Data type";
         }
+    }
 
-        return type;
+    private static boolean isMobileConnected(ConnectivityManager cm) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Network network = cm.getActiveNetwork();
+            if (network == null) {
+                return false;
+            }
+            NetworkCapabilities capabilities = cm.getNetworkCapabilities(network);
+            return capabilities != null
+                    && capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR);
+        }
+        return isMobileConnectedLegacy(cm);
+    }
+
+    @SuppressWarnings("deprecation")
+    private static boolean isMobileConnectedLegacy(ConnectivityManager cm) {
+        NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        return mobile != null && mobile.isConnected();
     }
 
     public static String getIPv6() {
@@ -173,15 +241,15 @@ public class MetadataUtils {
         return "02:00:00:00:00:00";
     }
 
-    public static String getDeviceID() {
-        String deviceId = Preferences.getInstallationId();
-
-        if (deviceId == null) {
-            deviceId = UUID.randomUUID().toString();
-            Preferences.setInstallationId(deviceId);
+    public static String getDeviceID(Context context) {
+        if (context == null) {
+            return "";
         }
-
-        return deviceId;
+        String androidId = Settings.Secure.getString(
+                context.getContentResolver(),
+                Settings.Secure.ANDROID_ID
+        );
+        return androidId != null ? androidId : "";
     }
 
     private static String getIPAddresses(boolean IPv4) {

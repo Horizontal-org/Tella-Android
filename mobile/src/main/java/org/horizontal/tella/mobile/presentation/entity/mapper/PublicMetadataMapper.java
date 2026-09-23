@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import org.horizontal.tella.mobile.presentation.entity.PublicMetadata;
 import org.horizontal.tella.mobile.util.MetadataUtils;
 import org.horizontal.tella.mobile.util.StringUtils;
+import org.horizontal.tella.mobile.util.Util;
 import org.horizontal.tella.mobile.util.VaultFolderPath;
 import timber.log.Timber;
 
@@ -33,7 +34,6 @@ public class PublicMetadataMapper {
 
         metadata.cells = mfmd.getCells();
         metadata.wifis = mfmd.getWifis();
-        metadata.timestamp = mfmd.getTimestamp();
         metadata.ambientTemperature = mfmd.getAmbientTemperature();
         metadata.light = mfmd.getLight();
 
@@ -72,6 +72,7 @@ public class PublicMetadataMapper {
         metadata.put("File hash", rc(publicMetadata.fileHash));
         metadata.put("File path", rc(publicMetadata.filePath));
         metadata.put("File name", rc(publicMetadata.fileName));
+        metadata.put("File created", formatCreated(vaultFile.created));
 
         try {
             if (publicMetadata.cells != null) {
@@ -84,7 +85,6 @@ public class PublicMetadataMapper {
             Timber.e(e);
         }
 
-        metadata.put("Timestamp", rc(publicMetadata.timestamp));
         metadata.put("Ambient temperature", rc(publicMetadata.ambientTemperature));
         metadata.put("Light", rc(publicMetadata.light));
 
@@ -126,6 +126,13 @@ public class PublicMetadataMapper {
         location.speed = myLocation.getSpeed();
 
         return location;
+    }
+
+    private static String formatCreated(long created) {
+        if (created <= 0) {
+            return "";
+        }
+        return Util.getDateTimeString(created, "dd-MM-yyyy HH:mm:ss Z");
     }
 
     private static String rc(String str) {

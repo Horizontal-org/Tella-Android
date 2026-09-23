@@ -52,12 +52,12 @@ object VerificationMetadataRows {
                 vaultFile.hash ?: metadata?.fileHashSHA256
             ),
             VerificationField(
-                R.string.verification_info_field_file_modified,
+                R.string.verification_info_field_file_created,
                 formatTimestamp(vaultFile.created)
             ),
             VerificationField(
-                R.string.verification_info_field_proof_generated,
-                metadata?.timestamp?.takeIf { it > 0 }?.let { formatTimestamp(it) }
+                R.string.verification_info_field_file_modified,
+                formatTimestamp(vaultFile.created)
             )
         )
     }
@@ -104,11 +104,11 @@ object VerificationMetadataRows {
             ),
             VerificationField(
                 R.string.verification_info_field_location_latitude,
-                loc?.latitude?.toString()
+                degreeString(loc?.latitude)
             ),
             VerificationField(
                 R.string.verification_info_field_location_longitude,
-                loc?.longitude?.toString()
+                degreeString(loc?.longitude)
             ),
             VerificationField(
                 R.string.verification_info_field_location_altitude,
@@ -167,6 +167,11 @@ object VerificationMetadataRows {
         } else {
             value.toString()
         }
+    }
+
+    private fun degreeString(value: Number?): String? {
+        val number = numberString(value) ?: return null
+        return "$number°"
     }
 
     private fun unitString(value: Number?, unit: String): String? {
