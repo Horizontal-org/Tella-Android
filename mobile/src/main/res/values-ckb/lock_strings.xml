@@ -29,7 +29,7 @@
     <string name="LockPinConfirm_Message_Error_TryAgain">تکایە دووبارە هەوڵ بدەوە. PINـەکانت یەکتر ناگرنەوە.</string>
     <string name="LockPinConfirm_Message_Error_IncorrectPin">PINی هەڵە، تکایە دووبارە هەوڵ بدەوە</string>
     <string name="UnlockPassword_Message_EnterYourPassword">وشەی نهێنییەکەت داخڵ بکە</string>
-    <string name="LockPasswordSet_Message_Hint">بە لایەنی کەمەوە 6 پیت بەکاربهێنە و دوور ببەوە لە بەکارهێنانی وشەی نهێنی کە بە ئاسانی پێشبینی بکرێت، وەک وشەی \"password\". تا وشەی نهێنی درێژتر بێت، پارێزراوتر دەبێت.</string>
+    <string name="LockPasswordSet_Message_Hint">Use at least 6 characters.</string>
     <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">تکایە دووبارە هەوڵ بدەوە. وشە نهێنییەکانت وەک یەک نین.</string>
     <string name="LockSuccess_Message_AllDone">کارەکەت کۆتایی هات!</string>
     <string name="LockSuccess_Message_Hint">هەمیشە دەتوانیت بژاردەی قفڵەکەت بگۆڕیت وە زیاتر تێلا لە ڕێکخستنەکاندا تایبەتمەند بکەیت.</string>
