@@ -3,6 +3,8 @@ package org.horizontal.tella.mobile.util;
 import android.content.Context;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.provider.Settings;
@@ -96,27 +98,45 @@ public class MetadataUtils {
     }
 
     public static String getNetworkType(Context context) {
-        String networkStatus = "";
-
         final ConnectivityManager cm = (ConnectivityManager)
                 context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if (cm == null) {
-            return networkStatus;
+            return "";
         }
 
-        final NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        final NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-
-        if (wifi.isConnected()) {
-            networkStatus = "WiFi";
-        } else if (mobile.isConnected()) {
-            networkStatus = getDataType(context);
-        } else {
-            networkStatus = "No network";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Network network = cm.getActiveNetwork();
+            if (network == null) {
+                return "No network";
+            }
+            NetworkCapabilities capabilities = cm.getNetworkCapabilities(network);
+            if (capabilities == null) {
+                return "No network";
+            }
+            if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                return "WiFi";
+            }
+            if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                return getDataType(context);
+            }
+            return "No network";
         }
 
-        return networkStatus;
+        return getNetworkTypeLegacy(cm, context);
+    }
+
+    @SuppressWarnings("deprecation")
+    private static String getNetworkTypeLegacy(ConnectivityManager cm, Context context) {
+        NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        if (wifi != null && wifi.isConnected()) {
+            return "WiFi";
+        }
+        if (mobile != null && mobile.isConnected()) {
+            return getDataType(context);
+        }
+        return "No network";
     }
 
     public static String getNetwork(Context context) {
@@ -130,8 +150,7 @@ public class MetadataUtils {
             return "";
         }
 
-        final NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-        if (mobile == null || !mobile.isConnected()) {
+        if (!isMobileConnected(cm)) {
             return "";
         }
 
@@ -162,6 +181,25 @@ public class MetadataUtils {
         } catch (Exception ignored) {
             return "Other Mobile Data type";
         }
+    }
+
+    private static boolean isMobileConnected(ConnectivityManager cm) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Network network = cm.getActiveNetwork();
+            if (network == null) {
+                return false;
+            }
+            NetworkCapabilities capabilities = cm.getNetworkCapabilities(network);
+            return capabilities != null
+                    && capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR);
+        }
+        return isMobileConnectedLegacy(cm);
+    }
+
+    @SuppressWarnings("deprecation")
+    private static boolean isMobileConnectedLegacy(ConnectivityManager cm) {
+        NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        return mobile != null && mobile.isConnected();
     }
 
     public static String getIPv6() {

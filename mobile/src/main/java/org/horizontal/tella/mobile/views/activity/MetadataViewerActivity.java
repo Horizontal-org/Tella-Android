@@ -46,6 +46,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import kotlin.Unit;
 
 
 @AndroidEntryPoint
@@ -217,10 +218,13 @@ public class MetadataViewerActivity extends BaseLockActivity {
             spannable.setSpan(new ClickableSpan() {
                 @Override
                 public void onClick(@NonNull View widget) {
-                    Util.startBrowserIntent(
-                            MetadataViewerActivity.this,
-                            getString(R.string.config_verification_url)
-                    );
+                    maybeChangeTemporaryTimeout(() -> {
+                        Util.startBrowserIntent(
+                                MetadataViewerActivity.this,
+                                getString(R.string.config_verification_url)
+                        );
+                        return Unit.INSTANCE;
+                    });
                 }
 
                 @Override
