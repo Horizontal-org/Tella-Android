@@ -23,13 +23,13 @@
     <string name="UnLockPattern_Message_IncorrectPattern">请重试，图案不匹配。</string>
     <string name="LockPinSet_Message_EnterPin">确认 PIN 码</string>
     <string name="UnlockPin_Message_EnterPin">请输入 PIN 码解锁 Tella</string>
-    <string name="LockPinSet_Message_Hint">使用至少 6 位数。 避免使用容易猜到的数字，比如您的生日。</string>
+    <string name="LockPinSet_Message_Hint">使用至少 6 位数字</string>
     <string name="LockPinSet_Message_Confirm">确认 PIN 码</string>
     <string name="LockPinConfirm_Message_Confirm">请再次输入 PIN 码， 以确认无误。</string>
     <string name="LockPinConfirm_Message_Error_TryAgain">请重试，PIN 码不匹配。</string>
     <string name="LockPinConfirm_Message_Error_IncorrectPin">PIN 码错误，请重试</string>
     <string name="UnlockPassword_Message_EnterYourPassword">请输入您的密码</string>
-    <string name="LockPasswordSet_Message_Hint">至少使用 6 个字符，避免使用“password”等容易猜到的密码。密码越长越安全。</string>
+    <string name="LockPasswordSet_Message_Hint">使用至少 6 个字符。</string>
     <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">请重试。您的密码不匹配。</string>
     <string name="LockSuccess_Message_AllDone">已全部完成！</string>
     <string name="LockSuccess_Message_Hint">您随时可以在设置中更改应用锁定选项 并进一步自定义 Tella。</string>
@@ -46,7 +46,7 @@
     <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">请输入当前 PIN 码， 更改您的伪装</string>
     <string name="Settings_Action_SetLock">应用锁</string>
     <string name="Settings_Message_LockChanged">应用锁已更换！</string>
-    <string name="LockPinSet_Message_Hint_guessable">Avoid using numbers that can be guessed easily, such as your birthday.</string>
-    <string name="LockPasswordSet_Message_Hint_guessable">Avoid using passwords that can be guessed easily, such as “password.”</string>
-    <string name="LockPasswordSet_Message_Hint_length">The longer your password, the more secure it is.</string>
+    <string name="LockPinSet_Message_Hint_guessable">避免使用容易猜到的数字，例如您的生日。</string>
+    <string name="LockPasswordSet_Message_Hint_guessable">避免使用容易猜到的密码，例如 password。</string>
+    <string name="LockPasswordSet_Message_Hint_length">密码越长，安全性越高。</string>
 </resources>
