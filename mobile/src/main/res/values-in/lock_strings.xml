@@ -23,13 +23,13 @@
     <string name="UnLockPattern_Message_IncorrectPattern">Silakan coba lagi. Pola Anda tidak cocok.</string>
     <string name="LockPinSet_Message_EnterPin">Masukkan PIN Anda</string>
     <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock Tella</string>
-    <string name="LockPinSet_Message_Hint">Use at least 6 digits. Avoid using numbers that can be guessed easily, such as your birthday.</string>
+    <string name="LockPinSet_Message_Hint">Use at least 6 digits</string>
     <string name="LockPinSet_Message_Confirm">Konfirmasikan PIN Anda</string>
     <string name="LockPinConfirm_Message_Confirm">Silakan masukkan PIN Anda satu kali lagi, untuk memastikan.</string>
     <string name="LockPinConfirm_Message_Error_TryAgain">Silakan coba lagi. PIN Anda tidak cocok.</string>
     <string name="LockPinConfirm_Message_Error_IncorrectPin">PIN salah, silakan coba lagi</string>
     <string name="UnlockPassword_Message_EnterYourPassword">Masukkan kata sandi Anda</string>
-    <string name="LockPasswordSet_Message_Hint">Gunakan setidaknya 6 karakter dan hindari menggunakan kata sandi yang bisa dengan mudah ditebak, seperti \"password.\" Semakin panjang kata sandi Anda, semakin aman.</string>
+    <string name="LockPasswordSet_Message_Hint">Use at least 6 characters.</string>
     <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">Silakan coba lagi. Kata sandi Anda tidak cocok.</string>
     <string name="LockSuccess_Message_AllDone">Anda selesai!</string>
     <string name="LockSuccess_Message_Hint">Anda selalu bisa mengubah opsi kunci Anda dan menyesuaikan Tella lebih lanjut di Pengaturan.</string>
