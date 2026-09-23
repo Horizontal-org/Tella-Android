@@ -57,7 +57,7 @@ object VerificationMetadataRows {
             ),
             VerificationField(
                 R.string.verification_info_field_file_modified,
-                formatTimestamp(vaultFile.created)
+                formatTimestamp(if (vaultFile.modified > 0) vaultFile.modified else vaultFile.created)
             )
         )
     }

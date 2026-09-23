@@ -73,6 +73,8 @@ public class PublicMetadataMapper {
         metadata.put("File path", rc(publicMetadata.filePath));
         metadata.put("File name", rc(publicMetadata.fileName));
         metadata.put("File created", formatCreated(vaultFile.created));
+        metadata.put("File modified", formatCreated(
+                vaultFile.modified > 0 ? vaultFile.modified : vaultFile.created));
 
         try {
             if (publicMetadata.cells != null) {
