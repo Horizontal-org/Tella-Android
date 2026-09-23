@@ -656,7 +656,7 @@
     <string name="Outbox_Reports_Empty_Message">صندوق خروجی شما فعلاً خالی است. گزارش‌های آماده ارسال اینجا ظاهر می‌شوند.</string>
     <string name="Submitted_Reports_Empty_Message">شما گزارش ارسال‌شده ندارید.</string>
     <string name="New_Reports_Text">گزارش جدید</string>
-    <string name="Reports_Title_Screen">گزارش</string>
+    <string name="Reports_Title_Screen">Report</string>
     <string name="Reports_Send_To_Text">ارسال گزارش به:</string>
     <string name="Reports_Select_Your_Project">پروژه خود را انتخاب کنید</string>
     <string name="Reports_Select_Title">عنوان</string>
@@ -941,7 +941,7 @@
     <string name="select_file_picker">Select a file manager</string>
     <string name="gallery_toast_fail_import_no_file_manager">No file manager app found. Please install a file manager app (like Google Files, Fossify File Manager, or any other file manager) to import files.</string>
     <string name="onboard_lock_warning_title">Don\'t lose your files</string>
-    <string name="onboard_lock_warning_message">Your lock is the only way to access your Tella files. If you forget your lock, there is currently no way to recover it. Your data inside Tella will be lost forever.</string>
+    <string name="onboard_lock_warning_message">Your lock is the only way to access your Tella files.</string>
     <string name="onboard_lock_warning_cta">I understand</string>
     <string name="onboard_lock_protect_sheet_title">Protect your lock</string>
     <string name="onboard_lock_protect_sheet_message">Make sure to remember your lock or save it somewhere safe like a password manager.</string>
