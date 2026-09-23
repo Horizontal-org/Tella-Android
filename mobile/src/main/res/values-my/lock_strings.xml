@@ -46,4 +46,7 @@
     <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">သင့်အသွင်အပြင် ပြောင်းလဲရန် သင့်လက်ရှိပင်နံပါတ်ကို ရိုက်ထည့်ပါ...</string>
     <string name="Settings_Action_SetLock">လော့ခ်</string>
     <string name="Settings_Message_LockChanged">သင့်လော့ခ်ကို ပြောင်းပြီးပြီ။</string>
+    <string name="LockPinSet_Message_Hint_guessable">Avoid using numbers that can be guessed easily, such as your birthday.</string>
+    <string name="LockPasswordSet_Message_Hint_guessable">Avoid using passwords that can be guessed easily, such as “password.”</string>
+    <string name="LockPasswordSet_Message_Hint_length">The longer your password, the more secure it is.</string>
 </resources>
