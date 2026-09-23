@@ -23,13 +23,13 @@
     <string name="UnLockPattern_Message_IncorrectPattern">Спробуйте ще раз. Ключі не збігаються.</string>
     <string name="LockPinSet_Message_EnterPin">Введіть PIN-код</string>
     <string name="UnlockPin_Message_EnterPin">Введіть PIN-код, щоб розблокуватиTella</string>
-    <string name="LockPinSet_Message_Hint">Використовуйте принаймні 6 цифр. Уникайте комбінацій, які легко вгадати, наприклад, ваш день народження.</string>
+    <string name="LockPinSet_Message_Hint">Використовуйте щонайменше 6 цифр</string>
     <string name="LockPinSet_Message_Confirm">Підтвердьте PIN-код</string>
     <string name="LockPinConfirm_Message_Confirm">Будь ласка, введіть PIN-код ще раз, щоб переконатися.</string>
     <string name="LockPinConfirm_Message_Error_TryAgain">Спробуйте ще раз. PIN-коди не збігаються.</string>
     <string name="LockPinConfirm_Message_Error_IncorrectPin">Неправильний PIN-код, спробуйте ще раз</string>
     <string name="UnlockPassword_Message_EnterYourPassword">Введіть пароль</string>
-    <string name="LockPasswordSet_Message_Hint">Використовуйте принаймні 6 символів і намагайтеся не використовувати паролі, які легко вгадати, наприклад, „password”. Чим довший ваш пароль, тим він безпечніший.</string>
+    <string name="LockPasswordSet_Message_Hint">Використовуйте щонайменше 6 символів.</string>
     <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">Спробуйте ще раз. Паролі не збігаються.</string>
     <string name="LockSuccess_Message_AllDone">Усе готово!</string>
     <string name="LockSuccess_Message_Hint">Ви завжди можете змінити спосіб блокування та додатково налаштувати Tella в Налаштуваннях.</string>
@@ -46,7 +46,7 @@
     <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">Введіть поточний PIN-код, щоб змінити маскування</string>
     <string name="Settings_Action_SetLock">Блокування</string>
     <string name="Settings_Message_LockChanged">Блокування змінено!</string>
-    <string name="LockPinSet_Message_Hint_guessable">Avoid using numbers that can be guessed easily, such as your birthday.</string>
-    <string name="LockPasswordSet_Message_Hint_guessable">Avoid using passwords that can be guessed easily, such as “password.”</string>
-    <string name="LockPasswordSet_Message_Hint_length">The longer your password, the more secure it is.</string>
+    <string name="LockPinSet_Message_Hint_guessable">Уникайте чисел, які легко вгадати, наприклад дати вашого народження.</string>
+    <string name="LockPasswordSet_Message_Hint_guessable">Уникайте паролів, які легко вгадати, наприклад «password».</string>
+    <string name="LockPasswordSet_Message_Hint_length">Чим довший ваш пароль, тим він надійніший.</string>
 </resources>
