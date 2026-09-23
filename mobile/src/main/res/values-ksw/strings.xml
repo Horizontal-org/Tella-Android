@@ -431,7 +431,7 @@
     <string name="settings.docu_add.server_dialog.select_tella_web">Tella ပှာ်ယဲၤသန့</string>
     <string name="settings.docu_add.server_dialog.select_tella_uwazi">Uwazi</string>
     <string name="collect.outbox_tab.title">Outbox</string>
-    <string name="Collect_RemoveForm_SheetTitle">ကသုးကွံာ် လံာ်ကွီၣ်ဒိအံၤဧါ?</string>
+    <string name="Collect_RemoveForm_SheetTitle">ကထူးသံကွံာ်လံာ်ကွီၣ်ဒိတခါအံၤဧါ?</string>
     <string name="fragment_uwazi">Uwazi</string>
     <string name="Uwazi_Dowload_Temapltes_Header_Title">တၢ်ကဘျၣ်ဒိတဖၣ်</string>
     <string name="Uwazi_RemoveTemplate_SheetTitle">သုးကွံာ်အီၤလၢ စဲးဖီကဟၣ်ပီးလီတခါအံၤအပူၤ</string>
@@ -656,7 +656,7 @@
     <string name="Outbox_Reports_Empty_Message">အခဲအံၤ လၢန Outboxပူၤ တၢ်တအိၣ်နီတမံၤဘၣ်. လံာ်ပာ်ဖျါလၢအအိၣ်ကတဲာ်ကတီၤအသးလံတဖၣ် ကဟဲဖျါထီၣ်ဝဲဒၣ်ဖဲအံၤန့ၣ်လီၤ.</string>
     <string name="Submitted_Reports_Empty_Message">လံာ်ပာ်ဖျါလၢ နတီၣ်ထီၣ်ဃာ်အီၤဝံၤတဖၣ် တအိၣ်နီတခါဘၣ်</string>
     <string name="New_Reports_Text">လံာ်ပာ်ဖျါအသီတခါ</string>
-    <string name="Reports_Title_Screen">လံာ်ပာ်ဖျါ</string>
+    <string name="Reports_Title_Screen">တၢ်ပာ်ဖျါတဖၣ်</string>
     <string name="Reports_Send_To_Text">ဆှၢထီၣ် လံာ်ပာ်ဖျါအံၤ ဆူ-</string>
     <string name="Reports_Select_Your_Project">ဃုထၢဘၣ် ပရီကၠဲးလၢ နအဲၣ်ဒိးဆှၢအီၤ</string>
     <string name="Reports_Select_Title">တၢ်အခိၣ်တီ</string>
