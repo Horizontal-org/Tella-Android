@@ -23,13 +23,13 @@
     <string name="UnLockPattern_Message_IncorrectPattern">Khawngaihin ti nawn leh rawh. I pattern a inmil lo.</string>
     <string name="LockPinSet_Message_EnterPin">I PIN chhu lut rawh</string>
     <string name="UnlockPin_Message_EnterPin">Tella unlock turin i PIN chhu lut rawh</string>
-    <string name="LockPinSet_Message_Hint">Digit 6 tal hmang rawh. I piancham ang chi, mi rin theih mai tur awlsam hmang suh.</string>
+    <string name="LockPinSet_Message_Hint">Use at least 6 digits</string>
     <string name="LockPinSet_Message_Confirm">I PIN tichiang rawh</string>
     <string name="LockPinConfirm_Message_Confirm">Chian lehzual nan, khawngaihin i PIN vawikhat dang chhu lut leh rawh.</string>
     <string name="LockPinConfirm_Message_Error_TryAgain">Khawngaihin ti nawn leh rawh. I PIN a inmil lo.</string>
     <string name="LockPinConfirm_Message_Error_IncorrectPin">PIN a dik lo, khawngaihin ti nawn leh rawh</string>
     <string name="UnlockPassword_Message_EnterYourPassword">I password chhu lut rawh</string>
-    <string name="LockPasswordSet_Message_Hint">Character 6 tal hmang la, “password” ang chi mi rin awlsam tur hmang suh. I password a sei poh leh a him a ni mai.</string>
+    <string name="LockPasswordSet_Message_Hint">Use at least 6 characters.</string>
     <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">Khawngaihin ti nawn leh rawh. I password a inmil lo.</string>
     <string name="LockSuccess_Message_AllDone">I inpeih ta!</string>
     <string name="LockSuccess_Message_Hint">Settings-ah i lock thlangin Tella hi i duh danin i siamrem thei reng a nia.</string>
