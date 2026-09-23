@@ -46,4 +46,7 @@
     <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">আপনার ছদ্মবেশ পরিবর্তন করতে আপনার বর্তমান পিন লিখুন৷</string>
     <string name="Settings_Action_SetLock">তালা</string>
     <string name="Settings_Message_LockChanged">আপনার লক পরিবর্তন করা হয়েছে!</string>
+    <string name="LockPinSet_Message_Hint_guessable">Avoid using numbers that can be guessed easily, such as your birthday।</string>
+    <string name="LockPasswordSet_Message_Hint_guessable">Avoid using passwords that can be guessed easily, such as “password.”</string>
+    <string name="LockPasswordSet_Message_Hint_length">The longer your password, the more secure it is।</string>
 </resources>
