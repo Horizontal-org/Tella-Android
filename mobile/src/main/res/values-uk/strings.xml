@@ -1142,7 +1142,7 @@
     <string name="verification_step2_sender_hash">Крок 2: Підтвердьте хеш відправника</string>
     <string name="confirm_and_continue">Підтвердити й продовжити</string>
     <string name="collect_form_geopoint_first_load_message_secondary">Це може зайняти деякий час, залежно від вашого інтернет-з\'єднання.</string>
-    <string name="settings_invalid_url">Помилка: URL-адреса сервера неправильна</string>
+    <string name="settings_invalid_url">URL-адреса сервера неправильна.</string>
     <string name="onboard.expl_files_info">За замовчуванням ваші файли в Tella збережені лише на вашому пристрої, а не в мережі.</string>
     <string name="Uwazi_Subtitle_RemoveOutboxEntity">Ви впевнені, що хочете видалити цю сутність?</string>
     <string name="onboard.share_data_connections">Tella підтримує підключення до серверів:</string>
