@@ -928,7 +928,7 @@
     <string name="select_file_picker">请选择文件管理器</string>
     <string name="gallery_toast_fail_import_no_file_manager">未找到文件管理器应用。请安装相关应用（如 Google 文件文件极客、Fossify File Manager 或其他文件管理器）以导入文件。</string>
     <string name="onboard_lock_warning_title">小心丢失文件</string>
-    <string name="onboard_lock_warning_message">应用锁是访问 Tella 文件的唯一途径。 如果忘记如何打开应用锁，目前没有办法恢复，并且 Tella 中的数据将永远丢失。</string>
+    <string name="onboard_lock_warning_message">应用锁是访问 Tella 文件的唯一途径。</string>
     <string name="onboard_lock_warning_cta">我明白</string>
     <string name="onboard_lock_protect_sheet_title">保护应用锁</string>
     <string name="onboard_lock_protect_sheet_message">请务必记住应用锁，或者将其保存在密码管理器等安全的地方。</string>
