@@ -654,7 +654,7 @@
     <string name="Outbox_Reports_Empty_Message">Tu Bandeja de salida está actualmente vacía. Los informes que estén listos para enviar aparecerán aquí.</string>
     <string name="Submitted_Reports_Empty_Message">No tienes informes enviados</string>
     <string name="New_Reports_Text">NUEVO REPORTE</string>
-    <string name="Reports_Title_Screen">REPORTE</string>
+    <string name="Reports_Title_Screen">Report</string>
     <string name="Reports_Send_To_Text">Enviar reporte a:</string>
     <string name="Reports_Select_Your_Project">Selecciona tu proyecto</string>
     <string name="Reports_Select_Title">Título</string>
@@ -939,7 +939,7 @@
     <string name="select_file_picker">Seleccione un gestor de archivos</string>
     <string name="gallery_toast_fail_import_no_file_manager">No file manager app found. Please install a file manager app (like Google Files, Fossify File Manager, or any other file manager) to import files.</string>
     <string name="onboard_lock_warning_title">No pierda sus archivos</string>
-    <string name="onboard_lock_warning_message">Tu bloqueo es la única forma de acceder a sus archivos de Tella. Si olvida su bloqueo, no hay forma de recuperarlo. Sus datos en Tella se perderán para siempre.</string>
+    <string name="onboard_lock_warning_message">Your lock is the only way to access your Tella files.</string>
     <string name="onboard_lock_warning_cta">Entendido</string>
     <string name="onboard_lock_protect_sheet_title">Proteja su método de bloqueo</string>
     <string name="onboard_lock_protect_sheet_message">Asegúrese de recordar tu método de bloqueo o guardarlo en algún lugar seguro como un gestor de contraseñas.</string>
