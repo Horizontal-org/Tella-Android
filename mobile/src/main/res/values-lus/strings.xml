@@ -656,7 +656,7 @@
     <string name="Outbox_Reports_Empty_Message">I Outbox a ruak. Report thehluh mai theih te hetah hian a lang ang.</string>
     <string name="Submitted_Reports_Empty_Message">Report thehluh tawh i nei lo.</string>
     <string name="New_Reports_Text">REPORT THAR</string>
-    <string name="Reports_Title_Screen">REPORT</string>
+    <string name="Reports_Title_Screen">Report</string>
     <string name="Reports_Send_To_Text">Report thawnna tur:</string>
     <string name="Reports_Select_Your_Project">I project thlang rawh</string>
     <string name="Reports_Select_Title">Title</string>
@@ -941,7 +941,7 @@
     <string name="select_file_picker">File manager thlang rawh</string>
     <string name="gallery_toast_fail_import_no_file_manager">File manager app hmuh a ni lo. File la lût tûrin khawngaihin file manager app (Google Files, Fossify File Manager, emaw file manager dang eng pawh) install rawh.</string>
     <string name="onboard_lock_warning_title">I file-te ti bo suh</string>
-    <string name="onboard_lock_warning_message">I kalhna (lock) chauh hi i Tella file-a luh theihna awm chhun a ni. I kalhna i theihnghilh chuan, tûnah rih chuan dawn kîr theihna kawng a awm lo. Tella chhûnga i data-te chu a bo hlen vang.</string>
+    <string name="onboard_lock_warning_message">Your lock is the only way to access your Tella files.</string>
     <string name="onboard_lock_warning_cta">Ka hrethiam e</string>
     <string name="onboard_lock_protect_sheet_title">I kalhna (lock) humhim rawh</string>
     <string name="onboard_lock_protect_sheet_message">I kalhna (lock) chu hriat reng tum la, a nih loh pawhin password manager ang hmun himah vawng ṭha rawh.</string>
