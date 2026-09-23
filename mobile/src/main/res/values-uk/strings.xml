@@ -680,7 +680,7 @@
     <string name="Outbox_Reports_Empty_Message">Ваша скринька Вихідні наразі порожня. Звіти, готові до надсилання, з’являться тут.</string>
     <string name="Submitted_Reports_Empty_Message">У вас немає надісланих звітів.</string>
     <string name="New_Reports_Text">НОВИЙ ЗВІТ</string>
-    <string name="Reports_Title_Screen">ЗВІТ</string>
+    <string name="Reports_Title_Screen">Звіт</string>
     <string name="Reports_Send_To_Text">Надіслати звіт до:</string>
     <string name="Reports_Select_Your_Project">Виберіть свій проєкт</string>
     <string name="Reports_Select_Title">Заголовок</string>
@@ -967,7 +967,7 @@
     <string name="select_file_picker">Виберіть файловий менеджер</string>
     <string name="gallery_toast_fail_import_no_file_manager">Програму файлового менеджера не знайдено. Будь ласка, встановіть файловий менеджер (наприклад, Google Files, Fossify або будь-який інший), щоб імпортувати файли.</string>
     <string name="onboard_lock_warning_title">Не втратьте свої файли</string>
-    <string name="onboard_lock_warning_message">Ваш ключ доступу (пароль/ключ/PIN-код) — це єдиний спосіб отримати доступ до файлів у Tella. Якщо ви забудете його, відновити доступ буде неможливо. Ваш вміст у Tella буде втрачено назавжди.</string>
+    <string name="onboard_lock_warning_message">Ваше блокування — це єдиний спосіб отримати доступ до ваших файлів Tella.</string>
     <string name="onboard_lock_warning_cta">Я розумію</string>
     <string name="onboard_lock_protect_sheet_title">Захистіть свій ключ доступу</string>
     <string name="onboard_lock_protect_sheet_message">Обов’язково запам’ятайте свій ключ доступу або збережіть його в надійному місці, наприклад, у менеджері паролів.</string>
