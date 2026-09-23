@@ -202,6 +202,7 @@ class VerificationMetadataCsvTest {
         assertTrue(lines[1].contains("abc123"))
         assertTrue(lines[1].contains("1.23"))
         assertTrue(lines[0].split(",").contains("File created"))
+        assertTrue(lines[0].split(",").contains("File modified"))
         assertFalse(lines[0].split(",").contains("Timestamp"))
     }
 

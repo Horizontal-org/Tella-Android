@@ -12,6 +12,7 @@ public class VaultFile  implements Serializable {
     public String name;
     public long size;
     public long created;
+    public long modified;
     public long duration;
     public boolean anonymous;
     public Metadata metadata;
