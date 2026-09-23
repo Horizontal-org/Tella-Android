@@ -1006,26 +1006,27 @@ public class MediaFileHandler {
         launchShare(context, Collections.singletonList(mediaFileUri), vaultFile.mimeType, false);
     }
 
-    @SuppressLint("CheckResult")
     public static void startShareActivity(Context context, List<VaultFile> mediaFiles, boolean includeMetadata) {
         boolean withVerification = includeMetadata && hasVerificationMetadata(mediaFiles);
         ArrayList<Uri> uris = collectShareUris(context, mediaFiles, withVerification);
-        if (!withVerification || !isSignalShareAvailable(context)) {
-            launchShare(context, uris, "*/*", uris.size() > 1, null);
-            return;
-        }
-
-        Context appContext = context.getApplicationContext();
-        Single.fromCallable(() -> createVerificationShareZip(appContext, mediaFiles))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        zipUri -> launchShare(context, uris, "*/*", uris.size() > 1, zipUri),
-                        error -> {
-                            Timber.e(error, MediaFileHandler.class.getName());
-                            launchShare(context, uris, "*/*", uris.size() > 1, null);
-                        }
-                );
+        // TODO 3.5.0: resume the Signal zip share below. Until then Signal receives the same files as the rest of the app.
+        // if (!withVerification || !isSignalShareAvailable(context)) {
+        //     launchShare(context, uris, "*/*", uris.size() > 1, null);
+        //     return;
+        // }
+        //
+        // Context appContext = context.getApplicationContext();
+        // Single.fromCallable(() -> createVerificationShareZip(appContext, mediaFiles))
+        //         .subscribeOn(Schedulers.io())
+        //         .observeOn(AndroidSchedulers.mainThread())
+        //         .subscribe(
+        //                 zipUri -> launchShare(context, uris, "*/*", uris.size() > 1, zipUri),
+        //                 error -> {
+        //                     Timber.e(error, MediaFileHandler.class.getName());
+        //                     launchShare(context, uris, "*/*", uris.size() > 1, null);
+        //                 }
+        //         );
+        launchShare(context, uris, "*/*", uris.size() > 1, null);
     }
 
     private static boolean hasVerificationMetadata(List<VaultFile> mediaFiles) {
