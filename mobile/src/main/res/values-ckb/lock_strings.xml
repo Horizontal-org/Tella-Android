@@ -23,7 +23,7 @@
     <string name="UnLockPattern_Message_IncorrectPattern">تکایە دووبارە هەوڵ بدەوە. شێوازەکانت یەکتر ناگرنەوە.</string>
     <string name="LockPinSet_Message_EnterPin">PINـەکەت داخڵ بکە</string>
     <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock Tella</string>
-    <string name="LockPinSet_Message_Hint">Use at least 6 digits. Avoid using numbers that can be guessed easily, such as your birthday.</string>
+    <string name="LockPinSet_Message_Hint">Use at least 6 digits</string>
     <string name="LockPinSet_Message_Confirm">PINـەکەت پشتڕاست بکەرەوە</string>
     <string name="LockPinConfirm_Message_Confirm">تکایە جارێکی تر PINـەکەت بنووسەوە، تەنیا بۆ ئەوەی دڵنیا بیت.</string>
     <string name="LockPinConfirm_Message_Error_TryAgain">تکایە دووبارە هەوڵ بدەوە. PINـەکانت یەکتر ناگرنەوە.</string>
