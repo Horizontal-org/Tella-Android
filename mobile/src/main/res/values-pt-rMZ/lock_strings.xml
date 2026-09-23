@@ -23,13 +23,13 @@
     <string name="UnLockPattern_Message_IncorrectPattern">Por favor, tente novamente. Os seus padrões não coincidem.</string>
     <string name="LockPinSet_Message_EnterPin">Introduza o seu PIN</string>
     <string name="UnlockPin_Message_EnterPin">Introduza o seu PIN para desbloquear o Tella</string>
-    <string name="LockPinSet_Message_Hint">Utilize pelo menos 6 dígitos. Evite utilizar números que possam ser facilmente adivinhados, como o seu aniversário.</string>
+    <string name="LockPinSet_Message_Hint">Use at least 6 digits</string>
     <string name="LockPinSet_Message_Confirm">Confirmar o seu PIN</string>
     <string name="LockPinConfirm_Message_Confirm">Por favor, introduza o seu PIN mais uma vez, só para certificar.</string>
     <string name="LockPinConfirm_Message_Error_TryAgain">Por favor, tente novamente. Os seus PINs não coincidem.</string>
     <string name="LockPinConfirm_Message_Error_IncorrectPin">PIN incorrecto, tente novamente</string>
     <string name="UnlockPassword_Message_EnterYourPassword">Introduza a sua palavra-passe.</string>
-    <string name="LockPasswordSet_Message_Hint">Utilize pelo menos 6 caracteres e evite utilizar palavras-passe que possam ser facilmente adivinhadas, como “palavra-passe”. Quanto mais longa for a palavra-passe, mais segura é.</string>
+    <string name="LockPasswordSet_Message_Hint">Use at least 6 characters.</string>
     <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">Por favor, tente novamente. As suas palavras-passe não coincidem.</string>
     <string name="LockSuccess_Message_AllDone">Já está tudo feito!</string>
     <string name="LockSuccess_Message_Hint">Pode sempre alterar a sua opção de bloqueio e personalizar ainda mais o Tella nas Definições.</string>
