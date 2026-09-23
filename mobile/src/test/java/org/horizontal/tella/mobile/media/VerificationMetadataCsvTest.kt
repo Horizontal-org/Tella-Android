@@ -36,6 +36,19 @@ class VerificationMetadataCsvTest {
     }
 
     @Test
+    fun availableName_keepsPreferredWhenFreeAndSuffixesWhenTaken() {
+        assertEquals("test.csv", VerificationMetadataCsv.availableName("test.csv", emptyList()))
+        assertEquals(
+            "test-1.csv",
+            VerificationMetadataCsv.availableName("test.csv", listOf("test.csv"))
+        )
+        assertEquals(
+            "test-2.csv",
+            VerificationMetadataCsv.availableName("test.csv", listOf("test.csv", "test-1.csv"))
+        )
+    }
+
+    @Test
     fun zipNameFor_replacesExtensionWithZip() {
         assertEquals("evidence.zip", VerificationMetadataCsv.zipNameFor("evidence.mp4"))
         assertEquals("photo.zip", VerificationMetadataCsv.zipNameFor("photo.jpg"))
@@ -137,6 +150,27 @@ class VerificationMetadataCsvTest {
             VerificationMetadataCsv.needsVerificationSharePrompt(
                 listOf(photo, photoCsv, video, videoCsv)
             )
+        )
+    }
+
+    @Test
+    fun csvInSelection_doesNotClaimCsvLinkedToAnotherFile() {
+        val photo = VaultFile()
+        photo.id = "photo-id"
+        photo.name = "test.jpg"
+        val video = VaultFile()
+        video.id = "video-id"
+        video.name = "test.mp4"
+        val photoCsv = VaultFile()
+        photoCsv.id = "photo-csv"
+        photoCsv.name = "test.csv"
+        photoCsv.sourceFileId = "photo-id"
+        assertSame(
+            photoCsv,
+            VerificationMetadataCsv.csvInSelection(photo, listOf(photo, video, photoCsv))
+        )
+        assertNull(
+            VerificationMetadataCsv.csvInSelection(video, listOf(photo, video, photoCsv))
         )
     }
 
