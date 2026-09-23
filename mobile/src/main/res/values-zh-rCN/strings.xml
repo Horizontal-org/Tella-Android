@@ -1052,7 +1052,7 @@
     <string name="verification_step1_recipient_hash">Step 1: Confirm recipient hash</string>
     <string name="verification_step2_sender_hash">Step 2: Confirm sender hash</string>
     <string name="confirm_and_continue">Confirm and continue</string>
-    <string name="settings_invalid_url">错误：服务器 URL 不正确</string>
+    <string name="settings_invalid_url">服务器 URL 不正确。</string>
     <string name="onboard.expl_files_info">默认情况下，Tella 文件仅存储在您的设备上，而不是在线存储。</string>
     <string name="Uwazi_Subtitle_RemoveOutboxEntity">是否确定删除此实体？</string>
     <string name="onboard.share_data_connections">Tella 支持与以下服务器的连接：</string>
