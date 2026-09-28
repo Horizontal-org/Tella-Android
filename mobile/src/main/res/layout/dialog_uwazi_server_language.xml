@@ -75,24 +75,24 @@
             android:layout_width="120dp"
             android:layout_height="54dp"
             android:layout_marginEnd="12dp"
-            android:background="@drawable/bg_uwazi_language_cancel_btn"
+            android:background="@drawable/cancel_button_background"
             android:gravity="center"
             android:includeFontPadding="false"
             android:text="@string/action_cancel"
             android:textAllCaps="true"
-            android:textColor="@color/btn_dark_letter" />
+            android:textColor="@color/wa_white" />
 
         <TextView
             android:id="@+id/next_btn"
             style="@style/Typography.ButtonS"
             android:layout_width="120dp"
             android:layout_height="54dp"
-            android:background="@drawable/bg_uwazi_language_ok_btn"
+            android:background="@drawable/action_button_background"
             android:gravity="center"
             android:includeFontPadding="false"
             android:text="@string/action_ok"
             android:textAllCaps="true"
-            android:textColor="@color/wa_white" />
+            android:textColor="@color/btn_dark_letter" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
