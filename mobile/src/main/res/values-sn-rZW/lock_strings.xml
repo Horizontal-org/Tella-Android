@@ -23,13 +23,13 @@
     <string name="UnLockPattern_Message_IncorrectPattern">Ndapota mbindaswe swakassiana swaissa iswi</string>
     <string name="LockPinSet_Message_EnterPin">Issa codi hako</string>
     <string name="UnlockPin_Message_EnterPin">Issa codi hako kuti uvure Tella</string>
-    <string name="LockPinSet_Message_Hint">Shandisai manumeri anosvika matanhatu kana kupfuura. Musashandisa manumeri anogona kufungidzirwa nyore, sekuti zuva renyu rekuzvarwa.</string>
+    <string name="LockPinSet_Message_Hint">Use at least 6 digits</string>
     <string name="LockPinSet_Message_Confirm">Ndiona here codi hako.</string>
     <string name="LockPinConfirm_Message_Confirm">Issa codi hako swe kuti ungwe no chokwandi.</string>
     <string name="LockPinConfirm_Message_Error_TryAgain">Ndaponta mbindaswe codi hako hakassiana.</string>
     <string name="LockPinConfirm_Message_Error_IncorrectPin">Codi hakashata mbindhaswe ho chipiri.</string>
     <string name="UnlockPassword_Message_EnterYourPassword">Issa codi hako.</string>
-    <string name="LockPasswordSet_Message_Hint">Shandisai mavara anosvika matanhatu kana kupfuura uye musashandisa macodi anogona kufungidzirwa nyore, sekuti “password.” Codi yenyu painoreba, ndipo painova yakachengeteka zvikhuru.</string>
+    <string name="LockPasswordSet_Message_Hint">Use at least 6 characters.</string>
     <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">Ndapota edzai zvakare. Mapassword enyu haawirirane.</string>
     <string name="LockSuccess_Message_AllDone">Emwi mapera esse.</string>
     <string name="LockSuccess_Message_Hint">Unokwanissa kuchinja mavarire ita kuti Tella iete chiemo chaunodha pa seti.</string>

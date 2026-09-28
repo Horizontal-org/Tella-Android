@@ -23,13 +23,13 @@
     <string name="UnLockPattern_Message_IncorrectPattern">Tlhela usungula. Svifaniso sva wena a svi fambelani.</string>
     <string name="LockPinSet_Message_EnterPin">Nghenisa PIN ya wena</string>
     <string name="UnlockPin_Message_EnterPin">Nghenisa PIN ya wena kuva upfula Tella</string>
-    <string name="LockPinSet_Message_Hint">Tirhisa tinomboro ta 6. Ungatirhisi tinomboro leti tingativiwaka hi kuolova, kufana ni siku la wena la kupsaliwa.</string>
+    <string name="LockPinSet_Message_Hint">Use at least 6 digits</string>
     <string name="LockPinSet_Message_Confirm">Tiyisisa PIN ya wena</string>
     <string name="LockPinConfirm_Message_Confirm">Thlela unghenisa PIN ya wena, kuva utiyisisa ntsena.</string>
     <string name="LockPinConfirm_Message_Error_TryAgain">Thlela usungula. MaPIN ya wena a ma fambelani.</string>
     <string name="LockPinConfirm_Message_Error_IncorrectPin">PIN ya wena li hoxile, thlela usungula</string>
     <string name="UnlockPassword_Message_EnterYourPassword">Nghenisa kodiko la wena</string>
-    <string name="LockPasswordSet_Message_Hint">Tirhisa maletra ya 6 kumbe kutlula nasvona ungatirhisi makodiko lawa mangativiwaka hi kuolova, kufana ni rhito “kodiko.” Loko kodiko la wena li lehile, li va li sirhelelekile svinene.</string>
+    <string name="LockPasswordSet_Message_Hint">Use at least 6 characters.</string>
     <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">Thlela usungula. Makodiko ya wena a ma fambelani.</string>
     <string name="LockSuccess_Message_AllDone">Uhetile!</string>
     <string name="LockSuccess_Message_Hint">U nga cinca kurhandza ka wena ka kukhiya ni kuendla hi ndlela ya wena kun\'wana ka Tella hi kuya ka Kulungisa.</string>

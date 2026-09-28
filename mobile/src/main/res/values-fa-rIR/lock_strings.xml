@@ -23,13 +23,13 @@
     <string name="UnLockPattern_Message_IncorrectPattern">لطفا دوباره امتحان کنید. الگوهای شما همخوانی ندارند.</string>
     <string name="LockPinSet_Message_EnterPin">پین را وارد کنید</string>
     <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock Tella</string>
-    <string name="LockPinSet_Message_Hint">Use at least 6 digits. Avoid using numbers that can be guessed easily, such as your birthday.</string>
+    <string name="LockPinSet_Message_Hint">Use at least 6 digits</string>
     <string name="LockPinSet_Message_Confirm">پین را تایید کنید</string>
     <string name="LockPinConfirm_Message_Confirm">برای اطمینان، لطفا یک بار دیگر پین را وارد کنید.</string>
     <string name="LockPinConfirm_Message_Error_TryAgain">لطفا دوباره امتحان کنید. پین‌های شما همخوانی ندارند.</string>
     <string name="LockPinConfirm_Message_Error_IncorrectPin">پین نادرست، دوباره امتحان کنید</string>
     <string name="UnlockPassword_Message_EnterYourPassword">گذرواژه را وارد کنید</string>
-    <string name="LockPasswordSet_Message_Hint">حداقل از 6 رقم استفاده کنید و از گذرواژه‌های ساده مانند «password» استفاده نکنید. هرچه گذرواژه طولانی تر باشد، امنیت آن بیشتر است.</string>
+    <string name="LockPasswordSet_Message_Hint">Use at least 6 characters.</string>
     <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">لطفا دوباره امتحان کنید. گذرواژه‌های شما همخوانی ندارند.</string>
     <string name="LockSuccess_Message_AllDone">کار شما به پایان رسید!</string>
     <string name="LockSuccess_Message_Hint">در هر زمان می‌توانید گزینه قفل را تغییر دهید و Tella را از قسمت «تنظیمات»، بیشتر سفارشی کنید.</string>

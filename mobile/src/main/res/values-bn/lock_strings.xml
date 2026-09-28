@@ -23,13 +23,13 @@
     <string name="UnLockPattern_Message_IncorrectPattern">অনুগ্রহ করে আবার চেষ্টা করুন। আপনার প্যাটার্নগুলি মিলছে না।</string>
     <string name="LockPinSet_Message_EnterPin">আপনার পিন লিখুন</string>
     <string name="UnlockPin_Message_EnterPin">Tella আনলক করতে আপনার পিন লিখুন</string>
-    <string name="LockPinSet_Message_Hint">কমপক্ষে ৬ সংখ্যা ব্যবহার করুন। আপনার জন্মদিনের মতো সহজে অনুমান করা যায় এমন নম্বর ব্যবহার করা এড়িয়ে চলুন।</string>
+    <string name="LockPinSet_Message_Hint">Use at least 6 digits</string>
     <string name="LockPinSet_Message_Confirm">আপনার পিন নিশ্চিত করুন</string>
     <string name="LockPinConfirm_Message_Confirm">নিশ্চিত হতে, অনুগ্রহ করে আপনার পিন আরও একবার লিখুন।</string>
     <string name="LockPinConfirm_Message_Error_TryAgain">আবার চেষ্টা করুন। আপনার পিন মিলছে না।</string>
     <string name="LockPinConfirm_Message_Error_IncorrectPin">ভুল পিন, অনুগ্রহ করে আবার চেষ্টা করুন</string>
     <string name="UnlockPassword_Message_EnterYourPassword">আপনার পাসওয়ার্ড লিখুন</string>
-    <string name="LockPasswordSet_Message_Hint">কমপক্ষে ৬টি অক্ষর ব্যবহার করুন এবং সহজেই অনুমান করা যায় এমন পাসওয়ার্ড ব্যবহার এড়িয়ে চলুন, যেমন \"১২৩৪৫৬\" আপনার পাসওয়ার্ড যত দীর্ঘ , এটি তত বেশি নিরাপদ।</string>
+    <string name="LockPasswordSet_Message_Hint">Use at least 6 characters।</string>
     <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">আবার চেষ্টা করুন। আপনার পাসওয়ার্ড মিলছে না।</string>
     <string name="LockSuccess_Message_AllDone">আপনি সব সম্পন্ন করেছেন!</string>
     <string name="LockSuccess_Message_Hint">আপনি যেকোনো সময় আপনার লক পরিবর্তন করতে পারেন এবং সেটিংসে Tella কে আরও কাস্টমাইজ করতে পারেন৷</string>

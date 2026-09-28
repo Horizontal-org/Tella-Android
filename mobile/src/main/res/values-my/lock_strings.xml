@@ -23,13 +23,13 @@
     <string name="UnLockPattern_Message_IncorrectPattern">ကျေးဇူးပြု၍ ထပ်မံကြိုးစားပါ။ သင့်ပုံစံများသည် ကိုက်ညီမှု မရှိပါ။</string>
     <string name="LockPinSet_Message_EnterPin">သင့် PIN နံပါတ်ကို ရိုက်ထည့်ပါ</string>
     <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock Tella</string>
-    <string name="LockPinSet_Message_Hint">Use at least 6 digits. Avoid using numbers that can be guessed easily, such as your birthday.</string>
+    <string name="LockPinSet_Message_Hint">Use at least 6 digits</string>
     <string name="LockPinSet_Message_Confirm">သင်၏ PIN ကို အတည်ပြုပါ</string>
     <string name="LockPinConfirm_Message_Confirm">သေချာစေရန်အတွက် သင်၏ PIN ကို နောက်တစ်ကြိမ် ထပ်မံရိုက်ထည့်ပါ။</string>
     <string name="LockPinConfirm_Message_Error_TryAgain">ကျေးဇူးပြု၍ ထပ်မံကြိုးစားပါ။ သင်၏ PIN များသည် ကိုက်ညီမှု မရှိပါ။</string>
     <string name="LockPinConfirm_Message_Error_IncorrectPin">PIN မမှန်ပါ၊ ကျေးဇူးပြု၍ ထပ်မံစမ်းကြည့်ပါ</string>
     <string name="UnlockPassword_Message_EnterYourPassword">သင့်စကားဝှက်ကို ထည့်ပါ</string>
-    <string name="LockPasswordSet_Message_Hint">အနည်းဆုံး အက္ခရာ ၆ လုံးအသုံးပြုပြီး \"စကားဝှက်\" ကဲ့သို့သော အလွယ်တကူခန့်မှန်းနိုင်သည့် စကားဝှက်များ အသုံးပြုခြင်းကို ရှောင်ကြဉ်ပါ။ စကားဝှက် ရှည်လျားလေလေ ပိုလုံခြုံလေလေဖြစ်သည်။</string>
+    <string name="LockPasswordSet_Message_Hint">Use at least 6 characters.</string>
     <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">ကျေးဇူးပြု၍ ထပ်မံကြိုးစားပါ။ သင်၏စကားဝှက်များ မကိုက်ညီပါ။</string>
     <string name="LockSuccess_Message_AllDone">အားလုံး ပြီးပါပြီ။</string>
     <string name="LockSuccess_Message_Hint">သင့်လော့ခ်ရွေးချယ်မှုကို အမြဲတမ်းပြောင်းလဲနိုင်ပြီး ဆက်တင်များတွင် Tella ကို စိတ်ကြိုက်ပြင်ဆင်နိုင်သည်။</string>
