@@ -29,6 +29,7 @@ public class D {
     static final String C_THUMBNAIL = "c_thumbnail";
     static final String C_NAME = "c_name";
     static final String C_CREATED = "c_created";
+    static final String C_MODIFIED = "c_modified";
     static final String C_DURATION = "c_duration";
     static final String C_ANONYMOUS = "c_anonymous";
     static final String C_SIZE = "c_size";

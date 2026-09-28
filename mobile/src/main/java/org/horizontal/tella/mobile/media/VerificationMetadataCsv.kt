@@ -20,6 +20,25 @@ object VerificationMetadataCsv {
         val base = if (dot > 0) name.substring(0, dot) else name
         return "$base.csv"
     }
+    
+    fun availableName(preferred: String, usedNames: Collection<String>): String {
+        val used = HashSet(usedNames)
+        val name = preferred.ifBlank { "file.csv" }
+        if (used.add(name)) {
+            return name
+        }
+        val dot = name.lastIndexOf('.')
+        val base = if (dot > 0) name.substring(0, dot) else name
+        val extension = if (dot > 0) name.substring(dot) else ""
+        var index = 1
+        while (true) {
+            val candidate = "$base-$index$extension"
+            index++
+            if (used.add(candidate)) {
+                return candidate
+            }
+        }
+    }
 
     fun zipNameFor(originalName: String?): String {
         val name = originalName?.takeIf { it.isNotBlank() } ?: "file"
@@ -55,7 +74,18 @@ object VerificationMetadataCsv {
         val linked = others?.firstOrNull { candidate ->
             !original.id.isNullOrBlank() && candidate.sourceFileId == original.id
         }
-        return existingCsv(linked, others, original.name)
+        if (linked != null) {
+            return linked
+        }
+        val csvName = fileNameFor(original.name)
+        return others?.firstOrNull { candidate ->
+            candidate.name == csvName && !linkedToOtherFile(candidate, original.id)
+        }
+    }
+
+    private fun linkedToOtherFile(candidate: VaultFile, originalId: String?): Boolean {
+        val sourceId = candidate.sourceFileId
+        return !sourceId.isNullOrBlank() && !originalId.isNullOrBlank() && sourceId != originalId
     }
 
     fun needsVerificationSharePrompt(selected: List<VaultFile>): Boolean {

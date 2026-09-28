@@ -7,6 +7,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.utils.DialogUtils
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentReportsListBinding
 import org.horizontal.tella.mobile.domain.entity.IEntityInstance
@@ -101,7 +102,13 @@ abstract class BaseReportsFragment<I : IEntityInstance> :
     }
 
     private fun showError(throwable: Throwable) {
-        Snackbar.make(binding.root, throwable.message.toString(), Snackbar.LENGTH_LONG).show()
+        val snackbar = Snackbar.make(binding.root, throwable.message.toString(), Snackbar.LENGTH_LONG)
+        snackbar.addCallback(object : Snackbar.Callback() {
+            override fun onShown(sb: Snackbar?) {
+                sb?.view?.let { DialogUtils.placeAboveKeyboard(it) }
+            }
+        })
+        snackbar.show()
     }
 
     private fun showEmptyMessage() {

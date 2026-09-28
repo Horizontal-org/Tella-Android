@@ -38,6 +38,17 @@ class VerificationMetadataRowsTest {
     }
 
     @Test
+    fun fileRows_modifiedChangesAfterEdit() {
+        val vaultFile = VaultFile()
+        vaultFile.created = 1_520_000_000_000L
+        vaultFile.modified = 1_530_000_000_000L
+
+        val rows = VerificationMetadataRows.rows(vaultFile, VerificationCategory.FILE)
+
+        assertTrue(rows[3].value != rows[4].value)
+    }
+
+    @Test
     fun fileRows_pathIsRootWhenLocationMissing() {
         val vaultFile = VaultFile()
         vaultFile.name = "photo.jpg"

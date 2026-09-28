@@ -1,13 +1,17 @@
 package org.hzontal.shared_ui.utils
 
 import android.app.Activity
+import android.graphics.Rect
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.FrameLayout
 import android.widget.FrameLayout.LayoutParams
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.doOnAttach
+import androidx.core.view.doOnDetach
 import org.hzontal.shared_ui.R
 import org.hzontal.shared_ui.databinding.LayoutBottomMessageWithButtonBinding
 
@@ -46,6 +50,7 @@ object DialogUtils {
         val textViewMsg = view.findViewById<TextView>(R.id.txv_msg)
         textViewMsg.text = msg
         container.addView(view)
+        placeAboveKeyboard(view)
 
         view.requestFocus()
         view.announceForAccessibility(msg)
@@ -114,5 +119,27 @@ object DialogUtils {
             onBtnClick.invoke()
         }
         container.addView(frameLayout)
+        placeAboveKeyboard(binding.root)
+    }
+
+    @JvmStatic
+    fun placeAboveKeyboard(view: View) {
+        view.doOnAttach {
+            val observer = view.viewTreeObserver
+            val listener = ViewTreeObserver.OnGlobalLayoutListener {
+                if (!view.isAttachedToWindow || view.height == 0) return@OnGlobalLayoutListener
+                val visible = Rect()
+                view.getWindowVisibleDisplayFrame(visible)
+                val location = IntArray(2)
+                view.getLocationOnScreen(location)
+                val bottom = location[1] - view.translationY.toInt() + view.height
+                val covered = (bottom - visible.bottom).coerceAtLeast(0)
+                view.translationY = -covered.toFloat()
+            }
+            observer.addOnGlobalLayoutListener(listener)
+            view.doOnDetach {
+                if (observer.isAlive) observer.removeOnGlobalLayoutListener(listener)
+            }
+        }
     }
 }
