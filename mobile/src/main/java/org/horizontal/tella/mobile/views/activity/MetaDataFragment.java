@@ -16,6 +16,7 @@ import android.location.LocationManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.view.View;
@@ -75,6 +76,7 @@ public abstract class MetaDataFragment extends BaseFragment implements SensorEve
     private boolean locationListenerRegistered;
     private boolean wifiReceiverRegistered;
     private boolean sensorListenerRegistered;
+    private boolean wifiScanReceived;
 
     private AlertDialog metadataAlertDialog;
     private AlertDialog locationAlertDialog;
@@ -113,6 +115,7 @@ public abstract class MetaDataFragment extends BaseFragment implements SensorEve
 
             @Override
             public void onProviderEnabled(@NonNull String provider) {
+                startLocationListening();
             }
 
             @Override
@@ -131,6 +134,7 @@ public abstract class MetaDataFragment extends BaseFragment implements SensorEve
                     return;
                 }
 
+                wifiScanReceived = true;
                 wifiSubject.onNext(getWifiStrings(wifiManager.getScanResults()));
             }
         };
@@ -172,21 +176,55 @@ public abstract class MetaDataFragment extends BaseFragment implements SensorEve
             return;
         }
 
+        requestLocationUpdatesIfEnabled(LocationManager.GPS_PROVIDER);
+        requestLocationUpdatesIfEnabled(LocationManager.NETWORK_PROVIDER);
+        locationListenerRegistered = true;
+        acceptBestLastKnownLocation();
+    }
+
+    @SuppressWarnings("MissingPermission")
+    private void requestLocationUpdatesIfEnabled(String provider) {
+        if (locationManager == null || locationListener == null) {
+            return;
+        }
+
         try {
+            if (!locationManager.isProviderEnabled(provider)) {
+                return;
+            }
             locationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER,
+                    provider,
                     LOCATION_REQUEST_INTERVAL,
                     0f,
                     locationListener,
                     Looper.getMainLooper()
             );
-            locationListenerRegistered = true;
+        } catch (IllegalArgumentException | SecurityException ignored) {
+        }
+    }
 
-            Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (lastLocation != null) {
-                acceptBetterLocation(lastLocation);
+    @SuppressWarnings("MissingPermission")
+    private void acceptBestLastKnownLocation() {
+        if (locationManager == null) {
+            return;
+        }
+
+        Location best = null;
+        for (String provider : new String[]{LocationManager.GPS_PROVIDER, LocationManager.NETWORK_PROVIDER}) {
+            try {
+                if (!locationManager.isProviderEnabled(provider)) {
+                    continue;
+                }
+                Location lastLocation = locationManager.getLastKnownLocation(provider);
+                if (lastLocation != null && LocationUtil.isBetterLocation(lastLocation, best)) {
+                    best = lastLocation;
+                }
+            } catch (IllegalArgumentException | SecurityException ignored) {
             }
-        } catch (SecurityException ignored) {
+        }
+
+        if (best != null) {
+            acceptBetterLocation(best);
         }
     }
 
@@ -358,7 +396,7 @@ public abstract class MetaDataFragment extends BaseFragment implements SensorEve
                             return Unit.INSTANCE;
                         });
                     } else {
-                        listener.onContinue();
+                        new Handler(Looper.getMainLooper()).post(listener::onContinue);
                     }
                 }
         );
@@ -381,6 +419,13 @@ public abstract class MetaDataFragment extends BaseFragment implements SensorEve
     }
 
     public Observable<MetadataActivity.MetadataHolder> observeMetadata() {
+        if (!isLocationProviderEnabled()) {
+            List<String> wifis = wifiSubject.hasValue()
+                    ? wifiSubject.getValue()
+                    : Collections.emptyList();
+            return Observable.just(new MetadataActivity.MetadataHolder(MyLocation.createEmpty(), wifis));
+        }
+
         return Observable.combineLatest(
                         observeLocationData().startWith(MyLocation.createEmpty()),
                         observeWifiData().startWith(Collections.<String>emptyList()),
@@ -388,7 +433,20 @@ public abstract class MetaDataFragment extends BaseFragment implements SensorEve
                 )
                 .filter(mh -> !mh.getWifis().isEmpty() || !mh.getLocation().isEmpty())
                 .take((5 * 60 * 1000) / (int) LOCATION_REQUEST_INTERVAL)
-                .takeUntil(mh -> !mh.getWifis().isEmpty() && !mh.getLocation().isEmpty());
+                .takeUntil(this::hasAllRequestedMetadata);
+    }
+
+    private boolean hasAllRequestedMetadata(MetadataActivity.MetadataHolder holder) {
+        if (holder.getLocation().isEmpty()) {
+            return false;
+        }
+        return !holder.getWifis().isEmpty() || wifiScanReceived || isWifiScanUnavailable();
+    }
+
+    private boolean isWifiScanUnavailable() {
+        return MetadataActivity.isAirplaneModeOn(baseActivity)
+                && wifiManager != null
+                && !wifiManager.isWifiEnabled();
     }
 
     public void attachMediaFileMetadata(
@@ -399,6 +457,7 @@ public abstract class MetaDataFragment extends BaseFragment implements SensorEve
             return;
         }
 
+        wifiScanReceived = false;
         startWifiScan();
 
         final Metadata metadata = new Metadata();
@@ -411,7 +470,7 @@ public abstract class MetaDataFragment extends BaseFragment implements SensorEve
                         : null
         );
         metadata.setLight(getLightSensorData().hasValue() ? getLightSensorData().getValue() : null);
-        metadata.setDeviceID(MetadataUtils.getDeviceID());
+        metadata.setDeviceID(MetadataUtils.getDeviceID(baseActivity));
         metadata.setWifiMac(MetadataUtils.getWifiMac());
         metadata.setIPv4(MetadataUtils.getIPv4());
         metadata.setIPv6(MetadataUtils.getIPv6());
@@ -429,7 +488,7 @@ public abstract class MetaDataFragment extends BaseFragment implements SensorEve
             metadata.setCells(TelephonyUtils.getCellInfo(baseActivity));
         }
 
-        if (!isLocationProviderEnabled() || isFineLocationPermissionDenied()) {
+        if (isFineLocationPermissionDenied()) {
             metadataAttacher.attachMetadata(vaultFile, metadata);
             return;
         }
@@ -480,6 +539,7 @@ public abstract class MetaDataFragment extends BaseFragment implements SensorEve
                 baseActivity,
                 (dialog, which) -> metadataCancelRelay.accept(MetadataActivity.MetadataHolder.createEmpty())
         );
+        applyExistingMetadataDialogChecks();
     }
 
     protected void hideMetadataProgressBarDialog() {
@@ -488,17 +548,52 @@ public abstract class MetaDataFragment extends BaseFragment implements SensorEve
         }
     }
 
-    private void networkGatheringChecked() {
-        if (metadataAlertDialog != null) {
-            metadataAlertDialog.findViewById(R.id.networkProgress).setVisibility(View.GONE);
-            metadataAlertDialog.findViewById(R.id.networkCheck).setVisibility(View.VISIBLE);
+    private void applyExistingMetadataDialogChecks() {
+        if (locationSubject.hasValue()
+                && locationSubject.getValue() != null
+                && !locationSubject.getValue().isEmpty()) {
+            locationGahteringChecked();
+        }
+        if (wifiSubject.hasValue()
+                && wifiSubject.getValue() != null
+                && !wifiSubject.getValue().isEmpty()) {
+            networkGatheringChecked();
         }
     }
 
+    private void networkGatheringChecked() {
+        setMetadataRowChecked(R.id.networkProgress, R.id.networkCheck);
+    }
+
     private void locationGahteringChecked() {
-        if (metadataAlertDialog != null) {
-            metadataAlertDialog.findViewById(R.id.locationProgress).setVisibility(View.GONE);
-            metadataAlertDialog.findViewById(R.id.locationCheck).setVisibility(View.VISIBLE);
+        setMetadataRowChecked(R.id.locationProgress, R.id.locationCheck);
+    }
+
+    private void setMetadataRowChecked(int progressId, int checkId) {
+        AlertDialog dialog = metadataAlertDialog;
+        if (dialog == null) {
+            return;
+        }
+
+        Runnable update = () -> {
+            if (metadataAlertDialog == null) {
+                return;
+            }
+            View progress = metadataAlertDialog.findViewById(progressId);
+            View check = metadataAlertDialog.findViewById(checkId);
+            if (progress != null) {
+                progress.setVisibility(View.GONE);
+            }
+            if (check != null) {
+                check.setVisibility(View.VISIBLE);
+            }
+        };
+
+        View decor = dialog.getWindow() != null ? dialog.getWindow().getDecorView() : null;
+        if (decor != null) {
+            decor.post(update);
+        } else {
+            update.run();
         }
     }
 

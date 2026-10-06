@@ -78,6 +78,7 @@ class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
     }
 
     private var isBackgroundWorkInProgress: Boolean = false
+    private var gpsPromptIgnoredForCurrentSession = false
 
     override fun isBackgroundWorkInProgress(): Boolean {
         return isBackgroundWorkInProgress
@@ -277,6 +278,22 @@ class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
 
     private fun isLocationSettingsRequestCode(requestCode: Int): Boolean {
         return requestCode == C.START_CAMERA_CAPTURE || requestCode == C.START_AUDIO_RECORD
+    }
+
+    override fun getGpsMetadataDialogMessageResId(): Int {
+        return R.string.verification_prompt_dialog_media_file_expl
+    }
+
+    override fun onGpsMetadataDialogConfirmed() {
+        gpsPromptIgnoredForCurrentSession = false
+    }
+
+    override fun onGpsMetadataDialogIgnored() {
+        gpsPromptIgnoredForCurrentSession = true
+    }
+
+    fun isGpsPromptIgnoredForCurrentSession(): Boolean {
+        return gpsPromptIgnoredForCurrentSession
     }
 
     @SuppressLint("NeedOnRequestPermissionsResult")

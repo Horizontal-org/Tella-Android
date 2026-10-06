@@ -1,5 +1,7 @@
 package org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers
 
+import android.content.Context
+import androidx.fragment.app.FragmentManager
 import com.hzontal.tella_vault.VaultFile
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.horizontal.tella.mobile.R
@@ -12,12 +14,33 @@ object AttachmentsSheetHelper {
     private const val OPTION_ONLY_MEDIA = 0
 
     /**
-     * Create and return options map for share dialog.
+     * Create and return options map for share/export dialogs that may include verification metadata.
      */
-    private fun getShareDialogOptions(): LinkedHashMap<Int, Int> {
+    fun getShareDialogOptions(): LinkedHashMap<Int, Int> {
         return linkedMapOf(
             OPTION_MEDIA_AND_VERIFICATION to R.string.verification_share_select_media_and_verification,
             OPTION_ONLY_MEDIA to R.string.verification_share_select_only_media
+        )
+    }
+
+    fun showIncludeVerificationDialog(
+        fragmentManager: FragmentManager,
+        context: Context,
+        onResult: (includeMetadata: Boolean) -> Unit
+    ) {
+        BottomSheetUtils.showRadioListOptionsSheet(
+            fragmentManager,
+            context,
+            getShareDialogOptions(),
+            context.getString(R.string.verification_share_dialog_title),
+            context.getString(R.string.verification_share_dialog_expl),
+            context.getString(R.string.action_ok),
+            context.getString(R.string.action_cancel),
+            object : BottomSheetUtils.RadioOptionConsumer {
+                override fun accept(option: Int) {
+                    onResult(option == OPTION_MEDIA_AND_VERIFICATION)
+                }
+            }
         )
     }
 
@@ -25,50 +48,24 @@ object AttachmentsSheetHelper {
      * Show a dialog to share multiple files with metadata
      */
     internal fun showShareWithMetadataDialog(activity: BaseActivity, selected: List<VaultFile>) {
-        val options = getShareDialogOptions()
-        BottomSheetUtils.showRadioListOptionsSheet(
+        showIncludeVerificationDialog(
             activity.supportFragmentManager,
-            activity,
-            options,
-            activity.getString(R.string.verification_share_dialog_title),
-            activity.getString(R.string.verification_share_dialog_expl),
-            activity.getString(R.string.action_ok),
-            activity.getString(R.string.action_cancel),
-            object : BottomSheetUtils.RadioOptionConsumer {
-                override fun accept(option: Int) {
-                    AttachmentsHelper.startShareActivity(
-                        option == OPTION_MEDIA_AND_VERIFICATION,
-                        selected,
-                        activity
-                    )
-                }
-            }
-        )
+            activity
+        ) { includeMetadata ->
+            AttachmentsHelper.startShareActivity(includeMetadata, selected, activity)
+        }
     }
 
     /**
      * Show a dialog to share a single file with metadata
      */
     internal fun showShareFileWithMetadataDialog(vaultFile: VaultFile, activity: BaseActivity) {
-        val options = getShareDialogOptions()
-        BottomSheetUtils.showRadioListOptionsSheet(
+        showIncludeVerificationDialog(
             activity.supportFragmentManager,
-            activity,
-            options,
-            activity.getString(R.string.verification_share_dialog_title),
-            activity.getString(R.string.verification_share_dialog_expl),
-            activity.getString(R.string.action_ok),
-            activity.getString(R.string.action_cancel),
-            object : BottomSheetUtils.RadioOptionConsumer {
-                override fun accept(option: Int) {
-                    MediaFileHandler.startShareActivity(
-                        activity,
-                        vaultFile,
-                        option == OPTION_MEDIA_AND_VERIFICATION
-                    )
-                }
-            }
-        )
+            activity
+        ) { includeMetadata ->
+            MediaFileHandler.startShareActivity(activity, vaultFile, includeMetadata)
+        }
     }
 
 }

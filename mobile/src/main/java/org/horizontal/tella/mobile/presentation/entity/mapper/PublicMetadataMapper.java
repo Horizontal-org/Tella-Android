@@ -9,16 +9,21 @@ import com.hzontal.tella_vault.VaultFile;
 import java.util.LinkedHashMap;
 
 import org.horizontal.tella.mobile.presentation.entity.PublicMetadata;
+import org.horizontal.tella.mobile.util.MetadataUtils;
 import org.horizontal.tella.mobile.util.StringUtils;
+import org.horizontal.tella.mobile.util.Util;
+import org.horizontal.tella.mobile.util.VaultFolderPath;
 import timber.log.Timber;
 
 
 public class PublicMetadataMapper {
-    private static PublicMetadata transform(@NonNull VaultFile vaultFile) {
+    private static PublicMetadata transform(@NonNull VaultFile vaultFile, String fileLocation) {
         PublicMetadata metadata = new PublicMetadata();
 
         metadata.fileHash = vaultFile.hash;
-        metadata.filePath = vaultFile.path;
+        metadata.filePath = fileLocation != null && !fileLocation.isEmpty()
+                ? fileLocation
+                : VaultFolderPath.ROOT;
         metadata.fileName = vaultFile.name;
 
         Metadata mfmd = vaultFile.metadata;
@@ -29,7 +34,6 @@ public class PublicMetadataMapper {
 
         metadata.cells = mfmd.getCells();
         metadata.wifis = mfmd.getWifis();
-        metadata.timestamp = mfmd.getTimestamp();
         metadata.ambientTemperature = mfmd.getAmbientTemperature();
         metadata.light = mfmd.getLight();
 
@@ -55,25 +59,34 @@ public class PublicMetadataMapper {
     }
 
     public static LinkedHashMap<String, String> transformToMap(@NonNull VaultFile vaultFile) {
+        return transformToMap(vaultFile, null);
+    }
+
+    public static LinkedHashMap<String, String> transformToMap(
+            @NonNull VaultFile vaultFile,
+            String fileLocation
+    ) {
         LinkedHashMap<String, String> metadata = new LinkedHashMap<>();
-        PublicMetadata publicMetadata = transform(vaultFile);
+        PublicMetadata publicMetadata = transform(vaultFile, fileLocation);
 
         metadata.put("File hash", rc(publicMetadata.fileHash));
         metadata.put("File path", rc(publicMetadata.filePath));
         metadata.put("File name", rc(publicMetadata.fileName));
+        metadata.put("File created", formatCreated(vaultFile.created));
+        metadata.put("File modified", formatCreated(
+                vaultFile.modified > 0 ? vaultFile.modified : vaultFile.created));
 
         try {
             if (publicMetadata.cells != null) {
                 metadata.put("Cells", rc(StringUtils.join(" ", publicMetadata.cells)));
             }
-            if (publicMetadata.cells != null) {
+            if (publicMetadata.wifis != null) {
                 metadata.put("WiFis", rc(StringUtils.join(" ", publicMetadata.wifis)));
             }
         } catch (Exception e) {
             Timber.e(e);
         }
 
-        metadata.put("Timestamp", rc(publicMetadata.timestamp));
         metadata.put("Ambient temperature", rc(publicMetadata.ambientTemperature));
         metadata.put("Light", rc(publicMetadata.light));
 
@@ -96,7 +109,7 @@ public class PublicMetadataMapper {
         metadata.put("Manufacturer", rc(publicMetadata.manufacturer));
         metadata.put("Data type", rc(publicMetadata.dataType));
         metadata.put("Hardware", rc(publicMetadata.hardware));
-        metadata.put("Screen size", rc(publicMetadata.screenSize));
+        metadata.put("Screen size", rc(MetadataUtils.formatScreenSize(publicMetadata.screenSize)));
         metadata.put("WiFi MAC", rc(publicMetadata.wifiMac));
         metadata.put("Device ID", rc(publicMetadata.deviceID));
 
@@ -115,6 +128,13 @@ public class PublicMetadataMapper {
         location.speed = myLocation.getSpeed();
 
         return location;
+    }
+
+    private static String formatCreated(long created) {
+        if (created <= 0) {
+            return "";
+        }
+        return Util.getDateTimeString(created, "dd-MM-yyyy HH:mm:ss Z");
     }
 
     private static String rc(String str) {

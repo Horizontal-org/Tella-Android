@@ -100,6 +100,7 @@ class LanguageFragment : BaseFragment() {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = languageSelectorAdapter
             }
+            toolbar.backClickListener = { baseActivity.supportFragmentManager.popBackStack() }
             nextBtn.setOnClickListener {
                 baseActivity.addFragment(
                     SuccessConnectFragment.newInstance(serverUwazi, isUpdate),

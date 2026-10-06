@@ -62,11 +62,7 @@ class UwaziConnectFlowViewModel : ViewModel() {
                     return@subscribe
                 }
                 CrashReporterProvider.get().recordException(error)
-                val messageResId = when (error) {
-                    is java.net.UnknownHostException -> R.string.settings_docu_error_domain_doesnt_exit
-                    else -> R.string.settings_docu_error_unknown_connection_error
-                }
-                _serverUrlError.postValue(messageResId)
+                _serverUrlError.postValue(R.string.settings_invalid_url)
             })
     }
 

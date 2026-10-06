@@ -352,6 +352,7 @@ class AttachmentsViewModel @Inject constructor(
                                 MediaFileHandler.maybeCreateMetadataMediaFile(it),
                                 path
                             )
+                            MediaFileHandler.saveVerificationMetadataToVaultIfMissing(it)
                         }
                     }
                 }

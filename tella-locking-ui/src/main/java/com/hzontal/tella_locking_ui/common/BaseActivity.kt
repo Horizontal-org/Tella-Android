@@ -143,27 +143,31 @@ open class BaseActivity : AppCompatActivity() {
             setResult(RESULT_OK)
             finish()
         } else {
-            synchronized(onboardingProtectSheetLock) {
-                if (isOnboardingProtectSheetShowing) return
-                isOnboardingProtectSheetShowing = true
+            val intent = Intent(this, Class.forName(ReturnActivity.SETTINGS.activityName))
+            intent.putExtra(IS_ONBOARD_LOCK_SET, true)
+            startActivity(intent)
+            finishAffinity()
+        }
+    }
+
+    protected fun showOnboardingProtectSheet(onContinue: () -> Unit) {
+        synchronized(onboardingProtectSheetLock) {
+            if (isOnboardingProtectSheetShowing) return
+            isOnboardingProtectSheetShowing = true
+        }
+        registerOnboardingProtectSheetDismissListener()
+        runOnUiThread {
+            if (isFinishing || isDestroyed) {
+                synchronized(onboardingProtectSheetLock) {
+                    isOnboardingProtectSheetShowing = false
+                }
+                return@runOnUiThread
             }
-            registerOnboardingProtectSheetDismissListener()
-            runOnUiThread {
-                if (isFinishing || isDestroyed) {
-                    synchronized(onboardingProtectSheetLock) {
-                        isOnboardingProtectSheetShowing = false
-                    }
-                    return@runOnUiThread
+            TellaKeysUI.getCredentialsCallback().onOnboardingLockSetupComplete(this) {
+                synchronized(onboardingProtectSheetLock) {
+                    isOnboardingProtectSheetShowing = false
                 }
-                TellaKeysUI.getCredentialsCallback().onOnboardingLockSetupComplete(this) {
-                    synchronized(onboardingProtectSheetLock) {
-                        isOnboardingProtectSheetShowing = false
-                    }
-                    val intent = Intent(this, Class.forName(ReturnActivity.SETTINGS.activityName))
-                    intent.putExtra(IS_ONBOARD_LOCK_SET, true)
-                    startActivity(intent)
-                    finishAffinity()
-                }
+                onContinue()
             }
         }
     }

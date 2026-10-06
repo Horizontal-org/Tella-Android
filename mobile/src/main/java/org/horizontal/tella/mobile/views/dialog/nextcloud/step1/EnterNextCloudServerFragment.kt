@@ -9,11 +9,11 @@ import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import com.owncloud.android.lib.common.network.CertificateCombinedException
 import dagger.hilt.android.AndroidEntryPoint
-import org.hzontal.shared_ui.utils.DialogUtils
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentEnterServerBinding
 import org.horizontal.tella.mobile.domain.entity.nextcloud.NextCloudServer
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
+import org.horizontal.tella.mobile.views.dialog.ConnectFlowUtils
 import org.horizontal.tella.mobile.views.dialog.OBJECT_KEY
 import org.horizontal.tella.mobile.views.dialog.nextcloud.NextCloudLoginFlowViewModel
 import org.horizontal.tella.mobile.views.dialog.nextcloud.sslalert.SslUntrustedCertDialog
@@ -43,7 +43,10 @@ class EnterNextCloudServerFragment : BaseBindingFragment<FragmentEnterServerBind
                     serverNextCloud.url = urlText
                     viewModel.validateServerUrl(urlText)
                 } else {
-                    showErrorMessage(getString(R.string.Error_Connecting_To_Server_Msg))
+                    ConnectFlowUtils.setUrlFieldError(
+                        urlLayout,
+                        getString(R.string.invalid_url)
+                    )
                 }
             }
         }
@@ -63,7 +66,10 @@ class EnterNextCloudServerFragment : BaseBindingFragment<FragmentEnterServerBind
             if (isValid) {
                 navigateToNextScreen()
             } else {
-                showErrorMessage(getString(R.string.Error_Connecting_To_Server_Msg))
+                ConnectFlowUtils.setUrlFieldError(
+                    binding.urlLayout,
+                    getString(R.string.settings_invalid_url)
+                )
             }
         }
 
@@ -81,15 +87,14 @@ class EnterNextCloudServerFragment : BaseBindingFragment<FragmentEnterServerBind
         navManager().navigateToEnterNextCloudLoginScreen()
     }
 
-    private fun showErrorMessage(message: String) {
-        DialogUtils.showBottomMessage(baseActivity, message, false)
-    }
-
     private fun handleCertificateError(exception: Throwable) {
         if (exception is CertificateCombinedException) {
             showUntrustedCertDialog(exception)
         } else {
-            binding.urlLayout.error = getString(R.string.invalid_url)
+            ConnectFlowUtils.setUrlFieldError(
+                binding.urlLayout,
+                getString(R.string.settings_invalid_url)
+            )
         }
     }
 

@@ -44,6 +44,8 @@ class PasswordUnlockActivity : BasePasswordActivity() {
         enterPasswordTextView.isVisible = false
         passwordLeftButton.isVisible = false
         passwordRightButton.isVisible = false
+        passwordMsgHintSecond.isVisible = false
+        passwordMsgHintThird.isVisible = false
         passwordEditText.setOnKeyListener { _, keyCode, keyEvent ->
             if (keyEvent.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
                 if (isHiLighted) onSuccessSetPassword(mPassword)
@@ -58,8 +60,6 @@ class PasswordUnlockActivity : BasePasswordActivity() {
                 backBtn.setOnClickListener { finish() }
                 passwordMsgTextView.text =
                     getString(R.string.LockPasswordSet_Settings_EnterCurrentPassword)
-                passwordEditText.hint =
-                    getString(R.string.LockPasswordSet_Settings_EnterCurrentPassword)
             }
 
             ReturnActivity.CAMOUFLAGE.getActivityOrder() -> {
@@ -68,18 +68,16 @@ class PasswordUnlockActivity : BasePasswordActivity() {
                 backBtn.setOnClickListener { finish() }
                 passwordMsgTextView.text =
                     getString(R.string.LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage)
-                passwordEditText.hint =
-                    getString(R.string.LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage)
             }
 
             else -> {
-                passwordMsgTextView.text = getText(R.string.UnlockPassword_Message_EnterPassword)
-                passwordEditText.hint = getString(R.string.UnlockPassword_Message_EnterPassword)
+                enterPasswordTextView.isVisible = true
+                enterPasswordTextView.text = getText(R.string.UnlockPassword_Message_EnterPassword)
+                passwordMsgTextView.isVisible = false
                 passwordRightButton.text = getString(R.string.unlock)
                 passwordRightButton.isVisible = true
                 passwordEditText.onChange {
-                    passwordMsgTextView.text =
-                        getText(R.string.UnlockPassword_Message_EnterPassword)
+                    passwordMsgTextView.isVisible = false
                 }
             }
         }

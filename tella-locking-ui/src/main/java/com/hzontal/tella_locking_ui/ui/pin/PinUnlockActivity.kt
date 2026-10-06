@@ -33,7 +33,7 @@ class PinUnlockActivity : BasePinActivity() {
     }
 
     private fun initView() {
-        pinMsgText.visibility = View.GONE
+        pinMsgContainer.visibility = View.GONE
         pinLeftButton.visibility = View.GONE
         pinRightButton.visibility = View.GONE
         pinTopImageView.background = ContextCompat.getDrawable(this, R.drawable.tella_logo_dark_bg)

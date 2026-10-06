@@ -225,8 +225,6 @@ open class CustomBottomSheetFragment : BottomSheetDialogFragment() {
         isCancelable = isCancellable
         configBackPressCallback()
         if (statusBarColor != null) applyStatusBarColor(statusBarColor!!)
-
-        KeyboardUtil(view)
     }
 
     private fun configBackPressCallback() {

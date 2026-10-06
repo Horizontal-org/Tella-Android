@@ -62,6 +62,7 @@ import org.horizontal.tella.mobile.views.activity.viewer.PhotoViewerActivity.Com
 import org.horizontal.tella.mobile.views.activity.viewer.PhotoViewerActivity.Companion.VIEW_PHOTO
 import org.horizontal.tella.mobile.views.activity.viewer.VideoViewerActivity
 import org.horizontal.tella.mobile.views.activity.viewer.VideoViewerActivity.Companion.VIEW_VIDEO
+import org.horizontal.tella.mobile.views.activity.viewer.VaultActionsHelper
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.recorder.MicActivity
 import org.horizontal.tella.mobile.views.fragment.vault.adapters.attachments.AttachmentsRecycleViewAdapter
@@ -71,6 +72,7 @@ import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.Att
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.AttachmentsHelper.setToolbarLabel
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.AttachmentsHelper.shareVaultFile
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.AttachmentsHelper.shareVaultFiles
+import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.AttachmentsSheetHelper
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.MoveModeUIUpdater
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.SelectMode
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.VAULT_FILE_ARG
@@ -80,11 +82,9 @@ import org.horizontal.tella.mobile.views.fragment.vault.home.VAULT_FILTER
 import org.horizontal.tella.mobile.views.fragment.vault.info.VaultInfoFragment.Companion.VAULT_FILE_INFO_TOOLBAR
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.RadioOptionConsumer
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showChooseImportSheet
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showConfirmSheet
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showProgressImportSheet
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showRadioListOptionsSheet
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils
 import org.hzontal.shared_ui.breadcrumb.DefaultBreadcrumbsCallback
 import org.hzontal.shared_ui.breadcrumb.model.BreadcrumbItem
@@ -692,6 +692,8 @@ class AttachmentsFragment :
             isUploadVisible = false,
             isMoveVisible = filterType == FilterType.ALL,
             isEditVisible = vaultFile?.mimeType == "image/jpeg",
+            isVerificationInfoVisible = !isMultipleFiles && vaultFile?.metadata != null,
+            verificationInfoLabel = getString(R.string.verification_info_app_bar),
             action = object : VaultSheetUtils.IVaultActions {
                 override fun upload() {
                 }
@@ -787,6 +789,16 @@ class AttachmentsFragment :
                             }
                         })
 
+                }
+
+                override fun showVerificationInformation() {
+                    vaultFile?.let { file ->
+                        VaultActionsHelper.openVerificationInformation(
+                            requireContext(),
+                            file,
+                            currentRootID
+                        )
+                    }
                 }
             })
 
@@ -1387,23 +1399,14 @@ class AttachmentsFragment :
     }
 
     private fun showExportWithMetadataDialog(isMultipleFiles: Boolean, vaultFile: VaultFile?) {
-        val options = LinkedHashMap<Int, Int>()
-        options[1] = R.string.verification_share_select_media_and_verification
-        options[0] = R.string.verification_share_select_only_media
-        showRadioListOptionsSheet(baseActivity.supportFragmentManager,
-            requireContext(),
-            options,
-            getString(R.string.verification_share_dialog_title),
-            getString(R.string.verification_share_dialog_expl),
-            getString(R.string.action_ok),
-            getString(R.string.action_cancel),
-            object : RadioOptionConsumer {
-                override fun accept(option: Int) {
-                    withMetadata = option > 0
-                    baseActivity.maybeChangeTemporaryTimeout {
-                        performFileSearch(isMultipleFiles, vaultFile)
-                    }
-                }
-            })
+        AttachmentsSheetHelper.showIncludeVerificationDialog(
+            baseActivity.supportFragmentManager,
+            requireContext()
+        ) { includeMetadata ->
+            withMetadata = includeMetadata
+            baseActivity.maybeChangeTemporaryTimeout {
+                performFileSearch(isMultipleFiles, vaultFile)
+            }
+        }
     }
 }

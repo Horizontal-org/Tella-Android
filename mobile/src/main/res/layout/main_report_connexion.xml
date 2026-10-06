@@ -15,22 +15,27 @@
         android:layout_height="match_parent">
     </org.hzontal.shared_ui.veiw_pager_component.ViewPagerComponent>
 
-    <Button
+    <TextView
         android:id="@+id/new_report_btn"
+        style="@style/Typography.ButtonL"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="54dp"
         android:layout_gravity="bottom|end"
         android:layout_marginHorizontal="@dimen/tella_main_vertical"
         android:layout_marginBottom="@dimen/activity_vertical_large_margin"
         android:background="@drawable/bg_round_orange_btn"
-        android:fontFamily="@font/open_sans"
-        android:gravity="center_vertical"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="@font/open_sans_bold"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:letterSpacing="0.03125"
         android:text="@string/New_Reports_Text"
         android:textAlignment="center"
+        android:textAllCaps="true"
         android:textColor="@color/btn_dark_letter"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:cornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="RtlCompat" />

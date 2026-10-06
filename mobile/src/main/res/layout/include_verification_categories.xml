@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/verification_categories_card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_verification_categories_card"
+    android:clipToOutline="true"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/verification_category_file"
+        layout="@layout/item_verification_category"
+        tools:ignore="IncludeLayoutParam" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/wa_white_12" />
+
+    <include
+        android:id="@+id/verification_category_device"
+        layout="@layout/item_verification_category"
+        tools:ignore="IncludeLayoutParam" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/wa_white_12" />
+
+    <include
+        android:id="@+id/verification_category_network"
+        layout="@layout/item_verification_category"
+        tools:ignore="IncludeLayoutParam" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/wa_white_12" />
+
+    <include
+        android:id="@+id/verification_category_location"
+        layout="@layout/item_verification_category"
+        tools:ignore="IncludeLayoutParam" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/wa_white_12" />
+
+    <include
+        android:id="@+id/verification_category_other"
+        layout="@layout/item_verification_category"
+        tools:ignore="IncludeLayoutParam" />
+</LinearLayout>

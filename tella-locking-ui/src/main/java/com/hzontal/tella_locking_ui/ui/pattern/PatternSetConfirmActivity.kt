@@ -1,21 +1,12 @@
 package com.hzontal.tella_locking_ui.ui.pattern
 
-import android.graphics.Color
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
-import androidx.core.view.updatePadding
 import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.TellaKeysUI
-import com.hzontal.tella_locking_ui.common.CommonStates
 import com.hzontal.tella_locking_ui.patternlock.PatternUtils
 import com.hzontal.tella_locking_ui.patternlock.PatternView
 import com.hzontal.tella_locking_ui.patternlock.SetPatternActivity
@@ -44,10 +35,11 @@ class PatternSetConfirmActivity : SetPatternActivity() {
         when (mStage) {
             Stage.Confirm, Stage.ConfirmWrong -> {
                 if (PatternUtils.patternToSha1String(mPattern, mPattern.size) == pattern) {
-                    updateStage(Stage.ConfirmCorrect);
+                    mPatternView.setPatternMatched(true)
+                    updateStage(Stage.ConfirmCorrect)
                     onSetPattern(newPattern)
                 } else {
-                    updateStage(Stage.ConfirmWrong);
+                    updateStage(Stage.ConfirmWrong)
                 }
             }
             else -> {
@@ -67,24 +59,26 @@ class PatternSetConfirmActivity : SetPatternActivity() {
         val mNewPassphrase = PatternUtils.patternToSha1String(pattern)
         // holder.unlockRegistry.setActiveMethod(applicationContext, UnlockRegistry.Method.TELLA_PATTERN)
         // I've put this in LockApp - for holder.unlockRegistry.getActiveConfig(this) to work
-        TellaKeysUI.getUnlockRegistry().setActiveMethod(this@PatternSetConfirmActivity, UnlockRegistry.Method.TELLA_PATTERN)
-        val keySpec = PBEKeySpec(mNewPassphrase.toCharArray())
-        val config = TellaKeysUI.getUnlockRegistry().getActiveConfig(this@PatternSetConfirmActivity)
+        val persist = persist@{
+            TellaKeysUI.getUnlockRegistry().setActiveMethod(this@PatternSetConfirmActivity, UnlockRegistry.Method.TELLA_PATTERN)
+            val keySpec = PBEKeySpec(mNewPassphrase.toCharArray())
+            val config = TellaKeysUI.getUnlockRegistry().getActiveConfig(this@PatternSetConfirmActivity)
+            val mainKey = generateOrGetMainKey() ?: return@persist
+            TellaKeysUI.getMainKeyStore().store(mainKey, config.wrapper, keySpec, object : MainKeyStore.IMainKeyStoreCallback {
+                override fun onSuccess(mainKey: MainKey) {
+                    Timber.d("** MainKey stored: %s **", mainKey.key)
+                    // here, we store MainKey in memory -> unlock the app
+                    TellaKeysUI.getMainKeyHolder().set(mainKey)
+                    onSuccessConfirmUnlock()
+                }
 
-        val mainKey = generateOrGetMainKey() ?: return
-        TellaKeysUI.getMainKeyStore().store(mainKey, config.wrapper, keySpec, object : MainKeyStore.IMainKeyStoreCallback {
-            override fun onSuccess(mainKey: MainKey) {
-                Timber.d("** MainKey stored: %s **", mainKey.key)
-                // here, we store MainKey in memory -> unlock the app
-                TellaKeysUI.getMainKeyHolder().set(mainKey)
-                onSuccessConfirmUnlock()
-            }
-
-            override fun onError(throwable: Throwable) {
-                Timber.e(throwable, "** MainKey store error **")
-                onCanceled()
-            }
-        })
+                override fun onError(throwable: Throwable) {
+                    Timber.e(throwable, "** MainKey store error **")
+                    onCanceled()
+                }
+            })
+        }
+        if (isFromSettings) persist() else showOnboardingProtectSheet(persist)
     }
 
     override fun onCanceled() {

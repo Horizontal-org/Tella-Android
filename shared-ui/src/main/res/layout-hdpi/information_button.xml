@@ -18,11 +18,12 @@
 
     <TextView
         android:id="@+id/centerTopTv"
-        style="@style/Tella_Main_White_Text.Bold"
+        style="@style/Typography.ButtonL"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="16sp"
+        android:textAllCaps="true"
+        android:textColor="@color/wa_white"
         app:layout_constraintBottom_toTopOf="@+id/centerBottomTv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -32,10 +33,10 @@
 
     <TextView
         android:id="@+id/centerBottomTv"
-        style="@style/Tella_Main_White_Text.Bold"
+        style="@style/Typography.ButtonDetailRegular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
+        android:textColor="@color/wa_white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -44,11 +45,12 @@
 
     <TextView
         android:id="@+id/startTopTv"
-        style="@style/Tella_Main_White_Text.Bold"
+        style="@style/Typography.ButtonL"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="21dp"
-        android:textSize="16sp"
+        android:textAllCaps="true"
+        android:textColor="@color/wa_white"
         app:layout_constraintBottom_toTopOf="@+id/startBottomTv"
         app:layout_constraintStart_toEndOf="@id/leftImg"
         app:layout_constraintTop_toTopOf="parent"
@@ -56,14 +58,14 @@
 
     <TextView
         android:id="@+id/startBottomTv"
-        style="@style/Tella_Main_White_Text.Bold"
+        style="@style/Typography.ButtonDetailRegular"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
         android:ellipsize="end"
-        android:textSize="12sp"
         android:paddingEnd="20dp"
         android:paddingStart="20dp"
+        android:textColor="@color/wa_white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/leftImg"

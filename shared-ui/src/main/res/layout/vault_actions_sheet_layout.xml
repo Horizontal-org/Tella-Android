@@ -67,12 +67,22 @@
         android:layout_marginTop="20dp"
         app:drawableStartCompat="@drawable/ic_share" />
 
+    <TextView
+        android:id="@+id/verificationInfoActionTV"
+        style="@style/Tella2_BottomSheet_Text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/shareActionTV"
+        android:layout_marginTop="20dp"
+        android:visibility="gone"
+        app:drawableStartCompat="@drawable/ic_verified_user_24px"
+        tools:text="Verification information"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/saveActionTV"
         style="@style/Tella2_BottomSheet_Text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/shareActionTV"
+        app:layout_constraintTop_toBottomOf="@id/verificationInfoActionTV"
         android:layout_marginTop="20dp"
         app:drawableStartCompat="@drawable/ic_save_alt_24px" />
 

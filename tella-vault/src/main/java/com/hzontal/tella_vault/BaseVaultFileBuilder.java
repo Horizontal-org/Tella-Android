@@ -19,6 +19,7 @@ public abstract class BaseVaultFileBuilder<T extends BaseVaultFileBuilder<T, B>,
     protected InputStream data;
     protected String hash;
     protected String path;
+    protected String sourceFileId;
 
     public T setPath(String path) {
         this.path = path;
@@ -89,6 +90,12 @@ public abstract class BaseVaultFileBuilder<T extends BaseVaultFileBuilder<T, B>,
     public T setHash(String hash) {
         checkForFile();
         this.hash = hash;
+        return getThis();
+    }
+
+    public T setSourceFileId(String sourceFileId) {
+        checkForFile();
+        this.sourceFileId = sourceFileId;
         return getThis();
     }
 

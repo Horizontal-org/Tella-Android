@@ -1,22 +1,28 @@
 package org.horizontal.tella.mobile.views.activity.viewer
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.FragmentManager
+import com.hzontal.tella_vault.Metadata
 import com.hzontal.tella_vault.VaultFile
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.media.MediaFileHandler
+import org.horizontal.tella.mobile.views.activity.MetadataViewerActivity
 import org.horizontal.tella.mobile.views.activity.viewer.PermissionsActionsHelper.hasStoragePermissions
 import org.horizontal.tella.mobile.views.activity.viewer.PermissionsActionsHelper.requestStoragePermissions
 import org.horizontal.tella.mobile.views.base_ui.BaseActivity
+import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.AttachmentsSheetHelper
 import org.horizontal.tella.mobile.views.fragment.vault.edit.VaultEditFragment
 import org.horizontal.tella.mobile.views.fragment.vault.info.VaultInfoFragment
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.showVaultActionsSheet
+import org.hzontal.shared_ui.utils.DialogUtils
 import permissions.dispatcher.NeedsPermission
 
 var withMetadata = false
@@ -46,7 +52,9 @@ object VaultActionsHelper {
         vaultFile: VaultFile,
         viewModel: SharedMediaFileViewModel,
         unitFunction: () -> Unit,
-        toolbar: Toolbar) {
+        toolbar: Toolbar,
+        parentId: String? = null
+    ) {
 
         chosenVaultFile = vaultFile
         sharedViewModel = viewModel
@@ -161,6 +169,10 @@ object VaultActionsHelper {
                 )
             }
 
+            override fun showVerificationInformation() {
+                openVerificationInformation(this@showVaultActionsDialog, chosenVaultFile, parentId)
+            }
+
         }
         // Show the Vault actions dialog with available actions for the given VaultFile
         showVaultActionsSheet(
@@ -178,35 +190,64 @@ object VaultActionsHelper {
             isMultipleFiles = false,
             isUploadVisible = false,
             isMoveVisible = false,
+            isVerificationInfoVisible = chosenVaultFile.metadata != null,
+            verificationInfoLabel = getString(R.string.verification_info_app_bar),
             action = vaultActions
+        )
+    }
+
+    fun BaseActivity.observeVerificationMetadataSave(viewModel: SharedMediaFileViewModel) {
+        viewModel.verificationMetadataSaved.observe(this) { file ->
+            DialogUtils.showBottomMessage(
+                this,
+                getString(R.string.verification_save_csv_vault_success, file.name),
+                false
+            )
+        }
+        viewModel.verificationMetadataAlreadySaved.observe(this) { path ->
+            showVerificationCsvAlreadySavedSheet(supportFragmentManager, this, path)
+        }
+    }
+
+    @JvmStatic
+    fun openVerificationInformation(
+        context: Context,
+        vaultFile: VaultFile,
+        parentId: String?
+    ) {
+        val intent = Intent(context, MetadataViewerActivity::class.java)
+        intent.putExtra(Metadata.VIEW_METADATA, vaultFile)
+        if (!parentId.isNullOrBlank()) {
+            intent.putExtra(MetadataViewerActivity.PARENT_ID, parentId)
+        }
+        context.startActivity(intent)
+    }
+
+    @JvmStatic
+    fun showVerificationCsvAlreadySavedSheet(
+        fragmentManager: FragmentManager,
+        context: Context,
+        path: String
+    ) {
+        BottomSheetUtils.showStandardSheet(
+            fragmentManager = fragmentManager,
+            titleText = context.getString(R.string.verification_save_csv_already_saved_title),
+            descriptionText = context.getString(R.string.verification_save_csv_already_saved_expl),
+            actionButtonLabel = context.getString(R.string.verification_save_csv_already_saved_action),
+            cancelButtonLabel = null,
+            secondaryDescriptionText = context.getString(
+                R.string.verification_save_csv_already_saved_path,
+                path
+            )
         )
     }
 
     fun BaseActivity.shareMediaFile() {
         if (chosenVaultFile.metadata != null) {
-            showShareWithMetadataDialog()
+            AttachmentsSheetHelper.showShareFileWithMetadataDialog(chosenVaultFile, this)
         } else {
             startShareActivity(false)
         }
-    }
-
-    private fun BaseActivity.showShareWithMetadataDialog() {
-        val options = mapOf(
-            R.string.verification_share_select_media_and_verification to R.string.verification_share_select_media_and_verification,
-            R.string.verification_share_select_only_media to R.string.verification_share_select_only_media
-        )
-        BottomSheetUtils.showRadioListOptionsSheet(supportFragmentManager,
-            this,
-            options as LinkedHashMap<Int, Int>,
-            getString(R.string.verification_share_dialog_title),
-            getString(R.string.verification_share_dialog_expl),
-            getString(R.string.action_ok),
-            getString(R.string.action_cancel),
-            object : BottomSheetUtils.RadioOptionConsumer {
-                override fun accept(option: Int) {
-                    startShareActivity(option > 0)
-                }
-            })
     }
 
     private fun BaseActivity.startShareActivity(
@@ -220,29 +261,19 @@ object VaultActionsHelper {
 
 
     internal fun BaseActivity.showExportWithMetadataDialog() {
-        val options = mapOf(
-            R.string.verification_share_select_media_and_verification to R.string.verification_share_select_media_and_verification,
-            R.string.verification_share_select_only_media to R.string.verification_share_select_only_media
-        )
         Handler().post {
-            BottomSheetUtils.showRadioListOptionsSheet(supportFragmentManager,
-                this,
-                options as LinkedHashMap<Int, Int>,
-                getString(R.string.verification_share_dialog_title),
-                getString(R.string.verification_share_dialog_expl),
-                getString(R.string.action_ok),
-                getString(R.string.action_cancel),
-                object : BottomSheetUtils.RadioOptionConsumer {
-                    override fun accept(option: Int) {
-                        withMetadata = option > 0
-                        this@showExportWithMetadataDialog.maybeChangeTemporaryTimeout {
-                            performFileSearch(
-                                chosenVaultFile, withMetadata,
-                                sharedViewModel, filePicker, requestPermission
-                            )
-                        }
-                    }
-                })
+            AttachmentsSheetHelper.showIncludeVerificationDialog(
+                supportFragmentManager,
+                this
+            ) { includeMetadata ->
+                withMetadata = includeMetadata
+                this@showExportWithMetadataDialog.maybeChangeTemporaryTimeout {
+                    performFileSearch(
+                        chosenVaultFile, withMetadata,
+                        sharedViewModel, filePicker, requestPermission
+                    )
+                }
+            }
         }
     }
 

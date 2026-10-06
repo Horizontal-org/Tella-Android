@@ -48,6 +48,7 @@ public class VaultDataSource implements IVaultDatabase {
         if (database == null) {
             database = dbHelper.getWritableDatabase();
         }
+        ensureSourceFileIdColumn();
     }
 
     public VaultFile getByHash(String hash) {
@@ -66,6 +67,37 @@ public class VaultDataSource implements IVaultDatabase {
         }
 
         return null;
+    }
+
+    @Override
+    public VaultFile getBySourceFileId(String sourceFileId) {
+        if (sourceFileId == null || sourceFileId.isEmpty()) {
+            return null;
+        }
+        try (Cursor cursor = database.query(
+                D.T_VAULT_FILE,
+                null,
+                D.C_SOURCE_FILE_ID + " = ?",
+                new String[]{sourceFileId},
+                null, null, null)) {
+
+            if (cursor.moveToFirst()) {
+                return cursorToVaultFile(cursor);
+            }
+        } catch (Exception e) {
+            Timber.e(e, "getBySourceFileId failed");
+        }
+        return null;
+    }
+
+    @Override
+    public void updateSourceFileId(String fileId, String sourceFileId) {
+        if (fileId == null || fileId.isEmpty()) {
+            return;
+        }
+        ContentValues values = new ContentValues();
+        values.put(D.C_SOURCE_FILE_ID, sourceFileId);
+        database.update(D.T_VAULT_FILE, values, D.C_ID + " = ?", new String[]{fileId});
     }
 
     /**
@@ -129,6 +161,9 @@ public class VaultDataSource implements IVaultDatabase {
         if (vaultFile.created == 0) {
             vaultFile.created = System.currentTimeMillis();
         }
+        if (vaultFile.modified == 0) {
+            vaultFile.modified = vaultFile.created;
+        }
 
         try {
             database.beginTransaction();
@@ -139,6 +174,7 @@ public class VaultDataSource implements IVaultDatabase {
             values.put(D.C_PARENT_ID, parentId);
             values.put(D.C_NAME, vaultFile.name);
             values.put(D.C_CREATED, vaultFile.created);
+            values.put(D.C_MODIFIED, vaultFile.modified);
             values.put(D.C_DURATION, vaultFile.duration);
             values.put(D.C_SIZE, vaultFile.size);
             values.put(D.C_ANONYMOUS, vaultFile.anonymous ? 1 : 0);
@@ -147,6 +183,7 @@ public class VaultDataSource implements IVaultDatabase {
             values.put(D.C_MIME_TYPE, vaultFile.mimeType);
             values.put(D.C_PATH, vaultFile.path);
             values.put(D.C_METADATA, gson.toJson(vaultFile.metadata));
+            values.put(D.C_SOURCE_FILE_ID, vaultFile.sourceFileId);
 
             database.insert(D.T_VAULT_FILE, null, values);
 
@@ -196,6 +233,7 @@ public class VaultDataSource implements IVaultDatabase {
                             D.C_PARENT_ID,
                             D.C_NAME,
                             D.C_CREATED,
+                            D.C_MODIFIED,
                             D.C_DURATION,
                             D.C_SIZE,
                             D.C_HASH,
@@ -203,7 +241,8 @@ public class VaultDataSource implements IVaultDatabase {
                             D.C_THUMBNAIL,
                             D.C_MIME_TYPE,
                             D.C_PATH,
-                            D.C_METADATA
+                            D.C_METADATA,
+                            D.C_SOURCE_FILE_ID
                     },
                     where,
                     null,
@@ -291,17 +330,20 @@ public class VaultDataSource implements IVaultDatabase {
                 D.T_VAULT_FILE,
                 new String[]{
                         D.C_ID,
+                        D.C_PARENT_ID,
                         D.C_PATH,
                         D.C_NAME,
                         D.C_METADATA,
                         D.C_CREATED,
+                        D.C_MODIFIED,
                         D.C_DURATION,
                         D.C_ANONYMOUS,
                         D.C_SIZE,
                         D.C_HASH,
                         D.C_MIME_TYPE,
                         D.C_TYPE,
-                        D.C_THUMBNAIL
+                        D.C_THUMBNAIL,
+                        D.C_SOURCE_FILE_ID
                 },
                 cn(D.C_ID) + " = ?", new String[]{id},
                 null, null, null, null
@@ -328,6 +370,7 @@ public class VaultDataSource implements IVaultDatabase {
         try {
             ContentValues values = new ContentValues();
             values.put(D.C_NAME, name);
+            values.put(D.C_MODIFIED, System.currentTimeMillis());
 
             database.update(D.T_VAULT_FILE, values, D.C_ID + " = ?",
                     new String[]{id});
@@ -368,6 +411,7 @@ public class VaultDataSource implements IVaultDatabase {
 
         ContentValues values = new ContentValues();
         values.put(D.C_PARENT_ID, newParent);
+        values.put(D.C_MODIFIED, System.currentTimeMillis());
 
         int count = database.update(D.T_VAULT_FILE, values, D.C_ID + " = ?",
                 new String[]{vaultFile.id});
@@ -412,6 +456,12 @@ public class VaultDataSource implements IVaultDatabase {
         try {
             database.beginTransaction();
 
+            VaultFile current = get(vaultFile.id);
+            if (current == null) {
+                database.setTransactionSuccessful();
+                return true;
+            }
+
             int count = database.delete(D.T_VAULT_FILE, D.C_ID + " = ?", new String[]{vaultFile.id});
 
             if (count != 1) {
@@ -447,9 +497,17 @@ public class VaultDataSource implements IVaultDatabase {
         VaultFile vaultFile = new VaultFile();
 
         vaultFile.id = cursor.getString(cursor.getColumnIndexOrThrow(D.C_ID));
+        int parentColumn = cursor.getColumnIndex(D.C_PARENT_ID);
+        if (parentColumn >= 0) {
+            vaultFile.parentId = cursor.getString(parentColumn);
+        }
         vaultFile.type = VaultFile.Type.fromValue(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_TYPE)));
         vaultFile.name = cursor.getString(cursor.getColumnIndexOrThrow(D.C_NAME));
         vaultFile.created = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_CREATED));
+        int modifiedColumn = cursor.getColumnIndex(D.C_MODIFIED);
+        if (modifiedColumn >= 0 && !cursor.isNull(modifiedColumn)) {
+            vaultFile.modified = cursor.getLong(modifiedColumn);
+        }
         vaultFile.duration = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_DURATION));
         vaultFile.size = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_SIZE));
         vaultFile.anonymous = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_ANONYMOUS)) == 1;
@@ -458,6 +516,10 @@ public class VaultDataSource implements IVaultDatabase {
         vaultFile.mimeType = cursor.getString(cursor.getColumnIndexOrThrow(D.C_MIME_TYPE));
         vaultFile.path = cursor.getString(cursor.getColumnIndexOrThrow(D.C_PATH));
         vaultFile.metadata = gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_METADATA)), Metadata.class);
+        int sourceColumn = cursor.getColumnIndex(D.C_SOURCE_FILE_ID);
+        if (sourceColumn >= 0 && !cursor.isNull(sourceColumn)) {
+            vaultFile.sourceFileId = cursor.getString(sourceColumn);
+        }
 
         return vaultFile;
     }
@@ -557,5 +619,31 @@ public class VaultDataSource implements IVaultDatabase {
      */
     private void deleteTable(String table) {
         database.delete(table, D.C_ID + " != '" + ROOT_UID + "'", null);
+    }
+
+    private void ensureSourceFileIdColumn() {
+        if (hasColumn(D.T_VAULT_FILE, D.C_SOURCE_FILE_ID)) {
+            VaultSQLiteOpenHelper.createSourceFileIndex(database);
+            return;
+        }
+        VaultSQLiteOpenHelper.addSourceFileIdColumn(database);
+        VaultSQLiteOpenHelper.createSourceFileIndex(database);
+    }
+
+    private boolean hasColumn(String table, String column) {
+        try (Cursor cursor = database.rawQuery("PRAGMA table_info(" + table + ")", null)) {
+            int nameIndex = cursor.getColumnIndex("name");
+            if (nameIndex < 0) {
+                return false;
+            }
+            while (cursor.moveToNext()) {
+                if (column.equals(cursor.getString(nameIndex))) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            Timber.e(e, "hasColumn failed");
+        }
+        return false;
     }
 }

@@ -30,7 +30,7 @@ import org.horizontal.tella.mobile.data.sharedpref.Preferences
 import org.horizontal.tella.mobile.media.MediaFileHandler
 import org.horizontal.tella.mobile.mvp.contract.IMetadataAttachPresenterContract
 import org.horizontal.tella.mobile.mvp.presenter.MetadataAttacher
-import org.horizontal.tella.mobile.util.C.RECORD_REQUEST_CODE
+import org.horizontal.tella.mobile.util.C
 import org.horizontal.tella.mobile.util.StringUtils
 import org.horizontal.tella.mobile.views.activity.MetadataActivity
 import org.horizontal.tella.mobile.views.activity.MainActivity
@@ -74,6 +74,8 @@ class MicActivity : MetadataActivity(),
     private lateinit var recordingName: TextView
     private var currentRootParent: String? = null
     private var currentRecordName = ""
+    private var pendingRecordAfterLocationCheck = false
+    private var gpsPromptIgnoredForCurrentSession = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -116,10 +118,10 @@ class MicActivity : MetadataActivity(),
         mRecord.setOnClickListener {
             if (notRecording) {
                 if (hastRecordingPermissions(this)) {
-                    handleRecord()
+                    maybeStartRecording()
                 } else {
                     maybeChangeTemporaryTimeout()
-                    requestRecordingPermissions(RECORD_REQUEST_CODE)
+                    requestRecordingPermissions(C.RECORD_REQUEST_CODE)
                 }
             } else {
                 handleStop()
@@ -241,7 +243,98 @@ class MicActivity : MetadataActivity(),
         )
     }
 
+    private fun hasLocationPermission(): Boolean {
+        return ActivityCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestLocationPermission(requestCode: Int) {
+        requestPermissions(
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            requestCode
+        )
+    }
+
+    private fun maybeStartRecording() {
+        if (!shouldCheckLocationBeforeRecording()) {
+            handleRecord()
+            return
+        }
+
+        pendingRecordAfterLocationCheck = true
+        if (!hasLocationPermission()) {
+            maybeChangeTemporaryTimeout()
+            requestLocationPermission(C.LOCATION_PERMISSION)
+            return
+        }
+
+        continueRecordingAfterLocationCheck()
+    }
+
+    private fun continueRecordingAfterLocationCheck() {
+        if (!pendingRecordAfterLocationCheck) return
+
+        if (!hasLocationPermission()) {
+            handleRecord()
+            return
+        }
+
+        if (gpsPromptIgnoredForCurrentSession) {
+            handleRecord()
+            return
+        }
+
+        startLocationMetadataListening()
+        checkLocationSettings(C.START_AUDIO_RECORD) {
+            handleRecord()
+        }
+    }
+
+    private fun shouldCheckLocationBeforeRecording(): Boolean {
+        return !Preferences.isAnonymousMode() && viewModel.isAudioRecorder()
+    }
+
+    override fun getGpsMetadataDialogMessageResId(): Int {
+        return R.string.verification_prompt_dialog_media_file_expl
+    }
+
+    override fun onGpsMetadataDialogConfirmed() {
+        gpsPromptIgnoredForCurrentSession = false
+    }
+
+    override fun onGpsMetadataDialogIgnored() {
+        gpsPromptIgnoredForCurrentSession = true
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == C.RECORD_REQUEST_CODE) {
+            if (grantResults.firstOrNull() == PackageManager.PERMISSION_GRANTED) {
+                maybeStartRecording()
+            }
+            return
+        }
+
+        if (requestCode != C.LOCATION_PERMISSION || !pendingRecordAfterLocationCheck) {
+            return
+        }
+
+        if (grantResults.firstOrNull() == PackageManager.PERMISSION_GRANTED) {
+            continueRecordingAfterLocationCheck()
+        } else {
+            handleRecord()
+        }
+    }
+
     private fun handleRecord() {
+        pendingRecordAfterLocationCheck = false
         notRecording = false
         if (viewModel.isAudioRecorder()) {   //first start or restart
             disablePlay()
