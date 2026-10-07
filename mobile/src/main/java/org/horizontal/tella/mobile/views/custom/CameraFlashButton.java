@@ -25,15 +25,15 @@ public class CameraFlashButton extends AppCompatImageButton implements View.OnTo
     }
 
     public void displayFlashOn() {
-        setImageResource(R.drawable.ic_flash_on_white);
+        setImageResource(R.drawable.ic_camera_flash_on);
     }
 
     public void displayFlashOff() {
-        setImageResource(R.drawable.ic_flash_off_white);
+        setImageResource(R.drawable.ic_camera_flash_off);
     }
 
     public void displayFlashAuto() {
-        setImageResource(R.drawable.ic_flash_auto_white);
+        setImageResource(R.drawable.ic_camera_flash_auto);
     }
 
     public void rotateView(int angle){

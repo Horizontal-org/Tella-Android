@@ -1,208 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/root"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/wa_black"
-    android:orientation="vertical"
-    android:keepScreenOn="true">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root" android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/camera_design_surface" android:keepScreenOn="true" android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/topBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:background="@color/wa_black"
-        android:elevation="12dp">
-
-        <ImageView
-            android:id="@+id/close"
-            style="@style/CameraTopImageStyle"
-            android:layout_alignParentStart="true"
-            android:src="@drawable/ic_close_white"
-            android:clickable="true"
-            android:focusable="true"
-            android:contentDescription="@string/action_cancel" />
-
-        <org.horizontal.tella.mobile.views.custom.CameraResolutionButton
-            android:id="@+id/resolutionButton"
-            android:background="@color/wa_black"
-            android:visibility="gone"
-            style="@style/CameraTopImageStyle"
-            android:contentDescription="@string/action_choose_resolution"
-            android:layout_toStartOf="@id/gridButton"
-            android:layout_marginStart="32dp"/>
-
-        <org.horizontal.tella.mobile.views.custom.CameraGridButton
-            android:id="@+id/gridButton"
-            style="@style/CameraTopImageStyle"
-            android:layout_marginStart="32dp"
-            android:layout_toStartOf="@id/switchButton" />
-
-        <org.horizontal.tella.mobile.views.custom.CameraSwitchButton
-            android:id="@+id/switchButton"
-            style="@style/CameraTopImageStyle"
-            android:layout_toStartOf="@id/flashButton"
-            android:layout_marginStart="32dp"/>
-
-        <org.horizontal.tella.mobile.views.custom.CameraFlashButton
-            android:id="@+id/flashButton"
-            style="@style/CameraTopImageStyle"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="32dp"
-            tools:ignore="RelativeOverlap" />
+    <RelativeLayout android:id="@+id/topBar" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:minHeight="56dp"
+        android:paddingStart="8dp" android:paddingTop="4dp" android:paddingEnd="8dp" android:paddingBottom="4dp">
+        <ImageView android:id="@+id/close" style="@style/CameraDesignToolbarButton"
+            android:layout_alignParentStart="true" android:contentDescription="@string/action_cancel"
+            android:src="@drawable/ic_close_white" />
+        <org.horizontal.tella.mobile.views.custom.CameraResolutionButton android:id="@+id/resolutionButton"
+            style="@style/CameraDesignToolbarButton" android:layout_toStartOf="@id/flashButton"
+            android:contentDescription="@string/action_choose_resolution" android:visibility="gone" />
+        <org.horizontal.tella.mobile.views.custom.CameraFlashButton android:id="@+id/flashButton"
+            style="@style/CameraDesignToolbarButton" android:layout_toStartOf="@id/gridButton"
+            android:contentDescription="@string/camera_flash_settings" android:padding="14dp"
+            android:src="@drawable/ic_camera_flash_off" />
+        <org.horizontal.tella.mobile.views.custom.CameraGridButton android:id="@+id/gridButton"
+            style="@style/CameraDesignToolbarButton" android:layout_alignParentEnd="true"
+            android:contentDescription="@string/action_show_gridview" android:src="@drawable/ic_grid_off_white_24dp" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <androidx.camera.view.PreviewView
-            android:id="@+id/viewFinder"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:keepScreenOn="true"
-            app:implementationMode="compatible" />
-
-        <org.horizontal.tella.mobile.views.custom.CameraGridOverlayView
-            android:id="@+id/gridOverlay"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-            android:importantForAccessibility="no" />
-
-        <org.horizontal.tella.mobile.views.custom.CameraDurationTextView
-            android:id="@+id/durationView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:padding="2dp"
-            android:shadowDx="2"
-            android:shadowDy="2"
-            android:shadowRadius="2"
-            android:textColor="@android:color/white"
-            android:elevation="8dp" />
-
-        <FrameLayout
-            android:layout_width="32dp"
-            android:layout_height="250dp"
-            android:layout_marginStart="40dp"
-            android:contentDescription="@string/action_zoom"
-            android:layout_alignParentBottom="true"
-            android:orientation="vertical"
-            android:elevation="8dp">
-
-            <SeekBar
-                android:id="@+id/camera_zoom"
-                style="@style/CameraZoomSeekBar"
-                android:contentDescription="@string/action_zoom"
-                android:layout_width="230dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
-                android:max="100"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:rotation="270" />
+    <FrameLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
+        <androidx.camera.view.PreviewView android:id="@+id/viewFinder" android:layout_width="match_parent"
+            android:layout_height="match_parent" android:keepScreenOn="true" app:implementationMode="compatible" />
+        <org.horizontal.tella.mobile.views.custom.CameraGridOverlayView android:id="@+id/gridOverlay"
+            android:layout_width="match_parent" android:layout_height="match_parent"
+            android:importantForAccessibility="no" android:visibility="gone" />
+        <FrameLayout android:layout_width="48dp" android:layout_height="250dp"
+            android:layout_gravity="bottom|start" android:layout_marginStart="16dp" android:layout_marginBottom="16dp">
+            <SeekBar android:id="@+id/camera_zoom" style="@style/CameraZoomSeekBar"
+                android:layout_width="230dp" android:layout_height="48dp" android:layout_gravity="center"
+                android:contentDescription="@string/action_zoom" android:max="100" android:rotation="270" />
         </FrameLayout>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/camera_bottom_controls"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="12dp">
-
-        <org.horizontal.tella.mobile.views.custom.CameraCaptureButton
-            android:id="@+id/captureButton"
-            android:layout_width="@dimen/camera_capture_button"
-            android:layout_height="@dimen/camera_capture_button"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="16dp"
-            android:contentDescription="@string/Uwazi_WidgetMedia_Take_Photo"
-            android:padding="8dp"
-            android:scaleType="fitCenter" />
-
-        <com.mikhaellopez.circularimageview.CircularImageView
-            android:id="@+id/preview_image"
-            android:layout_width="@dimen/gallery_preview_button"
-            android:layout_height="@dimen/gallery_preview_button"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="30dp"
-            android:clickable="true"
-            android:contentDescription="@string/action_open_gallery"
-            android:focusable="true"
-            android:padding="10dp"
-            android:src="@drawable/white"
-            app:civ_border_color="@color/wa_gray"
-            app:civ_border_width="2dp" />
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/camera_mode_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/camera_mode_links_margin"
-        android:layout_marginBottom="@dimen/camera_mode_links_margin"
-        android:orientation="horizontal"
-        android:baselineAligned="false"
-        android:elevation="12dp">
-
-        <LinearLayout
-            android:id="@+id/photo_mode"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight=".5"
-            android:clickable="true"
-            android:focusable="true"
-            android:orientation="vertical"
-            android:paddingStart="50dp"
-            android:paddingEnd="0dp">
-
-            <TextView
-                android:id="@+id/photo_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/CameraModeText"
-                android:text="@string/camera_tab.title_photo"
-                android:textAlignment="center"/>
-
-            <View
-                android:id="@+id/photo_line"
-                style="@style/CameraModeLine" />
+        <androidx.appcompat.widget.AppCompatImageButton android:id="@+id/moreButton"
+            android:layout_width="48dp" android:layout_height="48dp" android:layout_gravity="bottom|end"
+            android:layout_marginEnd="16dp" android:layout_marginBottom="8dp"
+            android:background="@drawable/camera_more_background" android:contentDescription="@string/camera_more_options"
+            android:padding="14dp" app:srcCompat="@drawable/ic_camera_more" />
+        <View android:id="@+id/panelDismissArea" android:layout_width="match_parent" android:layout_height="match_parent"
+            android:clickable="true" android:contentDescription="@string/camera_dismiss_options"
+            android:focusable="true" android:visibility="gone" />
+        <LinearLayout android:id="@+id/morePanel" style="@style/CameraDesignPanel"
+            android:gravity="center" android:orientation="horizontal" android:padding="20dp" android:visibility="gone">
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                android:gravity="center" android:orientation="vertical">
+                <org.horizontal.tella.mobile.views.custom.CameraFlashButton android:id="@+id/menuFlashButton"
+                    style="@style/CameraDesignMenuButton" android:contentDescription="@string/camera_flash_settings"
+                    android:padding="20dp" android:scaleType="fitCenter" android:src="@drawable/ic_camera_flash_off" />
+                <TextView style="@style/CameraDesignMenuLabel" android:importantForAccessibility="no"
+                    android:text="@string/camera_flash_title" />
+            </LinearLayout>
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                android:gravity="center" android:orientation="vertical">
+                <org.horizontal.tella.mobile.views.custom.CameraGridButton android:id="@+id/menuGridButton"
+                    style="@style/CameraDesignMenuButton" android:contentDescription="@string/action_show_gridview"
+                    android:src="@drawable/ic_grid_off_white_24dp" />
+                <TextView style="@style/CameraDesignMenuLabel" android:importantForAccessibility="no"
+                    android:text="@string/camera_grid_title" />
+            </LinearLayout>
         </LinearLayout>
+        <LinearLayout android:id="@+id/flashPanel" style="@style/CameraDesignPanel"
+            android:orientation="vertical" android:padding="8dp" android:visibility="gone">
+            <FrameLayout android:layout_width="match_parent" android:layout_height="48dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center"
+                    android:accessibilityHeading="true" android:text="@string/camera_flash_title"
+                    android:textAllCaps="true" android:textColor="@android:color/white" android:textSize="14sp" />
+                <androidx.appcompat.widget.AppCompatImageButton android:id="@+id/flashBackButton"
+                    android:layout_width="48dp" android:layout_height="48dp" android:layout_gravity="start|center_vertical"
+                    android:background="@drawable/camera_back_background" android:contentDescription="@string/camera_back_to_more_options"
+                    android:padding="14dp" android:scaleType="fitCenter" app:srcCompat="@drawable/ic_camera_back" />
+            </FrameLayout>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:gravity="center" android:orientation="horizontal">
+                <LinearLayout android:id="@+id/flashOffOption" style="@style/CameraDesignFlashOption"
+                    android:contentDescription="@string/camera_flash_off_description">
+                    <ImageView style="@style/CameraDesignFlashOptionIcon" android:src="@drawable/ic_camera_flash_off" />
+                    <TextView style="@style/CameraDesignFlashOptionLabel" android:text="@string/camera_flash_off" />
+                </LinearLayout>
+                <LinearLayout android:id="@+id/flashOnOption" style="@style/CameraDesignFlashOption"
+                    android:contentDescription="@string/camera_flash_on_description">
+                    <ImageView style="@style/CameraDesignFlashOptionIcon" android:src="@drawable/ic_camera_flash_on" />
+                    <TextView style="@style/CameraDesignFlashOptionLabel" android:text="@string/camera_flash_on" />
+                </LinearLayout>
+                <LinearLayout android:id="@+id/flashAutoOption" style="@style/CameraDesignFlashOption"
+                    android:contentDescription="@string/camera_flash_auto_description">
+                    <ImageView style="@style/CameraDesignFlashOptionIcon" android:src="@drawable/ic_camera_flash_auto" />
+                    <TextView style="@style/CameraDesignFlashOptionLabel" android:text="@string/camera_flash_auto" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_gravity="top|center_horizontal" android:layout_marginTop="8dp"
+            android:gravity="center_horizontal" android:orientation="vertical">
+            <org.horizontal.tella.mobile.views.custom.CameraDurationTextView android:id="@+id/durationView"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:background="@drawable/camera_recording_timer_background"
+                android:gravity="center" android:minWidth="84dp" android:minHeight="32dp"
+                android:paddingStart="12dp" android:paddingTop="6dp"
+                android:paddingEnd="12dp" android:paddingBottom="6dp"
+                android:fontFamily="sans-serif-medium" android:fontFeatureSettings="tnum"
+                android:includeFontPadding="false" android:singleLine="true" android:textDirection="ltr"
+                android:textSize="14sp" android:textColor="@android:color/white"
+                android:visibility="gone" tools:text="00:00:37" />
+            <TextView android:id="@+id/gridFeedback" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginTop="4dp" android:accessibilityLiveRegion="polite"
+                android:background="@drawable/camera_feedback_off" android:gravity="center"
+                android:minHeight="28dp" android:paddingStart="10dp" android:paddingTop="4dp"
+                android:paddingEnd="10dp" android:paddingBottom="4dp" android:textColor="@color/camera_design_surface"
+                android:textSize="12sp" android:visibility="gone" tools:text="@string/camera_grid_on_feedback" />
+        </LinearLayout>
+    </FrameLayout>
 
-        <LinearLayout
-            android:id="@+id/video_mode"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight=".5"
-            android:clickable="true"
-            android:focusable="true"
-            android:orientation="vertical"
-            android:paddingStart="0dp"
-            android:paddingEnd="50dp">
-
-            <TextView
-                android:id="@+id/video_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/CameraModeText"
-                android:text="@string/camera_tab.title_video"
-                android:textAlignment="center"/>
-            <View
-                android:id="@+id/video_line"
-                style="@style/CameraModeLine" />
+    <RelativeLayout android:id="@+id/camera_bottom_controls" android:layout_width="match_parent"
+        android:layout_height="96dp" android:paddingStart="24dp" android:paddingTop="8dp"
+        android:paddingEnd="24dp" android:paddingBottom="8dp">
+        <FrameLayout android:id="@+id/galleryButtonContainer" android:layout_width="56dp" android:layout_height="56dp"
+            android:layout_alignParentStart="true" android:layout_centerVertical="true">
+            <com.mikhaellopez.circularimageview.CircularImageView android:id="@+id/preview_image"
+                android:layout_width="match_parent" android:layout_height="match_parent" android:clickable="true"
+                android:contentDescription="@string/action_open_gallery" android:focusable="true"
+                android:padding="4dp" android:src="@drawable/white"
+                app:civ_border_color="@android:color/white" app:civ_border_width="1dp" />
+            <com.mikhaellopez.circularimageview.CircularImageView android:id="@+id/previewIncomingImage"
+                android:layout_width="match_parent" android:layout_height="match_parent"
+                android:clickable="false" android:focusable="false"
+                android:importantForAccessibility="no" android:visibility="gone"
+                app:civ_border_color="@android:color/transparent" app:civ_border_width="1dp" />
+        </FrameLayout>
+        <org.horizontal.tella.mobile.views.custom.CameraCaptureButton android:id="@+id/captureButton"
+            android:layout_width="80dp" android:layout_height="80dp" android:layout_centerInParent="true"
+            android:contentDescription="@string/Uwazi_WidgetMedia_Take_Photo" android:padding="4dp" android:scaleType="fitCenter" />
+        <org.horizontal.tella.mobile.views.custom.CameraSwitchButton android:id="@+id/switchButton"
+            android:layout_width="56dp" android:layout_height="56dp"
+            android:layout_alignParentEnd="true" android:layout_centerVertical="true"
+            android:background="@drawable/camera_switch_background" android:contentDescription="@string/action_switch_to_front_camera"
+            android:padding="18dp" android:scaleType="fitCenter" android:src="@drawable/ic_camera_switch" />
+        <org.horizontal.tella.mobile.views.custom.CameraCaptureButton android:id="@+id/recordingPhotoButton"
+            android:layout_width="56dp" android:layout_height="56dp"
+            android:layout_alignParentEnd="true" android:layout_centerVertical="true"
+            android:contentDescription="@string/camera_take_photo_while_recording"
+            android:padding="6dp" android:scaleType="fitCenter" android:visibility="gone" />
+    </RelativeLayout>
+    <LinearLayout android:id="@+id/camera_mode_bar" android:layout_width="match_parent" android:layout_height="64dp"
+        android:gravity="center" android:orientation="horizontal" android:paddingBottom="8dp">
+        <LinearLayout android:id="@+id/video_mode" style="@style/CameraDesignMode">
+            <TextView android:id="@+id/video_text" style="@style/CameraDesignModeText" android:text="@string/camera_tab.title_video" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/photo_mode" style="@style/CameraDesignMode">
+            <TextView android:id="@+id/photo_text" style="@style/CameraDesignModeText" android:text="@string/camera_tab.title_photo" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
