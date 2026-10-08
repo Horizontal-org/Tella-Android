@@ -1,5 +1,6 @@
 package org.horizontal.tella.mobile.util;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -52,6 +53,9 @@ public class Util {
 
         try {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            if (!(context instanceof Activity)) {
+                browserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            }
             if (browserIntent.resolveActivity(packageManager) != null) {
                 context.startActivity(browserIntent);
             }

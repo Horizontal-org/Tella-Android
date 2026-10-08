@@ -206,7 +206,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements Collect
         binding.nearbySharingSwitch.mSwitch.setChecked(Preferences.isEnableHomeNearby());
         binding.nearbySharingSwitch.setTextAndAction(R.string.action_learn_more, () -> {
             maybeChangeTemporaryTimeout(() -> {
-                Util.startBrowserIntent(getApplicationContext(), getString(R.string.config_nearby_sharing_url));
+                Util.startBrowserIntent(this, getString(R.string.config_nearby_sharing_url));
                 return null;
             });
             return Unit.INSTANCE;
