@@ -619,7 +619,7 @@ public class MediaFileHandler {
 
 
     public static Single<VaultFile> importOthersUri(Context context, Uri uri, String parentId) throws Exception {
-        String mimeType = context.getContentResolver().getType(uri);
+        String mimeType = MediaFile.INSTANCE.normalizedMimeType(context.getContentResolver().getType(uri));
 
         DocumentFile doc = DocumentFile.fromSingleUri(context, uri);
         if (doc == null || !doc.exists()) {

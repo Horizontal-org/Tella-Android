@@ -136,6 +136,11 @@ object MediaFile {
         sFormatToMimeTypeMap[mtpFormatCode] = mimeType
     }
 
+    private fun addMimeType(mimeType: String, fileType: Int, mtpFormatCode: Int) {
+        sMimeTypeMap[mimeType] = fileType
+        sMimeTypeToFormatMap[mimeType] = mtpFormatCode
+    }
+
     fun isAudioFileType(mimeType: String): Boolean {
         return isAudioFileType(getFileTypeForMimeType(mimeType))
     }
@@ -246,8 +251,27 @@ object MediaFile {
     }
 
     private fun getFileTypeForMimeType(mimeType: String?): Int {
-        val value = sMimeTypeMap[mimeType]
+        val value = sMimeTypeMap[baseMimeType(mimeType)]
         return value ?: 0
+    }
+    
+    fun normalizedMimeType(mimeType: String?): String? {
+        val base = baseMimeType(mimeType) ?: return mimeType
+        return if (isOggContainerMimeType(base)) OGG_CONTAINER_MIME_TYPE else mimeType
+    }
+
+    private fun baseMimeType(mimeType: String?): String? {
+        if (mimeType.isNullOrBlank()) return null
+        val base = mimeType.substringBefore(';').trim().lowercase(Locale.ROOT)
+        return base.ifEmpty { null }
+    }
+
+    private fun isOggContainerMimeType(baseMimeType: String): Boolean {
+        return baseMimeType == OGG_CONTAINER_MIME_TYPE ||
+                baseMimeType == "application/ogg" ||
+                baseMimeType == "audio/opus" ||
+                baseMimeType == "audio/vorbis" ||
+                baseMimeType == "audio/oga"
     }
 
     fun getMimeTypeForFile(path: String?): String? {
@@ -277,7 +301,7 @@ object MediaFile {
 
     fun getFormatCode(fileName: String, mimeType: String?): Int {
         if (mimeType != null) {
-            val value = sMimeTypeToFormatMap[mimeType]
+            val value = sMimeTypeToFormatMap[baseMimeType(mimeType)]
             if (value != null) {
                 return value.toInt()
             }
@@ -300,6 +324,8 @@ object MediaFile {
 
     class MediaFileType internal constructor(val fileType: Int, val mimeType: String)
 
+    private const val OGG_CONTAINER_MIME_TYPE = "audio/ogg"
+
     init {
         addFileType("MP3", FILE_TYPE_MP3, "audio/mpeg", MtpConstants.FORMAT_MP3)
         addFileType("MPGA", FILE_TYPE_MP3, "audio/mpeg", MtpConstants.FORMAT_MP3)
@@ -309,9 +335,13 @@ object MediaFile {
         addFileType("AWB", FILE_TYPE_AWB, "audio/amr-wb")
         /* if (isWMAEnabled()) {
             addFileType("WMA", FILE_TYPE_WMA, "audio/x-ms-wma", MtpConstants.FORMAT_WMA);
-        }*/addFileType("OGG", FILE_TYPE_OGG, "audio/ogg", MtpConstants.FORMAT_OGG)
-        addFileType("OGG", FILE_TYPE_OGG, "application/ogg", MtpConstants.FORMAT_OGG)
-        addFileType("OGA", FILE_TYPE_OGG, "application/ogg", MtpConstants.FORMAT_OGG)
+        }*/addFileType("OGG", FILE_TYPE_OGG, OGG_CONTAINER_MIME_TYPE, MtpConstants.FORMAT_OGG)
+        addFileType("OGA", FILE_TYPE_OGG, OGG_CONTAINER_MIME_TYPE, MtpConstants.FORMAT_OGG)
+        addFileType("OPUS", FILE_TYPE_OGG, OGG_CONTAINER_MIME_TYPE, MtpConstants.FORMAT_OGG)
+        addMimeType("application/ogg", FILE_TYPE_OGG, MtpConstants.FORMAT_OGG)
+        addMimeType("audio/opus", FILE_TYPE_OGG, MtpConstants.FORMAT_OGG)
+        addMimeType("audio/vorbis", FILE_TYPE_OGG, MtpConstants.FORMAT_OGG)
+        addMimeType("audio/oga", FILE_TYPE_OGG, MtpConstants.FORMAT_OGG)
         addFileType("AAC", FILE_TYPE_AAC, "audio/aac", MtpConstants.FORMAT_AAC)
         addFileType("AAC", FILE_TYPE_AAC, "audio/aac-adts", MtpConstants.FORMAT_AAC)
         addFileType("MKA", FILE_TYPE_MKA, "audio/x-matroska")
