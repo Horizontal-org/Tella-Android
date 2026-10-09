@@ -88,6 +88,13 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
 
             binding.audioInfo.setVisibility(GONE);
             binding.videoInfo.setVisibility(GONE);
+        } else if (MediaFile.INSTANCE.isCsvFile(vaultFile.name, vaultFile.mimeType)) {
+            binding.thumbView.setImageResource(R.drawable.ic_csv);
+            binding.thumbView.setScaleType(ImageView.ScaleType.CENTER);
+
+            showMediaFileInfo();
+            binding.audioInfo.setVisibility(GONE);
+            binding.videoInfo.setVisibility(GONE);
         } else if (MediaFile.INSTANCE.isTextFileType(vaultFile.mimeType)) {
             binding.thumbView.setImageResource(R.drawable.ic_baseline_assignment_24);
             binding.thumbView.setScaleType(ImageView.ScaleType.CENTER);

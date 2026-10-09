@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.utils.MediaFile.isAudioFileType
+import com.hzontal.utils.MediaFile.isCsvFile
 import com.hzontal.utils.MediaFile.isImageFileType
 import com.hzontal.utils.MediaFile.isVideoFileType
 import org.horizontal.tella.mobile.R
@@ -105,7 +106,11 @@ open class ReportsFilesRecyclerViewAdapter(
                     this.showVideoInfo(vaultFile)
                 } else {
                     fileNameTextView.text = vaultFile.name
-                    this.showDocInfo()
+                    if (isCsvFile(vaultFile.name, vaultFile.mimeType)) {
+                        icAttachmentImg.setBackgroundResource(R.drawable.ic_csv)
+                    } else {
+                        this.showDocInfo()
+                    }
                 }
             } else {
                 removeBtn.visibility = View.GONE

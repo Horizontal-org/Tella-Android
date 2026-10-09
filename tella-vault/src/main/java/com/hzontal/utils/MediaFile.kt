@@ -299,6 +299,23 @@ object MediaFile {
         return false
     }
 
+    fun isCsvFile(fileName: String?, mimeType: String?): Boolean {
+        if (mimeType.equals("text/csv", ignoreCase = true)
+            || mimeType.equals("application/csv", ignoreCase = true)
+            || mimeType.equals("text/comma-separated-values", ignoreCase = true)
+        ) {
+            return true
+        }
+        if (fileName.isNullOrEmpty()) {
+            return false
+        }
+        val lastDot = fileName.lastIndexOf('.')
+        if (lastDot >= 0 && lastDot < fileName.length - 1) {
+            return fileName.substring(lastDot + 1).equals("csv", ignoreCase = true)
+        }
+        return false
+    }
+
     fun getFormatCode(fileName: String, mimeType: String?): Int {
         if (mimeType != null) {
             val value = sMimeTypeToFormatMap[baseMimeType(mimeType)]

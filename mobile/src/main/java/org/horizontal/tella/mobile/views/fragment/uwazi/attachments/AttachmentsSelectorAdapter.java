@@ -108,13 +108,13 @@ public class AttachmentsSelectorAdapter extends RecyclerView.Adapter<Attachments
                         .into(holder.mediaView);
 
             } else {
-                holder.showDocumentInfo();
+                holder.showDocumentInfo(vaultFile);
             }
         } else {
             if (VaultFile.Type.fromValue(vaultFile.type.getValue()) == VaultFile.Type.DIRECTORY) {
                 holder.showFolderInfo();
             } else {
-                holder.showDocumentInfo();
+                holder.showDocumentInfo(vaultFile);
             }
         }
 
@@ -301,8 +301,10 @@ public class AttachmentsSelectorAdapter extends RecyclerView.Adapter<Attachments
             mediaView.setVisibility(View.INVISIBLE);
         }
 
-        void showDocumentInfo() {
-            icAttachmentImg.setBackgroundResource(R.drawable.ic_document_24px_filled);
+        void showDocumentInfo(VaultFile vaultFile) {
+            icAttachmentImg.setBackgroundResource(MediaFile.INSTANCE.isCsvFile(vaultFile.name, vaultFile.mimeType)
+                    ? R.drawable.ic_csv
+                    : R.drawable.ic_document_24px_filled);
             mediaView.setVisibility(View.INVISIBLE);
         }
 

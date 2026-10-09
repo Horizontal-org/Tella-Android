@@ -19,7 +19,11 @@ class ViewHolder(private val binding: ItemBackgroundActivityBinding) :
         binding.fileNameTextView.text = "$encryptingText ${item.name}"
         when (item.type) {
             BackgroundActivityType.FILE -> {
-                item.thumb?.let { icPreview(item.mimeType, it, binding.attachmentImg) }
+                if (MediaFile.isCsvFile(item.name, item.mimeType)) {
+                    binding.icAttachmentImg.showCsvInfo()
+                } else {
+                    item.thumb?.let { icPreview(item.mimeType, it, binding.attachmentImg) }
+                }
             }
 
             BackgroundActivityType.OTHER -> {
@@ -36,6 +40,7 @@ class ViewHolder(private val binding: ItemBackgroundActivityBinding) :
                 binding.icAttachmentImg.showVideoInfo()
                 binding.icAttachmentImg.loadImage(thumb)
             }
+            MediaFile.isCsvFile(null, mimeType) -> binding.icAttachmentImg.showCsvInfo()
             MediaFile.isTextFileType(mimeType) -> binding.icAttachmentImg.showDocumentInfo()
             else -> binding.icAttachmentImg.showDocumentInfo()
         }
@@ -57,6 +62,10 @@ class ViewHolder(private val binding: ItemBackgroundActivityBinding) :
 
     private fun ImageView.showDocumentInfo() {
         setBackgroundResource(R.drawable.ic_document_24px_filled)
+    }
+
+    private fun ImageView.showCsvInfo() {
+        setBackgroundResource(R.drawable.ic_csv)
     }
 
 }
