@@ -10,11 +10,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.utils.MediaFile.isAudioFileType
-import com.hzontal.utils.MediaFile.isCsvFile
 import com.hzontal.utils.MediaFile.isImageFileType
 import com.hzontal.utils.MediaFile.isVideoFileType
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.views.fragment.vault.adapters.VaultClickListener
+import org.horizontal.tella.mobile.views.fragment.vault.adapters.vaultDocumentIcon
 import org.horizontal.tella.mobile.views.fragment.vault.adapters.viewholders.base.BaseViewHolder
 import org.horizontal.tella.mobile.views.fragment.vault.adapters.viewholders.base.inflate
 
@@ -72,10 +72,7 @@ class RecentAttachmentViewHolder(val view: View) : BaseViewHolder<VaultFile?>(vi
     }
 
     private fun showDocumentInfo(vaultFile: VaultFile?) {
-        icAttachmentImg.setBackgroundResource(
-            if (isCsvFile(vaultFile?.name, vaultFile?.mimeType)) R.drawable.ic_csv
-            else R.drawable.ic_document_24px_filled
-        )
+        icAttachmentImg.setBackgroundResource(vaultDocumentIcon(vaultFile?.name, vaultFile?.mimeType))
         fileNameTextView.visibility = View.VISIBLE
         fileNameTextView.text = vaultFile?.name
         more.visibility = View.VISIBLE

@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.horizontal.tella.mobile.R;
+import org.horizontal.tella.mobile.views.fragment.vault.adapters.VaultFileIcon;
 import org.horizontal.tella.mobile.media.MediaFileHandler;
 import org.horizontal.tella.mobile.util.DateUtil;
 import org.horizontal.tella.mobile.databinding.ItemVaultAttachmentGridBinding;
@@ -318,9 +319,9 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
         }
 
         void showDocumentInfo(VaultFile vaultFile) {
-            icAttachmentImg.setBackgroundResource(MediaFile.INSTANCE.isCsvFile(vaultFile.name, vaultFile.mimeType)
-                    ? R.drawable.ic_csv
-                    : R.drawable.ic_document_24px_filled);
+            icAttachmentImg.setBackgroundResource(
+                    VaultFileIcon.vaultDocumentIcon(vaultFile.name, vaultFile.mimeType)
+            );
             mediaView.setVisibility(View.INVISIBLE);
         }
 

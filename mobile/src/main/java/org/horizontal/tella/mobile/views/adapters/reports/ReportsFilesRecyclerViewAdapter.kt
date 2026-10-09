@@ -12,10 +12,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.utils.MediaFile.isAudioFileType
-import com.hzontal.utils.MediaFile.isCsvFile
 import com.hzontal.utils.MediaFile.isImageFileType
 import com.hzontal.utils.MediaFile.isVideoFileType
 import org.horizontal.tella.mobile.R
+import org.horizontal.tella.mobile.views.fragment.vault.adapters.vaultDocumentIcon
 import org.horizontal.tella.mobile.views.interfaces.IReportAttachmentsHandler
 
 
@@ -106,11 +106,7 @@ open class ReportsFilesRecyclerViewAdapter(
                     this.showVideoInfo(vaultFile)
                 } else {
                     fileNameTextView.text = vaultFile.name
-                    if (isCsvFile(vaultFile.name, vaultFile.mimeType)) {
-                        icAttachmentImg.setBackgroundResource(R.drawable.ic_csv)
-                    } else {
-                        this.showDocInfo()
-                    }
+                    this.showDocInfo(vaultFile)
                 }
             } else {
                 removeBtn.visibility = View.GONE
@@ -135,8 +131,10 @@ open class ReportsFilesRecyclerViewAdapter(
             icAttachmentImg.setBackgroundResource(R.drawable.ic_audio_w_small)
         }
 
-        private fun showDocInfo() {
-            icAttachmentImg.setBackgroundResource(R.drawable.ic_reports)
+        private fun showDocInfo(vaultFile: VaultFile) {
+            icAttachmentImg.setBackgroundResource(
+                vaultDocumentIcon(vaultFile.name, vaultFile.mimeType, R.drawable.ic_reports)
+            )
         }
 
         private fun showImageInfo(vaultFile: VaultFile) {

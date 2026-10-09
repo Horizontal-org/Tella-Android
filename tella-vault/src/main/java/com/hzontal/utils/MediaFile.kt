@@ -300,20 +300,14 @@ object MediaFile {
     }
 
     fun isCsvFile(fileName: String?, mimeType: String?): Boolean {
-        if (mimeType.equals("text/csv", ignoreCase = true)
-            || mimeType.equals("application/csv", ignoreCase = true)
-            || mimeType.equals("text/comma-separated-values", ignoreCase = true)
-        ) {
+        val base = baseMimeType(mimeType)
+        if (base != null && CSV_MIME_TYPES.contains(base)) {
             return true
         }
-        if (fileName.isNullOrEmpty()) {
-            return false
-        }
+        if (fileName.isNullOrBlank()) return false
         val lastDot = fileName.lastIndexOf('.')
-        if (lastDot >= 0 && lastDot < fileName.length - 1) {
-            return fileName.substring(lastDot + 1).equals("csv", ignoreCase = true)
-        }
-        return false
+        if (lastDot < 0 || lastDot >= fileName.length - 1) return false
+        return fileName.substring(lastDot + 1).equals("csv", ignoreCase = true)
     }
 
     fun getFormatCode(fileName: String, mimeType: String?): Int {
@@ -342,6 +336,13 @@ object MediaFile {
     class MediaFileType internal constructor(val fileType: Int, val mimeType: String)
 
     private const val OGG_CONTAINER_MIME_TYPE = "audio/ogg"
+
+    private val CSV_MIME_TYPES = setOf(
+        "text/csv",
+        "application/csv",
+        "text/comma-separated-values",
+        "text/x-csv"
+    )
 
     init {
         addFileType("MP3", FILE_TYPE_MP3, "audio/mpeg", MtpConstants.FORMAT_MP3)

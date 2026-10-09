@@ -8,6 +8,7 @@ import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.ItemBackgroundActivityBinding
 import org.horizontal.tella.mobile.domain.entity.background_activity.BackgroundActivityModel
 import org.horizontal.tella.mobile.domain.entity.background_activity.BackgroundActivityType
+import org.horizontal.tella.mobile.views.fragment.vault.adapters.vaultDocumentIcon
 
 class ViewHolder(private val binding: ItemBackgroundActivityBinding) :
     RecyclerView.ViewHolder(binding.root) {
@@ -19,20 +20,17 @@ class ViewHolder(private val binding: ItemBackgroundActivityBinding) :
         binding.fileNameTextView.text = "$encryptingText ${item.name}"
         when (item.type) {
             BackgroundActivityType.FILE -> {
-                if (MediaFile.isCsvFile(item.name, item.mimeType)) {
-                    binding.icAttachmentImg.showCsvInfo()
-                } else {
-                    item.thumb?.let { icPreview(item.mimeType, it, binding.attachmentImg) }
-                }
+                item.thumb?.let { icPreview(item.mimeType, item.name, it, binding.attachmentImg) }
+                    ?: binding.icAttachmentImg.showDocumentInfo(item.mimeType, item.name)
             }
 
             BackgroundActivityType.OTHER -> {
-                binding.icAttachmentImg.showDocumentInfo()
+                binding.icAttachmentImg.showDocumentInfo(item.mimeType, item.name)
             }
         }
     }
 
-    private fun icPreview(mimeType: String, thumb: ByteArray, previewImageView: ImageView) {
+    private fun icPreview(mimeType: String, name: String, thumb: ByteArray, previewImageView: ImageView) {
         when {
             MediaFile.isImageFileType(mimeType) -> binding.icAttachmentImg.loadImage(thumb)
             MediaFile.isAudioFileType(mimeType) -> binding.icAttachmentImg.showAudioInfo()
@@ -40,9 +38,7 @@ class ViewHolder(private val binding: ItemBackgroundActivityBinding) :
                 binding.icAttachmentImg.showVideoInfo()
                 binding.icAttachmentImg.loadImage(thumb)
             }
-            MediaFile.isCsvFile(null, mimeType) -> binding.icAttachmentImg.showCsvInfo()
-            MediaFile.isTextFileType(mimeType) -> binding.icAttachmentImg.showDocumentInfo()
-            else -> binding.icAttachmentImg.showDocumentInfo()
+            else -> binding.icAttachmentImg.showDocumentInfo(mimeType, name)
         }
     }
 
@@ -60,12 +56,8 @@ class ViewHolder(private val binding: ItemBackgroundActivityBinding) :
         setBackgroundResource(R.drawable.ic_audio_w_small)
     }
 
-    private fun ImageView.showDocumentInfo() {
-        setBackgroundResource(R.drawable.ic_document_24px_filled)
-    }
-
-    private fun ImageView.showCsvInfo() {
-        setBackgroundResource(R.drawable.ic_csv)
+    private fun ImageView.showDocumentInfo(mimeType: String?, name: String?) {
+        setBackgroundResource(vaultDocumentIcon(name, mimeType))
     }
 
 }

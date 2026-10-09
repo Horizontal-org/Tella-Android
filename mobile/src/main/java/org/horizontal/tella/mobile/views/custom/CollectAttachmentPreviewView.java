@@ -16,6 +16,7 @@ import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.utils.MediaFile;
 
 import org.horizontal.tella.mobile.R;
+import org.horizontal.tella.mobile.views.fragment.vault.adapters.VaultFileIcon;
 import org.horizontal.tella.mobile.databinding.CollectAttachemntPreviewViewBinding;
 import org.horizontal.tella.mobile.mvp.contract.ICollectAttachmentMediaFilePresenterContract;
 import org.horizontal.tella.mobile.mvp.presenter.CollectAttachmentMediaFilePresenter;
@@ -89,7 +90,9 @@ public class CollectAttachmentPreviewView extends LinearLayout implements IColle
             binding.audioInfo.setVisibility(GONE);
             binding.videoInfo.setVisibility(GONE);
         } else if (MediaFile.INSTANCE.isCsvFile(vaultFile.name, vaultFile.mimeType)) {
-            binding.thumbView.setImageResource(R.drawable.ic_csv);
+            binding.thumbView.setImageResource(
+                    VaultFileIcon.vaultDocumentIcon(vaultFile.name, vaultFile.mimeType)
+            );
             binding.thumbView.setScaleType(ImageView.ScaleType.CENTER);
 
             showMediaFileInfo();
