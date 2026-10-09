@@ -207,6 +207,7 @@ public class MediaFileHandler {
         FileUtil.emptyDir(new File(context.getFilesDir(), C.MEDIA_DIR));
         FileUtil.emptyDir(new File(context.getFilesDir(), C.METADATA_DIR));
         FileUtil.emptyDir(new File(context.getFilesDir(), C.TMP_DIR));
+        clearVerificationShareCache(context);
     }
 
     public static void exportMediaFile(Context context,
@@ -1006,27 +1007,26 @@ public class MediaFileHandler {
         launchShare(context, Collections.singletonList(mediaFileUri), vaultFile.mimeType, false);
     }
 
+    @SuppressLint("CheckResult")
     public static void startShareActivity(Context context, List<VaultFile> mediaFiles, boolean includeMetadata) {
         boolean withVerification = includeMetadata && hasVerificationMetadata(mediaFiles);
         ArrayList<Uri> uris = collectShareUris(context, mediaFiles, withVerification);
-        // TODO 3.5.0: resume the Signal zip share below. Until then Signal receives the same files as the rest of the app.
-        // if (!withVerification || !isSignalShareAvailable(context)) {
-        //     launchShare(context, uris, "*/*", uris.size() > 1, null);
-        //     return;
-        // }
-        //
-        // Context appContext = context.getApplicationContext();
-        // Single.fromCallable(() -> createVerificationShareZip(appContext, mediaFiles))
-        //         .subscribeOn(Schedulers.io())
-        //         .observeOn(AndroidSchedulers.mainThread())
-        //         .subscribe(
-        //                 zipUri -> launchShare(context, uris, "*/*", uris.size() > 1, zipUri),
-        //                 error -> {
-        //                     Timber.e(error, MediaFileHandler.class.getName());
-        //                     launchShare(context, uris, "*/*", uris.size() > 1, null);
-        //                 }
-        //         );
-        launchShare(context, uris, "*/*", uris.size() > 1, null);
+        if (!withVerification || !isSignalShareAvailable(context)) {
+            launchShare(context, uris, "*/*", uris.size() > 1, null);
+            return;
+        }
+
+        Context appContext = context.getApplicationContext();
+        Single.fromCallable(() -> createVerificationShareZip(appContext, mediaFiles))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        zipUri -> launchShare(context, uris, "*/*", uris.size() > 1, zipUri),
+                        error -> {
+                            Timber.e(error, MediaFileHandler.class.getName());
+                            launchShare(context, uris, "*/*", uris.size() > 1, null);
+                        }
+                );
     }
 
     private static boolean hasVerificationMetadata(List<VaultFile> mediaFiles) {
@@ -1200,16 +1200,23 @@ public class MediaFileHandler {
         }
     }
 
+    public static void clearVerificationShareCache(Context context) {
+        VerificationShareCacheCleaner.clearActive();
+        deleteShareCache(context);
+    }
+
     static void deleteShareCache(Context context) {
         File shareDir = new File(context.getApplicationContext().getCacheDir(), SHARE_CACHE_DIR);
         File[] existing = shareDir.listFiles();
-        if (existing == null) {
-            return;
-        }
-        for (File file : existing) {
-            if (!file.delete()) {
-                Timber.w("Failed to delete share cache file %s", file.getAbsolutePath());
+        if (existing != null) {
+            for (File file : existing) {
+                if (!file.delete()) {
+                    Timber.w("Failed to delete share cache file %s", file.getAbsolutePath());
+                }
             }
+        }
+        if (shareDir.exists() && !shareDir.delete()) {
+            Timber.w("Failed to delete share cache directory %s", shareDir.getAbsolutePath());
         }
     }
 

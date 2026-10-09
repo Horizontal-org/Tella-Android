@@ -230,6 +230,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         vaultConfig.root = new File(this.getFilesDir(), C.MEDIA_DIR);
 
         mainKeyHolder = new LifecycleMainKey(ProcessLifecycleOwner.get().getLifecycle(), Preferences.getLockTimeout());
+        mainKeyHolder.setOnCleared(() -> MediaFileHandler.clearVerificationShareCache(this));
         //Tella keys
         TellaKeys.initialize();
         initializeLockConfigRegistry();
