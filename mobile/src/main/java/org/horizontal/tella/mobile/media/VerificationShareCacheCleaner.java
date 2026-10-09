@@ -44,6 +44,12 @@ final class VerificationShareCacheCleaner implements Application.ActivityLifecyc
         }
     }
 
+    static void clearActive() {
+        if (active != null) {
+            active.clearNow();
+        }
+    }
+
     private VerificationShareCacheCleaner(Activity activity, Uri zipUri) {
         application = activity.getApplication();
         watchedClass = activity.getClass();

@@ -7,6 +7,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.utils.MediaFile;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -191,11 +192,16 @@ public class MediaFileHttpServer implements Runnable {
                 throw new IOException();
             }
 
+            String contentType = MediaFile.INSTANCE.normalizedMimeType(vaultFile.mimeType);
+            if (contentType == null) {
+                contentType = vaultFile.mimeType;
+            }
+
             String headers = "";
             if (cbSkip > 0) {// It is a seek or skip request if there's a Range
                 // header
                 headers += "HTTP/1.1 206 Partial Content\r\n";
-                headers += "Content-Type: " + vaultFile.mimeType + "\r\n";
+                headers += "Content-Type: " + contentType + "\r\n";
                 headers += "Accept-Ranges: bytes\r\n";
                 headers += "Content-Length: " + (fileSize - cbSkip) + "\r\n";
                 headers += "Content-Range: bytes " + cbSkip + "-" + (fileSize - 1) + "/" + fileSize + "\r\n";
@@ -203,7 +209,7 @@ public class MediaFileHttpServer implements Runnable {
                 headers += "\r\n";
             } else {
                 headers += "HTTP/1.1 200 OK\r\n";
-                headers += "Content-Type: " + vaultFile.mimeType + "\r\n";
+                headers += "Content-Type: " + contentType + "\r\n";
                 headers += "Accept-Ranges: bytes\r\n";
                 headers += "Content-Length: " + fileSize + "\r\n";
                 headers += "Connection: Keep-Alive\r\n";
