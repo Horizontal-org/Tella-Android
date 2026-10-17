@@ -72,9 +72,14 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion < 2) {
-            addSourceFileIdColumn(db);
+            // VaultDataSource may already have added c_source_file_id, so check before adding.
+            if (!hasColumn(db, D.T_VAULT_FILE, D.C_SOURCE_FILE_ID)) {
+                addSourceFileIdColumn(db);
+            }
             createSourceFileIndex(db);
-            addModifiedColumn(db);
+            if (!hasColumn(db, D.T_VAULT_FILE, D.C_MODIFIED)) {
+                addModifiedColumn(db);
+            }
         }
     }
 

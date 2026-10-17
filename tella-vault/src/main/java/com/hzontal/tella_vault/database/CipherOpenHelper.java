@@ -237,7 +237,7 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
         if (preferences.isAlreadyMigratedVaultDB()) {
             char[] keyChars = encodeRawKey(password);
             try {
-                return SQLiteDatabase.openDatabase(
+                return upgradeIfNeeded(SQLiteDatabase.openDatabase(
                         context.getDatabasePath(DATABASE_NAME).getPath(),
                         new String(keyChars),
                         null,
@@ -262,7 +262,7 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
                                 }
                             }
                         }
-                );
+                ));
             } finally {
                 Arrays.fill(keyChars, '\0');
             }
@@ -270,5 +270,30 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
             Timber.tag(TAG).d("Database is from a fresh install, not calling getWritableDatabase.");
             return super.getWritableDatabase(); // or handle appropriately
         }
+    }
+
+    /**
+     * Databases migrated from SQLCipher 3 are opened directly above, bypassing
+     * {@link SQLiteOpenHelper}, so onUpgrade() and onOpen() never ran for them. Apply pending
+     * schema upgrades here. If an upgrade fails, the transaction rolls back and the database is
+     * used as it was before.
+     */
+    private SQLiteDatabase upgradeIfNeeded(SQLiteDatabase db) {
+        int version = db.getVersion();
+        if (version > 0 && version < DATABASE_VERSION) {
+            db.beginTransaction();
+            try {
+                onUpgrade(db, version, DATABASE_VERSION);
+                db.setVersion(DATABASE_VERSION);
+                db.setTransactionSuccessful();
+                Timber.tag(TAG).d("Upgraded migrated database from version %d to %d", version, DATABASE_VERSION);
+            } catch (Exception e) {
+                Timber.tag(TAG).e(e, "Error upgrading migrated database from version %d to %d", version, DATABASE_VERSION);
+            } finally {
+                db.endTransaction();
+            }
+        }
+        onOpen(db);
+        return db;
     }
 }
