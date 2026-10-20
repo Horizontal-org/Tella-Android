@@ -49,7 +49,7 @@ public class UwaziDatabaseModule implements DatabaseModule {
     }
 
     private String createTableUwaziServer() {
-        return "CREATE TABLE " + sq(D.T_UWAZI_SERVER) + " (" +
+        return "CREATE TABLE IF NOT EXISTS " + sq(D.T_UWAZI_SERVER) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_NAME, D.TEXT) + " , " +
                 cddl(D.C_URL, D.TEXT) + " , " +
@@ -61,7 +61,7 @@ public class UwaziDatabaseModule implements DatabaseModule {
     }
 
     private String createTableCollectBlankTemplateUwazi() {
-        return "CREATE TABLE " + sq(D.T_UWAZI_BLANK_TEMPLATES) + " (" +
+        return "CREATE TABLE IF NOT EXISTS " + sq(D.T_UWAZI_BLANK_TEMPLATES) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_UWAZI_SERVER_ID, D.INTEGER, true) + " , " +
                 cddl(D.C_DOWNLOAD_URL, D.TEXT) + " , " +
@@ -76,7 +76,7 @@ public class UwaziDatabaseModule implements DatabaseModule {
     }
 
     private String createTableCollectEntityUwazi() {
-        return "CREATE TABLE " + sq(D.T_UWAZI_ENTITY_INSTANCES) + " (" +
+        return "CREATE TABLE IF NOT EXISTS " + sq(D.T_UWAZI_ENTITY_INSTANCES) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_UWAZI_SERVER_ID, D.INTEGER, true) + " , " +
                 cddl(D.C_TEMPLATE_ENTITY, D.TEXT, true) + " , " +
@@ -94,7 +94,7 @@ public class UwaziDatabaseModule implements DatabaseModule {
     }
 
     private String createTableUwaziEntityInstanceVaultFile() {
-        return "CREATE TABLE " + sq(D.T_UWAZI_ENTITY_INSTANCE_VAULT_FILE) + " (" +
+        return "CREATE TABLE IF NOT EXISTS " + sq(D.T_UWAZI_ENTITY_INSTANCE_VAULT_FILE) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_UWAZI_ENTITY_INSTANCE_ID, D.INTEGER, true) + " , " +
                 cddl(D.C_VAULT_FILE_ID, D.TEXT, true) + " , " +

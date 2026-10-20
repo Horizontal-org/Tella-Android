@@ -62,7 +62,10 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // we have started from version 1
+        if (hasColumn(db, D.T_VAULT_FILE, D.C_ID)) {
+            onUpgrade(db, 1, D.DATABASE_VERSION);
+            return;
+        }
         // DBv1
         createVaultFileTable(db);
         insertRootVaultFile(db);
@@ -72,9 +75,13 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion < 2) {
-            addSourceFileIdColumn(db);
+            if (!hasColumn(db, D.T_VAULT_FILE, D.C_SOURCE_FILE_ID)) {
+                addSourceFileIdColumn(db);
+            }
             createSourceFileIndex(db);
-            addModifiedColumn(db);
+            if (!hasColumn(db, D.T_VAULT_FILE, D.C_MODIFIED)) {
+                addModifiedColumn(db);
+            }
         }
     }
 

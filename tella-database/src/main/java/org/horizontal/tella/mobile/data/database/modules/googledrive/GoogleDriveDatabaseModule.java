@@ -47,7 +47,7 @@ public class GoogleDriveDatabaseModule implements DatabaseModule {
     }
 
     private String createTableGoogleDrive() {
-        return "CREATE TABLE " + sq(D.T_GOOGLE_DRIVE) + " (" +
+        return "CREATE TABLE IF NOT EXISTS " + sq(D.T_GOOGLE_DRIVE) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_GOOGLE_DRIVE_FOLDER_ID, D.TEXT, true) + " UNIQUE, " +
                 cddl(D.C_GOOGLE_DRIVE_FOLDER_NAME, D.TEXT, true) + " , " +
@@ -58,7 +58,7 @@ public class GoogleDriveDatabaseModule implements DatabaseModule {
     }
 
     private String createTableGoogleDriveFormInstance() {
-        return "CREATE TABLE " + sq(D.T_GOOGLE_DRIVE_FORM_INSTANCE) + " (" +
+        return "CREATE TABLE IF NOT EXISTS " + sq(D.T_GOOGLE_DRIVE_FORM_INSTANCE) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_REPORT_SERVER_ID, D.INTEGER, true) + " , " +
                 cddl(D.C_REPORT_API_ID, D.TEXT, true) + " , " +
@@ -75,7 +75,7 @@ public class GoogleDriveDatabaseModule implements DatabaseModule {
     }
 
     private String createTableGoogleDriveInstanceVaultFile() {
-        return "CREATE TABLE " + sq(D.T_GOOGLE_DRIVE_INSTANCE_VAULT_FILE) + " (" +
+        return "CREATE TABLE IF NOT EXISTS " + sq(D.T_GOOGLE_DRIVE_INSTANCE_VAULT_FILE) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_REPORT_INSTANCE_ID, D.INTEGER, true) + " , " +
                 cddl(D.C_VAULT_FILE_ID, D.TEXT, true) + " , " +

@@ -12,10 +12,7 @@ public interface DatabaseModule {
      */
     String getModuleName();
 
-    /**
-     * Creates all tables for this module.
-     * Called during database creation.
-     */
+    
     void onCreate(SQLiteDatabase db);
 
     /**
@@ -33,4 +30,3 @@ public interface DatabaseModule {
      */
     int getMinDatabaseVersion();
 }
-
