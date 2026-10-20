@@ -41,7 +41,7 @@ public class FeedbackDatabaseModule implements DatabaseModule {
     }
 
     private String createTableFeedback() {
-        return "CREATE TABLE " + sq(D.T_FEEDBACK) + " (" +
+        return "CREATE TABLE IF NOT EXISTS " + sq(D.T_FEEDBACK) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_DESCRIPTION_TEXT, D.TEXT, true) + " , " +
                 cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0," +

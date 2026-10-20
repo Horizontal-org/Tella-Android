@@ -1,5 +1,6 @@
 package org.horizontal.tella.mobile.data.database.modules.media;
 
+import static org.horizontal.tella.mobile.data.database.HorizontalSQLiteOpenHelper.addColumnIfMissing;
 import static org.horizontal.tella.mobile.data.database.HorizontalSQLiteOpenHelper.cddl;
 import static org.horizontal.tella.mobile.data.database.HorizontalSQLiteOpenHelper.sq;
 
@@ -34,34 +35,42 @@ public class MediaDatabaseModule implements DatabaseModule {
         db.execSQL(createTableMediaFile());
 
         // DBv5
-        db.execSQL(alterTableMediaFileAddHash());
+        addColumnIfMissing(db, D.T_MEDIA_FILE, D.C_HASH,
+                alterTableMediaFileAddHash());
 
         // DBv7
         db.execSQL(createTableMediaFileUploads());
 
         // DBv8
-        db.execSQL(alterTableMediaFileUploadsAddMetadata());
-        db.execSQL(alterTableMediaFileUploadsAddManual());
-        db.execSQL(alterTableMediaFileUploadsAddServer());
+        addColumnIfMissing(db, D.T_MEDIA_FILE_UPLOAD, D.C_INCLUDE_METADATA,
+                alterTableMediaFileUploadsAddMetadata());
+        addColumnIfMissing(db, D.T_MEDIA_FILE_UPLOAD, D.C_MANUAL_UPLOAD,
+                alterTableMediaFileUploadsAddManual());
+        addColumnIfMissing(db, D.T_MEDIA_FILE_UPLOAD, D.C_SERVER_ID,
+                alterTableMediaFileUploadsAddServer());
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion < 5) {
-            db.execSQL(alterTableMediaFileAddHash());
+            addColumnIfMissing(db, D.T_MEDIA_FILE, D.C_HASH,
+                    alterTableMediaFileAddHash());
         }
         if (oldVersion < 7) {
             db.execSQL(createTableMediaFileUploads());
         }
         if (oldVersion < 8) {
-            db.execSQL(alterTableMediaFileUploadsAddServer());
-            db.execSQL(alterTableMediaFileUploadsAddManual());
-            db.execSQL(alterTableMediaFileUploadsAddMetadata());
+            addColumnIfMissing(db, D.T_MEDIA_FILE_UPLOAD, D.C_SERVER_ID,
+                    alterTableMediaFileUploadsAddServer());
+            addColumnIfMissing(db, D.T_MEDIA_FILE_UPLOAD, D.C_MANUAL_UPLOAD,
+                    alterTableMediaFileUploadsAddManual());
+            addColumnIfMissing(db, D.T_MEDIA_FILE_UPLOAD, D.C_INCLUDE_METADATA,
+                    alterTableMediaFileUploadsAddMetadata());
         }
     }
 
     private String createTableMediaFile() {
-        return "CREATE TABLE " + sq(D.T_MEDIA_FILE) + " (" +
+        return "CREATE TABLE IF NOT EXISTS " + sq(D.T_MEDIA_FILE) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_PATH, D.TEXT, true) + " , " +
                 cddl(D.C_UID, D.TEXT, true) + " , " +
@@ -83,7 +92,7 @@ public class MediaDatabaseModule implements DatabaseModule {
     }
 
     private String createTableMediaFileUploads() {
-        return "CREATE TABLE " + sq(D.T_MEDIA_FILE_UPLOAD) + " (" +
+        return "CREATE TABLE IF NOT EXISTS " + sq(D.T_MEDIA_FILE_UPLOAD) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_MEDIA_FILE_ID, D.INTEGER, false) + " UNIQUE, " +
                 cddl(D.C_UPDATED, D.INTEGER, true) + " , " +

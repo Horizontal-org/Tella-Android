@@ -47,7 +47,7 @@ public class NextCloudDatabaseModule implements DatabaseModule {
     }
 
     private String createTableNextCloud() {
-        return "CREATE TABLE " + sq(D.T_NEXT_CLOUD) + " (" +
+        return "CREATE TABLE IF NOT EXISTS " + sq(D.T_NEXT_CLOUD) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_NEXT_CLOUD_FOLDER_NAME, D.TEXT, true) + " UNIQUE, " +
                 cddl(D.C_URL, D.TEXT) + " , " +
@@ -60,7 +60,7 @@ public class NextCloudDatabaseModule implements DatabaseModule {
     }
 
     private String createTableNextCloudFormInstance() {
-        return "CREATE TABLE " + sq(D.T_NEXT_CLOUD_FORM_INSTANCE) + " (" +
+        return "CREATE TABLE IF NOT EXISTS " + sq(D.T_NEXT_CLOUD_FORM_INSTANCE) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_REPORT_SERVER_ID, D.INTEGER, true) + " , " +
                 cddl(D.C_REPORT_API_ID, D.TEXT, true) + " , " +
@@ -77,7 +77,7 @@ public class NextCloudDatabaseModule implements DatabaseModule {
     }
 
     private String createTableNextCloudInstanceVaultFile() {
-        return "CREATE TABLE " + sq(D.T_NEXT_CLOUD_INSTANCE_VAULT_FILE) + " (" +
+        return "CREATE TABLE IF NOT EXISTS " + sq(D.T_NEXT_CLOUD_INSTANCE_VAULT_FILE) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_REPORT_INSTANCE_ID, D.INTEGER, true) + " , " +
                 cddl(D.C_VAULT_FILE_ID, D.TEXT, true) + " , " +

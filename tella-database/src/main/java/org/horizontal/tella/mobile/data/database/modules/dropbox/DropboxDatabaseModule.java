@@ -47,7 +47,7 @@ public class DropboxDatabaseModule implements DatabaseModule {
     }
 
     private String createTableDropBox() {
-        return "CREATE TABLE " + sq(D.T_DROPBOX) + " (" +
+        return "CREATE TABLE IF NOT EXISTS " + sq(D.T_DROPBOX) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_DROPBOX_ACCESS_TOKEN, D.TEXT, true) + " UNIQUE, " +
                 cddl(D.C_NAME, D.TEXT) + " , " +
@@ -57,7 +57,7 @@ public class DropboxDatabaseModule implements DatabaseModule {
     }
 
     private String createTableDropBoxFormInstance() {
-        return "CREATE TABLE " + sq(D.T_DROPBOX_FORM_INSTANCE) + " (" +
+        return "CREATE TABLE IF NOT EXISTS " + sq(D.T_DROPBOX_FORM_INSTANCE) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_REPORT_SERVER_ID, D.INTEGER, true) + " , " +
                 cddl(D.C_REPORT_API_ID, D.TEXT, true) + " , " +
@@ -74,7 +74,7 @@ public class DropboxDatabaseModule implements DatabaseModule {
     }
 
     private String createTableDropBoxInstanceVaultFile() {
-        return "CREATE TABLE " + sq(D.T_DROPBOX_INSTANCE_VAULT_FILE) + " (" +
+        return "CREATE TABLE IF NOT EXISTS " + sq(D.T_DROPBOX_INSTANCE_VAULT_FILE) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_REPORT_INSTANCE_ID, D.INTEGER, true) + " , " +
                 cddl(D.C_VAULT_FILE_ID, D.TEXT, true) + " , " +
