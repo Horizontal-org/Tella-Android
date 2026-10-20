@@ -1,0 +1,4 @@
+• Fixed a problem that could stop Tella from opening after an update, when the encrypted database needed a schema update.
+• Existing files, reports, and connections are kept.
+
+Full release notes: https://tella.app/releases
