@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.horizontal.tella.mobile.R;
+import org.horizontal.tella.mobile.views.fragment.vault.adapters.VaultFileIcon;
 import org.horizontal.tella.mobile.media.MediaFileHandler;
 import org.horizontal.tella.mobile.util.DateUtil;
 import org.horizontal.tella.mobile.databinding.ItemVaultAttachmentGridBinding;
@@ -112,13 +113,13 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
                         .skipMemoryCache(true)
                         .into(holder.mediaView);
             } else {
-                holder.showDocumentInfo();
+                holder.showDocumentInfo(vaultFile);
             }
         } else {
             if (VaultFile.Type.fromValue(vaultFile.type.getValue()) == VaultFile.Type.DIRECTORY) {
                 holder.showFolderInfo();
             } else {
-                holder.showDocumentInfo();
+                holder.showDocumentInfo(vaultFile);
             }
         }
 
@@ -317,8 +318,10 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
             mediaView.setVisibility(View.INVISIBLE);
         }
 
-        void showDocumentInfo() {
-            icAttachmentImg.setBackgroundResource(R.drawable.ic_document_24px_filled);
+        void showDocumentInfo(VaultFile vaultFile) {
+            icAttachmentImg.setBackgroundResource(
+                    VaultFileIcon.vaultDocumentIcon(vaultFile.name, vaultFile.mimeType)
+            );
             mediaView.setVisibility(View.INVISIBLE);
         }
 

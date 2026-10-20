@@ -6,6 +6,8 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Pair
 import android.view.*
 import android.widget.FrameLayout
@@ -207,11 +209,18 @@ open class CustomBottomSheetFragment : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
+        if (layoutRes == 0) {
+            Handler(Looper.getMainLooper()).post {
+                if (isAdded) dismissAllowingStateLoss()
+            }
+            return View(inflater.context)
+        }
         return inflater.inflate(layoutRes, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (layoutRes == 0) return
         for (i in clickers.indices) {
             val viewClick = clickers[i]
             view.findViewById<View>(viewClick.first).setOnClickListener { viewClick.second() }
@@ -278,7 +287,6 @@ open class CustomBottomSheetFragment : BottomSheetDialogFragment() {
 
         return dialog
     }
-
 
     companion object {
         /**

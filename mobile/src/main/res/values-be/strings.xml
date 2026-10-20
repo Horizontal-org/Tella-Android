@@ -82,7 +82,10 @@
     <string name="permission_dialog.expl_device.storage">Для экспарту мультымедыя файлаў дадатку патрабуецца дазвол на доступ да знешняга сховішча</string>
     <string name="gallery_toast_fail.deleting.files">Памылка пры выдаленні файлаў. Некаторыя мультымедыя файлы не выдалены</string>
     <plurals name="gallery_toast_files.exported">
-        <item quantity="one">%1$d file saved to the device</item>
+        <item quantity="one">%1$d файл захаваны на прыладу</item>
+        <item quantity="few">%1$d файлы захаваныя на прыладу</item>
+        <item quantity="many">%1$d файлаў захавана на прыладу</item>
+        <item quantity="other">%1$d файлаў захавана на прыладу</item>
     </plurals>
     <string name="gallery_delete.files_dialog.title">Выдаліць мультымедыя файлы?</string>
     <string name="gallery_delete.files_dialog.expl">Абраныя мультымедыя файлы будуць выдаленыя з вашай галерэі.</string>
