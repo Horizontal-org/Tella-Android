@@ -12,7 +12,6 @@ import com.hzontal.tella_vault.filter.Limits
 import com.hzontal.tella_vault.filter.Sort
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -87,35 +86,36 @@ class HomeVaultViewModel @Inject constructor(
 
     // Execute Panic Mode
     fun executePanicMode() {
-        val rxVault = MyApplication.keyRxVault.rxVault.firstOrError().blockingGet()
+        val uninstall = Preferences.isUninstallOnPanic()
+        val steps = mutableListOf<() -> Unit>()
+        val finalSteps = mutableListOf<() -> Unit>()
 
-        keyDataSource.dataSource
-            .firstOrError()
-            .subscribeOn(Schedulers.io())
-            .flatMapCompletable { dataSource: DataSource ->
-                if (Preferences.isDeleteGalleryEnabled()) {
-                    rxVault.destroy().blockingAwait()
-                    MediaFileHandler.destroyGallery(appContext)
-                }
-
-                if (Preferences.isDeleteServerSettingsActive()) {
-                    dataSource.deleteDatabase()
-                }
-                if (Preferences.isEraseForms()) {
-                    dataSource.deleteFormsAndRelatedTables()
-                }
-
-                clearSharedPreferences()
-                MyApplication.exit(appContext)
-                MyApplication.resetKeys()
-
-                if (Preferences.isUninstallOnPanic()) {
-                    uninstallTella(appContext)
-                }
-
-                Completable.complete()
+        if (Preferences.isDeleteGalleryEnabled()) {
+            steps += {
+                    MyApplication.keyRxVault.rxVault.firstOrError().blockingGet()
+                        .destroy().blockingAwait()
             }
-            .blockingAwait()
+            steps += { MediaFileHandler.destroyGallery(appContext) }
+        }
+        if (Preferences.isDeleteServerSettingsActive()) {
+            steps += { keyDataSource.dataSource.firstOrError().blockingGet().deleteDatabase() }
+        }
+        if (Preferences.isEraseForms()) {
+            steps += {
+                keyDataSource.dataSource.firstOrError().blockingGet()
+                    .deleteFormsAndRelatedTables()
+            }
+        }
+        steps += ::clearSharedPreferences
+        finalSteps += { MyApplication.exit(appContext) }
+        finalSteps += { MyApplication.resetKeys() }
+        if (uninstall) {
+            finalSteps += { uninstallTella(appContext) }
+        }
+
+        runQuickDelete(steps, finalSteps) { throwable ->
+            CrashReporterProvider.get().recordException(throwable)
+        }
     }
 
 
@@ -291,11 +291,35 @@ class HomeVaultViewModel @Inject constructor(
     private fun uninstallTella(context: Context) {
         val packageUri = Uri.parse("package:" + BuildConfig.APPLICATION_ID)
         val intent = Intent(Intent.ACTION_UNINSTALL_PACKAGE, packageUri)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
     }
 
     override fun onCleared() {
         super.onCleared()
         disposables.dispose()
+    }
+}
+
+internal fun runQuickDelete(
+    steps: List<() -> Unit>,
+    finalSteps: List<() -> Unit>,
+    onError: (Throwable) -> Unit,
+) {
+    fun runStep(step: () -> Unit) {
+        try {
+            step()
+        } catch (throwable: Throwable) {
+            try {
+                onError(throwable)
+            } catch (_: Throwable) {
+            }
+        }
+    }
+
+    try {
+        steps.forEach(::runStep)
+    } finally {
+        finalSteps.forEach(::runStep)
     }
 }

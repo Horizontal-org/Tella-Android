@@ -2312,7 +2312,17 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     private void deleteTable(String table) {
-        database.execSQL("DELETE FROM " + table);
+        deleteTable(database, table);
+    }
+
+    static void deleteTable(SQLiteDatabase database, String table) {
+        try (Cursor cursor = database.rawQuery(
+                "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = ? LIMIT 1",
+                new String[]{table})) {
+            if (cursor.moveToFirst()) {
+                database.execSQL("DELETE FROM " + table);
+            }
+        }
     }
 
     public void deleteDatabase() {
