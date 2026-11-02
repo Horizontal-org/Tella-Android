@@ -58,7 +58,7 @@ class TellaFileUploadSchedulerViewModel @Inject constructor(val application: App
 
                 // APPEND_OR_REPLACE ensures a new worker is queued even when one is already running.
                 // Without this, files captured during an active upload would be silently dropped by
-                // WorkManager and never uploaded. This trades off strict 1-hour report grouping
+                // WorkManager and never uploaded. This trades off strict 30-minute report grouping
                 // (files captured mid-upload go into a separate auto-report) for correctness.
                 // TODO: revisit if same-report grouping during active uploads becomes a requirement.
                 WorkManager.getInstance(application)

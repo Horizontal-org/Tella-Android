@@ -1,5 +1,7 @@
 package org.horizontal.tella.mobile.data.database;
 
+import static org.horizontal.tella.mobile.data.database.HorizontalSQLiteOpenHelper.create;
+
 import org.horizontal.tella.mobile.data.database.PreferencesAdapter;
 import org.horizontal.tella.mobile.data.database.HorizontalSQLiteOpenHelper;
 
@@ -7,6 +9,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.text.TextUtils;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -41,6 +44,7 @@ import io.reactivex.Single;
 import io.reactivex.SingleTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+
 import org.horizontal.tella.mobile.data.entity.MetadataEntity;
 import org.horizontal.tella.mobile.data.entity.mapper.EntityMapper;
 import org.horizontal.tella.mobile.data.sharedpref.Preferences;
@@ -76,6 +80,7 @@ import org.horizontal.tella.mobile.util.C;
 import org.horizontal.tella.mobile.util.DateUtil;
 import org.horizontal.tella.mobile.util.FileUtil;
 import org.horizontal.tella.mobile.util.Util;
+
 import timber.log.Timber;
 
 public class DataSource implements IServersRepository, ITellaUploadServersRepository, ITellaUploadsRepository, ITellaReportsRepository, ICollectServersRepository, ICollectFormsRepository,
@@ -101,10 +106,10 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     private DataSource(Context context, byte[] key) {
         System.loadLibrary("sqlcipher");
         // Use DatabaseModuleFactory to conditionally include modules based on build variant
-        org.horizontal.tella.mobile.data.database.DatabaseModuleProvider provider = 
-            org.horizontal.tella.mobile.data.database.DatabaseModuleFactory.createProvider();
-        HorizontalSQLiteOpenHelper sqLiteOpenHelper = HorizontalSQLiteOpenHelper.create(
-            context, key, PreferencesAdapter.INSTANCE, provider);
+       DatabaseModuleProvider provider =
+                DatabaseModuleFactory.createProvider();
+        HorizontalSQLiteOpenHelper sqLiteOpenHelper = create(
+                context, key, PreferencesAdapter.INSTANCE, provider);
         database = sqLiteOpenHelper.getWritableDatabase();
         dataBaseUtils = new DataBaseUtils(database);
     }
@@ -1410,7 +1415,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 ReportInstance newReportInstance = ReportInstance.getAutoReportReportInstance(serverId, "Auto-report " + DateUtil.getDateTimeString());
                 newReportInstance.getWidgetMediaFiles().add(mediaFile);
                 reportInstance = dataBaseUtils.updateTellaReportsFormInstance(newReportInstance, D.T_REPORT_FORM_INSTANCE, D.T_REPORT_INSTANCE_VAULT_FILE);
-            } else if (Util.currentTimestamp() - currentInstance.getUpdated() > C.UPLOAD_SET_DURATION) {
+            } else if (Util.currentTimestamp() - currentInstance.getUpdated() > C.UPLOAD_REPORT_DURATION) {
                 currentInstance.setCurrent(0);
                 currentInstance.setStatus(EntityStatus.SUBMITTED);
                 currentInstance.setWidgetMediaFiles(getReportFiles(currentInstance, null));
@@ -1498,7 +1503,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 lastSet = cursor.getLong(cursor.getColumnIndexOrThrow("MAX (" + D.C_SET + ")"));
                 maxStatus = cursor.getInt(cursor.getColumnIndexOrThrow("MAX (" + D.C_STATUS + ")"));
             }
-            if (Util.currentTimestamp() - lastUpdate > C.UPLOAD_SET_DURATION && maxStatus < UploadStatus.UPLOADING.ordinal()) {
+            if (Util.currentTimestamp() - lastUpdate > C.UPLOAD_REPORT_DURATION && maxStatus < UploadStatus.UPLOADING.ordinal()) {
                 newSet = lastSet + 1;
             } else {
                 newSet = lastSet;
