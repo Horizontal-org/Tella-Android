@@ -314,7 +314,6 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
 
     @Override
     public void onUnSuccessfulUnlock(String tag, Throwable throwable) {
-        CrashReporterProvider.INSTANCE.get().recordException(throwable);
     }
 
     @Override
