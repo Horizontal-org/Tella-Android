@@ -15,7 +15,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import org.hzontal.tella.keys.key.LifecycleMainKey
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
@@ -63,8 +62,6 @@ class TellaFileUploadSchedulerViewModel @Inject constructor(val application: App
                 // TODO: revisit if same-report grouping during active uploads becomes a requirement.
                 WorkManager.getInstance(application)
                 .enqueueUniqueWork("WorkerUploadReport2", ExistingWorkPolicy.APPEND_OR_REPLACE, oneTimeJob)
-
-                MyApplication.getMainKeyHolder().timeout = LifecycleMainKey.NO_TIMEOUT
 
                 _mediaFilesUploadScheduled.postValue(true)
             }, { throwable ->

@@ -16,7 +16,6 @@ import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
 import org.horizontal.tella.mobile.domain.entity.reports.ReportInstance
 import org.horizontal.tella.mobile.domain.entity.reports.TellaReportServer
 import org.horizontal.tella.mobile.domain.repository.reports.ReportsRepository
-import org.horizontal.tella.mobile.util.LockTimeoutManager
 import org.horizontal.tella.mobile.util.StatusProvider
 import org.hzontal.tella.keys.key.LifecycleMainKey
 import timber.log.Timber
@@ -32,9 +31,6 @@ class WorkerUploadReport @AssistedInject constructor(
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
-        // We need the database instance to check status in the 'finally' block
-        var dataSource: DataSource? = null
-
         try {
             if (!statusProvider.isOnline()) {
                 Timber.d("*** Test worker *** No connectivity - will retry")
@@ -48,21 +44,18 @@ class WorkerUploadReport @AssistedInject constructor(
                 return@withContext Result.retry()
             }
 
-            dataSource = DataSource.getInstance(context, mainKey)
+            val dataSource = DataSource.getInstance(context, mainKey)
 
             val reportFormInstances = getOutboxReportInstances(dataSource)
             if (reportFormInstances.isEmpty()) {
-                Timber.d("*** Test worker *** disableNoTimeOut - no remaining work")
-                setNoTimeOut(false)
+                Timber.d("*** Test worker *** no remaining work")
                 return@withContext Result.success()
             } else {
-                Timber.d("*** Test worker *** enableNoTimeOut - there is work remaining")
-                setNoTimeOut(true)
+                Timber.d("*** Test worker *** there is work remaining")
             }
 
             val server = getServer(dataSource) ?: run {
-                Timber.d("*** Test worker *** disableNoTimeOut - Failed: no server")
-                setNoTimeOut(false)
+                Timber.d("*** Test worker *** Failed: no server")
                 return@withContext Result.failure()
             }
 
@@ -108,17 +101,6 @@ class WorkerUploadReport @AssistedInject constructor(
         } catch (t: Throwable) {
             Timber.e(t, "WorkerUploadReport failed")
             Result.retry()
-        } finally {
-            // IMPORTANT: Ensure we set up the timeout again, independently of the worker result.
-            // We only reset the timeout if the database shows no more pending reports.
-            dataSource?.let {
-                disableNoTimeoutOnlyWhenDone(it)
-            } ?: run {
-                // If we never even got a dataSource (key was locked),
-                // ensure we don't accidentally leave the timeout disabled forever.
-                Timber.d("*** Test worker *** disableNoTimeOut - no datasource")
-                setNoTimeOut(false)
-            }
         }
     }
 
@@ -179,23 +161,4 @@ class WorkerUploadReport @AssistedInject constructor(
         return reportInstance
     }
 
-    private fun setNoTimeOut(enableNoTimeout: Boolean) {
-        MyApplication.getMainKeyHolder().timeout =
-            if (enableNoTimeout) LifecycleMainKey.NO_TIMEOUT
-            else LockTimeoutManager.IMMEDIATE_SHUTDOWN
-    }
-
-    private suspend fun disableNoTimeoutOnlyWhenDone(dataSource: DataSource) {
-        // 1. Fetch the current state of the Outbox from the database
-        val remaining = getOutboxReportInstances(dataSource)
-
-        // 2. Only if the Outbox is truly empty do we allow the timeout to be reset.
-        // This protects us if another worker is still processing its own list.
-        if (remaining.isEmpty()) {
-            Timber.d("*** Test worker *** disableNoTimeOut - no remaining reports to upload after finishing work")
-            setNoTimeOut(false)
-        } else {
-            Timber.d("*** Test worker *** Remaining report to upload after finishing work, keeping NoTimeout active")
-        }
-    }
 }

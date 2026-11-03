@@ -11,8 +11,6 @@ import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
-import org.hzontal.tella.keys.key.LifecycleMainKey
-import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.data.database.KeyDataSource
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
 import org.horizontal.tella.mobile.util.jobs.WorkerUploadReport
@@ -47,9 +45,6 @@ class ScheduleUploadReportFilesUseCase @Inject constructor(
                     ExistingWorkPolicy.APPEND_OR_REPLACE,
                     oneTimeJob
                 )
-
-                // Update the main key holder's timeout
-                MyApplication.getMainKeyHolder().timeout = LifecycleMainKey.NO_TIMEOUT
 
                 // Perform the upload report operation and complete the Completable
                 dataSource.scheduleUploadReport(formMediaFile, uploadServerId)
