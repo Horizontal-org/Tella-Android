@@ -17,7 +17,7 @@ object VerificationHelpRows {
             VerificationCategory.DEVICE -> R.string.verification_help_device_bar
             VerificationCategory.NETWORK -> R.string.verification_help_network_bar
             VerificationCategory.LOCATION -> R.string.verification_help_location_bar
-            VerificationCategory.OTHER -> R.string.verification_help_other_bar
+            VerificationCategory.ENVIRONMENT -> R.string.verification_help_other_bar
         }
     }
 
@@ -27,7 +27,7 @@ object VerificationHelpRows {
             VerificationCategory.DEVICE -> deviceRows()
             VerificationCategory.NETWORK -> networkRows()
             VerificationCategory.LOCATION -> locationRows()
-            VerificationCategory.OTHER -> otherRows()
+            VerificationCategory.ENVIRONMENT -> environmentRows()
         }
     }
 
@@ -155,7 +155,7 @@ object VerificationHelpRows {
         )
     }
 
-    private fun otherRows(): List<VerificationHelpField> {
+    private fun environmentRows(): List<VerificationHelpField> {
         return listOf(
             VerificationHelpField(
                 R.string.verification_info_field_ambient_temperature,

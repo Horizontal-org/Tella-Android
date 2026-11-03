@@ -312,7 +312,13 @@ public class MetadataViewerActivity extends BaseLockActivity {
         for (VerificationField field : VerificationMetadataRows.INSTANCE.rows(
                 vaultFile, category, fileLocation
         )) {
-            metadataList.addView(createMetadataItem(field.getValue(), getString(field.getLabelRes())));
+            metadataList.addView(createMetadataItem(
+                    field.getValue(),
+                    getString(field.getLabelRes()),
+                    category == VerificationCategory.ENVIRONMENT
+                            ? R.string.verification_info_field_not_supported_on_device
+                            : R.string.verification_info_field_metadata_not_available
+            ));
         }
     }
 
@@ -335,14 +341,14 @@ public class MetadataViewerActivity extends BaseLockActivity {
                 return R.string.verification_info_subheading_network_metadata;
             case LOCATION:
                 return R.string.verification_info_subheading_location_metadata;
-            case OTHER:
+            case ENVIRONMENT:
                 return R.string.verification_info_subheading_other_metadata;
             default:
                 return R.string.verification_info_app_bar;
         }
     }
 
-    private View createMetadataItem(CharSequence value, String name) {
+    private View createMetadataItem(CharSequence value, String name, @StringRes int emptyValueRes) {
         @SuppressLint("InflateParams")
         LinearLayout layout = (LinearLayout) LayoutInflater.from(this)
                 .inflate(R.layout.metadata_item, null);
@@ -352,7 +358,7 @@ public class MetadataViewerActivity extends BaseLockActivity {
 
         dataName.setText(name);
         if (value == null || value.length() < 1) {
-            dataValue.setText(R.string.verification_info_field_metadata_not_available);
+            dataValue.setText(emptyValueRes);
         } else {
             dataValue.setText(value);
         }

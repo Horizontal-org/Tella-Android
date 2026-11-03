@@ -29,7 +29,7 @@ object VerificationMetadataRows {
             VerificationCategory.DEVICE -> deviceRows(metadata)
             VerificationCategory.NETWORK -> networkRows(metadata)
             VerificationCategory.LOCATION -> locationRows(metadata?.myLocation)
-            VerificationCategory.OTHER -> otherRows(metadata)
+            VerificationCategory.ENVIRONMENT -> environmentRows(metadata)
         }
     }
 
@@ -129,7 +129,7 @@ object VerificationMetadataRows {
         )
     }
 
-    private fun otherRows(metadata: Metadata?): List<VerificationField> {
+    private fun environmentRows(metadata: Metadata?): List<VerificationField> {
         return listOf(
             VerificationField(
                 R.string.verification_info_field_ambient_temperature,
