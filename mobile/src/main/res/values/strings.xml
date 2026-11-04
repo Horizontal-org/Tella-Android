@@ -120,7 +120,7 @@ mode activation</string>
   <string name="settings.camo_expl">Select a custom icon and name to better hide Tella on your device. Note that the Tella icon will remain visible from the Android settings.</string>
   <string name="gallery_action.desc_save.to.device">Save to device</string>
   <string name="settings.docu_verification_action">Verification mode</string>
-  <string name="settings.docu_verification_action.expl">Makes your media files verifiable by collecting information about your device and location.</string>
+  <string name="settings.docu_verification_action.expl">Makes it easier to verify where and when a photo, video, or audio recording was captured by collecting information about your device and location.</string>
   <string name="collect_no.form_heading">Easy data collection</string>
   <string name="collect_expl_not.connected.to.server">To receive forms and submit data, you must first connect to a compatible server. Ask your organization for the server information and <a href="tella_scheme://open.collect.manage.servers.activity">set up the server here</a>.</string>
   <string name="collect.sent_expl_no.forms">There are no submitted forms to display.</string>
