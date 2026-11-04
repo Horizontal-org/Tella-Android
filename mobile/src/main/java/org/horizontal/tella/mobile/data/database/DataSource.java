@@ -2380,6 +2380,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         // Delete tables related to DropBox instances
         deleteTable(D.T_DROPBOX_FORM_INSTANCE);
         deleteTable(D.T_DROPBOX_INSTANCE_VAULT_FILE);
+        deleteTable(D.T_NEXT_CLOUD_FORM_INSTANCE);
+        deleteTable(D.T_NEXT_CLOUD_INSTANCE_VAULT_FILE);
 
     }
 
@@ -2394,6 +2396,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         deleteTable(D.T_MEDIA_FILE_UPLOAD);
         deleteTable(D.T_GOOGLE_DRIVE);
         deleteTable(D.T_DROPBOX);
+        deleteTable(D.T_NEXT_CLOUD);
 
     }
 
