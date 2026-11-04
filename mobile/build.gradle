@@ -301,7 +301,6 @@ dependencies {
     // tests
     testImplementation "androidx.arch.core:core-testing:2.2.0"
     testImplementation 'org.mockito:mockito-core:3.12.4'
-    testImplementation 'org.mockito:mockito-inline:3.12.4'
     testImplementation "junit:junit:$versions.junit"
 
     implementation "com.vanniktech:android-image-cropper:4.5.0"

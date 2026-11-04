@@ -12,6 +12,7 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -2315,10 +2316,10 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         deleteTable(database, table);
     }
 
-    static void deleteTable(SQLiteDatabase database, String table) {
-        try (Cursor cursor = database.rawQuery(
+    static void deleteTable(SupportSQLiteDatabase database, String table) {
+        try (Cursor cursor = database.query(
                 "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = ? LIMIT 1",
-                new String[]{table})) {
+                new Object[]{table})) {
             if (cursor.moveToFirst()) {
                 database.execSQL("DELETE FROM " + table);
             }

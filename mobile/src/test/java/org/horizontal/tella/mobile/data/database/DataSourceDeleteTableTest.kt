@@ -1,15 +1,16 @@
 package org.horizontal.tella.mobile.data.database
 
-import net.zetetic.database.sqlcipher.SQLiteDatabase
+import android.database.Cursor
+import androidx.sqlite.db.SupportSQLiteDatabase
 import org.junit.Test
+import org.mockito.Mockito.doReturn
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.never
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
-import android.database.Cursor
 
 class DataSourceDeleteTableTest {
-    private val database = mock(SQLiteDatabase::class.java)
+    private val database = mock(SupportSQLiteDatabase::class.java)
     private val cursor = mock(Cursor::class.java)
 
     private val quickDeleteTables = listOf(
@@ -40,8 +41,7 @@ class DataSourceDeleteTableTest {
 
     @Test
     fun `missing flavor table is skipped`() {
-        `when`(database.rawQuery(anyString(), org.mockito.ArgumentMatchers.any())).thenReturn(cursor)
-        `when`(cursor.moveToFirst()).thenReturn(false)
+        stubTable(D.T_GOOGLE_DRIVE, false)
 
         DataSource.deleteTable(database, D.T_GOOGLE_DRIVE)
 
@@ -51,8 +51,7 @@ class DataSourceDeleteTableTest {
 
     @Test
     fun `existing table is emptied`() {
-        `when`(database.rawQuery(anyString(), org.mockito.ArgumentMatchers.any())).thenReturn(cursor)
-        `when`(cursor.moveToFirst()).thenReturn(true)
+        stubTable(D.T_NEXT_CLOUD, true)
 
         DataSource.deleteTable(database, D.T_NEXT_CLOUD)
 
@@ -62,13 +61,20 @@ class DataSourceDeleteTableTest {
 
     @Test
     fun `all quick delete tables are emptied when present`() {
-        `when`(database.rawQuery(anyString(), org.mockito.ArgumentMatchers.any())).thenReturn(cursor)
-        `when`(cursor.moveToFirst()).thenReturn(true)
+        quickDeleteTables.forEach { stubTable(it, true) }
 
         quickDeleteTables.forEach { DataSource.deleteTable(database, it) }
 
         quickDeleteTables.forEach { verify(database).execSQL("DELETE FROM $it") }
     }
 
-    private fun anyString(): String = org.mockito.ArgumentMatchers.anyString()
+    private fun stubTable(table: String, exists: Boolean) {
+        doReturn(cursor).`when`(database).query(TABLE_EXISTS_QUERY, arrayOf<Any>(table))
+        `when`(cursor.moveToFirst()).thenReturn(exists)
+    }
+
+    private companion object {
+        const val TABLE_EXISTS_QUERY =
+            "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = ? LIMIT 1"
+    }
 }
