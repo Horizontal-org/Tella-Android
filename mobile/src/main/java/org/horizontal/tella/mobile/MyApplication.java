@@ -419,7 +419,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
             long spentTime = System.currentTimeMillis() - startTime;
             totalTimeSpent += spentTime; // Add to total time spent
             Preferences.setTimeSpent(totalTimeSpent); // Save the time to shared preferences
-            divviupUtils.runTimeSpentEvent(totalTimeSpent); // Send analytics if needed
+            divviupUtils.runTimeSpentEvent(spentTime);
             TempFileManager.INSTANCE.deleteAllFiles();
         }
     }
