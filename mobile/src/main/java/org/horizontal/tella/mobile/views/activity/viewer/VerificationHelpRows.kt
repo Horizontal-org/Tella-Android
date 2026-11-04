@@ -37,22 +37,17 @@ object VerificationHelpRows {
                 R.string.verification_info_field_filename,
                 R.string.verification_info_filename_expl
             ),
+            VerificationHelpField(R.string.Vault_FileSize, R.string.verification_file_size_help),
+            VerificationHelpField(R.string.Vault_FileFormat, R.string.verification_file_format_help),
+            VerificationHelpField(R.string.Vault_FileCreated, R.string.verification_file_created_help),
             VerificationHelpField(
-                R.string.verification_info_field_file_path,
-                R.string.verification_info_file_path_expl
-            ),
-            VerificationHelpField(
-                R.string.verification_info_field_hash,
-                R.string.verification_info_hash_expl
-            ),
-            VerificationHelpField(
-                R.string.verification_info_field_file_created,
-                R.string.verification_info_file_created_expl
-            ),
-            VerificationHelpField(
-                R.string.verification_info_field_file_modified,
+                R.string.verification_file_last_modified,
                 R.string.verification_info_date_time_modified_expl
-            )
+            ),
+            VerificationHelpField(R.string.Vault_FileResolution, R.string.verification_file_resolution_help),
+            VerificationHelpField(R.string.verification_file_folder, R.string.verification_file_folder_help),
+            VerificationHelpField(R.string.verification_info_field_hash, R.string.verification_file_hash_help),
+            VerificationHelpField(R.string.verification_file_info_created, R.string.verification_file_info_created_help)
         )
     }
 
@@ -63,7 +58,7 @@ object VerificationHelpRows {
                 R.string.verification_info_manufacturer_expl
             ),
             VerificationHelpField(
-                R.string.verification_info_field_hardware,
+                R.string.verification_device_model,
                 R.string.verification_info_device_model_expl
             ),
             VerificationHelpField(
@@ -75,7 +70,7 @@ object VerificationHelpRows {
                 R.string.verification_info_screen_size_expl
             ),
             VerificationHelpField(
-                R.string.verification_info_field_wifi_mac,
+                R.string.verification_device_wifi_mac_address,
                 R.string.verification_info_wifi_mac_expl
             ),
             VerificationHelpField(
@@ -83,7 +78,7 @@ object VerificationHelpRows {
                 R.string.verification_info_language_expl
             ),
             VerificationHelpField(
-                R.string.verification_info_field_locale,
+                R.string.verification_device_region,
                 R.string.verification_info_locale_expl
             )
         )
@@ -96,27 +91,27 @@ object VerificationHelpRows {
                 R.string.verification_info_connection_status_expl
             ),
             VerificationHelpField(
-                R.string.verification_info_field_network_type,
+                R.string.verification_network_connected_to,
                 R.string.verification_info_network_type_expl
             ),
             VerificationHelpField(
-                R.string.verification_info_field_data_type,
+                R.string.verification_network_mobile_type,
                 R.string.verification_info_data_type_expl
             ),
             VerificationHelpField(
-                R.string.verification_info_field_ipv4,
+                R.string.verification_network_ipv4_address,
                 R.string.verification_info_ipv4_expl
             ),
             VerificationHelpField(
-                R.string.verification_info_field_ipv6,
+                R.string.verification_network_ipv6_address,
                 R.string.verification_info_ipv6_expl
             ),
             VerificationHelpField(
-                R.string.verification_info_field_cell_towers,
+                R.string.verification_network_nearby_cells,
                 R.string.verification_info_cell_towers_expl
             ),
             VerificationHelpField(
-                R.string.verification_info_wifi,
+                R.string.verification_network_nearby_wifi,
                 R.string.verification_info_wifi_expl
             )
         )
@@ -145,11 +140,11 @@ object VerificationHelpRows {
                 R.string.verification_info_location_accuracy_expl
             ),
             VerificationHelpField(
-                R.string.verification_info_field_location_speed,
+                R.string.verification_location_speed,
                 R.string.verification_info_location_speed_expl
             ),
             VerificationHelpField(
-                R.string.verification_info_field_location_time_value,
+                R.string.verification_location_recorded_at,
                 R.string.verification_info_location_time_expl
             )
         )

@@ -36,6 +36,7 @@ import org.horizontal.tella.mobile.views.activity.viewer.VaultActionsHelper;
 import org.horizontal.tella.mobile.views.activity.viewer.VerificationCategory;
 import org.horizontal.tella.mobile.views.activity.viewer.VerificationCategoryBinder;
 import org.horizontal.tella.mobile.views.activity.viewer.VerificationField;
+import org.horizontal.tella.mobile.views.activity.viewer.VerificationFileResolution;
 import org.horizontal.tella.mobile.views.activity.viewer.VerificationHelpField;
 import org.horizontal.tella.mobile.views.activity.viewer.VerificationHelpRows;
 import org.horizontal.tella.mobile.views.activity.viewer.VerificationMetadataRows;
@@ -61,6 +62,7 @@ public class MetadataViewerActivity extends BaseLockActivity {
     private String parentId;
     private SharedMediaFileViewModel viewModel;
     private ActivityMetadataViewerBinding binding;
+    private String fileResolution;
     private boolean openedDirectlyToCategory;
     private boolean showingDetail;
     private boolean showingHelp;
@@ -240,6 +242,7 @@ public class MetadataViewerActivity extends BaseLockActivity {
     }
 
     private void showCategoryList() {
+        disposables.clear();
         showingDetail = false;
         showingHelp = false;
         currentCategory = null;
@@ -257,6 +260,7 @@ public class MetadataViewerActivity extends BaseLockActivity {
         if (vaultFile == null) {
             return;
         }
+        disposables.clear();
         showingDetail = true;
         showingHelp = false;
         currentCategory = category;
@@ -275,6 +279,7 @@ public class MetadataViewerActivity extends BaseLockActivity {
     }
 
     private void showCategoryHelp(VerificationCategory category) {
+        disposables.clear();
         showingDetail = true;
         showingHelp = true;
         currentCategory = category;
@@ -296,12 +301,21 @@ public class MetadataViewerActivity extends BaseLockActivity {
         disposables.clear();
         disposables.add(
                 VaultFolderPath.resolveAsync(vaultFile.id)
+                        .map(path -> new String[] {path, VerificationFileResolution.read(vaultFile)})
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                path -> bindRows(category, path),
-                                ignored -> bindRows(category, VaultFolderPath.ROOT)
+                                result -> {
+                                    fileResolution = result[1];
+                                    bindRows(category, displayFolder(result[0]));
+                                },
+                                ignored -> bindRows(category, displayFolder(VaultFolderPath.ROOT))
                         )
         );
+    }
+
+    private String displayFolder(String path) {
+        String root = getString(R.string.Vault_AllFiles_Title);
+        return VaultFolderPath.ROOT.equals(path) ? root : root + " > " + path.substring(1).replace("/", " > ");
     }
 
     private void bindRows(VerificationCategory category, String fileLocation) {
@@ -310,13 +324,15 @@ public class MetadataViewerActivity extends BaseLockActivity {
         }
         metadataList.removeAllViews();
         for (VerificationField field : VerificationMetadataRows.INSTANCE.rows(
-                vaultFile, category, fileLocation
+                vaultFile, category, fileLocation, fileResolution
         )) {
             metadataList.addView(createMetadataItem(
-                    field.getValue(),
+                    field.getValueRes() != null ? getString(field.getValueRes()) : field.getValue(),
                     getString(field.getLabelRes()),
                     category == VerificationCategory.ENVIRONMENT
                             ? R.string.verification_info_field_not_supported_on_device
+                            : category == VerificationCategory.DEVICE
+                            ? R.string.verification_device_not_recorded
                             : R.string.verification_info_field_metadata_not_available
             ));
         }
@@ -356,8 +372,12 @@ public class MetadataViewerActivity extends BaseLockActivity {
         TextView dataName = layout.findViewById(R.id.name);
         TextView dataValue = layout.findViewById(R.id.data);
 
+        if (currentCategory == VerificationCategory.FILE || currentCategory == VerificationCategory.DEVICE
+                || currentCategory == VerificationCategory.NETWORK || currentCategory == VerificationCategory.LOCATION) {
+            dataName.getLayoutParams().width = Math.round(96 * getResources().getDisplayMetrics().density);
+        }
         dataName.setText(name);
-        if (value == null || value.length() < 1) {
+        if (value == null || value.toString().trim().isEmpty()) {
             dataValue.setText(emptyValueRes);
         } else {
             dataValue.setText(value);
@@ -373,6 +393,10 @@ public class MetadataViewerActivity extends BaseLockActivity {
 
         TextView dataName = layout.findViewById(R.id.name);
         TextView dataValue = layout.findViewById(R.id.data);
+        if (currentCategory == VerificationCategory.FILE || currentCategory == VerificationCategory.DEVICE
+                || currentCategory == VerificationCategory.NETWORK || currentCategory == VerificationCategory.LOCATION) {
+            dataName.getLayoutParams().width = Math.round(96 * getResources().getDisplayMetrics().density);
+        }
         dataName.setText(name);
         dataValue.setText(explanation);
         return layout;

@@ -5,13 +5,16 @@ import com.hzontal.tella_vault.Metadata
 import com.hzontal.tella_vault.MyLocation
 import com.hzontal.tella_vault.VaultFile
 import org.horizontal.tella.mobile.R
+import org.horizontal.tella.mobile.util.FileUtil
+import java.util.Locale
 import org.horizontal.tella.mobile.util.MetadataUtils
 import org.horizontal.tella.mobile.util.Util
 import org.horizontal.tella.mobile.util.VaultFolderPath
 
 data class VerificationField(
     @StringRes val labelRes: Int,
-    val value: String?
+    val value: String?,
+    @StringRes val valueRes: Int? = null
 )
 
 object VerificationMetadataRows {
@@ -21,11 +24,12 @@ object VerificationMetadataRows {
     fun rows(
         vaultFile: VaultFile,
         category: VerificationCategory,
-        fileLocation: String? = null
+        fileLocation: String? = null,
+        resolution: String? = null
     ): List<VerificationField> {
         val metadata = vaultFile.metadata
         return when (category) {
-            VerificationCategory.FILE -> fileRows(vaultFile, metadata, fileLocation)
+            VerificationCategory.FILE -> fileRows(vaultFile, metadata, fileLocation, resolution)
             VerificationCategory.DEVICE -> deviceRows(metadata)
             VerificationCategory.NETWORK -> networkRows(metadata)
             VerificationCategory.LOCATION -> locationRows(metadata?.myLocation)
@@ -36,15 +40,27 @@ object VerificationMetadataRows {
     private fun fileRows(
         vaultFile: VaultFile,
         metadata: Metadata?,
-        fileLocation: String?
+        fileLocation: String?,
+        resolution: String?
     ): List<VerificationField> {
         return listOf(
             VerificationField(
                 R.string.verification_info_field_filename,
                 vaultFile.name?.takeIf { it.isNotBlank() } ?: metadata?.fileName
             ),
+            VerificationField(R.string.Vault_FileSize, FileUtil.getFileSizeString(vaultFile.size)),
+            VerificationField(R.string.Vault_FileFormat, fileFormat(vaultFile)),
             VerificationField(
-                R.string.verification_info_field_file_path,
+                R.string.Vault_FileCreated,
+                formatTimestamp(vaultFile.created)
+            ),
+            VerificationField(
+                R.string.verification_file_last_modified,
+                formatTimestamp(if (vaultFile.modified > 0) vaultFile.modified else vaultFile.created)
+            ),
+            VerificationField(R.string.Vault_FileResolution, resolution),
+            VerificationField(
+                R.string.verification_file_folder,
                 fileLocation?.takeIf { it.isNotBlank() } ?: VaultFolderPath.ROOT
             ),
             VerificationField(
@@ -52,46 +68,75 @@ object VerificationMetadataRows {
                 vaultFile.hash ?: metadata?.fileHashSHA256
             ),
             VerificationField(
-                R.string.verification_info_field_file_created,
-                formatTimestamp(vaultFile.created)
-            ),
-            VerificationField(
-                R.string.verification_info_field_file_modified,
-                formatTimestamp(if (vaultFile.modified > 0) vaultFile.modified else vaultFile.created)
+                R.string.verification_file_info_created,
+                metadata?.timestamp?.let { formatTimestamp(it) }
             )
         )
+    }
+
+    private fun fileFormat(file: VaultFile): String? {
+        val subtype = file.mimeType?.substringAfter('/', "")?.takeIf {
+            it.isNotBlank() && it != "octet-stream"
+        }
+        return (subtype ?: file.name?.substringAfterLast('.', "")?.takeIf { it.isNotBlank() })
+            ?.uppercase(Locale.ROOT)
     }
 
     private fun deviceRows(metadata: Metadata?): List<VerificationField> {
         return listOf(
             VerificationField(R.string.verification_info_field_manufacturer, metadata?.manufacturer),
-            VerificationField(R.string.verification_info_field_hardware, metadata?.hardware),
+            VerificationField(R.string.verification_device_model, metadata?.hardware),
             VerificationField(R.string.verification_info_field_device_id, metadata?.deviceID),
             VerificationField(
                 R.string.verification_info_field_screen_size,
-                MetadataUtils.formatScreenSize(metadata?.screenSize)
+                MetadataUtils.formatScreenSize(metadata?.screenSize?.takeUnless { it.isBlank() || it == "-1" })
             ),
-            VerificationField(R.string.verification_info_field_wifi_mac, metadata?.wifiMac),
+            VerificationField(
+                R.string.verification_device_wifi_mac_address,
+                metadata?.wifiMac?.takeUnless {
+                    it.isBlank() || it == "02:00:00:00:00:00" || it == "2:0:0:0:0:0"
+                }
+            ),
             VerificationField(R.string.verification_info_field_language, metadata?.language),
-            VerificationField(R.string.verification_info_field_locale, metadata?.locale)
+            VerificationField(R.string.verification_device_region, metadata?.locale)
         )
     }
 
     private fun networkRows(metadata: Metadata?): List<VerificationField> {
+        val networkType = metadata?.networkType?.trim()
+        val wifi = networkType.equals("WiFi", ignoreCase = true) ||
+            networkType.equals("Wi-Fi", ignoreCase = true)
+        val cellular = networkType?.contains("Mobile Data", ignoreCase = true) == true
+        val notOnMobileData = metadata?.dataType.isNullOrBlank() &&
+            (wifi || networkType.equals("No network", ignoreCase = true))
         val cells = metadata?.cells
+            ?.filter { it.isNotBlank() }
             ?.takeIf { it.isNotEmpty() }
-            ?.joinToString(", ")
+            ?.joinToString(",\n") { "[${it.trim().removeSurrounding("[", "]")}]" }
         val wifis = metadata?.wifis
+            ?.filter { it.isNotBlank() }
             ?.takeIf { it.isNotEmpty() }
             ?.joinToString(", ")
         return listOf(
             VerificationField(R.string.verification_info_field_connection_status, metadata?.network),
-            VerificationField(R.string.verification_info_field_network_type, metadata?.networkType),
-            VerificationField(R.string.verification_info_field_data_type, metadata?.dataType),
-            VerificationField(R.string.verification_info_field_ipv4, metadata?.getIPv4()),
-            VerificationField(R.string.verification_info_field_ipv6, metadata?.getIPv6()),
-            VerificationField(R.string.verification_info_field_cell_towers, cells),
-            VerificationField(R.string.verification_info_wifi, wifis)
+            VerificationField(
+                R.string.verification_network_connected_to,
+                networkType,
+                when {
+                    wifi -> R.string.verification_network_wifi
+                    cellular -> R.string.verification_network_cellular
+                    else -> null
+                }
+            ),
+            VerificationField(
+                R.string.verification_network_mobile_type,
+                metadata?.dataType,
+                if (notOnMobileData) R.string.verification_network_not_mobile else null
+            ),
+            VerificationField(R.string.verification_network_ipv4_address, metadata?.getIPv4()),
+            VerificationField(R.string.verification_network_ipv6_address, metadata?.getIPv6()),
+            VerificationField(R.string.verification_network_nearby_cells, cells),
+            VerificationField(R.string.verification_network_nearby_wifi, wifis)
         )
     }
 
@@ -104,11 +149,11 @@ object VerificationMetadataRows {
             ),
             VerificationField(
                 R.string.verification_info_field_location_latitude,
-                degreeString(loc?.latitude)
+                numberString(loc?.latitude)
             ),
             VerificationField(
                 R.string.verification_info_field_location_longitude,
-                degreeString(loc?.longitude)
+                numberString(loc?.longitude)
             ),
             VerificationField(
                 R.string.verification_info_field_location_altitude,
@@ -119,11 +164,11 @@ object VerificationMetadataRows {
                 unitString(loc?.accuracy, "m")
             ),
             VerificationField(
-                R.string.verification_info_field_location_speed,
+                R.string.verification_location_speed,
                 unitString(loc?.speed, "m/s")
             ),
             VerificationField(
-                R.string.verification_info_field_location_time_value,
+                R.string.verification_location_recorded_at,
                 loc?.timestamp?.let { formatTimestamp(it) }
             )
         )
@@ -167,11 +212,6 @@ object VerificationMetadataRows {
         } else {
             value.toString()
         }
-    }
-
-    private fun degreeString(value: Number?): String? {
-        val number = numberString(value) ?: return null
-        return "$number°"
     }
 
     private fun unitString(value: Number?, unit: String): String? {
