@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="camera_design_surface">#202326</color>
+    <color name="camera_design_accent">#E4AA55</color>
+    <color name="camera_design_panel">#D9071012</color>
+    <color name="camera_design_option">#202326</color>
+    <color name="camera_design_option_selected">#485052</color>
+    <color name="camera_design_ring">#85888A</color>
+    <color name="camera_design_feedback_neutral">#DDE0E1</color>
+    <color name="camera_recording_timer_red">#AB1013</color>
+    <color name="camera_recording_stop_red">#FF4045</color>
+
+    <string name="camera_flash_title">Flash</string>
+    <string name="camera_grid_title">Grid</string>
+    <string name="camera_flash_off">Off</string>
+    <string name="camera_flash_on">On</string>
+    <string name="camera_flash_auto">Auto</string>
+    <string name="camera_more_options">More camera options</string>
+    <string name="camera_flash_settings">Choose flash mode</string>
+    <string name="camera_back_to_more_options">Back to camera options</string>
+    <string name="camera_dismiss_options">Close camera options</string>
+    <string name="camera_flash_off_description">Flash off</string>
+    <string name="camera_flash_on_description">Flash on</string>
+    <string name="camera_flash_auto_description">Automatic flash</string>
+    <string name="camera_grid_on_feedback">GRID ON</string>
+    <string name="camera_grid_off_feedback">GRID OFF</string>
+    <string name="camera_error_unavailable">Unable to start the camera. Try opening it again.</string>
+    <string name="camera_error_capture">Unable to take the photo. Please try again.</string>
+    <string name="camera_error_recording">Unable to save the recording. Please try again.</string>
+    <string name="camera_error_control">Unable to apply this camera setting. Please try again.</string>
+    <string name="camera_stop_recording">Stop recording</string>
+    <string name="camera_recording">Recording</string>
+    <string name="camera_starting_recording">Starting recording</string>
+    <string name="camera_stopping_recording">Saving recording</string>
+    <string name="camera_take_photo_while_recording">Take photo while recording</string>
+
+    <style name="CameraDesignToolbarButton">
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:tint">@color/camera_control_tint</item>
+    </style>
+
+    <style name="CameraDesignPanel">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">bottom</item>
+        <item name="android:layout_margin">16dp</item>
+        <item name="android:background">@drawable/camera_panel_background</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="CameraDesignMenuButton">
+        <item name="android:layout_width">64dp</item>
+        <item name="android:layout_height">64dp</item>
+        <item name="android:background">@drawable/camera_option_background</item>
+        <item name="android:padding">18dp</item>
+        <item name="android:tint">@color/camera_control_tint</item>
+    </style>
+
+    <style name="CameraDesignMenuLabel">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="CameraDesignFlashOption">
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="CameraDesignFlashOptionIcon">
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:padding">2dp</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:duplicateParentState">true</item>
+        <item name="android:importantForAccessibility">no</item>
+        <item name="android:tint">@color/camera_control_tint</item>
+    </style>
+
+    <style name="CameraDesignFlashOptionLabel">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:duplicateParentState">true</item>
+        <item name="android:importantForAccessibility">no</item>
+        <item name="android:textColor">@color/camera_control_tint</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="CameraDesignMode">
+        <item name="android:layout_width">104dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:layout_marginEnd">4dp</item>
+        <item name="android:background">@drawable/camera_mode_pill</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="CameraDesignModeText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:duplicateParentState">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/camera_mode_text</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+</resources>

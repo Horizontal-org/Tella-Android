@@ -1,7 +1,9 @@
 package org.horizontal.tella.mobile.views.custom;
 
 import android.content.Context;
+
 import androidx.appcompat.widget.AppCompatImageButton;
+
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,14 +27,10 @@ public class CameraSwitchButton extends AppCompatImageButton implements View.OnT
     }
 
     public void displayCamera(boolean isBackCamera) {
-        if (isBackCamera) {
-            setImageResource(R.drawable.ic_camera_rear_white);
-        } else {
-            setImageResource(R.drawable.ic_camera_front_white);
-        }
+        setImageResource(R.drawable.ic_camera_switch);
     }
 
-    public void rotateView(int angle){
+    public void rotateView(int angle) {
         animate().rotation(angle).start();
     }
 
