@@ -24,6 +24,14 @@ public class LifecycleMainKey implements LifecycleObserver {
 
     private final ScheduledExecutorService executor;
     private ScheduledFuture<?> scheduledFuture;
+    private Runnable onCleared;
+
+    /**
+     * Runs after the in-memory key is wiped, including lock timeout.
+     */
+    public void setOnCleared(Runnable onCleared) {
+        this.onCleared = onCleared;
+    }
 
     public LifecycleMainKey(Lifecycle lifecycle, long timeout) {
         this.timeout = timeout;
@@ -64,6 +72,9 @@ public class LifecycleMainKey implements LifecycleObserver {
 
         mainKey.wipe();
         mainKey = null;
+        if (onCleared != null) {
+            onCleared.run();
+        }
 
         return true;
     }

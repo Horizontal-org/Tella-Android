@@ -137,14 +137,14 @@ class VerificationMetadataRowsTest {
     }
 
     @Test
-    fun otherRows_mapTemperatureAndLight() {
+    fun environmentRows_mapTemperatureAndLight() {
         val metadata = Metadata()
         metadata.ambientTemperature = 21f
         metadata.light = 120f
         val vaultFile = VaultFile()
         vaultFile.metadata = metadata
 
-        val rows = VerificationMetadataRows.rows(vaultFile, VerificationCategory.OTHER)
+        val rows = VerificationMetadataRows.rows(vaultFile, VerificationCategory.ENVIRONMENT)
 
         assertEquals("21", rows[0].value)
         assertEquals("120", rows[1].value)

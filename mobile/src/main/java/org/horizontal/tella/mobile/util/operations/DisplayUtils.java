@@ -70,7 +70,10 @@ public final class DisplayUtils {
         mimeType2HumanReadable.put("image/tiff", "TIFF image");
         // music
         mimeType2HumanReadable.put("audio/mpeg", "MP3 music file");
+        mimeType2HumanReadable.put("audio/ogg", "OGG music file");
         mimeType2HumanReadable.put("application/ogg", "OGG music file");
+        mimeType2HumanReadable.put("audio/opus", "OGG music file");
+        mimeType2HumanReadable.put("audio/vorbis", "OGG music file");
     }
 
     private DisplayUtils() {

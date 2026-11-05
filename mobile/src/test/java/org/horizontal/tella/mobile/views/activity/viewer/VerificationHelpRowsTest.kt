@@ -43,8 +43,12 @@ class VerificationHelpRowsTest {
     }
 
     @Test
-    fun otherHelp_includesTemperatureAndLight() {
-        val rows = VerificationHelpRows.rows(VerificationCategory.OTHER)
+    fun environmentHelp_includesTemperatureAndLight() {
+        val rows = VerificationHelpRows.rows(VerificationCategory.ENVIRONMENT)
+        assertEquals(
+            R.string.verification_help_other_bar,
+            VerificationHelpRows.titleRes(VerificationCategory.ENVIRONMENT)
+        )
         assertEquals(2, rows.size)
         assertEquals(R.string.verification_info_field_ambient_temperature, rows[0].labelRes)
         assertEquals(R.string.verification_info_field_light, rows[1].labelRes)

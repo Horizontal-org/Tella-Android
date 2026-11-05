@@ -82,7 +82,10 @@
     <string name="permission_dialog.expl_device.storage">Для экспорта мультимедиа файлов приложению требуется разрешение на доступ ко внешнему хранилищу</string>
     <string name="gallery_toast_fail.deleting.files">Ошибка при удалении файлов. Некоторые мультимедиа файлы не удалены</string>
     <plurals name="gallery_toast_files.exported">
-        <item quantity="one">%1$d file saved to the device</item>
+        <item quantity="one">%1$d файл сохранён на устройство</item>
+        <item quantity="few">%1$d файла сохранены на устройство</item>
+        <item quantity="many">%1$d файлов сохранено на устройство</item>
+        <item quantity="other">%1$d файлов сохранено на устройство</item>
     </plurals>
     <string name="gallery_delete.files_dialog.title">Удалить файл?</string>
     <string name="gallery_delete.files_dialog.expl">Выбранный файл будет навсегда удален из вашей галереи.</string>

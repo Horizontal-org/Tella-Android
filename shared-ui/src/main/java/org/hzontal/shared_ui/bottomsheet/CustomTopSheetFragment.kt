@@ -60,7 +60,7 @@ class CustomTopSheetFragment : CustomBottomSheetFragment() {
      * @return Instantiated CustomBottomSheetFragment object
      */
     override fun page(@LayoutRes layoutRes: Int): CustomTopSheetFragment {
-        this.layoutRes = layoutRes
+        super.page(layoutRes)
         return this
     }
 

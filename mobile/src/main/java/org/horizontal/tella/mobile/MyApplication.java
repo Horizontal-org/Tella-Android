@@ -230,6 +230,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         vaultConfig.root = new File(this.getFilesDir(), C.MEDIA_DIR);
 
         mainKeyHolder = new LifecycleMainKey(ProcessLifecycleOwner.get().getLifecycle(), Preferences.getLockTimeout());
+        mainKeyHolder.setOnCleared(() -> MediaFileHandler.clearVerificationShareCache(this));
         //Tella keys
         TellaKeys.initialize();
         initializeLockConfigRegistry();
@@ -313,7 +314,6 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
 
     @Override
     public void onUnSuccessfulUnlock(String tag, Throwable throwable) {
-        CrashReporterProvider.INSTANCE.get().recordException(throwable);
     }
 
     @Override
@@ -419,7 +419,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
             long spentTime = System.currentTimeMillis() - startTime;
             totalTimeSpent += spentTime; // Add to total time spent
             Preferences.setTimeSpent(totalTimeSpent); // Save the time to shared preferences
-            divviupUtils.runTimeSpentEvent(totalTimeSpent); // Send analytics if needed
+            divviupUtils.runTimeSpentEvent(spentTime);
             TempFileManager.INSTANCE.deleteAllFiles();
         }
     }

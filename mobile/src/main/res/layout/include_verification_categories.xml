@@ -57,7 +57,7 @@
         android:background="@color/wa_white_12" />
 
     <include
-        android:id="@+id/verification_category_other"
+        android:id="@+id/verification_category_environment"
         layout="@layout/item_verification_category"
         tools:ignore="IncludeLayoutParam" />
 </LinearLayout>

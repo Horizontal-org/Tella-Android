@@ -5,5 +5,5 @@ enum class VerificationCategory {
     DEVICE,
     NETWORK,
     LOCATION,
-    OTHER
+    ENVIRONMENT
 }

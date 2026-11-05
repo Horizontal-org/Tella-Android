@@ -11,7 +11,6 @@ import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.data.database.DataSource
 import org.horizontal.tella.mobile.di.WorkerDependenciesEntryPoint
 import org.horizontal.tella.mobile.domain.exception.NoConnectivityException
-import org.horizontal.tella.mobile.util.LockTimeoutManager
 
 class WorkerSendFeedBack(
     appContext: Context,
@@ -46,10 +45,7 @@ class WorkerSendFeedBack(
             val feedbackInstances = dataSource.listFeedBackInstances()?.blockingGet()
 
             if (feedbackInstances.isNullOrEmpty()) {
-                setNoTimeOut(false)
                 return@withContext Result.success()
-            } else {
-                setNoTimeOut(true)
             }
 
             // Same note: if submitFeedbackInstance returns Single, keep blockingGet() on IO.
@@ -59,7 +55,6 @@ class WorkerSendFeedBack(
                 } catch (e: Exception) {
                     // If this is a connectivity issue, ask WorkManager to retry later.
                     if (e is NoConnectivityException) {
-                        setNoTimeOut(false)
                         return@withContext Result.retry()
                     }
                     // For non-connectivity errors, do not put the whole worker into an infinite
@@ -68,17 +63,9 @@ class WorkerSendFeedBack(
                 }
             }
 
-            setNoTimeOut(false)
             Result.success()
         } catch (t: Throwable) {
-            setNoTimeOut(false)
             Result.retry()
         }
-    }
-
-    private fun setNoTimeOut(enableNoTimeout: Boolean) {
-        MyApplication.getMainKeyHolder().timeout =
-            if (enableNoTimeout) LifecycleMainKey.NO_TIMEOUT
-            else LockTimeoutManager.IMMEDIATE_SHUTDOWN
     }
 }

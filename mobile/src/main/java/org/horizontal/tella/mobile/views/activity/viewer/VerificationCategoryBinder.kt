@@ -42,10 +42,10 @@ object VerificationCategoryBinder {
             onCategory
         )
         bindRow(
-            root.findViewById(R.id.verification_category_other),
-            R.drawable.ic_info_24px,
+            root.findViewById(R.id.verification_category_environment),
+            R.drawable.ic_environment_24px,
             R.string.verification_info_subheading_other_metadata,
-            VerificationCategory.OTHER,
+            VerificationCategory.ENVIRONMENT,
             onCategory
         )
     }
