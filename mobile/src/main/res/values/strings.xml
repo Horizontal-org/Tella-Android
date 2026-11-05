@@ -273,10 +273,10 @@ Turn on GPS so Tella can record the position of your evidence.</string>
   <string name="verification.info_notes.expl">Optional notes attached to the file.</string>
   <string name="verification.info_connection.status.expl">Whether the device is connected to the internet</string>
   <string name="verification.info_network.type.expl">If the device is connected to the internet, this specifies whether it is to a Wi-Fi network or to a cellular network</string>
-  <string name="verification.info_data.type.expl">The type of mobile data network the device is connected to.</string>
+  <string name="verification.info_data.type.expl">The type of mobile data network the device is connected to</string>
   <string name="verification.info_wifi.mac.expl">A unique identifier for the device\'s Wi-Fi connector</string>
-  <string name="verification.info_ipv4.expl">A unique address identifying the device\'s internet connection.</string>
-  <string name="verification.info_ipv6.expl">A more recent identifier for a device\'s internet connection.</string>
+  <string name="verification.info_ipv4.expl">A unique address identifying the device\'s internet connection</string>
+  <string name="verification.info_ipv6.expl">A more recent identifier for a device\'s internet connection</string>
   <string name="verification.info_location.expl">The exact location of the device, includes latitude and longitude coordinates, altitude in meters, the accuracy of the measurement in meters, and the time of the measurement.</string>
   <string name="verification.info_location.provider.expl">How the device location is determined</string>
   <string name="verification.info_location.latitude.expl">The exact latitude of the device in degrees</string>
