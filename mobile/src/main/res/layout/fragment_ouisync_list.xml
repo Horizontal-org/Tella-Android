@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/space_cadet"
+    android:textDirection="locale">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/space_cadet">
+
+        <org.hzontal.shared_ui.appbar.ToolbarComponent
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp"
+            app:arrowBackIconContentDescription="@string/action_go_back"
+            app:rightIcon="@drawable/ic_refresh"
+            app:rightIconContentDescription="@string/action_refresh"
+            />
+
+        <TextView
+            android:id="@+id/syncing"
+            style="@style/Tella_Main_White_Text.Meduim"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingStart="20dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="12dp"
+            android:text="@string/ouisync_syncing"
+            android:textSize="14sp"
+            android:visibility="gone" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingTop="8dp"
+        android:paddingBottom="96dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <LinearLayout
+        android:id="@+id/empty_folder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingHorizontal="31dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_files_illustration"
+            android:importantForAccessibility="no" />
+
+        <TextView
+            android:id="@+id/empty"
+            style="@style/Tella_Main_White_Text.Meduim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:text="@string/ouisync_folder_empty"
+            android:textColor="@color/wa_white_88" />
+    </LinearLayout>
+
+    <org.horizontal.tella.mobile.views.custom.TellaFloatingActionButton
+        android:id="@+id/fab"
+        style="@style/Main_Floating_Action_Button_Style"
+        android:contentDescription="@string/action_add"
+        android:visibility="gone"
+        app:fabIcon="@drawable/ic_plus" />
+
+    <org.hzontal.shared_ui.buttons.RoundButton
+        android:id="@+id/save_folder_button"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="24dp"
+        android:visibility="gone"
+        app:check_state="true"
+        app:text="@string/ouisync_save_folder_action"
+        app:text_all_caps="false" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progress"
+        style="@style/Tella_Progress_Circular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
