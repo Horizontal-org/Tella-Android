@@ -5,6 +5,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import android.os.SystemClock;
+
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
@@ -17,10 +19,12 @@ import timber.log.Timber;
  */
 public class LifecycleMainKey implements LifecycleObserver {
     public static final long NO_TIMEOUT = -1;
+    private static final long IMMEDIATE_GRACE_MS = 700L;
 
     private MainKey mainKey;
     private CurrentState state;
     private long timeout;
+    private long pausedAtElapsed;
 
     private final ScheduledExecutorService executor;
     private ScheduledFuture<?> scheduledFuture;
@@ -42,6 +46,7 @@ public class LifecycleMainKey implements LifecycleObserver {
     }
 
     public synchronized boolean exists() {
+        maybeClearInactiveMainKey();
         return mainKey != null;
     }
 
@@ -86,16 +91,29 @@ public class LifecycleMainKey implements LifecycleObserver {
         cancelScheduledClear();
         maybeClearInactiveMainKey();
 
-        state = new CurrentState(State.ACTIVE);
+        markForeground();
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     public synchronized void deactivate() {
         Timber.d("*** LifecycleMainKey.deactivate");
 
-        scheduleClear();
-
+        noteAppPaused();
         state = new CurrentState(State.INACTIVE);
+        scheduleClear();
+    }
+
+    public synchronized void noteAppPaused() {
+        if (pausedAtElapsed == 0L) {
+            pausedAtElapsed = SystemClock.elapsedRealtime();
+            Timber.d("*** LifecycleMainKey.pause timeout=%d", timeout);
+        }
+    }
+
+    public synchronized void noteAppResumed() {
+        maybeClearInactiveMainKey();
+        cancelScheduledClear();
+        markForeground();
     }
 
     public long getTimeout() {
@@ -113,16 +131,43 @@ public class LifecycleMainKey implements LifecycleObserver {
     public static class MainKeyUnavailableException extends Exception {
     }
 
+    private void markForeground() {
+        pausedAtElapsed = 0L;
+        state = new CurrentState(State.ACTIVE);
+    }
+
     private synchronized boolean maybeClearInactiveMainKey() {
-        if (state.getState() != State.INACTIVE || timeout == NO_TIMEOUT) {
+        if (timeout == NO_TIMEOUT) {
             return false;
         }
 
-        if (state.isExpired(timeout)) {
+        long elapsed = inactiveElapsed();
+        if (elapsed < 0L) {
+            return false;
+        }
+
+        long limit = timeout == 0L ? IMMEDIATE_GRACE_MS : timeout;
+        if (state.getState() == State.INACTIVE && timeout == 0L) {
+            limit = 0L;
+        }
+        if (elapsed >= limit) {
+            Timber.d("*** LifecycleMainKey.expired elapsed=%d limit=%d", elapsed, limit);
             return clear();
         }
 
         return false;
+    }
+
+    private long inactiveElapsed() {
+        long now = SystemClock.elapsedRealtime();
+        long elapsed = -1L;
+        if (pausedAtElapsed != 0L) {
+            elapsed = now - pausedAtElapsed;
+        }
+        if (state.getState() == State.INACTIVE) {
+            elapsed = Math.max(elapsed, now - state.startedAtElapsed);
+        }
+        return elapsed;
     }
 
     @SuppressWarnings("UnusedReturnValue")
@@ -135,9 +180,27 @@ public class LifecycleMainKey implements LifecycleObserver {
             return clear();
         }
 
-        scheduledFuture = executor.schedule(this::clear, timeout, TimeUnit.MILLISECONDS);
+        cancelScheduledClear();
+        long delay = timeout;
+        if (pausedAtElapsed != 0L) {
+            delay = timeout - (SystemClock.elapsedRealtime() - pausedAtElapsed);
+            if (delay <= 0L) {
+                return clear();
+            }
+        }
+
+        scheduledFuture = executor.schedule(this::onScheduledClear, delay, TimeUnit.MILLISECONDS);
 
         return true;
+    }
+
+    private void onScheduledClear() {
+        synchronized (this) {
+            if (pausedAtElapsed == 0L && state.getState() != State.INACTIVE) {
+                return;
+            }
+            maybeClearInactiveMainKey();
+        }
     }
 
     @SuppressWarnings("UnusedReturnValue")
@@ -162,19 +225,15 @@ public class LifecycleMainKey implements LifecycleObserver {
 
     private static class CurrentState {
         private final State state;
-        private final long start;
+        private final long startedAtElapsed;
 
         public CurrentState(State state) {
             this.state = state;
-            this.start = System.currentTimeMillis();
+            this.startedAtElapsed = SystemClock.elapsedRealtime();
         }
 
         public State getState() {
             return state;
-        }
-
-        public boolean isExpired(long timeout) {
-            return timeout != NO_TIMEOUT && System.currentTimeMillis() - start > timeout;
         }
     }
 }
