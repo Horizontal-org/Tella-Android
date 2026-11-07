@@ -4,13 +4,17 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import dagger.hilt.android.EntryPointAccessors
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.withContext
 import org.hzontal.tella.keys.key.LifecycleMainKey
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.data.database.DataSource
 import org.horizontal.tella.mobile.di.WorkerDependenciesEntryPoint
 import org.horizontal.tella.mobile.domain.exception.NoConnectivityException
+import org.horizontal.tella.mobile.util.LockTimeoutManager
 
 class WorkerSendFeedBack(
     appContext: Context,
@@ -18,6 +22,7 @@ class WorkerSendFeedBack(
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
+        var holdsTimeout = false
         try {
             // Obtain dependencies from the Hilt application graph via entry point.
             val appContext = applicationContext
@@ -40,18 +45,22 @@ class WorkerSendFeedBack(
 
             val dataSource = DataSource.getInstance(appContext, mainKey)
 
-            // If listFeedBackInstances() returns an Rx Single, we safely call blockingGet() on IO.
-            // If you later expose a suspend version, just replace this line.
-            val feedbackInstances = dataSource.listFeedBackInstances()?.blockingGet()
+            val feedbackInstances = dataSource.listFeedBackInstances()?.await()
 
             if (feedbackInstances.isNullOrEmpty()) {
                 return@withContext Result.success()
             }
 
-            // Same note: if submitFeedbackInstance returns Single, keep blockingGet() on IO.
+            withContext(Dispatchers.Main.immediate) {
+                LockTimeoutManager.onBackgroundWorkStarted()
+                holdsTimeout = true
+            }
+
             for (instance in feedbackInstances) {
                 try {
-                    feedbackRepository.submitFeedbackInstance(instance).blockingGet()
+                    feedbackRepository.submitFeedbackInstance(instance).await()
+                } catch (cancellation: CancellationException) {
+                    throw cancellation
                 } catch (e: Exception) {
                     // If this is a connectivity issue, ask WorkManager to retry later.
                     if (e is NoConnectivityException) {
@@ -64,8 +73,16 @@ class WorkerSendFeedBack(
             }
 
             Result.success()
+        } catch (cancellation: CancellationException) {
+            throw cancellation
         } catch (t: Throwable) {
             Result.retry()
+        } finally {
+            if (holdsTimeout) {
+                withContext(NonCancellable + Dispatchers.Main.immediate) {
+                    LockTimeoutManager.onBackgroundWorkFinished()
+                }
+            }
         }
     }
 }

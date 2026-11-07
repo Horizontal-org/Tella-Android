@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.StrictMode;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -111,6 +113,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     private long startTime;
     private long totalTimeSpent = 0; // Store total time spent in the app
     private int activityReferences = 0;
+    private int resumedActivities = 0;
+    private Activity resumedActivity;
     private boolean isActivityChangingConfigurations = false;
 
 
@@ -230,7 +234,16 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         vaultConfig.root = new File(this.getFilesDir(), C.MEDIA_DIR);
 
         mainKeyHolder = new LifecycleMainKey(ProcessLifecycleOwner.get().getLifecycle(), Preferences.getLockTimeout());
-        mainKeyHolder.setOnCleared(() -> MediaFileHandler.clearVerificationShareCache(this));
+        mainKeyHolder.setOnCleared(() -> {
+            new Handler(Looper.getMainLooper()).post(() -> {
+                Activity activity = resumedActivity;
+                if (activity instanceof BaseLockActivity
+                        && !activity.isFinishing() && !activity.isDestroyed()) {
+                    ((BaseLockActivity) activity).restrictActivity();
+                }
+            });
+            MediaFileHandler.clearVerificationShareCache(this);
+        });
         //Tella keys
         TellaKeys.initialize();
         initializeLockConfigRegistry();
@@ -403,12 +416,23 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
 
     @Override
     public void onActivityResumed(@NonNull Activity activity) {
-
+        resumedActivity = activity;
+        boolean returning = resumedActivities == 0;
+        resumedActivities++;
+        if (returning && mainKeyHolder != null) {
+            mainKeyHolder.noteAppResumed();
+        }
     }
 
     @Override
     public void onActivityPaused(@NonNull Activity activity) {
-
+        if (resumedActivity == activity) {
+            resumedActivity = null;
+        }
+        resumedActivities = Math.max(0, resumedActivities - 1);
+        if (resumedActivities == 0 && !activity.isChangingConfigurations() && mainKeyHolder != null) {
+            mainKeyHolder.noteAppPaused();
+        }
     }
 
     @Override
