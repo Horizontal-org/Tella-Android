@@ -8,5 +8,4 @@ import android.content.Context
 class NoOpCrashReporter : CrashReporter {
     override fun init(context: Context) {}
     override fun recordException(throwable: Throwable) {}
-    override fun log(message: String) {}
 }

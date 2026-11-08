@@ -105,7 +105,6 @@ class AttachmentsViewModel @Inject constructor(
                         Timber.e(throwable, "Failed to get files")
                         CrashReporterProvider.get().run {
                             recordException(throwable)
-                            log("Failed to get files for parent: $parent")
                         }
                         _error.postValue(throwable)
                     }
@@ -124,7 +123,8 @@ class AttachmentsViewModel @Inject constructor(
 
         if (completable.isEmpty()) return
 
-        disposables.add(Single.zip(
+        disposables.add(
+            Single.zip(
             completable
         ) { objects: Array<Any?> ->
             objects.count { it is Boolean && it }
@@ -154,7 +154,8 @@ class AttachmentsViewModel @Inject constructor(
             vaultFile?.let { deleteFile(it) }?.let { completable.add(it) }
         }
 
-        disposables.add(Single.zip(
+        disposables.add(
+            Single.zip(
             completable
         ) { objects: Array<Any?> -> objects.size }.observeOn(AndroidSchedulers.mainThread())
             .subscribe({ num: Int? -> _deletedFiles.postValue(num!!) }) { throwable: Throwable? ->
@@ -249,7 +250,8 @@ class AttachmentsViewModel @Inject constructor(
         if (uris.isEmpty()) return
 
         var lastImportName: String? = null
-        disposables.add(Flowable.fromIterable(uris).flatMap { uri ->
+        disposables.add(
+            Flowable.fromIterable(uris).flatMap { uri ->
             MediaFileHandler.importVaultFileUri(getApplication(), uri, parentId).toFlowable()
                 .map { vaultFile -> vaultFile to uri }
                 .doOnSubscribe {
@@ -374,7 +376,8 @@ class AttachmentsViewModel @Inject constructor(
         vaultFiles: List<VaultFile?>
     ) {
         val vaultFileIds = vaultFiles.mapNotNull { it?.id }
-        disposables.add(keyDataSource.dataSource.flatMapSingle { dataSource: DataSource ->
+        disposables.add(
+            keyDataSource.dataSource.flatMapSingle { dataSource: DataSource ->
             dataSource.areVaultFilesUsedInConnections(vaultFileIds)
         }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribe({ doesFileExist: Boolean ->

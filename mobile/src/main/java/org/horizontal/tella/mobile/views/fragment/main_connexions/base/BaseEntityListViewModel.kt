@@ -95,7 +95,6 @@ abstract class BaseEntityListViewModel<I : IEntityInstance> : ViewModel() {
         Timber.e(throwable, logMessage)
         CrashReporterProvider.get().run {
             recordException(throwable)
-            log(logMessage)
         }
         instance.widgetMediaFiles = emptyList()
         _reportInstance.postValue(instance)
