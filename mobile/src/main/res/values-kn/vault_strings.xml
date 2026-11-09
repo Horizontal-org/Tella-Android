@@ -67,5 +67,5 @@
     <string name="Vault_SaveToDevice_SheetTitle">\"%1$s\" ಅನ್ನು ಸಾಧನಕ್ಕೆ ಉಳಿಸಬೇಕೇ?</string>
     <string name="Vault_SaveToDevice_SheetAction">ಸಾಧನಕ್ಕೆ ಉಳಿಸಿ</string>
     <string name="Vault_Folder_Empty_Msg">This folder is empty! Tap the + button below to import a file or create a folder.</string>
-    <string name="Vault_SaveVerification_SheetAction">Verification information</string>
+    <string name="Vault_SaveVerification_SheetAction">ಪರಿಶೀಲನೆ ಮಾಹಿತಿ</string>
 </resources>
