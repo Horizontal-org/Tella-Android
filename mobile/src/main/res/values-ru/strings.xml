@@ -1132,9 +1132,9 @@
     <string name="verification.save_csv_already_saved_action">I understand</string>
     <string name="onboard_lock_warning_message_recover">If you forget your lock, there is currently no way to recover it. Your data inside Tella will be lost forever.</string>
     <string name="verification.info_field_not_supported_on_device">Not supported on this device</string>
-    <string name="verification_file_folder">Folder</string>
+    <string name="verification_file_folder">Папка</string>
     <string name="verification_file_format_help">The format of the file</string>
-    <string name="verification_network_connected_to">Connected to</string>
+    <string name="verification_network_connected_to">Подключиться к</string>
     <string name="verification_file_hash_help">A unique number generated from the content of the file</string>
     <string name="verification_network_wifi">Wi-Fi</string>
     <string name="verification_location_recorded_at">Location recorded at</string>
@@ -1143,18 +1143,18 @@
     <string name="verification_file_created_help">The date and time when the file was first created on the device</string>
     <string name="verification_device_model">Model</string>
     <string name="verification_network_mobile_type">Mobile network type</string>
-    <string name="verification_network_ipv4_address">IPv4 address</string>
+    <string name="verification_network_ipv4_address">IP-адрес:</string>
     <string name="verification_file_size_help">The size of the file</string>
     <string name="verification_device_wifi_mac_address">Wi-Fi MAC address</string>
     <string name="verification_file_info_created">Verification info created</string>
-    <string name="verification_device_region">Region</string>
-    <string name="verification_location_speed">Speed</string>
+    <string name="verification_device_region">Религия</string>
+    <string name="verification_location_speed">Скорость</string>
     <string name="verification_file_info_created_help">The date and time when the verification information was created on the device</string>
-    <string name="verification_network_ipv6_address">IPv6 address</string>
+    <string name="verification_network_ipv6_address">IP-адрес:</string>
     <string name="verification_network_cellular">Cellular network</string>
     <string name="verification_file_resolution_help">The exact number of pixels that make up the image</string>
     <string name="verification_network_nearby_wifi">Nearby Wi-Fi networks</string>
-    <string name="verification_file_last_modified">Last modified</string>
+    <string name="verification_file_last_modified">Последнее изменение</string>
     <string name="verification_network_not_mobile">The device was not on mobile data</string>
     <string name="verification_network_nearby_cells">Nearby cell towers</string>
 </resources>
