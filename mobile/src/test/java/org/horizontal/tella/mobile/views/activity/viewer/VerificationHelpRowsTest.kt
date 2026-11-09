@@ -1,5 +1,6 @@
 package org.horizontal.tella.mobile.views.activity.viewer
 
+import com.hzontal.tella_vault.VaultFile
 import org.horizontal.tella.mobile.R
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -7,50 +8,102 @@ import org.junit.Test
 class VerificationHelpRowsTest {
 
     @Test
-    fun fileHelp_matchesVerificationFileFields() {
-        val rows = VerificationHelpRows.rows(VerificationCategory.FILE)
+    fun titles_matchEachCategory() {
         assertEquals(R.string.verification_help_file_bar, VerificationHelpRows.titleRes(VerificationCategory.FILE))
-        assertEquals(5, rows.size)
-        assertEquals(R.string.verification_info_field_filename, rows[0].labelRes)
-        assertEquals(R.string.verification_info_field_file_path, rows[1].labelRes)
-        assertEquals(R.string.verification_info_field_file_created, rows[3].labelRes)
-        assertEquals(R.string.verification_info_field_file_modified, rows[4].labelRes)
-    }
-
-    @Test
-    fun deviceHelp_matchesVerificationDeviceFields() {
-        val rows = VerificationHelpRows.rows(VerificationCategory.DEVICE)
         assertEquals(R.string.verification_help_device_bar, VerificationHelpRows.titleRes(VerificationCategory.DEVICE))
-        assertEquals(7, rows.size)
-        assertEquals(R.string.verification_info_field_manufacturer, rows[0].labelRes)
-        assertEquals(R.string.verification_info_field_locale, rows[6].labelRes)
+        assertEquals(R.string.verification_help_network_bar, VerificationHelpRows.titleRes(VerificationCategory.NETWORK))
+        assertEquals(R.string.verification_help_location_bar, VerificationHelpRows.titleRes(VerificationCategory.LOCATION))
+        assertEquals(R.string.verification_help_other_bar, VerificationHelpRows.titleRes(VerificationCategory.ENVIRONMENT))
     }
 
     @Test
-    fun networkHelp_includesConnectionAndWifi() {
-        val rows = VerificationHelpRows.rows(VerificationCategory.NETWORK)
-        assertEquals(7, rows.size)
-        assertEquals(R.string.verification_info_field_connection_status, rows[0].labelRes)
-        assertEquals(R.string.verification_info_wifi, rows[6].labelRes)
-    }
-
-    @Test
-    fun locationHelp_includesProviderAndCoordinates() {
-        val rows = VerificationHelpRows.rows(VerificationCategory.LOCATION)
-        assertEquals(7, rows.size)
-        assertEquals(R.string.verification_info_field_location_provider, rows[0].labelRes)
-        assertEquals(R.string.verification_info_field_location_time_value, rows[6].labelRes)
-    }
-
-    @Test
-    fun environmentHelp_includesTemperatureAndLight() {
-        val rows = VerificationHelpRows.rows(VerificationCategory.ENVIRONMENT)
+    fun fileHelp_listsFileFieldsInOrder() {
         assertEquals(
-            R.string.verification_help_other_bar,
-            VerificationHelpRows.titleRes(VerificationCategory.ENVIRONMENT)
+            listOf(
+                R.string.verification_info_field_filename,
+                R.string.Vault_FileSize,
+                R.string.Vault_FileFormat,
+                R.string.Vault_FileCreated,
+                R.string.verification_file_last_modified,
+                R.string.Vault_FileResolution,
+                R.string.verification_file_folder,
+                R.string.verification_info_field_hash,
+                R.string.verification_file_info_created
+            ),
+            labels(VerificationCategory.FILE)
         )
-        assertEquals(2, rows.size)
-        assertEquals(R.string.verification_info_field_ambient_temperature, rows[0].labelRes)
-        assertEquals(R.string.verification_info_field_light, rows[1].labelRes)
     }
+
+    @Test
+    fun deviceHelp_listsDeviceFieldsInOrder() {
+        assertEquals(
+            listOf(
+                R.string.verification_info_field_manufacturer,
+                R.string.verification_device_model,
+                R.string.verification_info_field_device_id,
+                R.string.verification_info_field_screen_size,
+                R.string.verification_device_wifi_mac_address,
+                R.string.verification_info_field_language,
+                R.string.verification_device_region
+            ),
+            labels(VerificationCategory.DEVICE)
+        )
+    }
+
+    @Test
+    fun networkHelp_listsNetworkFieldsInOrder() {
+        assertEquals(
+            listOf(
+                R.string.verification_info_field_connection_status,
+                R.string.verification_network_connected_to,
+                R.string.verification_network_mobile_type,
+                R.string.verification_network_ipv4_address,
+                R.string.verification_network_ipv6_address,
+                R.string.verification_network_nearby_cells,
+                R.string.verification_network_nearby_wifi
+            ),
+            labels(VerificationCategory.NETWORK)
+        )
+    }
+
+    @Test
+    fun locationHelp_listsLocationFieldsInOrder() {
+        assertEquals(
+            listOf(
+                R.string.verification_info_field_location_provider,
+                R.string.verification_info_field_location_latitude,
+                R.string.verification_info_field_location_longitude,
+                R.string.verification_info_field_location_altitude,
+                R.string.verification_info_field_location_accuracy,
+                R.string.verification_location_speed,
+                R.string.verification_location_recorded_at
+            ),
+            labels(VerificationCategory.LOCATION)
+        )
+    }
+
+    @Test
+    fun environmentHelp_listsTemperatureAndLight() {
+        assertEquals(
+            listOf(
+                R.string.verification_info_field_ambient_temperature,
+                R.string.verification_info_field_light
+            ),
+            labels(VerificationCategory.ENVIRONMENT)
+        )
+    }
+
+    @Test
+    fun helpRows_matchMetadataRowsForEveryCategory() {
+        VerificationCategory.values().forEach { category ->
+            assertEquals(
+                "Help and metadata rows differ for $category",
+                VerificationMetadataRows.rows(VaultFile(), category).map { it.labelRes },
+                labels(category)
+            )
+        }
+    }
+
+    private fun labels(category: VerificationCategory): List<Int> =
+        VerificationHelpRows.rows(category).map { it.labelRes }
 }
