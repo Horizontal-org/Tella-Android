@@ -69,4 +69,5 @@
     <string name="Vault_SaveToDevice_SheetTitle">Enregistrer \"%1$s\" sur l\'appareil ?</string>
     <string name="Vault_SaveToDevice_SheetAction">Enregistrer sur l\'appareil</string>
     <string name="Vault_Folder_Empty_Msg">Ce dossier est vide ! Appuyez sur le bouton « + » ci-dessous pour importer un fichier ou créer un dossier.</string>
+    <string name="Vault_SaveVerification_SheetAction">Renseignements de vérification</string>
 </resources>
