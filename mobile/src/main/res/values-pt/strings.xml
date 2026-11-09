@@ -1144,8 +1144,8 @@
     <string name="verification.save_csv_already_saved_path">You can find it in your Tella files, under %s.</string>
     <string name="verification.save_csv_already_saved_action">I understand</string>
     <string name="onboard_lock_warning_message_recover">If you forget your lock, there is currently no way to recover it. Your data inside Tella will be lost forever.</string>
-    <string name="verification_file_last_modified">Last modified</string>
-    <string name="verification_file_folder">Folder</string>
+    <string name="verification_file_last_modified">Data Modificação</string>
+    <string name="verification_file_folder">Pasta</string>
     <string name="verification_file_info_created">Verification info created</string>
     <string name="verification_file_size_help">The size of the file</string>
     <string name="verification_file_format_help">The format of the file</string>
@@ -1160,14 +1160,14 @@
     <string name="verification_device_not_recorded">Could not be recorded</string>
     <string name="verification_network_connected_to">Connected to</string>
     <string name="verification_network_mobile_type">Mobile network type</string>
-    <string name="verification_network_ipv4_address">IPv4 address</string>
-    <string name="verification_network_ipv6_address">IPv6 address</string>
+    <string name="verification_network_ipv4_address">Endereço de IP:</string>
+    <string name="verification_network_ipv6_address">Endereço de IP:</string>
     <string name="verification_network_nearby_cells">Nearby cell towers</string>
     <string name="verification_network_nearby_wifi">Nearby Wi-Fi networks</string>
     <string name="verification_network_wifi">Wi-Fi</string>
     <string name="verification_network_cellular">Cellular network</string>
     <string name="verification_network_not_mobile">The device was not on mobile data</string>
-    <string name="verification_location_speed">Speed</string>
+    <string name="verification_location_speed">Velocidade</string>
     <string name="verification.info_field_not_supported_on_device">Not supported on this device</string>
     <string name="verification_location_recorded_at">Location recorded at</string>
 </resources>
