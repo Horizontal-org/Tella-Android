@@ -1144,14 +1144,14 @@
     <string name="verification_file_size_help">The size of the file</string>
     <string name="verification_device_wifi_mac_address">Wi-Fi MAC address</string>
     <string name="verification_file_info_created">Verification info created</string>
-    <string name="verification_device_region">Region</string>
+    <string name="verification_device_region">ဘာသာတရား</string>
     <string name="verification_location_speed">Speed</string>
     <string name="verification_file_info_created_help">The date and time when the verification information was created on the device</string>
     <string name="verification_network_ipv6_address">IPv6 address</string>
     <string name="verification_network_cellular">Cellular network</string>
     <string name="verification_file_resolution_help">The exact number of pixels that make up the image</string>
     <string name="verification_network_nearby_wifi">Nearby Wi-Fi networks</string>
-    <string name="verification_file_last_modified">Last modified</string>
+    <string name="verification_file_last_modified">နောက်ဆုံးပြင်ဆင်ခဲ့သည်:</string>
     <string name="verification_network_not_mobile">The device was not on mobile data</string>
     <string name="verification_network_nearby_cells">Nearby cell towers</string>
 </resources>
