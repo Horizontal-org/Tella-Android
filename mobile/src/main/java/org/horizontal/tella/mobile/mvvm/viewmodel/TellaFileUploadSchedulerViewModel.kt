@@ -18,6 +18,7 @@ import io.reactivex.schedulers.Schedulers
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
+import org.horizontal.tella.mobile.util.jobs.PendingReportsLock
 import org.horizontal.tella.mobile.util.jobs.WorkerUploadReport
 import javax.inject.Inject
 
@@ -44,6 +45,7 @@ class TellaFileUploadSchedulerViewModel @Inject constructor(val application: App
             .flatMapCompletable { dataSource ->
                 val formMediaFile = FormMediaFile.fromMediaFile(vaultFile)
                 dataSource.scheduleUploadReport(formMediaFile, uploadServerId)
+                    .andThen(PendingReportsLock.refreshQuietly(dataSource))
             }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({

@@ -19,7 +19,6 @@ import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFileStatus
 import org.horizontal.tella.mobile.domain.entity.reports.ReportInstance
 import org.horizontal.tella.mobile.domain.entity.reports.TellaReportServer
 import org.horizontal.tella.mobile.domain.repository.reports.ReportsRepository
-import org.horizontal.tella.mobile.util.LockTimeoutManager
 import org.horizontal.tella.mobile.util.StatusProvider
 import org.hzontal.tella.keys.key.LifecycleMainKey
 import timber.log.Timber
@@ -35,15 +34,10 @@ class WorkerUploadReport @AssistedInject constructor(
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
-        var holdsTimeout = false
+        var dataSource: DataSource? = null
         var hasIncompleteUploads = false
 
         try {
-            if (!statusProvider.isOnline()) {
-                Timber.d("*** Test worker *** No connectivity - will retry")
-                return@withContext Result.retry()
-            }
-
             val mainKey = try {
                 MyApplication.getMainKeyHolder().get().key.encoded
             } catch (e: LifecycleMainKey.MainKeyUnavailableException) {
@@ -51,9 +45,11 @@ class WorkerUploadReport @AssistedInject constructor(
                 return@withContext Result.retry()
             }
 
-            val dataSource = DataSource.getInstance(context, mainKey)
+            val source = DataSource.getInstance(context, mainKey)
+            dataSource = source
 
-            val reportFormInstances = getOutboxReportInstances(dataSource)
+            val reportFormInstances = PendingReportsLock.refresh(source).await()
+                .sortedByDescending { it.updated }
             if (reportFormInstances.isEmpty()) {
                 Timber.d("*** Test worker *** no remaining work")
                 return@withContext Result.success()
@@ -61,16 +57,15 @@ class WorkerUploadReport @AssistedInject constructor(
                 Timber.d("*** Test worker *** there is work remaining")
             }
 
-            for (reportInstance in reportFormInstances) {
-                val server = getServer(dataSource, reportInstance.serverId) ?: return@withContext Result.failure()
-                if (server.isActivatedBackgroundUpload && !holdsTimeout) {
-                    withContext(Dispatchers.Main.immediate) {
-                        LockTimeoutManager.onBackgroundWorkStarted()
-                        holdsTimeout = true
-                    }
-                }
+            if (!statusProvider.isOnline()) {
+                Timber.d("*** Test worker *** No connectivity - will retry")
+                return@withContext Result.retry()
+            }
 
-                val reportWithFiles = getReportBundle(dataSource, reportInstance)
+            for (reportInstance in reportFormInstances) {
+                val server = getServer(source, reportInstance.serverId) ?: continue
+
+                val reportWithFiles = getReportBundle(source, reportInstance)
 
                 if (reportWithFiles.reportApiId.isEmpty()) {
                     // submitReport likely returns a Single<ReportResponse>
@@ -118,9 +113,13 @@ class WorkerUploadReport @AssistedInject constructor(
             Timber.e(t, "WorkerUploadReport failed")
             Result.retry()
         } finally {
-            if (holdsTimeout) {
-                withContext(NonCancellable + Dispatchers.Main.immediate) {
-                    LockTimeoutManager.onBackgroundWorkFinished()
+            dataSource?.let { source ->
+                withContext(NonCancellable) {
+                    try {
+                        PendingReportsLock.refresh(source).await()
+                    } catch (t: Throwable) {
+                        Timber.e(t, "Failed to refresh pending reports lock")
+                    }
                 }
             }
         }
@@ -131,28 +130,6 @@ class WorkerUploadReport @AssistedInject constructor(
     private suspend fun getServer(dataSource: DataSource, serverId: Long): TellaReportServer? {
         return dataSource.listTellaUploadServers().await()
             .firstOrNull { server -> server.id == serverId }
-    }
-
-    private suspend fun getAutoBackgroundServers(dataSource: DataSource): List<TellaReportServer> {
-        return dataSource.listTellaUploadServers()
-            .map { servers -> servers.filter { it.isActivatedBackgroundUpload || it.isAutoUpload } }
-            .await()
-    }
-
-    private suspend fun getOutboxReportInstances(dataSource: DataSource): List<ReportInstance> {
-        val outboxInstances = dataSource.listOutboxReportInstances().await()
-        val autoBackgroundServers = getAutoBackgroundServers(dataSource)
-        return filterInstancesByAutoBackgroundServers(outboxInstances, autoBackgroundServers)
-            .sortedByDescending { it.updated }
-    }
-
-    private fun filterInstancesByAutoBackgroundServers(
-        instances: List<ReportInstance>,
-        autoBackgroundServers: List<TellaReportServer>
-    ): List<ReportInstance> {
-        return instances.filter { instance ->
-            autoBackgroundServers.any { server -> server.id == instance.serverId }
-        }
     }
 
     private suspend fun getReportBundle(

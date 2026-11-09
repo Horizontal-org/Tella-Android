@@ -15,6 +15,7 @@ import info.guardianproject.cacheword.SecretsManager
 import org.hzontal.shared_ui.utils.CALCULATOR_THEME
 import org.hzontal.tella.keys.config.IUnlockRegistryHolder
 import org.hzontal.tella.keys.config.UnlockRegistry
+import org.horizontal.tella.mobile.util.LockTimeoutManager
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.data.sharedpref.Preferences
 import org.horizontal.tella.mobile.views.activity.PatternUpgradeActivity
@@ -96,7 +97,7 @@ abstract class BaseLockActivity : BaseActivity() {
 
     private fun maybeRestoreTimeout() {
         if (Preferences.isTempTimeout()) {
-            MyApplication.getMainKeyHolder().timeout = Preferences.getLockTimeout()
+            LockTimeoutManager.setCurrentTimeout(Preferences.getLockTimeout())
             Preferences.setTempTimeout(false)
         }
     }

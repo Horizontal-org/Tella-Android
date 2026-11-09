@@ -19,6 +19,7 @@ public class LockTimeoutManager {
     public static long THREE_MINUTES_SHUTDOWN = 180000L;
     public static long ONE_MINUTES_SHUTDOWN = 60000L;
     private static int activeBackgroundWorkers;
+    private static boolean pendingReportsHold;
     private final LinkedHashMap<Long, Integer> options;
 
     public LockTimeoutManager() {
@@ -50,9 +51,13 @@ public class LockTimeoutManager {
 
     public void setLockTimeout(long timeout) {
         Preferences.setLockTimeout(timeout);
+        setCurrentTimeout(timeout);
+    }
+
+    public static void setCurrentTimeout(long timeout) {
         LifecycleMainKey mainKeyHolder = getMainKeyHolder();
         synchronized (mainKeyHolder) {
-            if (activeBackgroundWorkers == 0 || mainKeyHolder.getTimeout() != LifecycleMainKey.NO_TIMEOUT) {
+            if (!isHeld() || mainKeyHolder.getTimeout() != LifecycleMainKey.NO_TIMEOUT) {
                 mainKeyHolder.setTimeout(timeout);
             }
         }
@@ -63,8 +68,8 @@ public class LockTimeoutManager {
         LifecycleMainKey mainKeyHolder = getMainKeyHolder();
         synchronized (mainKeyHolder) {
             mainKeyHolder.get();
-            refreshTimeout(mainKeyHolder, LifecycleMainKey.NO_TIMEOUT);
             activeBackgroundWorkers++;
+            applyHold(mainKeyHolder);
         }
     }
 
@@ -74,9 +79,50 @@ public class LockTimeoutManager {
         synchronized (mainKeyHolder) {
             if (activeBackgroundWorkers == 0) return;
             activeBackgroundWorkers--;
+            applyHold(mainKeyHolder);
+        }
+    }
+
+    @MainThread
+    public static void holdForPendingReports() throws LifecycleMainKey.MainKeyUnavailableException {
+        LifecycleMainKey mainKeyHolder = getMainKeyHolder();
+        synchronized (mainKeyHolder) {
+            mainKeyHolder.get();
+            pendingReportsHold = true;
+            applyHold(mainKeyHolder);
+        }
+    }
+
+    @MainThread
+    public static void releasePendingReportsHold() {
+        LifecycleMainKey mainKeyHolder = getMainKeyHolder();
+        synchronized (mainKeyHolder) {
+            if (!pendingReportsHold) return;
+            pendingReportsHold = false;
+            applyHold(mainKeyHolder);
+        }
+    }
+
+    public static void onMainKeyCleared() {
+        LifecycleMainKey mainKeyHolder = getMainKeyHolder();
+        synchronized (mainKeyHolder) {
+            pendingReportsHold = false;
             if (activeBackgroundWorkers == 0 && mainKeyHolder.getTimeout() == LifecycleMainKey.NO_TIMEOUT) {
-                refreshTimeout(mainKeyHolder, Preferences.getLockTimeout());
+                mainKeyHolder.setTimeout(Preferences.getLockTimeout());
             }
+        }
+    }
+
+    private static boolean isHeld() {
+        return activeBackgroundWorkers > 0 || pendingReportsHold;
+    }
+
+    private static void applyHold(LifecycleMainKey mainKeyHolder) {
+        boolean noTimeout = mainKeyHolder.getTimeout() == LifecycleMainKey.NO_TIMEOUT;
+        if (isHeld() && !noTimeout) {
+            refreshTimeout(mainKeyHolder, LifecycleMainKey.NO_TIMEOUT);
+        } else if (!isHeld() && noTimeout) {
+            refreshTimeout(mainKeyHolder, Preferences.getLockTimeout());
         }
     }
 
