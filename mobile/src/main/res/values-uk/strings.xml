@@ -1158,7 +1158,7 @@
     <string name="verification.help.network.bar">Довідка про мережу</string>
     <string name="verification.help.file.bar">Довідка про файл</string>
     <string name="verification.help.location.bar">Довідка про місцезнаходження</string>
-    <string name="verification.help.other.bar">Довідка про інше</string>
+    <string name="verification.help.other.bar">Environment</string>
     <string name="verification.info_filename.expl">Назва файлу.</string>
     <string name="verification.info_data.type.expl">Тип мережі мобільних даних, до якої підключено пристрій.</string>
     <string name="verification.info_location.latitude.expl">Точна широта пристрою в градусах.</string>
@@ -1177,9 +1177,9 @@
     <string name="verification.save_csv_already_saved_action">Зрозуміло</string>
     <string name="onboard_lock_warning_message_recover">Якщо ви забудете код розблокування, відновити його наразі неможливо. Усі ваші дані в Tella буде втрачено назавжди.</string>
     <string name="verification.info_field_not_supported_on_device">Not supported on this device</string>
-    <string name="verification_file_folder">Folder</string>
+    <string name="verification_file_folder">Тека</string>
     <string name="verification_file_format_help">The format of the file</string>
-    <string name="verification_network_connected_to">Connected to</string>
+    <string name="verification_network_connected_to">З\'єднатись з</string>
     <string name="verification_file_hash_help">A unique number generated from the content of the file</string>
     <string name="verification_network_wifi">Wi-Fi</string>
     <string name="verification_location_recorded_at">Location recorded at</string>
@@ -1188,18 +1188,18 @@
     <string name="verification_file_created_help">The date and time when the file was first created on the device</string>
     <string name="verification_device_model">Model</string>
     <string name="verification_network_mobile_type">Mobile network type</string>
-    <string name="verification_network_ipv4_address">IPv4 address</string>
+    <string name="verification_network_ipv4_address">IP адреса:</string>
     <string name="verification_file_size_help">The size of the file</string>
     <string name="verification_device_wifi_mac_address">Wi-Fi MAC address</string>
     <string name="verification_file_info_created">Verification info created</string>
-    <string name="verification_device_region">Region</string>
-    <string name="verification_location_speed">Speed</string>
+    <string name="verification_device_region">Religion</string>
+    <string name="verification_location_speed">Швидкість</string>
     <string name="verification_file_info_created_help">The date and time when the verification information was created on the device</string>
-    <string name="verification_network_ipv6_address">IPv6 address</string>
+    <string name="verification_network_ipv6_address">IP адреса:</string>
     <string name="verification_network_cellular">Cellular network</string>
     <string name="verification_file_resolution_help">The exact number of pixels that make up the image</string>
     <string name="verification_network_nearby_wifi">Nearby Wi-Fi networks</string>
-    <string name="verification_file_last_modified">Last modified</string>
+    <string name="verification_file_last_modified">Останній раз оновлено</string>
     <string name="verification_network_not_mobile">The device was not on mobile data</string>
     <string name="verification_network_nearby_cells">Nearby cell towers</string>
 </resources>
