@@ -304,6 +304,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
         toolbar.onLeftClickListener = { nav().navigateSafe(R.id.main_settings) }
         toolbar.onRightClickListener = {
             MyApplication.getMainKeyHolder().timeout = LockTimeoutManager.IMMEDIATE_SHUTDOWN
+            MyApplication.getMainKeyHolder().clear()
             Preferences.setExitTimeout(true)
             MyApplication.exit(baseActivity)
             baseActivity.finish()

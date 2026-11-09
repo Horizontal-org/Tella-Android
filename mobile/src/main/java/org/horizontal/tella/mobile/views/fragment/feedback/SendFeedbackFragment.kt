@@ -29,6 +29,7 @@ import org.horizontal.tella.mobile.util.TellaReleaseNaming
 import org.horizontal.tella.mobile.util.jobs.WorkerSendFeedBack
 import org.horizontal.tella.mobile.views.activity.SettingsActivity
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
+import org.horizontal.tella.mobile.views.base_ui.FragmentEdgeToEdge
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.OnNavBckListener
 
 @AndroidEntryPoint
@@ -40,6 +41,10 @@ class SendFeedbackFragment :
 
     private val viewModel by viewModels<SendFeedbackViewModel>()
     private var isSubmitEnabled = isDescriptionEnabled && Preferences.isFeedbackSharingEnabled()
+
+    override fun applyEdgeToEdgeIfNeeded(view: View) {
+        FragmentEdgeToEdge.apply(view, baseActivity, applyImeInset = true)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

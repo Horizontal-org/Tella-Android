@@ -66,7 +66,7 @@
     <string name="Vault_Delete_Original">SUPPRIMER L’ORIGINAL</string>
     <string name="Vault_deleteFileImported_SheetDesc">Après avoir importé le fichier dans Tella, souhaitez-vous conserver le fichier original sur votre appareil ou le supprimer ? Si vous le supprimez, le fichier importé dans Tella sera la seule copie restante.</string>
     <string name="Vault_FileEdit_SheetAction">Éditer</string>
-    <string name="Vault_SaveToDevice_SheetTitle">Enregistrer \"%1$d\" sur l\'appareil ?</string>
+    <string name="Vault_SaveToDevice_SheetTitle">Enregistrer \"%1$s\" sur l\'appareil ?</string>
     <string name="Vault_SaveToDevice_SheetAction">Enregistrer sur l\'appareil</string>
     <string name="Vault_Folder_Empty_Msg">Ce dossier est vide ! Appuyez sur le bouton « + » ci-dessous pour importer un fichier ou créer un dossier.</string>
 </resources>

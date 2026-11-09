@@ -12,7 +12,7 @@ import org.junit.Test
 class VerificationMetadataRowsTest {
 
     @Test
-    fun fileRows_useNameHashPathAndTimestamps() {
+    fun fileRows_useNameFormatFolderHashAndTimestamps() {
         val vaultFile = vaultFileWithMetadata()
         vaultFile.name = "clip.mp4"
         vaultFile.hash = "abc123"
@@ -24,17 +24,14 @@ class VerificationMetadataRowsTest {
             "/video"
         )
 
-        assertEquals(R.string.verification_info_field_filename, rows[0].labelRes)
+        assertEquals(9, rows.size)
         assertEquals("clip.mp4", rows[0].value)
-        assertEquals(R.string.verification_info_field_file_path, rows[1].labelRes)
-        assertEquals("/video", rows[1].value)
-        assertEquals(R.string.verification_info_field_hash, rows[2].labelRes)
-        assertEquals("abc123", rows[2].value)
-        assertEquals(R.string.verification_info_field_file_created, rows[3].labelRes)
+        assertEquals("MP4", rows[2].value)
         assertTrue(rows[3].value!!.isNotBlank())
-        assertEquals(R.string.verification_info_field_file_modified, rows[4].labelRes)
         assertEquals(rows[3].value, rows[4].value)
-        assertEquals(5, rows.size)
+        assertNull(rows[5].value)
+        assertEquals("/video", rows[6].value)
+        assertEquals("abc123", rows[7].value)
     }
 
     @Test
@@ -49,13 +46,14 @@ class VerificationMetadataRowsTest {
     }
 
     @Test
-    fun fileRows_pathIsRootWhenLocationMissing() {
+    fun fileRows_folderIsRootWhenLocationMissing() {
         val vaultFile = VaultFile()
         vaultFile.name = "photo.jpg"
 
         val rows = VerificationMetadataRows.rows(vaultFile, VerificationCategory.FILE)
 
-        assertEquals("/", rows[1].value)
+        assertEquals(R.string.verification_file_folder, rows[6].labelRes)
+        assertEquals("/", rows[6].value)
     }
 
     @Test
@@ -118,8 +116,8 @@ class VerificationMetadataRowsTest {
         val rows = VerificationMetadataRows.rows(vaultFile, VerificationCategory.LOCATION)
 
         assertEquals("GPS", rows[0].value)
-        assertEquals("40.8630502°", rows[1].value)
-        assertEquals("-73.93083805°", rows[2].value)
+        assertEquals("40.8630502", rows[1].value)
+        assertEquals("-73.93083805", rows[2].value)
         assertEquals("-1 m", rows[3].value)
         assertEquals("21 m", rows[4].value)
         assertEquals("0 m/s", rows[5].value)

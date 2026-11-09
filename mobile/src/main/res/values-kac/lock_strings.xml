@@ -23,7 +23,7 @@
     <string name="UnLockPattern_Message_IncorrectPattern">Chyeju hte kalang bai chyam yu u. Na a maka ni n htuk nga ai.</string>
     <string name="LockPinSet_Message_EnterPin">Na a dinghkrai masat htihkum(PIN)hpe dip bang u</string>
     <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock Tella</string>
-    <string name="LockPinSet_Message_Hint">Use at least 6 digits. Avoid using numbers that can be guessed easily, such as your birthday.</string>
+    <string name="LockPinSet_Message_Hint">Use at least 6 digits</string>
     <string name="LockPinSet_Message_Confirm">Na a dinghkrai masat htihkum(PIN) hpe shagrin u</string>
     <string name="LockPinConfirm_Message_Confirm">Chyeju hte, grau teng na matu, na a dinghkrai masat htihkum (PIN) hpe kalang mi bai dip bang u.</string>
     <string name="LockPinConfirm_Message_Error_TryAgain">Chyeju hte kalang bai chyam yu u. Na a dinghkrai masat htihkum (PIN)ni n htuk nga ai.</string>

@@ -4,8 +4,13 @@ import static org.horizontal.tella.mobile.MyApplication.getMainKeyHolder;
 
 import java.util.LinkedHashMap;
 
+import androidx.annotation.MainThread;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.ProcessLifecycleOwner;
+
 import org.horizontal.tella.mobile.R;
 import org.horizontal.tella.mobile.data.sharedpref.Preferences;
+import org.hzontal.tella.keys.key.LifecycleMainKey;
 
 
 public class LockTimeoutManager {
@@ -13,6 +18,7 @@ public class LockTimeoutManager {
     public static long FIVE_MINUTES_SHUTDOWN = 300000L;
     public static long THREE_MINUTES_SHUTDOWN = 180000L;
     public static long ONE_MINUTES_SHUTDOWN = 60000L;
+    private static int activeBackgroundWorkers;
     private final LinkedHashMap<Long, Integer> options;
 
     public LockTimeoutManager() {
@@ -44,6 +50,42 @@ public class LockTimeoutManager {
 
     public void setLockTimeout(long timeout) {
         Preferences.setLockTimeout(timeout);
-        getMainKeyHolder().setTimeout(timeout);
+        LifecycleMainKey mainKeyHolder = getMainKeyHolder();
+        synchronized (mainKeyHolder) {
+            if (activeBackgroundWorkers == 0 || mainKeyHolder.getTimeout() != LifecycleMainKey.NO_TIMEOUT) {
+                mainKeyHolder.setTimeout(timeout);
+            }
+        }
+    }
+
+    @MainThread
+    public static void onBackgroundWorkStarted() throws LifecycleMainKey.MainKeyUnavailableException {
+        LifecycleMainKey mainKeyHolder = getMainKeyHolder();
+        synchronized (mainKeyHolder) {
+            mainKeyHolder.get();
+            refreshTimeout(mainKeyHolder, LifecycleMainKey.NO_TIMEOUT);
+            activeBackgroundWorkers++;
+        }
+    }
+
+    @MainThread
+    public static void onBackgroundWorkFinished() {
+        LifecycleMainKey mainKeyHolder = getMainKeyHolder();
+        synchronized (mainKeyHolder) {
+            if (activeBackgroundWorkers == 0) return;
+            activeBackgroundWorkers--;
+            if (activeBackgroundWorkers == 0 && mainKeyHolder.getTimeout() == LifecycleMainKey.NO_TIMEOUT) {
+                refreshTimeout(mainKeyHolder, Preferences.getLockTimeout());
+            }
+        }
+    }
+
+    private static void refreshTimeout(LifecycleMainKey mainKeyHolder, long timeout) {
+        mainKeyHolder.setTimeout(LifecycleMainKey.NO_TIMEOUT);
+        mainKeyHolder.activate();
+        mainKeyHolder.setTimeout(timeout);
+        if (!ProcessLifecycleOwner.get().getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
+            mainKeyHolder.deactivate();
+        }
     }
 }
