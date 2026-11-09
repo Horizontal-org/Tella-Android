@@ -23,7 +23,7 @@
     <string name="UnLockPattern_Message_IncorrectPattern">ဝံသးစူၤမၤကဒီးအသီတဘျီတက့ၢ်. နတၢ်ဒဲးကံၣ်ဒဲးဝ့ၤအက့ၢ်အဂီၤအံၤတဘၣ်လိာ်ဖိးမံလိာ်သးဘၣ်န့ၣ်လီၤ.</string>
     <string name="LockPinSet_Message_EnterPin">ထၢနုာ်လီၤန PIN နီၣ်ဂံၢ်</string>
     <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock Tella</string>
-    <string name="LockPinSet_Message_Hint">Use at least 6 digits. Avoid using numbers that can be guessed easily, such as your birthday.</string>
+    <string name="LockPinSet_Message_Hint">Use at least 6 digits</string>
     <string name="LockPinSet_Message_Confirm">ပာ်ဂၢၢ်ပာ်ကျၢၤဘၣ်န PIN နီၣ်ဂံၢ်တက့ၢ်</string>
     <string name="LockPinConfirm_Message_Confirm">ဝံသးစူၤထၢနုာ်လီၤန PIN နီၣ်ဂံၢ်အသီကဒီးတဘျီ, ထဲဒၣ်တၢ်မၤလီၤတံၢ်ဒိၣ်ထီၣ်အဂီၢ်.</string>
     <string name="LockPinConfirm_Message_Error_TryAgain">ဝံသးစူၤမၤကဒီးအသီတဘျီ. န PIN နီၣ်ဂံၢ်တဘၣ်လိာ်ဖိးမံလိာ်သးဘၣ်.</string>

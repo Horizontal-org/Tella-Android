@@ -23,7 +23,7 @@
     <string name="UnLockPattern_Message_IncorrectPattern">Tente novamente. Seus padrões não correspondem.</string>
     <string name="LockPinSet_Message_EnterPin">Digite seu PIN</string>
     <string name="UnlockPin_Message_EnterPin">Digite seu PIN para desbloquear Tella</string>
-    <string name="LockPinSet_Message_Hint">Use pelo menos 6 dígitos. Evite usar números que possam ser adivinhados facilmente, como seu aniversário.</string>
+    <string name="LockPinSet_Message_Hint">Use pelo menos 6 dígitos</string>
     <string name="LockPinSet_Message_Confirm">Confirme seu PIN</string>
     <string name="LockPinConfirm_Message_Confirm">Por favor, digite seu PIN mais uma vez, só para ter certeza.</string>
     <string name="LockPinConfirm_Message_Error_TryAgain">Tente novamente. Seus PINs não correspondem.</string>
@@ -46,7 +46,7 @@
     <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">Digite seu PIN atual para alterar sua camuflagem</string>
     <string name="Settings_Action_SetLock">Bloqueio</string>
     <string name="Settings_Message_LockChanged">Seu bloqueio foi alterado</string>
-    <string name="LockPinSet_Message_Hint_guessable">Avoid using numbers that can be guessed easily, such as your birthday.</string>
+    <string name="LockPinSet_Message_Hint_guessable">Evite usar números que possam ser adivinhados facilmente, como seu aniversário.</string>
     <string name="LockPasswordSet_Message_Hint_guessable">Avoid using passwords that can be guessed easily, such as “password.”</string>
     <string name="LockPasswordSet_Message_Hint_length">The longer your password, the more secure it is.</string>
 </resources>
