@@ -1144,7 +1144,7 @@
     <string name="verification_file_size_help">The size of the file</string>
     <string name="verification_device_wifi_mac_address">Wi-Fi MAC address</string>
     <string name="verification_file_info_created">Verification info created</string>
-    <string name="verification_device_region">ဘာသာတရား</string>
+    <string name="verification_device_region">Region</string>
     <string name="verification_location_speed">Speed</string>
     <string name="verification_file_info_created_help">The date and time when the verification information was created on the device</string>
     <string name="verification_network_ipv6_address">IPv6 address</string>
