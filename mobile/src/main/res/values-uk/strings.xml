@@ -1150,7 +1150,7 @@
     <string name="verification.info_field_light">Освітленість</string>
     <string name="verification.info_subheading_network.metadata">Мережа</string>
     <string name="verification.info_subheading_location.metadata">Місцезнаходження</string>
-    <string name="verification.info_subheading_other.metadata">Інше</string>
+    <string name="verification.info_subheading_other.metadata">Environment</string>
     <string name="verification.help.intro">Tella записує метадані про кожне зроблене вами фото, відео чи аудіо: про файл, пристрій та довкілля навколо нього.</string>
     <string name="verification.help.intro.evidence">Цю перевірочну інформацію можна використовувати для підтвердження доказів та зіставлення їх з іншими відомими фактами про подію або місце її фіксації. %1$s</string>
     <string name="verification.help.intro.warning">Деякі з цих даних (IP-адреса, геолокація) можуть ідентифікувати вас або ваш пристрій, тому будьте обережні, коли ділитеся ними.</string>
