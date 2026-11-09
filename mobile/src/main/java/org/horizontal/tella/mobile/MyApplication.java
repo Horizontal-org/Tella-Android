@@ -27,6 +27,7 @@ import androidx.work.Configuration;
 
 import com.bumptech.glide.Glide;
 
+import org.horizontal.tella.mobile.util.LockTimeoutManager;
 import org.horizontal.tella.mobile.util.crash.CrashReporterProvider;
 
 import com.hzontal.tella_locking_ui.TellaKeysUI;
@@ -235,6 +236,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
 
         mainKeyHolder = new LifecycleMainKey(ProcessLifecycleOwner.get().getLifecycle(), Preferences.getLockTimeout());
         mainKeyHolder.setOnCleared(() -> {
+            LockTimeoutManager.onMainKeyCleared();
             new Handler(Looper.getMainLooper()).post(() -> {
                 Activity activity = resumedActivity;
                 if (activity instanceof BaseLockActivity

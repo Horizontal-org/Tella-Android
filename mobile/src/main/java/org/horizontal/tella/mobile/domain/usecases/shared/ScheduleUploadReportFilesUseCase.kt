@@ -13,6 +13,7 @@ import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import org.horizontal.tella.mobile.data.database.KeyDataSource
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
+import org.horizontal.tella.mobile.util.jobs.PendingReportsLock
 import org.horizontal.tella.mobile.util.jobs.WorkerUploadReport
 import javax.inject.Inject
 
@@ -49,6 +50,7 @@ class ScheduleUploadReportFilesUseCase @Inject constructor(
                             oneTimeJob
                         )
                     }
+                    .andThen(PendingReportsLock.refreshQuietly(dataSource))
             }
             .doOnError { throwable ->
                 CrashReporterProvider.get().recordException(throwable)
