@@ -296,6 +296,7 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         if (toolbar.menu.findItem(R.id.menu_item_more) != null) {
             toolbar.menu.findItem(R.id.menu_item_more).isVisible = true
         }
+        toolbar.menu.findItem(R.id.menu_item_edit)?.isVisible = true
         if (vaultFile!!.metadata != null && toolbar.menu.findItem(R.id.menu_item_metadata) != null) {
             toolbar.menu.findItem(R.id.menu_item_metadata).isVisible = true
         }

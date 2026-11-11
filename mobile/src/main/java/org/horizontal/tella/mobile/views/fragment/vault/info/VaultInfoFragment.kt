@@ -6,6 +6,7 @@ import androidx.core.view.isVisible
 import com.hzontal.tella_vault.VaultFile
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentVaultInfoBinding
 import org.horizontal.tella.mobile.util.DateUtil
 import org.horizontal.tella.mobile.util.FileUtil
@@ -44,6 +45,9 @@ class VaultInfoFragment : BaseBindingFragment<FragmentVaultInfoBinding>(Fragment
                     fileFormatTv.text = mimeType
                     fileCreatedTv.text = DateUtil.getDate(created)
                     fileSizeTv.text = FileUtil.getFileSizeString(size)
+                    val notAvailable = getString(R.string.verification_info_field_metadata_not_available)
+                    fileResolutionTv.text = notAvailable
+                    fileLengthTv.text = notAvailable
                 }
                 bindFolderPath(id)
             }

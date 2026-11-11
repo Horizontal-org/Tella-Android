@@ -151,8 +151,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     fun maybeChangeTemporaryTimeout() {
         if (LockTimeoutManager().lockTimeout == LockTimeoutManager.IMMEDIATE_SHUTDOWN || LockTimeoutManager().lockTimeout == LockTimeoutManager.ONE_MINUTES_SHUTDOWN) {
-            LockTimeoutManager.setCurrentTimeout(LockTimeoutManager.THREE_MINUTES_SHUTDOWN)
-            Preferences.setTempTimeout(true)
+            LockTimeoutManager.setTemporaryTimeout()
         }
     }
 
@@ -255,8 +254,7 @@ abstract class BaseActivity : AppCompatActivity() {
             getString(R.string.action_continue),
             getString(R.string.action_cancel),
             onConfirmClick = {
-                LockTimeoutManager.setCurrentTimeout(LockTimeoutManager.THREE_MINUTES_SHUTDOWN)
-                Preferences.setTempTimeout(true)
+                LockTimeoutManager.setTemporaryTimeout()
                 confirm.invoke()
             },
             onCancelClick = null

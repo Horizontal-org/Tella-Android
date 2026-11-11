@@ -35,19 +35,27 @@ class AboutAndHelpSettings : BaseFragment() {
         binding?.tella?.text = appName
         binding?.version?.text = TellaReleaseNaming.fullReleaseLabel(requireContext())
         binding?.tutorial?.setOnClickListener {
-            Util.startBrowserIntent(context, getString(R.string.config_tutorial_url))
+            baseActivity.maybeChangeTemporaryTimeout {
+                Util.startBrowserIntent(context, getString(R.string.config_tutorial_url))
+            }
         }
 
         binding?.faq?.setOnClickListener {
-            Util.startBrowserIntent(context, getString(R.string.config_faq_url))
+            baseActivity.maybeChangeTemporaryTimeout {
+                Util.startBrowserIntent(context, getString(R.string.config_faq_url))
+            }
         }
 
         binding?.contactUs?.setOnClickListener {
-            Util.startSendMailIntent(context, getString(R.string.config_contact_url))
+            baseActivity.maybeChangeTemporaryTimeout {
+                Util.startSendMailIntent(context, getString(R.string.config_contact_url))
+            }
         }
 
         binding?.privacyPolicy?.setOnClickListener {
-            Util.startBrowserIntent(context, getString(R.string.config_privacy_url))
+            baseActivity.maybeChangeTemporaryTimeout {
+                Util.startBrowserIntent(context, getString(R.string.config_privacy_url))
+            }
         }
     }
 }

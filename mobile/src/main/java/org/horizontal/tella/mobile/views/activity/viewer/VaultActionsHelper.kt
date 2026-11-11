@@ -130,6 +130,7 @@ object VaultActionsHelper {
                 toolBar.title = getString(R.string.Vault_FileInfo)
                 toolBar.menu.findItem(R.id.menu_item_more).isVisible = false
                 toolBar.menu.findItem(R.id.menu_item_metadata).isVisible = false
+                toolBar.menu.findItem(R.id.menu_item_edit)?.isVisible = false
                 invalidateOptionsMenu()
                 addFragment(
                     vaultFile.let { VaultInfoFragment.newInstance(it, false) },
@@ -320,7 +321,6 @@ object VaultActionsHelper {
             requestStoragePermissions(requestPermissionLauncher)
         }
     }
-
 
 
 }
