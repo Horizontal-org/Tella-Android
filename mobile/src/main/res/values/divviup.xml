@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="divviup_count_unlocks_type" translatable="false">count</string>
-    <string name="divviup_count_drop_box_sent_id" translatable="false"></string>
-    <string name="divviup_count_google_drive_sent_id" translatable="false"></string>
-    <string name="divviup_count_nextcloud_sent_id" translatable="false"></string>
-    <string name="divviup_count_unlocks_id" translatable="false"></string>
-    <string name="divviup_count_installs_id" translatable="false"></string>
-    <string name="divviup_time_spent_id" translatable="false"></string>
-    <string name="divviup_count_photos_id" translatable="false"></string>
-    <string name="divviup_count_videos_id" translatable="false"></string>
-    <string name="divviup_count_audios_id" translatable="false"></string>
-    <string name="divviup_count_imports_id" translatable="false"></string>
-    <string name="divviup_count_quick_delete_id" translatable="false"></string>
-    <string name="divviup_count_camouflage_id" translatable="false"></string>
-    <string name="divviup_count_report_sent_id" translatable="false"></string>
-    <string name="divviup_count_uwazi_sent_id" translatable="false"></string>
-    <string name="divviup_count_odk_sent_id" translatable="false"></string>
-    <string name="divviup_leader" translatable="false"></string>
-    <string name="divviup_helper" translatable="false"></string>
+    <string name="divviup_count_drop_box_sent_id" translatable="false">uoXDcgmaxhG3vq7dAsr9YASahYqSOjTXCqs41oJK2vo</string>
+    <string name="divviup_count_google_drive_sent_id" translatable="false">JeHg30ft0GU-tzUXwWVrGE3pXPIy3Aw6YB7DByrTDx0s</string>
+    <string name="divviup_count_unlocks_id" translatable="false">S4q94ji66y9gDS8flNwfbXJ4v2e_Prh5SzauoFu7ezQ</string>
+    <string name="divviup_count_installs_id" translatable="false">nwnfYKD9iGWESiX9zLMnF8ShgKTTI1phuWTqOBxwm98</string>
+    <string name="divviup_time_spent_id" translatable="false">5M2ObA2lGF8FNDu4HxUdK8_z9CqEXJXC4EtPf_sxqv8</string>
+    <string name="divviup_count_photos_id" translatable="false">03zbJSx9znR6njeVdYGYOgdl_L0xAM1zsOvtSBWu6FE</string>
+    <string name="divviup_count_videos_id" translatable="false">ONLs1JmyQXVbNfw85ZXD6Si4yOPqq0uecTYbcAX6lh0</string>
+    <string name="divviup_count_audios_id" translatable="false">Cj1KgRWfKDa8SnQmkR1AXiKt_DIB5t8w8MnLJR-JJjA</string>
+    <string name="divviup_count_imports_id" translatable="false">WNZ6DYVg2Zr1ApiOq70lJjOmtd7hjAU4kHnz1GgRyuo</string>
+    <string name="divviup_count_quick_delete_id" translatable="false">QLRZeb96Xuf3IxbOXttwb0AxmpDSscKyrnlYKmO5NJQ</string>
+    <string name="divviup_count_camouflage_id" translatable="false">MLtjZnLSGzqc9op1XwBuPA5vqVzrqDkHZe7pFIaTlCo</string>
+    <string name="divviup_count_report_sent_id" translatable="false">N_Um0XpWUmyO4ldDLtBl5M26TC-jNNmCmUwlFk5gcVk</string>
+    <string name="divviup_count_uwazi_sent_id" translatable="false">4-RKA6iTDoHrmF5Yc13rALCFzEx2Qc9DWKP8B0OOyDs</string>
+    <string name="divviup_count_odk_sent_id" translatable="false">z7HrlRw2425WB8Yo_PRjqyUKm4Cee_Xy7UG_b14PqpM</string>
+    <string name="divviup_count_nextcloud_sent_id" translatable="false">Xa5SIPXQ9ROz2jDuzgLtc9oOQuFGxmxZm3bVe1snIq4</string>
+    <string name="divviup_leader" translatable="false">https://dap-09-3.api.divviup.org/</string>
+    <string name="divviup_helper" translatable="false">https://helper-dap-09.shira.app/</string>
     <integer name="divviup_count_unlocks_timePrecisionSeconds">300</integer>
 </resources>
