@@ -1158,7 +1158,7 @@
     <string name="verification.help.network.bar">Довідка про мережу</string>
     <string name="verification.help.file.bar">Довідка про файл</string>
     <string name="verification.help.location.bar">Довідка про місцезнаходження</string>
-    <string name="verification.help.other.bar">Довідка про інше</string>
+    <string name="verification.help.other.bar">Environment help</string>
     <string name="verification.info_filename.expl">Назва файлу.</string>
     <string name="verification.info_data.type.expl">Тип мережі мобільних даних, до якої підключено пристрій.</string>
     <string name="verification.info_location.latitude.expl">Точна широта пристрою в градусах.</string>

@@ -1126,7 +1126,7 @@
     <string name="verification.help.device.bar">Device help</string>
     <string name="verification.help.network.bar">Network help</string>
     <string name="verification.help.location.bar">Location help</string>
-    <string name="verification.help.other.bar">Other help</string>
+    <string name="verification.help.other.bar">Environment help</string>
     <string name="verification.info_filename.expl">The file\'s name.</string>
     <string name="verification.info_data.type.expl">The type of mobile data network the device is connected to.</string>
     <string name="verification.info_location.latitude.expl">The exact latitude of the device in degrees.</string>
