@@ -19,7 +19,6 @@ import android.media.MediaScannerConnection;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.DocumentsContract;
@@ -1160,25 +1159,23 @@ public class MediaFileHandler {
         if (uris.isEmpty()) {
             return;
         }
-        Intent shareIntent = new Intent();
-        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        shareIntent.setType(mimeType);
-        if (multiple || uris.size() > 1) {
-            shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
-            shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, new ArrayList<>(uris));
+
+        boolean zipAsMainPayload = signalZipUri != null && chooserMayIgnoreCustomTargets();
+        Intent shareIntent;
+        if (zipAsMainPayload) {
+            shareIntent = buildZipSendIntent(signalZipUri);
+            context.grantUriPermission(
+                    SIGNAL_PACKAGE,
+                    signalZipUri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+            );
         } else {
-            shareIntent.setAction(Intent.ACTION_SEND);
-            shareIntent.putExtra(Intent.EXTRA_STREAM, uris.get(0));
+            shareIntent = buildFilesShareIntent(uris, mimeType, multiple);
         }
-        ClipData clipData = ClipData.newRawUri(null, uris.get(0));
-        for (int i = 1; i < uris.size(); i++) {
-            clipData.addItem(new ClipData.Item(uris.get(i)));
-        }
-        shareIntent.setClipData(clipData);
 
         Intent chooser = Intent.createChooser(shareIntent, context.getText(R.string.action_share));
         chooser.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        if (signalZipUri != null) {
+        if (signalZipUri != null && !zipAsMainPayload) {
             attachSignalZipShare(context, chooser, shareIntent, signalZipUri);
         }
         if (!(context instanceof Activity)) {
@@ -1198,6 +1195,50 @@ public class MediaFileHandler {
                 deleteShareCache(context);
             }
         }
+    }
+
+    private static Intent buildFilesShareIntent(List<Uri> uris, String mimeType, boolean multiple) {
+        Intent shareIntent = new Intent();
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        shareIntent.setType(mimeType);
+        if (multiple || uris.size() > 1) {
+            shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
+            shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, new ArrayList<>(uris));
+        } else {
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, uris.get(0));
+        }
+        ClipData clipData = ClipData.newRawUri(null, uris.get(0));
+        for (int i = 1; i < uris.size(); i++) {
+            clipData.addItem(new ClipData.Item(uris.get(i)));
+        }
+        shareIntent.setClipData(clipData);
+        return shareIntent;
+    }
+
+    private static Intent buildZipSendIntent(Uri zipUri) {
+        Intent zipIntent = new Intent(Intent.ACTION_SEND);
+        zipIntent.setType(VerificationMetadataCsv.MIME_TYPE_ZIP);
+        zipIntent.putExtra(Intent.EXTRA_STREAM, zipUri);
+        zipIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        zipIntent.setClipData(ClipData.newRawUri(null, zipUri));
+        return zipIntent;
+    }
+
+    /**
+     * True on vendors whose share sheet replaces the stock chooser and may ignore
+     * {@link Intent#EXTRA_INITIAL_INTENTS} and {@link Intent#EXTRA_EXCLUDE_COMPONENTS}.
+     */
+    private static boolean chooserMayIgnoreCustomTargets() {
+        return hasCustomShareSheet(Build.MANUFACTURER) || hasCustomShareSheet(Build.BRAND);
+    }
+
+    static boolean hasCustomShareSheet(@Nullable String vendor) {
+        if (vendor == null) {
+            return false;
+        }
+        String normalized = vendor.trim().toLowerCase(Locale.ROOT);
+        return normalized.equals("huawei") || normalized.equals("honor");
     }
 
     public static void clearVerificationShareCache(Context context) {
@@ -1233,11 +1274,7 @@ public class MediaFileHandler {
             Intent defaultShare,
             Uri zipUri
     ) {
-        Intent signalIntent = new Intent(Intent.ACTION_SEND);
-        signalIntent.setType(VerificationMetadataCsv.MIME_TYPE_ZIP);
-        signalIntent.putExtra(Intent.EXTRA_STREAM, zipUri);
-        signalIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        signalIntent.setClipData(ClipData.newRawUri(null, zipUri));
+        Intent signalIntent = buildZipSendIntent(zipUri);
         signalIntent.setPackage(SIGNAL_PACKAGE);
 
         List<ResolveInfo> signalActivities = queryShareActivities(context, signalIntent);

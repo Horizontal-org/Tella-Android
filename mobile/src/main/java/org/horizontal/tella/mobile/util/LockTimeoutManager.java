@@ -20,6 +20,7 @@ public class LockTimeoutManager {
     public static long ONE_MINUTES_SHUTDOWN = 60000L;
     private static int activeBackgroundWorkers;
     private static boolean pendingReportsHold;
+    private static boolean temporaryTimeoutUsedWhilePaused;
     private final LinkedHashMap<Long, Integer> options;
 
     public LockTimeoutManager() {
@@ -61,6 +62,28 @@ public class LockTimeoutManager {
                 mainKeyHolder.setTimeout(timeout);
             }
         }
+    }
+
+    @MainThread
+    public static void setTemporaryTimeout() {
+        setCurrentTimeout(THREE_MINUTES_SHUTDOWN);
+        Preferences.setTempTimeout(true);
+        temporaryTimeoutUsedWhilePaused = false;
+    }
+
+    @MainThread
+    public static void onAppPaused() {
+        temporaryTimeoutUsedWhilePaused = Preferences.isTempTimeout();
+    }
+
+    /** Restore only an allowance used during the absence that has just been checked. */
+    @MainThread
+    public static void restoreTemporaryTimeout() {
+        if (temporaryTimeoutUsedWhilePaused && Preferences.isTempTimeout()) {
+            setCurrentTimeout(Preferences.getLockTimeout());
+            Preferences.setTempTimeout(false);
+        }
+        temporaryTimeoutUsedWhilePaused = false;
     }
 
     @MainThread

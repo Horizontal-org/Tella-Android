@@ -36,7 +36,9 @@ import com.hzontal.tella_locking_ui.ui.AppCompatActivityUnlocker;
 import com.hzontal.tella_locking_ui.ui.DeviceCredentialsUnlockActivity;
 import com.hzontal.tella_locking_ui.ui.password.PasswordUnlockActivity;
 import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity;
+
 import org.horizontal.tella.mobile.views.activity.onboarding.OnboardingLockProtectSheet;
+
 import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity;
 import com.hzontal.tella_vault.Vault;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -423,6 +425,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         resumedActivities++;
         if (returning && mainKeyHolder != null) {
             mainKeyHolder.noteAppResumed();
+            LockTimeoutManager.restoreTemporaryTimeout();
         }
     }
 
@@ -434,6 +437,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         resumedActivities = Math.max(0, resumedActivities - 1);
         if (resumedActivities == 0 && !activity.isChangingConfigurations() && mainKeyHolder != null) {
             mainKeyHolder.noteAppPaused();
+            LockTimeoutManager.onAppPaused();
         }
     }
 
@@ -441,6 +445,9 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     public void onActivityStopped(Activity activity) {
         isActivityChangingConfigurations = activity.isChangingConfigurations();
         if (--activityReferences == 0 && !isActivityChangingConfigurations) {
+            if (mainKeyHolder != null) {
+                mainKeyHolder.deactivate();
+            }
             // App enters background
             long spentTime = System.currentTimeMillis() - startTime;
             totalTimeSpent += spentTime; // Add to total time spent
