@@ -118,7 +118,7 @@
     <string name="settings.camo_expl">Kheta xifaniso lexi u xirhandzaka ni vito leswaku ufihla Tella kahle ka xitirhisiwa xa wena. Tiva lesvaku xifaniso xa Tella xi ta tshama xi vonaka eka svilunghisi sva Android.</string>
     <string name="gallery_action.desc_save.to.device">Gravhara ka xitirhisiwa</string>
     <string name="settings.docu_verification_action">Ndlela ya kutiyisisa</string>
-    <string name="settings.docu_verification_action.expl">Yi endla lesvaku maarkivho ya wena ya mafoto ni mavhidiyo makambeliwa hi ku hlengeleta mahungu hi xitirhisiwa xa wena na ndhawu ya wena.</string>
+    <string name="settings.docu_verification_action.expl">Makes it easier to verify where and when a photo, video, or audio recording was captured by collecting information about your device and location.</string>
     <string name="collect_no.form_heading">Ku hlengeleta wutshokotshoko hi kuolova</string>
     <string name="collect_expl_not.connected.to.server">Ku amukela maformulariyo ni kurhumela mahungu, u fanele kusungula, konektara ka servhidori leyi fambisanaka. Vutisa nhlangano wa wena hi mahungu ya servhidor naswona <a href="tella_scheme://open.collect.manage.servers.activity">lunghisa servhidor laha</a>.</string>
     <string name="collect.sent_expl_no.forms">A ku na mafrmulariyo lawa marhumeliwaka lawa ma nga kombisiwaka.</string>
@@ -1115,7 +1115,7 @@
     <string name="verification.info_field_location.accuracy">Accuracy</string>
     <string name="verification.info_field_location.altitude">Altitude</string>
     <string name="verification.info_field_ambient.temperature">Ambient temperature</string>
-    <string name="verification.info_field_light">Light</string>
+    <string name="verification.info_field_light">Light level</string>
     <string name="verification.info_subheading_network.metadata">Network</string>
     <string name="verification.info_subheading_location.metadata">Location</string>
     <string name="verification.info_subheading_other.metadata">Environment</string>

@@ -118,7 +118,7 @@
     <string name="settings.camo_expl">Tella a inthup ṭhat lehzual theih nan icon leh hming thlang rawh. Hriat tur: Android settings-ah chuan Tella icon hi a la lang thei ang.</string>
     <string name="gallery_action.desc_save.to.device">Device-ah save rawh</string>
     <string name="settings.docu_verification_action">Verification mode</string>
-    <string name="settings.docu_verification_action.expl">I device leh awmna te chhinchhiaha i file te finfiah theih a nih nan.</string>
+    <string name="settings.docu_verification_action.expl">Makes it easier to verify where and when a photo, video, or audio recording was captured by collecting information about your device and location.</string>
     <string name="collect_no.form_heading">Data khawnkhawm awlsam</string>
     <string name="collect_expl_not.connected.to.server">To receive forms and submit data, you must first connect to a compatible server. Ask your organization for the server information and <a href="tella_scheme://open.collect.manage.servers.activity">set up the server here</a>.</string>
     <string name="collect.sent_expl_no.forms">Form thehluh tarlan tur a awm lo.</string>
@@ -1115,7 +1115,7 @@
     <string name="verification.info_field_location.accuracy">Accuracy</string>
     <string name="verification.info_field_location.altitude">Altitude</string>
     <string name="verification.info_field_ambient.temperature">Ambient temperature</string>
-    <string name="verification.info_field_light">Light</string>
+    <string name="verification.info_field_light">Light level</string>
     <string name="verification.info_subheading_network.metadata">Network</string>
     <string name="verification.info_subheading_location.metadata">Location</string>
     <string name="verification.info_subheading_other.metadata">Environment</string>

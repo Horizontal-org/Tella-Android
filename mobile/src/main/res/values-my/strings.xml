@@ -117,7 +117,7 @@
     <string name="settings.camo_expl">စိတ်ကြိုက်အိုင်ကွန်နှင့် အမည် ရွေးချယ်ပြီး Tella ကို သင့်စက်ပစ္စည်းတွင် ဝှက်နိုင်ပါသည်။ Tella အိုင်ကွန်ကို Android ဆက်တင်များတွင် မြင်နိုင်သေးကြောင်း သတိပြုပါ။</string>
     <string name="gallery_action.desc_save.to.device">စက်ထဲ၌ သိမ်းမည်</string>
     <string name="settings.docu_verification_action">အတည်ပြုခြင်းမုဒ်</string>
-    <string name="settings.docu_verification_action.expl">သင့်စက်ပစ္စည်းနှင့် တည်နေရာအကြောင်း အချက်အလက်များကို စုဆောင်းခြင်းဖြင့် သင့်မီဒီယာဖိုင်များကို အတည်ပြုနိုင်စေပါသည်။</string>
+    <string name="settings.docu_verification_action.expl">Makes it easier to verify where and when a photo, video, or audio recording was captured by collecting information about your device and location.</string>
     <string name="collect_no.form_heading">လွယ်ကူသောဒေတာ စုဆောင်းခြင်း</string>
     <string name="collect_expl_not.connected.to.server">ဖောင်ပုံစံများ လက်ခံရရှိရန်နှင့် ဒေတာပေးပို့ရန်၊ သင်သည် လိုက်ဖက်ညီသော ဆာဗာသို့ ဦးစွာ ချိတ်ဆက်ရပါမည်။ ဆာဗာအချက်အလက်အတွက် သင့်အဖွဲ့အစည်းကို မေးမြန်းပြီး <a href="tella_scheme://open.collect.manage.servers.activity"> ဆာဗာကို ဤနေရာတွင် တည်ဆောက်ပါ </a> ။</string>
     <string name="collect.sent_expl_no.forms">ပြသရန် တင်သွင်းထားသော ပုံစံများ မရှိပါ။</string>
@@ -1099,7 +1099,7 @@
     <string name="verification.info_field_location.accuracy">Accuracy</string>
     <string name="verification.info_field_location.altitude">Altitude</string>
     <string name="verification.info_field_ambient.temperature">Ambient temperature</string>
-    <string name="verification.info_field_light">Light</string>
+    <string name="verification.info_field_light">Light level</string>
     <string name="verification.info_subheading_network.metadata">Network</string>
     <string name="verification.info_subheading_location.metadata">Location</string>
     <string name="verification.info_subheading_other.metadata">Environment</string>

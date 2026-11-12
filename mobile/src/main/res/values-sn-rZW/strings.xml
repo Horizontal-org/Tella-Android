@@ -118,7 +118,7 @@
     <string name="settings.camo_expl">Keta zina lokuvhiga ndilona Tella hako pa foni hako. Ona kuti Tella inolamba heoneka pa seti ho foni.</string>
     <string name="gallery_action.desc_save.to.device">Kuvhiga pa foni</string>
     <string name="settings.docu_verification_action">Maonere</string>
-    <string name="settings.docu_verification_action.expl">Itakuti swikwama swako swo mapepa nau swioneke we tola mashoko pa foni hako nokukombidja ndau.</string>
+    <string name="settings.docu_verification_action.expl">Makes it easier to verify where and when a photo, video, or audio recording was captured by collecting information about your device and location.</string>
     <string name="collect_no.form_heading">Kutola mashoko kakachipa</string>
     <string name="collect_expl_not.connected.to.server">Kuti utambire ndau no kutumira mashoko, unondikana ku batana no mudjeke. Kumbira bato lako swirimaererano no mudjeke. <a href="tella_scheme://open.collect.manage.servers.activity">Endeni seta Mudjeke</a>.</string>
     <string name="collect.sent_expl_no.forms">Apana ndau ndjokutumirwa djingakombidjwa.</string>
@@ -1115,7 +1115,7 @@
     <string name="verification.info_field_location.accuracy">Accuracy</string>
     <string name="verification.info_field_location.altitude">Altitude</string>
     <string name="verification.info_field_ambient.temperature">Ambient temperature</string>
-    <string name="verification.info_field_light">Light</string>
+    <string name="verification.info_field_light">Light level</string>
     <string name="verification.info_subheading_network.metadata">Network</string>
     <string name="verification.info_subheading_location.metadata">Location</string>
     <string name="verification.info_subheading_other.metadata">Environment</string>

@@ -158,6 +158,7 @@ abstract class BaseActivity : AppCompatActivity() {
     private fun maybeRestoreExitTimeOut() {
         if (Preferences.isExitTimeout()) {
             LockTimeoutManager.setCurrentTimeout(Preferences.getLockTimeout())
+            Preferences.setExitTimeout(false)
             Preferences.setTempTimeout(false)
         }
     }

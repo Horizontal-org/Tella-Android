@@ -118,7 +118,7 @@
     <string name="settings.camo_expl">Tella-nı cihazınızda daha yaxşı gizlətmək üçün uyğun təsvir və ad seçin. Nəzərə alın ki, Android ayarlarında Tella-nın təsviri görünür.</string>
     <string name="gallery_action.desc_save.to.device">Cihazda saxla</string>
     <string name="settings.docu_verification_action">Təsdiqləmə rejimi</string>
-    <string name="settings.docu_verification_action.expl">Cihazınız və məkanınız haqda informasiya toplamaqla sizin media fayllarınızı yoxlanıla bilən edir.</string>
+    <string name="settings.docu_verification_action.expl">Makes it easier to verify where and when a photo, video, or audio recording was captured by collecting information about your device and location.</string>
     <string name="collect_no.form_heading">Məlumatların asanlıqla toplanması</string>
     <string name="collect_expl_not.connected.to.server">Formaları almaq və məlumatları göndərmək üçün əvval uyğun serverə qoşulmalısız. Təşkilatınızdan server haqda məlumat alın və<a href="tella_scheme://open.collect.manage.servers.activity"> serveri burda quraşdırın</a>.</string>
     <string name="collect.sent_expl_no.forms">Göndərilmiş forma yoxdur.</string>
@@ -1115,7 +1115,7 @@
     <string name="verification.info_field_location.accuracy">Accuracy</string>
     <string name="verification.info_field_location.altitude">Altitude</string>
     <string name="verification.info_field_ambient.temperature">Ambient temperature</string>
-    <string name="verification.info_field_light">Light</string>
+    <string name="verification.info_field_light">Light level</string>
     <string name="verification.info_subheading_network.metadata">Network</string>
     <string name="verification.info_subheading_location.metadata">Location</string>
     <string name="verification.info_subheading_other.metadata">Environment</string>

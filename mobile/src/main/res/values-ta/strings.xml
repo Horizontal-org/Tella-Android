@@ -118,7 +118,7 @@
     <string name="settings.camo_expl">உங்கள் சாதனத்தில் டெல்லாவை சிறப்பாக மறைக்க தனிப்பயன் படவுரு மற்றும் பெயரைத் தேர்ந்தெடுக்கவும். ஆண்ட்ராய்டு அமைப்புகளிலிருந்து டெல்லாவின் உண்மையான படவுரு தெரியும் என்பதை நினைவில் கொள்க.</string>
     <string name="gallery_action.desc_save.to.device">சாதனத்தில் சேமி</string>
     <string name="settings.docu_verification_action">சரிபார்ப்பு முறை</string>
-    <string name="settings.docu_verification_action.expl">உங்கள் சாதனம் மற்றும் இருப்பிடம் பற்றிய தகவல்களைச் சேகரிப்பதன் மூலம் உங்கள் மீடியா கோப்புகளை சரிபார்க்க முடியும்.</string>
+    <string name="settings.docu_verification_action.expl">Makes it easier to verify where and when a photo, video, or audio recording was captured by collecting information about your device and location.</string>
     <string name="collect_no.form_heading">எளிதான தரவு சேகரிப்பு</string>
     <string name="collect_expl_not.connected.to.server">படிவங்களைப் பெற மற்றும் படிவத் தரவைச் சமர்ப்பிக்க, நீங்கள் முதலில் இணக்கமான சேவையகத்துடன் இணைக்க வேண்டும். சேவையக தகவலை உங்கள் நிறுவனத்திடம் கேட்டு சேவையக விவரங்களை இங்கே அமைக்கவும்</string>
     <string name="collect.sent_expl_no.forms">உங்களுக்கு காண்பிக்க சமர்ப்பிக்கப்பட்ட படிவங்கள் எதுவும் இல்லை.</string>
@@ -1115,7 +1115,7 @@
     <string name="verification.info_field_location.accuracy">Accuracy</string>
     <string name="verification.info_field_location.altitude">Altitude</string>
     <string name="verification.info_field_ambient.temperature">Ambient temperature</string>
-    <string name="verification.info_field_light">Light</string>
+    <string name="verification.info_field_light">Light level</string>
     <string name="verification.info_subheading_network.metadata">Network</string>
     <string name="verification.info_subheading_location.metadata">Location</string>
     <string name="verification.info_subheading_other.metadata">Environment</string>

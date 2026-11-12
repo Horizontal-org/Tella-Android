@@ -117,7 +117,7 @@
     <string name="settings.camo_expl">Chọn biểu tượng và tên tùy chỉnh để ẩn Tella tốt hơn trên thiết bị của bạn. Lưu ý rằng biểu tượng Tella vẫn hiển thị trong cài đặt Android.</string>
     <string name="gallery_action.desc_save.to.device">Lưu vào thiết bị</string>
     <string name="settings.docu_verification_action">Chế độ xác thực</string>
-    <string name="settings.docu_verification_action.expl">Các tệp tin phương tiện của bạn có thể xác minh được bằng cách thu thập thông tin về thiết bị và vị trí của bạn.</string>
+    <string name="settings.docu_verification_action.expl">Makes it easier to verify where and when a photo, video, or audio recording was captured by collecting information about your device and location.</string>
     <string name="collect_no.form_heading">Thu thập dữ liệu dễ dàng</string>
     <string name="collect_expl_not.connected.to.server">Để nhận biểu mẫu và gửi dữ liệu, trước tiên bạn phải kết nối với một máy chủ tương thích. Hãy hỏi tổ chức của bạn để lấy thông tin máy chủ và <a href="tella_scheme://open.collect.manage.servers.activity">thiết lập máy chủ tại đây</a>.</string>
     <string name="collect.sent_expl_no.forms">Không có biểu mẫu đã gửi để hiển thị.</string>
@@ -1099,7 +1099,7 @@
     <string name="verification.info_field_location.accuracy">Accuracy</string>
     <string name="verification.info_field_location.altitude">Altitude</string>
     <string name="verification.info_field_ambient.temperature">Ambient temperature</string>
-    <string name="verification.info_field_light">Light</string>
+    <string name="verification.info_field_light">Light level</string>
     <string name="verification.info_subheading_network.metadata">Network</string>
     <string name="verification.info_subheading_location.metadata">Location</string>
     <string name="verification.info_subheading_other.metadata">Environment</string>

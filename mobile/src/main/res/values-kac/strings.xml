@@ -118,7 +118,7 @@
     <string name="settings.camo_expl">Select a custom icon and name to better hide Tella on your device. Note that the Tella icon will remain visible from the Android settings.</string>
     <string name="gallery_action.desc_save.to.device">Jak rai kata hta e matsing bang da u</string>
     <string name="settings.docu_verification_action">Jep shagrin ai lai ladat</string>
-    <string name="settings.docu_verification_action.expl">Na a jak rai hte nga shara hte seng ai shiga lamai lamang ni hpe mahkawng ai let, na a shiga lamang nhtan ni hpe masat shagrin la lu ai.</string>
+    <string name="settings.docu_verification_action.expl">Makes it easier to verify where and when a photo, video, or audio recording was captured by collecting information about your device and location.</string>
     <string name="collect_no.form_heading">Loi ai shiga lamang mahkawng ai lam</string>
     <string name="collect_expl_not.connected.to.server">Hkrang laika ni hpe hkap la lu nna shiga lamang ni hpe tang shawn lu na matu, nang gaw shawng nnan htap htuk ai madung kompyuta jak langai ngai hte matut mahkai da ra ai. Madung kompyuta jak shiga lami lamang ni a matu, na a wuhpung wuhpawng hpe san yu nna, <a href="tella_scheme://open.collect.manage.Daw jau jak (server)s.activity">ndai kaw madung kompyuta jak hpe lajang shanjin u</a>.</string>
     <string name="collect.sent_expl_no.forms">Madun na matu tang shawn da ai hkrang laika ni n nga ai.</string>
@@ -1115,7 +1115,7 @@
     <string name="verification.info_field_location.accuracy">Accuracy</string>
     <string name="verification.info_field_location.altitude">Altitude</string>
     <string name="verification.info_field_ambient.temperature">Ambient temperature</string>
-    <string name="verification.info_field_light">Light</string>
+    <string name="verification.info_field_light">Light level</string>
     <string name="verification.info_subheading_network.metadata">Network</string>
     <string name="verification.info_subheading_location.metadata">Location</string>
     <string name="verification.info_subheading_other.metadata">Environment</string>

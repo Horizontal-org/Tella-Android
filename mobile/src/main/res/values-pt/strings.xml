@@ -118,7 +118,7 @@
     <string name="settings.camo_expl">Selecione um ícone e um nome personalizados para melhor ocultar o Tella no seu aparelho. Note que o ícone do Tella permanecerá visível no menu de configurações do Android.</string>
     <string name="gallery_action.desc_save.to.device">Salvar no aparelho celular</string>
     <string name="settings.docu_verification_action">Modo de verificação</string>
-    <string name="settings.docu_verification_action.expl">Torna seus arquivos de mídia verificáveis, coletando informações sobre seu aparelho celular e localização.</string>
+    <string name="settings.docu_verification_action.expl">Makes it easier to verify where and when a photo, video, or audio recording was captured by collecting information about your device and location.</string>
     <string name="collect_no.form_heading">Coleta de dados fácil</string>
     <string name="collect_expl_not.connected.to.server">Para receber formulários e enviar dados, você deve primeiro se conectar a um servidor compatível. Peça à organização patrocinadora as informações do servidor e <a href="tella_scheme://open.collect.manage.servers.activity"> configure o servidor aqui </a> .</string>
     <string name="collect.sent_expl_no.forms">Não há formulários enviados a serem exibidos.</string>
@@ -1115,7 +1115,7 @@
     <string name="verification.info_field_location.accuracy">Accuracy</string>
     <string name="verification.info_field_location.altitude">Altitude</string>
     <string name="verification.info_field_ambient.temperature">Ambient temperature</string>
-    <string name="verification.info_field_light">Light</string>
+    <string name="verification.info_field_light">Light level</string>
     <string name="verification.info_subheading_network.metadata">Network</string>
     <string name="verification.info_subheading_location.metadata">Location</string>
     <string name="verification.info_subheading_other.metadata">Environment</string>

@@ -117,7 +117,7 @@
     <string name="settings.camo_expl">Pilih ikon dan nama khusus untuk menyembunyikan Tella dengan lebih baik di perangkat Anda. Ingatlah bahwa ikon Tella akan tetap terlihat dari pengaturan Android.</string>
     <string name="gallery_action.desc_save.to.device">Simpan ke perangkat</string>
     <string name="settings.docu_verification_action">Mode verifikasi</string>
-    <string name="settings.docu_verification_action.expl">Membuat file media Anda dapat diverifikasi dengan mengumpulkan informasi tentang perangkat dan lokasi Anda.</string>
+    <string name="settings.docu_verification_action.expl">Makes it easier to verify where and when a photo, video, or audio recording was captured by collecting information about your device and location.</string>
     <string name="collect_no.form_heading">Pengumpulan data yang mudah</string>
     <string name="collect_expl_not.connected.to.server">Untuk menerima formulir dan mengirimkan data, Anda harus terlebih dulu terhubung ke peladen yang kompatibel. Tanyakan informasi peladen kepada organisasi Anda dan <a href="tella_scheme://open.collect.manage.servers.activity">siapkan peladen di sini</a>.</string>
     <string name="collect.sent_expl_no.forms">Tidak ada formulir yang dikirimkan untuk ditampilkan.</string>
@@ -1099,7 +1099,7 @@
     <string name="verification.info_field_location.accuracy">Accuracy</string>
     <string name="verification.info_field_location.altitude">Altitude</string>
     <string name="verification.info_field_ambient.temperature">Ambient temperature</string>
-    <string name="verification.info_field_light">Light</string>
+    <string name="verification.info_field_light">Light level</string>
     <string name="verification.info_subheading_network.metadata">Network</string>
     <string name="verification.info_subheading_location.metadata">Location</string>
     <string name="verification.info_subheading_other.metadata">Environment</string>

@@ -118,7 +118,7 @@
     <string name="settings.camo_expl">ನಿಮ್ಮ ಸಾಧನದಲ್ಲಿ Tellaಗೆ ಮರೆಮಾಡಲು ಆ ಕಸ್ಟಮ್ ಐಕಾನ್ ಮತ್ತು ಹೆಸರನ್ನು ಆಯ್ಕೆಮಾಡಿ. ಆಂಡ್ರಾಯ್ಡ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳಿಂದ Tella ಐಕಾನ್ ಕಾಣಬರುತ್ತದೆ ಎಂಬುದನ್ನು ಗಮನಿಸಿ.</string>
     <string name="gallery_action.desc_save.to.device">ಸಾಧನದಲ್ಲಿ ಉಳಿಸಿರಿ</string>
     <string name="settings.docu_verification_action">ಪರಿಶೀಲನಾ ವಿಧ</string>
-    <string name="settings.docu_verification_action.expl">ನಿಮ್ಮ ಸಾಧನ ಮತ್ತು ಸ್ಥಳದ ಬಗ್ಗೆ ಮಾಹಿತಿಯನ್ನು ಸಂಗ್ರಹಿಸುವ ಮೂಲಕ ನಿಮ್ಮ ಮೀಡಿಯ ಫೈಲ್‌ಗಳನ್ನು ಪರಿಶೀಲಿಸುವಂತೆ ಮಾಡುತ್ತದೆ.</string>
+    <string name="settings.docu_verification_action.expl">Makes it easier to verify where and when a photo, video, or audio recording was captured by collecting information about your device and location.</string>
     <string name="collect_no.form_heading">ಸುಲಭವಾಗಿ ಡೇಟಾ ಅನ್ನು ಸಂಗ್ರಹಿಸಿ</string>
     <string name="collect_expl_not.connected.to.server">ಫಾರ್ಮ್‌ಗಳನ್ನು ಸ್ವೀಕರಿಸಲು ಮತ್ತು ಡೇಟಾವನ್ನು ಸಲ್ಲಿಸಲು, ನೀವು ಮೊದಲು ಹೊಂದಾಣಿಕೆಯ ಸರ್ವರ್‌ಗೆ ಸಂಪರ್ಕ ಹೊಂದಬೇಕು. ಸರ್ವರ್ ಮಾಹಿತಿಗಾಗಿ ನಿಮ್ಮ ಸಂಸ್ಥೆಯನ್ನು ಕೇಳಿ ಮತ್ತು <a href="tella_scheme://open.collect.manage.servers.activity"> ರಲ್ಲಿ ಸರ್ವರ್ ಅನ್ನು ಹೊಂದಿಸಿ </a>.</string>
     <string name="collect.sent_expl_no.forms">ತೋರಿಸಲು ಯಾವುದೇ ಸಲ್ಲಿಸಿದ ಫಾರ್ಮ್‌ಗಳಿಲ್ಲ.</string>
@@ -1115,7 +1115,7 @@
     <string name="verification.info_field_location.accuracy">Accuracy</string>
     <string name="verification.info_field_location.altitude">Altitude</string>
     <string name="verification.info_field_ambient.temperature">Ambient temperature</string>
-    <string name="verification.info_field_light">Light</string>
+    <string name="verification.info_field_light">Light level</string>
     <string name="verification.info_subheading_network.metadata">Network</string>
     <string name="verification.info_subheading_location.metadata">Location</string>
     <string name="verification.info_subheading_other.metadata">Environment</string>
