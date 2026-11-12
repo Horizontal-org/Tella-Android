@@ -118,7 +118,7 @@
     <string name="settings.camo_expl">ဃုထၢထီၣ် တၢ်ပနီၣ်ဒီးတၢ်အမံၤတခါခါ ဒ်သိးတၢ်ကပာ်ခူသူၣ်ဃာ်Tellaအံၤလၢနစဲးဖီကဟၣ်ပီးလီအပူၤဂ့ၤဂ့ၤဘၣ်ဘၣ်ကန့ၢ်ကသ့အဂီၢ်န့ၣ်တက့ၢ်. ဘၣ်ဆၣ်သ့ၣ်ညါဘၣ်လၢ Tella အတၢ်ပနီၣ်ကအိၣ်ဖျါဒံးဝဲဖဲ Android အတၢ်ဆီလီၤပာ်လီၤအပူၤန့ၣ်လီၤ.</string>
     <string name="gallery_action.desc_save.to.device">ပာ်ကီၤဆူစဲးဖီကဟၣ်ပီးလီအပူၤ</string>
     <string name="settings.docu_verification_action">တၢ်သမံထံပာ်ဂၢၢ်ပာ်ကျၢၤအကျိၤအကျဲ</string>
-    <string name="settings.docu_verification_action.expl">ပာ်ဂၢၢ်ပာ်ကျၢၤမၤလီၤတံၢ်ဘၣ်နတၢ်ကစီၣ်လံာ်တြံာ်တဖၣ်အံၤ ခီဖျိတၢ်ထၢဖှိၣ်ဝဲ နစဲးဖီကဟၣ်ပီးလီအတၢ်ဂ့ၢ်တၢ်ကျိၤဒီးအတၢ်လီၢ်တၢ်ကျဲအတၢ်ဂ့ၢ်တၢ်ကျိၤန့ၣ်တက့ၢ်.</string>
+    <string name="settings.docu_verification_action.expl">Makes it easier to verify where and when a photo, video, or audio recording was captured by collecting information about your device and location.</string>
     <string name="collect_no.form_heading">တၢ်ထၢဖှိၣ်တၢ်ဂ့ၢ်တၢ်ကျိၤလၢအညီတဖၣ်</string>
     <string name="collect_expl_not.connected.to.server">လၢတၢ်ကဒိးန့ၢ်ဘၣ်ဝဲလံာ်ကွီၣ်ဒိဒီးတၢ်ကဆှၢထီၣ်ဝဲတၢ်ဂ့ၢ်တၢ်ကျိၤအဂီၢ်, အဆိကတၢၢ်နကဘၣ်ဘျးစဲဒီး အ့ထၢၣ်နဲးသန့လၢအဘၣ်လိာ်ဖိးဒ့တခါန့ၣ်လီၤ. သံကွၢ်နတၢ်ကရၢကရိဘၣ်ဃးအ့ထၢၣ်နဲးသန့အဂ့ၢ်အကျိၤဒီး <a href="tella_scheme://open.collect.manage.servers.activity">ကျဲၤလီၤပာ်လီၤ အ့ထၢၣ်နဲးသန့အကျိၤဖဲ </a> အံၤန့ၣ်တက့ၢ်.</string>
     <string name="collect.sent_expl_no.forms">လံာ်ကွီၣ်ဒိလၢတၢ်ဆှၢထီၣ်ဃာ်ဝဲတဖၣ် တအိၣ်နီတခါလၢ တၢ်ကဒုးနဲၣ်ဖျါထီၣ်အဂီၢ်န့ၣ်ဘၣ်.</string>
@@ -1115,7 +1115,7 @@
     <string name="verification.info_field_location.accuracy">Accuracy</string>
     <string name="verification.info_field_location.altitude">Altitude</string>
     <string name="verification.info_field_ambient.temperature">Ambient temperature</string>
-    <string name="verification.info_field_light">Light</string>
+    <string name="verification.info_field_light">Light level</string>
     <string name="verification.info_subheading_network.metadata">Network</string>
     <string name="verification.info_subheading_location.metadata">Location</string>
     <string name="verification.info_subheading_other.metadata">Environment</string>

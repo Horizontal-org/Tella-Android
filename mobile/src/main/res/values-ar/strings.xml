@@ -118,7 +118,7 @@
     <string name="settings.camo_expl">اختر أيقونة واسمًا مخصصين لتحسين إخفاء Tella على جهازك. يُرجى ملاحظة أن أيقونة Tella ستظل مرئية عبر إعدادات أندرويد.</string>
     <string name="gallery_action.desc_save.to.device">الحفظ على الجهاز</string>
     <string name="settings.docu_verification_action">وضع التحقق</string>
-    <string name="settings.docu_verification_action.expl">يجعل ملفات الوسائط الخاصة بك قابلة للتحقق من خلال جمع المعلومات عن جهازك وموقعك.</string>
+    <string name="settings.docu_verification_action.expl">Makes it easier to verify where and when a photo, video, or audio recording was captured by collecting information about your device and location.</string>
     <string name="collect_no.form_heading">الجمع السهل للبيانات</string>
     <string name="collect_expl_not.connected.to.server">للحصول على الاستمارات وإرسال البيانات، يجب عليك أولًا الاتصال بخادم متوافق. اطلب من منظمتك تزويدك بمعلومات الخادم <a href="tella_scheme://open.collect.manage.servers.activity">وقم بضبط إعدادات الخادم هنا</a>.</string>
     <string name="collect.sent_expl_no.forms">لا تتوفر استمارات مرسلة لعرضها.</string>
@@ -1115,7 +1115,7 @@
     <string name="verification.info_field_location.accuracy">Accuracy</string>
     <string name="verification.info_field_location.altitude">Altitude</string>
     <string name="verification.info_field_ambient.temperature">Ambient temperature</string>
-    <string name="verification.info_field_light">Light</string>
+    <string name="verification.info_field_light">Light level</string>
     <string name="verification.info_subheading_network.metadata">Network</string>
     <string name="verification.info_subheading_location.metadata">Location</string>
     <string name="verification.info_subheading_other.metadata">Environment</string>

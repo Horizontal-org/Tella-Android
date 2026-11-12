@@ -118,7 +118,7 @@
     <string name="settings.camo_expl">برای پنهان کردن بهتر Tella در دستگاه، یک نماد و نام سفارشی انتخاب کنید. توجه داشته باشید که نماد Tella از تنظیمات اندروید قابل مشاهده باقی خواهد ماند.</string>
     <string name="gallery_action.desc_save.to.device">ذخیره کردن در دستگاه</string>
     <string name="settings.docu_verification_action">حالت راستی‌آزمایی</string>
-    <string name="settings.docu_verification_action.expl">با جمع‌آوری اطلاعات مربوط به دستگاه و مکان شما، فایل‌های رسانه ای شما را قابل تأیید می‌کند.</string>
+    <string name="settings.docu_verification_action.expl">Makes it easier to verify where and when a photo, video, or audio recording was captured by collecting information about your device and location.</string>
     <string name="collect_no.form_heading">جمع‌آوری آسان داده</string>
     <string name="collect_expl_not.connected.to.server">برای دریافت فرم‌ها و ارسال داده‌ها، باید ابتدا به سرور سازگار متصل شوید. اطلاعات سرور را از سازمان خود بخواهید و <a href="tella_scheme://open.collect.manage.servers.activity">اینجا یک سرور راه‌اندازی کنید</a>.</string>
     <string name="collect.sent_expl_no.forms">هیچ فرم ارسال‌شده ای برای نمایش وجود ندارد.</string>
@@ -1115,7 +1115,7 @@
     <string name="verification.info_field_location.accuracy">Accuracy</string>
     <string name="verification.info_field_location.altitude">Altitude</string>
     <string name="verification.info_field_ambient.temperature">Ambient temperature</string>
-    <string name="verification.info_field_light">Light</string>
+    <string name="verification.info_field_light">Light level</string>
     <string name="verification.info_subheading_network.metadata">Network</string>
     <string name="verification.info_subheading_location.metadata">Location</string>
     <string name="verification.info_subheading_other.metadata">Environment</string>

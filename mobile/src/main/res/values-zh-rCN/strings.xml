@@ -117,7 +117,7 @@
     <string name="settings.camo_expl">选择自定义图标和名称，可在设备上更好地隐藏 Tella。请注意，在安卓系统设置中，Tella 图标仍然可见。</string>
     <string name="gallery_action.desc_save.to.device">保存到设备</string>
     <string name="settings.docu_verification_action">验证模式</string>
-    <string name="settings.docu_verification_action.expl">收集设备和位置信息，以便对您的媒体文件进行验证。</string>
+    <string name="settings.docu_verification_action.expl">Makes it easier to verify where and when a photo, video, or audio recording was captured by collecting information about your device and location.</string>
     <string name="collect_no.form_heading">轻松收集数据</string>
     <string name="collect_expl_not.connected.to.server">为了接收表单和提交数据，必须首先连接到兼容的服务器。请咨询您的组织获取服务器信息，并<a href="tella_scheme://open.collect.manage.servers.activity">在此处设置服务器</a>。</string>
     <string name="collect.sent_expl_no.forms">没有已提交表单可显示。</string>
@@ -1099,7 +1099,7 @@
     <string name="verification.info_field_location.accuracy">Accuracy</string>
     <string name="verification.info_field_location.altitude">Altitude</string>
     <string name="verification.info_field_ambient.temperature">Ambient temperature</string>
-    <string name="verification.info_field_light">Light</string>
+    <string name="verification.info_field_light">Light level</string>
     <string name="verification.info_subheading_network.metadata">Network</string>
     <string name="verification.info_subheading_location.metadata">Location</string>
     <string name="verification.info_subheading_other.metadata">Environment</string>

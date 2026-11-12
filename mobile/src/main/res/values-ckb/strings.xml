@@ -118,7 +118,7 @@
     <string name="settings.camo_expl">ئایکۆن و ناوێکی دڵخوازی خۆت هەڵبژێرە بۆ باشتر شاردنەوەی تێلا لەسەر ئامێرەکەت. سەرنج بدە کە ئایکۆنی تێلا لە ڕێکخستنەکانی ئەندرۆیدەوە دەبیندرێت.</string>
     <string name="gallery_action.desc_save.to.device">پاشەکەوتکردن لە ئامێرەکەدا</string>
     <string name="settings.docu_verification_action">دۆخی سەلماندن</string>
-    <string name="settings.docu_verification_action.expl">بە کۆکردنەوەی زانیاری دەربارەی ئامێرەکەت و شوێنەکەت فایلە میدیاییەکانت سەلمێندراو دەبن.</string>
+    <string name="settings.docu_verification_action.expl">Makes it easier to verify where and when a photo, video, or audio recording was captured by collecting information about your device and location.</string>
     <string name="collect_no.form_heading">کۆکردنەوەیی ئاسانی داتا</string>
     <string name="collect_expl_not.connected.to.server">بۆ وەرگرتنی فۆرمەکان و پێشکەشکردنی داتا، پێویستە سەرەتا پەیوەندی بکەیت بە سێرڤەرێکی گونجاوەوە. داوا لە ڕێکخراوەکەت بکە بۆ زانیاری سێرڤەرەکە و <a href="tella_scheme://open.collect.manage.servers.activity">لێرە سێرڤەرەکە دابمەزرێنە</a>.</string>
     <string name="collect.sent_expl_no.forms">هیچ فۆرمێکی پێشکەشکراو نییە بۆ پیشاندان.</string>
@@ -1115,7 +1115,7 @@
     <string name="verification.info_field_location.accuracy">Accuracy</string>
     <string name="verification.info_field_location.altitude">Altitude</string>
     <string name="verification.info_field_ambient.temperature">Ambient temperature</string>
-    <string name="verification.info_field_light">Light</string>
+    <string name="verification.info_field_light">Light level</string>
     <string name="verification.info_subheading_network.metadata">Network</string>
     <string name="verification.info_subheading_location.metadata">Location</string>
     <string name="verification.info_subheading_other.metadata">Environment</string>

@@ -120,7 +120,7 @@
     <string name="settings.camo_expl">Виберіть власний значок та назву, щоб краще приховати Tella на вашому пристрої. Зауважте, що значок Tella все одно буде видно в налаштуваннях Android.</string>
     <string name="gallery_action.desc_save.to.device">Зберегти на пристрій</string>
     <string name="settings.docu_verification_action">Режим перевірки</string>
-    <string name="settings.docu_verification_action.expl">Робить ваші медіафайли такими, що піддаються перевірці, шляхом збору інформації про ваш пристрій і місцезнаходження.</string>
+    <string name="settings.docu_verification_action.expl">Makes it easier to verify where and when a photo, video, or audio recording was captured by collecting information about your device and location.</string>
     <string name="collect_no.form_heading">Простий збір даних</string>
     <string name="collect_expl_not.connected.to.server">Щоб отримувати форми та надсилати дані, спочатку потрібно під’єднатися до сумісного сервера. Запитайте інформацію про сервер у вашій організації та <a href="tella_scheme://open.collect.manage.servers.activity">налаштуйте сервер тут</a>.</string>
     <string name="collect.sent_expl_no.forms">Немає надісланих форм для відображення.</string>
@@ -1147,7 +1147,7 @@
     <string name="verification.info_field_location.accuracy">Точність</string>
     <string name="verification.info_field_location.altitude">Висота</string>
     <string name="verification.info_field_ambient.temperature">Температура довкілля</string>
-    <string name="verification.info_field_light">Освітленість</string>
+    <string name="verification.info_field_light">Light level</string>
     <string name="verification.info_subheading_network.metadata">Мережа</string>
     <string name="verification.info_subheading_location.metadata">Місцезнаходження</string>
     <string name="verification.info_subheading_other.metadata">Environment</string>

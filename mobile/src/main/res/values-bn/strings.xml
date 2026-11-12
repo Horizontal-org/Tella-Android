@@ -118,7 +118,7 @@
     <string name="settings.camo_expl">আপনার ডিভাইসে Tella আরও ভালোভাবে লুকানোর জন্য একটি কাস্টম আইকন এবং নাম নির্বাচন করুন। মনে রাখবেন যে টেলা আইকনটি অ্যান্ড্রয়েড সেটিংস থেকে দৃশ্যমান থাকবে।</string>
     <string name="gallery_action.desc_save.to.device">ডিভাইসে সংরক্ষণ করুন</string>
     <string name="settings.docu_verification_action">যাচাইকরণ মোড</string>
-    <string name="settings.docu_verification_action.expl">আপনার ডিভাইস এবং অবস্থান সম্পর্কে তথ্য সংগ্রহ করে আপনার মিডিয়া ফাইলগুলিকে যাচাইযোগ্য করে তোলে৷</string>
+    <string name="settings.docu_verification_action.expl">Makes it easier to verify where and when a photo, video, or audio recording was captured by collecting information about your device and location.</string>
     <string name="collect_no.form_heading">সহজ তথ্য সংগ্রহ</string>
     <string name="collect_expl_not.connected.to.server">ফর্মগুলি পেতে এবং ডেটা জমা দিতে, আপনাকে প্রথমে একটি সামঞ্জস্যপূর্ণ সার্ভারের সাথে সংযোগ করতে হবে৷ সার্ভারের তথ্যের জন্য আপনার প্রতিষ্ঠানকে জিজ্ঞাসা করুন এবং <a href="tella_scheme://open.collect.manage.servers.activity"> এখানে সার্ভার সেট আপ করুন </a> ।</string>
     <string name="collect.sent_expl_no.forms">দেখানোর মত কোন জমা ফর্ম নেই।</string>
@@ -1115,7 +1115,7 @@
     <string name="verification.info_field_location.accuracy">Accuracy</string>
     <string name="verification.info_field_location.altitude">Altitude</string>
     <string name="verification.info_field_ambient.temperature">Ambient temperature</string>
-    <string name="verification.info_field_light">Light</string>
+    <string name="verification.info_field_light">Light level</string>
     <string name="verification.info_subheading_network.metadata">Network</string>
     <string name="verification.info_subheading_location.metadata">Location</string>
     <string name="verification.info_subheading_other.metadata">Environment</string>
