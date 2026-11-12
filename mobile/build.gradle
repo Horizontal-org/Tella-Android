@@ -352,6 +352,8 @@ dependencies {
 
 
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3' // Use the latest version
+    implementation "ie.equalit.ouinet:ouisync-session:0.10.0-0"
+    implementation "ie.equalit.ouinet:ouisync-service:0.10.0-0"
 
 
     // Add exclusions to prevent other libraries from pulling in xmlpull

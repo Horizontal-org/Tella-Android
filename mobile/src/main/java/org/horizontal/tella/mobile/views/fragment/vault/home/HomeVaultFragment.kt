@@ -36,6 +36,7 @@ import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.bus.EventCompositeDisposable
 import org.horizontal.tella.mobile.bus.EventObserver
 import org.horizontal.tella.mobile.bus.event.RecentBackgroundActivitiesEvent
+import org.horizontal.tella.mobile.data.ouisync.OuisyncClient
 import org.horizontal.tella.mobile.data.sharedpref.Preferences
 import org.horizontal.tella.mobile.data.sharedpref.Preferences.isAlreadyMigratedMainDB
 import org.horizontal.tella.mobile.data.sharedpref.Preferences.isFreshInstall
@@ -495,6 +496,10 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
                 nav().navigateSafe(R.id.action_homeScreen_to_peerToPeer_screen)
             }
 
+            ServerType.OUISYNC -> {
+                nav().navigateSafe(R.id.action_homeScreen_to_ouisync_screen)
+            }
+
             ServerType.ADD_BUTTON -> {
                 baseActivity.startActivity(
                     Intent(
@@ -801,6 +806,9 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
             serversList?.add(ServerDataItem(emptyList(), ServerType.PEERTOPEER))
         }
 
+        if (OuisyncClient.isSupported) {
+            serversList?.add(ServerDataItem(emptyList(), ServerType.OUISYNC))
+        }
         serversList?.add(ServerDataItem(emptyList(), ServerType.ADD_BUTTON))
 
         maybeShowConnections()
