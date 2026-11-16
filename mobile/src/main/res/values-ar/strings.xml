@@ -9,7 +9,7 @@
     <string name="settings_menu.item_contact">الاتصال بنا</string>
     <string name="collect_dialog.text_download.progress">تنزيل الاستمارة</string>
     <string name="collect_toast_download.completed">لقد اكتمل التنزيل</string>
-    <string name="collect.draft_tab.title">Drafts</string>
+    <string name="collect.draft_tab.title">مسودات</string>
     <string name="collect.blank_action_download.form">تنزيل</string>
     <string name="settings_text_empty.field">لا يمكن ترك هذا الحقل فارغا.</string>
     <string name="home_toast_back.exit">يُرجة لمس زر « الرجوع » مرة أخرى لمغادرة التطبيق</string>
