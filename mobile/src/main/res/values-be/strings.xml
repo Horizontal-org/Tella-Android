@@ -184,7 +184,10 @@
     <string name="collect.form_signature_toast_fail.saving">Пры захаванні подпісу адбылася памылка</string>
     <string name="collect.form_acknowledge_select.expl">OK. Калі ласка, працягвайце.</string>
     <plurals name="collect.end_meta_number.of.elements">
-        <item quantity="one">%d file</item>
+        <item quantity="one">%d файл</item>
+        <item quantity="few">%d файлы</item>
+        <item quantity="many">%d файлаў</item>
+        <item quantity="other">%d файлаў</item>
     </plurals>
     <string name="action_learn.more">Даведайцеся больш</string>
     <string name="settings.servers_add.server_dialog.title">Дадаць сервер</string>
@@ -396,7 +399,10 @@
     <string name="Vault_CreateFolder_SheetAction">Create</string>
     <string name="ServerSettings_ServerName_ToolTip">Give your server a name to recognize it if you add more servers later. It could be the organization’s name, the project’s name, etc.</string>
     <plurals name="Vault_Importing_SheetProgress">
-        <item quantity="one">file imported</item>
+        <item quantity="one">файл імпартаваны</item>
+        <item quantity="few">файлы імпартаваныя</item>
+        <item quantity="many">файлаў імпартавана</item>
+        <item quantity="other">файлаў імпартавана</item>
     </plurals>
     <string name="Vault_Importing_SheetTitle">Importing and encrypting</string>
     <string name="Rec_Exit_SheetTitle">Save recording?</string>
@@ -478,7 +484,10 @@
     <string name="Uwazi_Server_Title">Server :</string>
     <string name="Uwazi_Template_Title">Template :</string>
     <plurals name="Uwazi_MiltiFileWidget_FilesAttached">
-        <item quantity="one">%1$d file attached</item>
+        <item quantity="one">%1$d файл далучаны</item>
+        <item quantity="few">%1$d файлы далучаныя</item>
+        <item quantity="many">%1$d файлаў далучана</item>
+        <item quantity="other">%1$d файлаў далучана</item>
     </plurals>
     <string name="Uwazi_MiltiFileWidget_SelectFiles">Select files</string>
     <string name="Uwazi_MiltiFileWidget_SelectPdfFiles">Select PDF files</string>
@@ -504,19 +513,34 @@
     <string name="Collect_Subtitle_RemoveForm">Are you sure you want to remove \"%1$s\"?</string>
     <string name="Util_ellapsedTime_Year">More than a year ago</string>
     <plurals name="Util_ellapsedTime_Months">
-        <item quantity="one">A month ago</item>
+        <item quantity="one">Месяц таму</item>
+        <item quantity="few">%d месяцы таму</item>
+        <item quantity="many">%d месяцаў таму</item>
+        <item quantity="other">%d месяцаў таму</item>
     </plurals>
     <plurals name="Util_ellapsedTime_Weeks">
-        <item quantity="one">A week ago</item>
+        <item quantity="one">Тыдзень таму</item>
+        <item quantity="few">%d тыдні таму</item>
+        <item quantity="many">%d тыдняў таму</item>
+        <item quantity="other">%d тыдняў таму</item>
     </plurals>
     <plurals name="Util_ellapsedTime_Days">
-        <item quantity="one">One day ago</item>
+        <item quantity="one">Адзін дзень таму</item>
+        <item quantity="few">%d дні таму</item>
+        <item quantity="many">%d дзён таму</item>
+        <item quantity="other">%d дзён таму</item>
     </plurals>
     <plurals name="Util_ellapsedTime_Hours">
-        <item quantity="one">An hour ago</item>
+        <item quantity="one">Гадзіну таму</item>
+        <item quantity="few">%d гадзіны таму</item>
+        <item quantity="many">%d гадзін таму</item>
+        <item quantity="other">%d гадзін таму</item>
     </plurals>
     <plurals name="Util_ellapsedTime_Minutes">
-        <item quantity="one">A minute ago</item>
+        <item quantity="one">Хвіліну таму</item>
+        <item quantity="few">%d хвіліны таму</item>
+        <item quantity="many">%d хвілін таму</item>
+        <item quantity="other">%d хвілін таму</item>
     </plurals>
     <string name="Util_ellapsedTime_Seconds">A few seconds ago</string>
     <string name="Donwload_Templates_Title_Description">These are the templates available on the Uwazi instances you are connected to.</string>
@@ -604,14 +628,23 @@
     <string name="settings.docu_auto.delete_action.expl">Tella will automatically delete the files from your device as soon as they are uploaded to the server.</string>
     <string name="settings.docu_delete.upload.server_dialog.expl">You will no longer be able to upload files to this server.</string>
     <plurals name="upload.main_meta_number.of.files">
-        <item quantity="one">One file</item>
+        <item quantity="one">Адзін файл</item>
+        <item quantity="few">%d файлы</item>
+        <item quantity="many">%d файлаў</item>
+        <item quantity="other">%d файлаў</item>
     </plurals>
     <string name="upload.main_meta_number.of.files_with_average" formatted="false">%d/%d MB uploaded</string>
     <plurals name="upload.main_meta_number.of.files.uploaded">
-        <item quantity="one">%d file uploaded</item>
+        <item quantity="one">%d файл запампаваны</item>
+        <item quantity="few">%d файлы запампаваныя</item>
+        <item quantity="many">%d файлаў запампавана</item>
+        <item quantity="other">%d файлаў запампавана</item>
     </plurals>
     <plurals name="upload.main_meta_minutes.left">
-        <item quantity="one">%d minute left</item>
+        <item quantity="one">Засталася %d хвіліна</item>
+        <item quantity="few">Засталося %d хвіліны</item>
+        <item quantity="many">Засталося %d хвілін</item>
+        <item quantity="other">Засталося %d хвілін</item>
     </plurals>
     <string name="settings.select_customization">Customization</string>
     <string name="Uwazi_Send_Header_Title">End of entity</string>
@@ -811,7 +844,10 @@
     <string name="Sensitive_Chnage_Description">The next version of Tella (to be released on 15 July 2024) will include major technical improvements. These changes carry a small risk that some files are lost when updating to the new version. If you store sensitive files in Tella, we advise you to copy them to a safe place outside of Tella before the update. Tap ‘Learn More’ below for more information on the upcoming changes and guidance on how to export all files from Tella.</string>
     <string name="Learn_More">LEARN MORE</string>
     <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
-        <item quantity="one">%1$d entity selected</item>
+        <item quantity="one">Выбрана %1$d сутнасць</item>
+        <item quantity="few">Выбраны %1$d сутнасці</item>
+        <item quantity="many">Выбрана %1$d сутнасцяў</item>
+        <item quantity="other">Выбрана %1$d сутнасцяў</item>
     </plurals>
     <string name="Uwazi_RelationShipWidget_Select_Entities">Select the entities you want to connect to this property.</string>
     <string name="Analytics_contribute_reminder_title">You are sharing data</string>
@@ -998,14 +1034,23 @@
     <string name="success_title">Success</string>
     <string name="failure_title">Something went wrong</string>
     <plurals name="success_file_received_from_sender">
-        <item quantity="one">You have successfully received %1$d file from the sender.</item>
+        <item quantity="one">Вы паспяхова атрымалі ад адпраўніка %1$d файл.</item>
+        <item quantity="few">Вы паспяхова атрымалі ад адпраўніка %1$d файлы.</item>
+        <item quantity="many">Вы паспяхова атрымалі ад адпраўніка %1$d файлаў.</item>
+        <item quantity="other">Вы паспяхова атрымалі ад адпраўніка %1$d файлаў.</item>
     </plurals>
     <plurals name="success_file_sent_to_recipient">
-        <item quantity="one">You have successfully sent %1$d file to the recipient.</item>
+        <item quantity="one">Вы паспяхова адправілі атрымальніку %1$d файл.</item>
+        <item quantity="few">Вы паспяхова адправілі атрымальніку %1$d файлы.</item>
+        <item quantity="many">Вы паспяхова адправілі атрымальніку %1$d файлаў.</item>
+        <item quantity="other">Вы паспяхова адправілі атрымальніку %1$d файлаў.</item>
     </plurals>
     <string name="partial_success_summary">Only %1$d files were received. %2$d files were not received.</string>
     <plurals name="failure_file_received_expl">
-        <item quantity="one">0 files were received. %1$d file was not received.</item>
+        <item quantity="one">Атрымана 0 файлаў. Не ўдалося атрымаць %1$d файл.</item>
+        <item quantity="few">Атрымана 0 файлаў. Не ўдалося атрымаць %1$d файлы.</item>
+        <item quantity="many">Атрымана 0 файлаў. Не ўдалося атрымаць %1$d файлаў.</item>
+        <item quantity="other">Атрымана 0 файлаў. Не ўдалося атрымаць %1$d файлаў.</item>
     </plurals>
     <string name="view_files_action">View Files</string>
     <string name="view_files">VIEW FILES</string>

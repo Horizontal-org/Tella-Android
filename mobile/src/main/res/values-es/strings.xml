@@ -510,9 +510,11 @@
     </plurals>
     <plurals name="Util_ellapsedTime_Weeks">
         <item quantity="one">Hace una semana</item>
+        <item quantity="other">Hace %d semanas</item>
     </plurals>
     <plurals name="Util_ellapsedTime_Days">
-        <item quantity="one">Hace un dia</item>
+        <item quantity="one">Hace un día</item>
+        <item quantity="other">Hace %d días</item>
     </plurals>
     <plurals name="Util_ellapsedTime_Hours">
         <item quantity="one">An hour ago</item>

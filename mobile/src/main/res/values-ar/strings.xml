@@ -668,7 +668,7 @@
     <string name="Project_Url_Screen_Title">أدخل عنوان URL للمشروع</string>
     <string name="Report_Dialog_Draft_Title">هل ترغب في الخروج من التقرير؟</string>
     <string name="Report_Server_Already_Exist_Error">أنت متصل بالفعل بهذا المشروع. الرجاء إدخال عنوان URL آخر.</string>
-    <string name="Report_Deleted_Confirmation">تم حذف %</string>
+    <string name="Report_Deleted_Confirmation">تم حذف %s.</string>
     <string name="Report_Save_Outbox_Confirmation">تم حفظ التقرير في صندوق الصادر الخاص بك. يمكنك إرساله عندما تكون جاهزاً.</string>
     <string name="settings.camo_micamera">ميكاميرا MiCamera</string>
     <string name="settings.camo_forecast">أحوال الطقس</string>
