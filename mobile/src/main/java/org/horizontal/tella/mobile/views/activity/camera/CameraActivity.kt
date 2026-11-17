@@ -21,9 +21,12 @@ import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
+import androidx.annotation.OptIn
 import androidx.appcompat.app.AlertDialog
 import androidx.camera.camera2.interop.Camera2CameraInfo
+import androidx.camera.camera2.interop.ExperimentalCamera2Interop
 import androidx.camera.core.AspectRatio
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraInfo
@@ -98,8 +101,6 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     private lateinit var captureButton: CameraCaptureButton
     private lateinit var durationView: CameraDurationTextView
     private lateinit var mSeekBar: SeekBar
-    private lateinit var videoLine: View
-    private lateinit var photoLine: View
     private lateinit var previewView: ImageView
     private lateinit var photoModeText: TextView
     private lateinit var videoModeText: TextView
@@ -174,6 +175,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
             insets
         }
         ViewCompat.requestApplyInsets(binding.root)
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         initView()
         overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
         metadataAttacher = MetadataAttacher(this)
@@ -311,8 +313,13 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         setCameraZoom()
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun onBackPressed() {
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            handleBackPressed()
+        }
+    }
+
+    private fun handleBackPressed() {
         if (maybeStopVideoRecording()) return
         if (!Preferences.isAnonymousMode() && isAddingInProgress) {
             BottomSheetUtils.showConfirmSheet(
@@ -331,7 +338,6 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
             return
         }
 
-        super.onBackPressed()
         finish()
     }
 
@@ -401,7 +407,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     }
 
     private fun closeCamera() {
-        onBackPressed()
+        onBackPressedDispatcher.onBackPressed()
     }
 
     private fun rotateViews(rotation: Int) {
@@ -716,6 +722,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         flashSupportsTorch = hasFlash
     }
 
+    @OptIn(ExperimentalCamera2Interop::class)
     private fun deviceHasFlash(localCameraProvider: ProcessCameraProvider): Boolean {
         camera?.cameraInfo?.let { info ->
             if (info.hasFlashUnit()) return true
@@ -776,16 +783,16 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     }
 
     private fun setPhotoActive() {
-        videoLine.visibility = View.GONE
-        photoLine.visibility = View.VISIBLE
+        binding.photoMode.isSelected = true
+        binding.videoMode.isSelected = false
         photoModeText.alpha = 1f
         videoModeText.alpha = if (modeLocked) 0.1f else 0.5f
         resolutionButton.visibility = View.GONE
     }
 
     private fun setVideoActive() {
-        videoLine.visibility = View.VISIBLE
-        photoLine.visibility = View.GONE
+        binding.videoMode.isSelected = true
+        binding.photoMode.isSelected = false
         videoModeText.alpha = 1f
         photoModeText.alpha = if (modeLocked) 0.1f else 0.5f
         if (videoResolutionManager != null) {
@@ -809,6 +816,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         }
     }
 
+    @OptIn(ExperimentalCamera2Interop::class)
     private fun initVideoResolutionManager(localCameraProvider: ProcessCameraProvider) {
         val lensFacingInt = if (lensFacing == CameraSelector.DEFAULT_FRONT_CAMERA) {
             CameraCharacteristics.LENS_FACING_FRONT
@@ -865,8 +873,6 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         captureButton = binding.captureButton
         durationView = binding.durationView
         mSeekBar = binding.cameraZoom
-        videoLine = binding.videoLine
-        photoLine = binding.photoLine
         previewView = binding.previewImage
         photoModeText = binding.photoText
         videoModeText = binding.videoText
@@ -1187,6 +1193,8 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         )
     }
 
+    // withAudioEnabled() is only called after hasAudioPermission() confirms RECORD_AUDIO is granted.
+    @SuppressLint("MissingPermission")
     private fun recordVideo(): Boolean {
         try {
             if (recording != null) {
