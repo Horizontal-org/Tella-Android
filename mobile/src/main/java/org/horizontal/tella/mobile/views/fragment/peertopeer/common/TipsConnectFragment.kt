@@ -70,7 +70,12 @@ class TipsConnectFragment :
             builder.setSpan(
                 object : ClickableSpan() {
                     override fun onClick(widget: View) {
-                        Util.startBrowserIntent(context, getString(R.string.peerToPeer_documentation_url))
+                        baseActivity.maybeChangeTemporaryTimeout {
+                            Util.startBrowserIntent(
+                                context,
+                                getString(R.string.peerToPeer_documentation_url)
+                            )
+                        }
                     }
 
                     override fun updateDrawState(ds: TextPaint) {

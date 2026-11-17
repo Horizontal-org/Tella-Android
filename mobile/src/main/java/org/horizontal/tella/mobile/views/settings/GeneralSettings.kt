@@ -27,6 +27,7 @@ import org.horizontal.tella.mobile.views.activity.analytics.AnalyticsActions
 import org.horizontal.tella.mobile.views.activity.analytics.AnalyticsIntroActivity
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import java.util.Locale
+import androidx.navigation.findNavController
 
 
 class GeneralSettings :
@@ -44,15 +45,17 @@ class GeneralSettings :
         (baseActivity as OnFragmentSelected?)?.setToolbarHomeIcon(R.drawable.ic_arrow_back_white_24dp)
 
         binding.languageSettingsButton.setOnClickListener {
-            Navigation.findNavController(it)
+            it.findNavController()
                 .navigate(R.id.action_general_settings_to_language_settings)
         }
 
         binding.shareDataSwitch.setTextAndAction(R.string.action_learn_more) {
-            Util.startBrowserIntent(
-                context,
-                getString(R.string.config_analytics_learn_url)
-            )
+            baseActivity.maybeChangeTemporaryTimeout {
+                Util.startBrowserIntent(
+                    context,
+                    getString(R.string.config_analytics_learn_url)
+                )
+            }
         }
         binding.shareDataSwitch.mSwitch.isChecked = hasAcceptedAnalytics()
 
@@ -178,7 +181,7 @@ class GeneralSettings :
         }
     }
 
-        private fun startCleanInsightActivity() {
+    private fun startCleanInsightActivity() {
         val intent = Intent(context, AnalyticsIntroActivity::class.java)
         startActivityForResult(intent, AnalyticsIntroActivity.CLEAN_INSIGHTS_REQUEST_CODE)
     }

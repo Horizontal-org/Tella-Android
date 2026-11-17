@@ -37,10 +37,36 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
     final byte[] password;
 
     CipherOpenHelper(@NonNull Context context, byte[] password) {
-        super(context, DATABASE_NAME, encodeRawKeyToUtf8Bytes(password), null, DATABASE_VERSION, MIN_DATABASE_VERSION, null, null, false);
+        this(context, new Preferences(context), Arrays.copyOf(password, password.length));
+    }
 
+    private CipherOpenHelper(Context context, Preferences preferences, byte[] password) {
+        super(context, DATABASE_NAME, encodeRawKeyToUtf8Bytes(password), null,
+                DATABASE_VERSION, MIN_DATABASE_VERSION, null,
+                migratedDatabaseHook(preferences, password), false);
         this.context = context.getApplicationContext();
-        this.password = Arrays.copyOf(password, password.length);
+        this.password = password;
+    }
+
+    private static SQLiteDatabaseHook migratedDatabaseHook(Preferences preferences, byte[] password) {
+        return new SQLiteDatabaseHook() {
+            @Override
+            public void preKey(SQLiteConnection connection) {
+            }
+
+            @Override
+            public void postKey(SQLiteConnection connection) {
+                if (preferences.isAlreadyMigratedVaultDB()) {
+                    char[] keyChars = encodeRawKey(password);
+                    try {
+                        connection.executeForString(
+                                "PRAGMA key = '" + new String(keyChars) + "';", null, null);
+                    } finally {
+                        Arrays.fill(keyChars, '\0');
+                    }
+                }
+            }
+        };
     }
 
     private static char[] encodeRawKey(byte[] raw_key) {
@@ -123,19 +149,15 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
             copyFile(oldDbFile, new File(backupDbPath));
             Timber.tag(TAG).d("Backup of old database created at: %s", backupDbPath);
         } catch (IOException e) {
-            Timber.tag(TAG).e(e, "Error creating backup of old database");
-            return;
+            throw new IllegalStateException("Unable to back up legacy database", e);
         }
 
-        if (newDbFile.exists()) {
-            newDbFile.delete();
+        if (newDbFile.exists() && !newDbFile.delete()) {
+            throw new IllegalStateException("Unable to replace incomplete database export");
         }
-
-        boolean migrationSuccess = false;
 
         char[] keyChars = encodeRawKey(key);
-        try {
-            SQLiteDatabase oldDb = SQLiteDatabase.openOrCreateDatabase(
+        try (SQLiteDatabase oldDb = SQLiteDatabase.openOrCreateDatabase(
                     oldDbPath,
                     new String(keyChars),
                     null,
@@ -163,7 +185,8 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
                             }
                         }
                     }
-            );
+            )) {
+            int oldVersion = oldDb.getVersion();
 
             char[] attachChars = encodeRawKey(key);
             try {
@@ -173,36 +196,28 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
             } finally {
                 Arrays.fill(attachChars, '\0');
             }
-            Cursor cursor = oldDb.rawQuery("SELECT sqlcipher_export('sqlcipher4');", null);
-            if (cursor != null && cursor.moveToFirst()) {
-                cursor.close();
+            try (Cursor cursor = oldDb.rawQuery("SELECT sqlcipher_export('sqlcipher4');", null)) {
+                cursor.moveToFirst();
             }
-
+            // sqlcipher_export copies tables and data, but not PRAGMA user_version.
+            oldDb.execSQL("PRAGMA sqlcipher4.user_version = " + oldVersion);
             oldDb.execSQL("DETACH DATABASE sqlcipher4;");
-            oldDb.close();
 
             if (newDbFile.exists()) {
                 long newSize = newDbFile.length();
                 Timber.tag(TAG).d("New database file size: " + newSize + " bytes");
             }
 
-            new Preferences(context).setAlreadyMigratedVaultDB(true);
-            Timber.tag(TAG).d("Database migration from SQLCipher 3 to 4 was successful.");
-            migrationSuccess = true;
         } catch (Exception e) {
-            Timber.tag(TAG).e(e, "Error during migration");
+            throw new IllegalStateException("Unable to migrate legacy database; original retained", e);
         } finally {
             Arrays.fill(keyChars, '\0');
         }
 
-        // Handle the result of the migration
-        if (migrationSuccess) {
-            Timber.tag(TAG).d("Migration successful, deleting old database...");
-            oldDbFile.delete();
-            new File(backupDbPath).delete();
-        } else {
-            Timber.tag(TAG).d("Migration failed, keeping the old database.");
-        }
+        new Preferences(context).setAlreadyMigratedVaultDB(true);
+        Timber.tag(TAG).d("Migration successful, deleting old database...");
+        oldDbFile.delete();
+        new File(backupDbPath).delete();
     }
 
     public static void copyFile(File sourceFile, File destFile) throws IOException {
@@ -230,45 +245,6 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
         }
     }
 
-    @NonNull
-    @Override
-    public SQLiteDatabase getWritableDatabase() {
-        Preferences preferences = new Preferences(context);
-        if (preferences.isAlreadyMigratedVaultDB()) {
-            char[] keyChars = encodeRawKey(password);
-            try {
-                return SQLiteDatabase.openDatabase(
-                        context.getDatabasePath(DATABASE_NAME).getPath(),
-                        new String(keyChars),
-                        null,
-                        SQLiteDatabase.OPEN_READWRITE,
-                        null,
-                        new SQLiteDatabaseHook() {
-                            @Override
-                            public void preKey(SQLiteConnection connection) {
-                            }
-
-                            @Override
-                            public void postKey(SQLiteConnection connection) {
-                                char[] pragmaChars = encodeRawKey(password);
-                                try {
-                                    connection.executeForString(
-                                            "PRAGMA key = '" + new String(pragmaChars) + "';",
-                                            null,
-                                            null
-                                    );
-                                } finally {
-                                    Arrays.fill(pragmaChars, '\0');
-                                }
-                            }
-                        }
-                );
-            } finally {
-                Arrays.fill(keyChars, '\0');
-            }
-        } else {
-            Timber.tag(TAG).d("Database is from a fresh install, not calling getWritableDatabase.");
-            return super.getWritableDatabase(); // or handle appropriately
-        }
-    }
+    // Use SQLiteOpenHelper for both fresh and exported databases. It owns schema
+    // transactions, readable/writable opens, connection caching and failure cleanup.
 }

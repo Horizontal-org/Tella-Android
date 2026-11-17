@@ -41,7 +41,7 @@ public class ResourcesDatabaseModule implements DatabaseModule {
     }
 
     private String createTableResources() {
-        return "CREATE TABLE " + sq(D.T_RESOURCES) + " (" +
+        return "CREATE TABLE IF NOT EXISTS " + sq(D.T_RESOURCES) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_SERVER_ID, D.INTEGER) + " , " +
                 cddl(D.C_RESOURCES_ID, D.TEXT, false) + " UNIQUE, " +

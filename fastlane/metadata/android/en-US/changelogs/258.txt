@@ -1,0 +1,9 @@
+Improved Verification Mode:
+• Organized information into 5 categories, each with its own help screen.
+• Verification information can now be saved as a CSV in Tella and attached to reports and connections.
+• Faster location, even indoors, and GPS is now requested before recording audio and video too.
+• Metadata is saved without waiting for Wi-Fi when offline.
+Bug fixes and minor improvements.
+Updated translations. Please consider helping us localize Tella.
+
+Full release notes: https://tella.app/releases

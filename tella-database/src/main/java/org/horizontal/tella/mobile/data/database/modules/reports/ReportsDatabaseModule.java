@@ -1,5 +1,6 @@
 package org.horizontal.tella.mobile.data.database.modules.reports;
 
+import static org.horizontal.tella.mobile.data.database.HorizontalSQLiteOpenHelper.addColumnIfMissing;
 import static org.horizontal.tella.mobile.data.database.HorizontalSQLiteOpenHelper.cddl;
 import static org.horizontal.tella.mobile.data.database.HorizontalSQLiteOpenHelper.sq;
 
@@ -36,26 +37,37 @@ public class ReportsDatabaseModule implements DatabaseModule {
         db.execSQL(createTableTellaUploadServer());
 
         // DBv9
-        db.execSQL(alterTableTellaUploadServerAddAccessToken());
-        db.execSQL(alterTableTellaUploadServerAddMetatData());
-        db.execSQL(alterTableTellaUploadServerAddBackgourndUpload());
-        db.execSQL(alterTableTellaUploadServerAddProjectName());
-        db.execSQL(alterTableTellaUploadServerAddProjectSlug());
-        db.execSQL(alterTableTellaUploadServerAddProjectID());
+        addColumnIfMissing(db, D.T_TELLA_UPLOAD_SERVER, D.C_ACCESS_TOKEN,
+                alterTableTellaUploadServerAddAccessToken());
+        addColumnIfMissing(db, D.T_TELLA_UPLOAD_SERVER, D.C_ACTIVATED_METADATA,
+                alterTableTellaUploadServerAddMetatData());
+        addColumnIfMissing(db, D.T_TELLA_UPLOAD_SERVER, D.C_BACKGROUND_UPLOAD,
+                alterTableTellaUploadServerAddBackgourndUpload());
+        addColumnIfMissing(db, D.T_TELLA_UPLOAD_SERVER, D.C_PROJECT_NAME,
+                alterTableTellaUploadServerAddProjectName());
+        addColumnIfMissing(db, D.T_TELLA_UPLOAD_SERVER, D.C_PROJECT_SLUG,
+                alterTableTellaUploadServerAddProjectSlug());
+        addColumnIfMissing(db, D.T_TELLA_UPLOAD_SERVER, D.C_PROJECT_ID,
+                alterTableTellaUploadServerAddProjectID());
         db.execSQL(createTableReportFormInstance());
         db.execSQL(createTableReportInstanceVaultFile());
         db.execSQL(createTableReportFileUploads());
 
         // DBv11
-        db.execSQL(alterTableTellaUploadServerAddAutoUpload());
-        db.execSQL(alterTableTellaUploadServerAddAutoDelete());
-        db.execSQL(alterTableReportFormInstanceAddCurrentUpload());
+        addColumnIfMissing(db, D.T_TELLA_UPLOAD_SERVER, D.C_AUTO_UPLOAD,
+                alterTableTellaUploadServerAddAutoUpload());
+        addColumnIfMissing(db, D.T_TELLA_UPLOAD_SERVER, D.C_AUTO_DELETE,
+                alterTableTellaUploadServerAddAutoDelete());
+        addColumnIfMissing(db, D.T_REPORT_FORM_INSTANCE, D.C_CURRENT_UPLOAD,
+                alterTableReportFormInstanceAddCurrentUpload());
 
         // DBv17
-        db.execSQL(alterTableTellaUploadServerAddApiVersion());
+        addColumnIfMissing(db, D.T_TELLA_UPLOAD_SERVER, D.C_TELLA_WEB_API_VERSION,
+                alterTableTellaUploadServerAddApiVersion());
 
         // DBv18
-        db.execSQL(alterTableTellaUploadServerAddHideProjectUrl());
+        addColumnIfMissing(db, D.T_TELLA_UPLOAD_SERVER, D.C_HIDE_PROJECT_URL,
+                alterTableTellaUploadServerAddHideProjectUrl());
     }
 
     @Override
@@ -64,31 +76,42 @@ public class ReportsDatabaseModule implements DatabaseModule {
             db.execSQL(createTableTellaUploadServer());
         }
         if (oldVersion < 9) {
-            db.execSQL(alterTableTellaUploadServerAddAccessToken());
-            db.execSQL(alterTableTellaUploadServerAddMetatData());
-            db.execSQL(alterTableTellaUploadServerAddBackgourndUpload());
-            db.execSQL(alterTableTellaUploadServerAddProjectName());
-            db.execSQL(alterTableTellaUploadServerAddProjectSlug());
-            db.execSQL(alterTableTellaUploadServerAddProjectID());
+            addColumnIfMissing(db, D.T_TELLA_UPLOAD_SERVER, D.C_ACCESS_TOKEN,
+                    alterTableTellaUploadServerAddAccessToken());
+            addColumnIfMissing(db, D.T_TELLA_UPLOAD_SERVER, D.C_ACTIVATED_METADATA,
+                    alterTableTellaUploadServerAddMetatData());
+            addColumnIfMissing(db, D.T_TELLA_UPLOAD_SERVER, D.C_BACKGROUND_UPLOAD,
+                    alterTableTellaUploadServerAddBackgourndUpload());
+            addColumnIfMissing(db, D.T_TELLA_UPLOAD_SERVER, D.C_PROJECT_NAME,
+                    alterTableTellaUploadServerAddProjectName());
+            addColumnIfMissing(db, D.T_TELLA_UPLOAD_SERVER, D.C_PROJECT_SLUG,
+                    alterTableTellaUploadServerAddProjectSlug());
+            addColumnIfMissing(db, D.T_TELLA_UPLOAD_SERVER, D.C_PROJECT_ID,
+                    alterTableTellaUploadServerAddProjectID());
             db.execSQL(createTableReportFormInstance());
             db.execSQL(createTableReportInstanceVaultFile());
             db.execSQL(createTableReportFileUploads());
         }
         if (oldVersion < 11) {
-            db.execSQL(alterTableTellaUploadServerAddAutoUpload());
-            db.execSQL(alterTableTellaUploadServerAddAutoDelete());
-            db.execSQL(alterTableReportFormInstanceAddCurrentUpload());
+            addColumnIfMissing(db, D.T_TELLA_UPLOAD_SERVER, D.C_AUTO_UPLOAD,
+                    alterTableTellaUploadServerAddAutoUpload());
+            addColumnIfMissing(db, D.T_TELLA_UPLOAD_SERVER, D.C_AUTO_DELETE,
+                    alterTableTellaUploadServerAddAutoDelete());
+            addColumnIfMissing(db, D.T_REPORT_FORM_INSTANCE, D.C_CURRENT_UPLOAD,
+                    alterTableReportFormInstanceAddCurrentUpload());
         }
         if (oldVersion < 17) {
-            db.execSQL(alterTableTellaUploadServerAddApiVersion());
+            addColumnIfMissing(db, D.T_TELLA_UPLOAD_SERVER, D.C_TELLA_WEB_API_VERSION,
+                    alterTableTellaUploadServerAddApiVersion());
         }
         if (oldVersion < 18) {
-            db.execSQL(alterTableTellaUploadServerAddHideProjectUrl());
+            addColumnIfMissing(db, D.T_TELLA_UPLOAD_SERVER, D.C_HIDE_PROJECT_URL,
+                    alterTableTellaUploadServerAddHideProjectUrl());
         }
     }
 
     private String createTableTellaUploadServer() {
-        return "CREATE TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " (" +
+        return "CREATE TABLE IF NOT EXISTS " + sq(D.T_TELLA_UPLOAD_SERVER) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_NAME, D.TEXT) + " , " +
                 cddl(D.C_URL, D.TEXT) + " , " +
@@ -149,7 +172,7 @@ public class ReportsDatabaseModule implements DatabaseModule {
     }
 
     private String createTableReportFormInstance() {
-        return "CREATE TABLE " + sq(D.T_REPORT_FORM_INSTANCE) + " (" +
+        return "CREATE TABLE IF NOT EXISTS " + sq(D.T_REPORT_FORM_INSTANCE) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_REPORT_SERVER_ID, D.INTEGER, true) + " , " +
                 cddl(D.C_REPORT_API_ID, D.TEXT, true) + " , " +
@@ -165,7 +188,7 @@ public class ReportsDatabaseModule implements DatabaseModule {
     }
 
     private String createTableReportInstanceVaultFile() {
-        return "CREATE TABLE " + sq(D.T_REPORT_INSTANCE_VAULT_FILE) + " (" +
+        return "CREATE TABLE IF NOT EXISTS " + sq(D.T_REPORT_INSTANCE_VAULT_FILE) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_REPORT_INSTANCE_ID, D.INTEGER, true) + " , " +
                 cddl(D.C_VAULT_FILE_ID, D.TEXT, true) + " , " +
@@ -178,7 +201,7 @@ public class ReportsDatabaseModule implements DatabaseModule {
     }
 
     private String createTableReportFileUploads() {
-        return "CREATE TABLE " + sq(D.T_REPORT_FILES_UPLOAD) + " (" +
+        return "CREATE TABLE IF NOT EXISTS " + sq(D.T_REPORT_FILES_UPLOAD) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_REPORT_INSTANCE_ID, D.INTEGER, false) + " UNIQUE, " +
                 cddl(D.C_UPDATED, D.INTEGER, true) + " , " +

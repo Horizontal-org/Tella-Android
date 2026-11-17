@@ -36,21 +36,20 @@
     <!-- Row 1 -->
     <TextView
         android:id="@+id/fileInfoLabelTv"
-        style="@style/Tella_Main_White_Text.Small"
+        style="@style/Tella_Main_White_Text.Meduim"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/tella_main_vertical"
-        android:text="@string/Vault_FileInfo"
+        android:text="@string/verification.info_field_filename"
         android:layout_marginTop="20dp"
         app:layout_constraintTop_toBottomOf="@id/appbar"
         app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
         android:id="@+id/fileInfoTv"
-        style="@style/Tella_Main_White_Text.Small"
+        style="@style/Tella_Main_White_Text.Meduim"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="11sp"
         android:paddingHorizontal="@dimen/tella_main_vertical"
         tools:text="Traffic Light Traffic Light Traffic Light Traffic Light Traffic Light Traffic Lightraffic Light Traffic Light Traffic Lightraffic Light Traffic Light Traffic Lightraffic Light Traffic Light Traffic Light"
         android:layout_marginTop="20dp"
@@ -62,7 +61,7 @@
     <!-- Row 2 -->
     <TextView
         android:id="@+id/fileSizeLabelTv"
-        style="@style/Tella_Main_White_Text.Small"
+        style="@style/Tella_Main_White_Text.Meduim"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/tella_main_vertical"
@@ -73,10 +72,9 @@
 
     <TextView
         android:id="@+id/fileSizeTv"
-        style="@style/Tella_Main_White_Text.Small"
+        style="@style/Tella_Main_White_Text.Meduim"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="11sp"
         android:paddingHorizontal="@dimen/tella_main_vertical"
         tools:text="35.8 MB"
         android:layout_marginTop="12dp"
@@ -88,7 +86,7 @@
     <!-- Row 3 -->
     <TextView
         android:id="@+id/fileFormatLabelTv"
-        style="@style/Tella_Main_White_Text.Small"
+        style="@style/Tella_Main_White_Text.Meduim"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/tella_main_vertical"
@@ -99,10 +97,9 @@
 
     <TextView
         android:id="@+id/fileFormatTv"
-        style="@style/Tella_Main_White_Text.Small"
+        style="@style/Tella_Main_White_Text.Meduim"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="11sp"
         android:paddingHorizontal="@dimen/tella_main_vertical"
         tools:text="MP4"
         android:layout_marginTop="12dp"
@@ -114,7 +111,7 @@
     <!-- Row 4 -->
     <TextView
         android:id="@+id/fileCreatedLabelTv"
-        style="@style/Tella_Main_White_Text.Small"
+        style="@style/Tella_Main_White_Text.Meduim"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/tella_main_vertical"
@@ -125,10 +122,9 @@
 
     <TextView
         android:id="@+id/fileCreatedTv"
-        style="@style/Tella_Main_White_Text.Small"
+        style="@style/Tella_Main_White_Text.Meduim"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="11sp"
         android:paddingHorizontal="@dimen/tella_main_vertical"
         tools:text="08-03-2021 09:33:35 +0500"
         android:layout_marginTop="12dp"
@@ -140,7 +136,7 @@
     <!-- Row 5 -->
     <TextView
         android:id="@+id/fileResolutionLabelTv"
-        style="@style/Tella_Main_White_Text.Small"
+        style="@style/Tella_Main_White_Text.Meduim"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/tella_main_vertical"
@@ -151,10 +147,9 @@
 
     <TextView
         android:id="@+id/fileResolutionTv"
-        style="@style/Tella_Main_White_Text.Small"
+        style="@style/Tella_Main_White_Text.Meduim"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="11sp"
         android:paddingHorizontal="@dimen/tella_main_vertical"
         tools:text="1024x768"
         android:layout_marginTop="12dp"
@@ -166,7 +161,7 @@
     <!-- Row 6 -->
     <TextView
         android:id="@+id/fileLengthLabelTv"
-        style="@style/Tella_Main_White_Text.Small"
+        style="@style/Tella_Main_White_Text.Meduim"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/tella_main_vertical"
@@ -177,10 +172,9 @@
 
     <TextView
         android:id="@+id/fileLengthTv"
-        style="@style/Tella_Main_White_Text.Small"
+        style="@style/Tella_Main_White_Text.Meduim"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="11sp"
         android:paddingHorizontal="@dimen/tella_main_vertical"
         tools:text="3:42"
         android:layout_marginTop="12dp"
@@ -192,7 +186,7 @@
     <!-- Row 7 -->
     <TextView
         android:id="@+id/filePathLabel"
-        style="@style/Tella_Main_White_Text.Small"
+        style="@style/Tella_Main_White_Text.Meduim"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/tella_main_vertical"
@@ -203,10 +197,9 @@
 
     <TextView
         android:id="@+id/filePathTv"
-        style="@style/Tella_Main_White_Text.Small"
+        style="@style/Tella_Main_White_Text.Meduim"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="11sp"
         android:paddingHorizontal="@dimen/tella_main_vertical"
         tools:text="Tella/video"
         android:layout_marginTop="12dp"

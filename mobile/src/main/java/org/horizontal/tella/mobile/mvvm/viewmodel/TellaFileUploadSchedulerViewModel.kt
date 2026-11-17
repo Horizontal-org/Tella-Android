@@ -15,10 +15,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import org.hzontal.tella.keys.key.LifecycleMainKey
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
+import org.horizontal.tella.mobile.util.jobs.PendingReportsLock
 import org.horizontal.tella.mobile.util.jobs.WorkerUploadReport
 import javax.inject.Inject
 
@@ -45,6 +45,7 @@ class TellaFileUploadSchedulerViewModel @Inject constructor(val application: App
             .flatMapCompletable { dataSource ->
                 val formMediaFile = FormMediaFile.fromMediaFile(vaultFile)
                 dataSource.scheduleUploadReport(formMediaFile, uploadServerId)
+                    .andThen(PendingReportsLock.refreshQuietly(dataSource))
             }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
@@ -58,13 +59,11 @@ class TellaFileUploadSchedulerViewModel @Inject constructor(val application: App
 
                 // APPEND_OR_REPLACE ensures a new worker is queued even when one is already running.
                 // Without this, files captured during an active upload would be silently dropped by
-                // WorkManager and never uploaded. This trades off strict 1-hour report grouping
+                // WorkManager and never uploaded. This trades off strict 30-minute report grouping
                 // (files captured mid-upload go into a separate auto-report) for correctness.
                 // TODO: revisit if same-report grouping during active uploads becomes a requirement.
                 WorkManager.getInstance(application)
                 .enqueueUniqueWork("WorkerUploadReport2", ExistingWorkPolicy.APPEND_OR_REPLACE, oneTimeJob)
-
-                MyApplication.getMainKeyHolder().timeout = LifecycleMainKey.NO_TIMEOUT
 
                 _mediaFilesUploadScheduled.postValue(true)
             }, { throwable ->

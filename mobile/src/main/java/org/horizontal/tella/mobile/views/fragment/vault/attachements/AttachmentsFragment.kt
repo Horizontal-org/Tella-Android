@@ -587,7 +587,8 @@ class AttachmentsFragment :
     }
 
     private fun showBottomSheet(vaultFile: VaultFile) {
-        BottomSheetUtils.showStandardSheet(baseActivity.supportFragmentManager,
+        BottomSheetUtils.showStandardSheet(
+            baseActivity.supportFragmentManager,
             baseActivity.getString(R.string.Vault_SaveToDevice_SheetTitle, vaultFile.name),
             baseActivity.getString(R.string.Vault_ViewerOther_SheetDesc),
             baseActivity.getString(R.string.Vault_SaveToDevice_SheetAction),
@@ -661,6 +662,7 @@ class AttachmentsFragment :
         }
         binding.checkBoxList.setCheckDrawable(icon, baseActivity)
     }
+
     private fun syncSelectionChromeLeavingSelectModeFully() {
         selectMode = SelectMode.DESELECT_ALL
         isListCheckOn = false
@@ -677,7 +679,8 @@ class AttachmentsFragment :
     }
 
     private fun showFileActionsSheet(vaultFile: VaultFile?, isMultipleFiles: Boolean) {
-        VaultSheetUtils.showVaultActionsSheet(baseActivity.supportFragmentManager,
+        VaultSheetUtils.showVaultActionsSheet(
+            baseActivity.supportFragmentManager,
             getSheetName(vaultFile, isMultipleFiles),
             getString(R.string.Vault_Upload_SheetAction),
             getString(R.string.Vault_Share_SheetAction),
@@ -744,7 +747,8 @@ class AttachmentsFragment :
                 }
 
                 override fun save() {
-                    showConfirmSheet(baseActivity.supportFragmentManager,
+                    showConfirmSheet(
+                        baseActivity.supportFragmentManager,
                         getString(R.string.gallery_save_to_device_dialog_title),
                         getString(R.string.gallery_save_to_device_dialog_expl),
                         getString(R.string.action_save),
@@ -768,7 +772,8 @@ class AttachmentsFragment :
                 }
 
                 override fun delete() {
-                    showConfirmSheet(baseActivity.supportFragmentManager,
+                    showConfirmSheet(
+                        baseActivity.supportFragmentManager,
                         getString(R.string.Vault_DeleteFile_SheetTitle),
                         getString(R.string.Vault_deleteFile_SheetDesc),
                         getString(R.string.action_delete),
@@ -899,7 +904,8 @@ class AttachmentsFragment :
         val vaultFiles = deleteState.first
         val showConfirmDelete = deleteState.second
         if (showConfirmDelete) {
-            showConfirmSheet(baseActivity.supportFragmentManager,
+            showConfirmSheet(
+                baseActivity.supportFragmentManager,
                 getString(R.string.Vault_Warning_Title),
                 getString(R.string.Vault_Confirm_delete_Description),
                 getString(R.string.Vault_Delete_anyway),
@@ -1002,7 +1008,14 @@ class AttachmentsFragment :
         vaultRootId = vaultFile?.id
         if (currentRootID == null) {
             currentRootID = vaultFile?.id
-            binding.breadcrumbsView.addItem(BreadcrumbItem.createSimpleItem(Item("", vaultFile?.id)))
+            binding.breadcrumbsView.addItem(
+                BreadcrumbItem.createSimpleItem(
+                    Item(
+                        "",
+                        vaultFile?.id
+                    )
+                )
+            )
             onMediaFilesAdded()
         } else {
             refreshEmptyStateIfVisible()
@@ -1175,8 +1188,11 @@ class AttachmentsFragment :
         when (requestCode) {
             C.IMPORT_MULTIPLE_FILES -> handleImportMultipleFiles(data)
             C.CAMERA_CAPTURE, C.RECORDED_AUDIO -> onMediaFilesAdded()
-            WRITE_REQUEST_CODE -> performFileSearch(attachmentsAdapter.selectedMediaFiles.isNotEmpty(), vaultFile)
-          //  PICKER_FILE_REQUEST_CODE -> handlePickerFileRequest(data)
+            WRITE_REQUEST_CODE -> performFileSearch(
+                attachmentsAdapter.selectedMediaFiles.isNotEmpty(),
+                vaultFile
+            )
+            //  PICKER_FILE_REQUEST_CODE -> handlePickerFileRequest(data)
         }
     }
 
@@ -1194,7 +1210,8 @@ class AttachmentsFragment :
                 }
             }
             if (importAndDelete) {
-                val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                val flags =
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                 listVaultFilesUris.forEach { uri ->
                     try {
                         baseActivity.contentResolver.takePersistableUriPermission(uri, flags)
@@ -1334,6 +1351,7 @@ class AttachmentsFragment :
         } catch (e: SecurityException) {
             if (!afterConsent && SDK_INT >= Build.VERSION_CODES.Q) {
                 (e as? RecoverableSecurityException)?.let { recoverable ->
+                    baseActivity.maybeChangeTemporaryTimeout()
                     deleteImportedSourceLauncher.launch(
                         IntentSenderRequest.Builder(
                             recoverable.userAction.actionIntent.intentSender

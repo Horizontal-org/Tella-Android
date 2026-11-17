@@ -151,15 +151,14 @@ abstract class BaseActivity : AppCompatActivity() {
 
     fun maybeChangeTemporaryTimeout() {
         if (LockTimeoutManager().lockTimeout == LockTimeoutManager.IMMEDIATE_SHUTDOWN || LockTimeoutManager().lockTimeout == LockTimeoutManager.ONE_MINUTES_SHUTDOWN) {
-            MyApplication.getMainKeyHolder().timeout =
-                LockTimeoutManager.THREE_MINUTES_SHUTDOWN
-            Preferences.setTempTimeout(true)
+            LockTimeoutManager.setTemporaryTimeout()
         }
     }
 
     private fun maybeRestoreExitTimeOut() {
         if (Preferences.isExitTimeout()) {
-            MyApplication.getMainKeyHolder().timeout = Preferences.getLockTimeout()
+            LockTimeoutManager.setCurrentTimeout(Preferences.getLockTimeout())
+            Preferences.setExitTimeout(false)
             Preferences.setTempTimeout(false)
         }
     }
@@ -256,9 +255,7 @@ abstract class BaseActivity : AppCompatActivity() {
             getString(R.string.action_continue),
             getString(R.string.action_cancel),
             onConfirmClick = {
-                MyApplication.getMainKeyHolder().timeout =
-                    LockTimeoutManager.THREE_MINUTES_SHUTDOWN
-                Preferences.setTempTimeout(true)
+                LockTimeoutManager.setTemporaryTimeout()
                 confirm.invoke()
             },
             onCancelClick = null

@@ -1,0 +1,9 @@
+Improvements to Verification mode: added new fields, clearer names and help text. Fixed sharing files with verification information to Signal.
+
+- Added support for OGG audio files.
+- Added a specific icon for CSV files.
+- Security and privacy fixes, specifically in Quick Delete, Crash Reports and Privacy-Preserving Analytics.
+- Lock timeout fixes: the lock timeout is now always restored.
+- Bug fixes and minor improvements.
+
+Full release notes: https://tella.app/releases

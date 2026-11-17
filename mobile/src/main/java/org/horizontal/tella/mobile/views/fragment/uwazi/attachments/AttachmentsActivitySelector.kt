@@ -24,6 +24,7 @@ import org.horizontal.tella.mobile.views.activity.viewer.AudioPlayActivity
 import org.horizontal.tella.mobile.views.activity.viewer.PhotoViewerActivity
 import org.horizontal.tella.mobile.views.activity.viewer.VideoViewerActivity
 import org.horizontal.tella.mobile.views.base_ui.BaseActivity
+import org.horizontal.tella.mobile.views.base_ui.BaseLockActivity
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.SelectMode
 import org.hzontal.shared_ui.breadcrumb.DefaultBreadcrumbsCallback
 import org.hzontal.shared_ui.breadcrumb.model.BreadcrumbItem
@@ -35,7 +36,7 @@ const val VAULT_FILES_FILTER = "vff"
 const val VAULT_PICKER_SINGLE = "vps"
 
 @AndroidEntryPoint
-class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.OnClickListener {
+class AttachmentsActivitySelector : BaseLockActivity(), ISelectorVaultHandler, View.OnClickListener {
 
     private lateinit var binding: FragmentAttachmentsSelectorBinding
     private lateinit var gridLayoutManager: GridLayoutManager

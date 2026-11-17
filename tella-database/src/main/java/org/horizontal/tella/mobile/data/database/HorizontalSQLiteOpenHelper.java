@@ -1,6 +1,7 @@
 package org.horizontal.tella.mobile.data.database;
 
 import android.content.Context;
+import android.database.Cursor;
 
 import net.zetetic.database.sqlcipher.SQLiteDatabase;
 import org.horizontal.tella.mobile.data.database.modules.DatabaseModule;
@@ -15,7 +16,6 @@ import org.horizontal.tella.mobile.data.database.modules.reports.ReportsDatabase
 import org.horizontal.tella.mobile.data.database.modules.resources.ResourcesDatabaseModule;
 import org.horizontal.tella.mobile.data.database.modules.settings.SettingsDatabaseModule;
 import org.horizontal.tella.mobile.data.database.modules.uwazi.UwaziDatabaseModule;
-import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,12 +104,27 @@ public class HorizontalSQLiteOpenHelper extends CipherOpenHelper {
         return objQuote(columnName) + " " + columnType + (notNull ? " NOT NULL" : "");
     }
 
+    public static void addColumnIfMissing(SQLiteDatabase db, String table, String column, String sql) {
+        try (Cursor cursor = db.rawQuery("PRAGMA table_info(" + objQuote(table) + ")", null)) {
+            int nameIndex = cursor.getColumnIndexOrThrow("name");
+            while (cursor.moveToNext()) {
+                if (column.equalsIgnoreCase(cursor.getString(nameIndex))) {
+                    return;
+                }
+            }
+        }
+        // Let real schema failures propagate so SQLiteOpenHelper rolls back the transaction.
+        db.execSQL(sql);
+    }
+
 
     @Override
     public void onCreate(net.zetetic.database.sqlcipher.SQLiteDatabase db) {
         Timber.d("Creating database with modular architecture");
         
-        // Delegate table creation to modules
+        // SQLCipher exports made by older releases can contain tables with user_version=0.
+        // Modules create missing tables and columns without replacing existing data. The
+        // SQLiteOpenHelper transaction only sets the current version after every module succeeds.
         for (DatabaseModule module : databaseModules) {
             try {
                 Timber.d("Creating tables for module: %s", module.getModuleName());

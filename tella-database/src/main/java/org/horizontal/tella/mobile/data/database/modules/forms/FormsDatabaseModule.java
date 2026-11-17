@@ -1,5 +1,6 @@
 package org.horizontal.tella.mobile.data.database.modules.forms;
 
+import static org.horizontal.tella.mobile.data.database.HorizontalSQLiteOpenHelper.addColumnIfMissing;
 import static org.horizontal.tella.mobile.data.database.HorizontalSQLiteOpenHelper.cddl;
 import static org.horizontal.tella.mobile.data.database.HorizontalSQLiteOpenHelper.sq;
 
@@ -40,32 +41,40 @@ public class FormsDatabaseModule implements DatabaseModule {
         db.execSQL(createTableCollectFormInstanceVaultFile());
 
         // DBv2
-        db.execSQL(alterTableCollectFormInstanceMediaFileAddStatus());
-        db.execSQL(alterTableCollectServerAddChecked());
+        addColumnIfMissing(db, D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE, D.C_STATUS,
+                alterTableCollectFormInstanceMediaFileAddStatus());
+        addColumnIfMissing(db, D.T_COLLECT_SERVER, D.C_CHECKED,
+                alterTableCollectServerAddChecked());
 
         // DBv3
-        db.execSQL(alterTableCollectBlankFormAddUpdated());
+        addColumnIfMissing(db, D.T_COLLECT_BLANK_FORM, D.C_UPDATED,
+                alterTableCollectBlankFormAddUpdated());
 
         // DBv4
-        db.execSQL(alterTableCollectFormInstanceAddFormPartStatus());
+        addColumnIfMissing(db, D.T_COLLECT_FORM_INSTANCE, D.C_FORM_PART_STATUS,
+                alterTableCollectFormInstanceAddFormPartStatus());
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion < 2) {
-            db.execSQL(alterTableCollectFormInstanceMediaFileAddStatus());
-            db.execSQL(alterTableCollectServerAddChecked());
+            addColumnIfMissing(db, D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE, D.C_STATUS,
+                    alterTableCollectFormInstanceMediaFileAddStatus());
+            addColumnIfMissing(db, D.T_COLLECT_SERVER, D.C_CHECKED,
+                    alterTableCollectServerAddChecked());
         }
         if (oldVersion < 3) {
-            db.execSQL(alterTableCollectBlankFormAddUpdated());
+            addColumnIfMissing(db, D.T_COLLECT_BLANK_FORM, D.C_UPDATED,
+                    alterTableCollectBlankFormAddUpdated());
         }
         if (oldVersion < 4) {
-            db.execSQL(alterTableCollectFormInstanceAddFormPartStatus());
+            addColumnIfMissing(db, D.T_COLLECT_FORM_INSTANCE, D.C_FORM_PART_STATUS,
+                    alterTableCollectFormInstanceAddFormPartStatus());
         }
     }
 
     private String createTableCollectServer() {
-        return "CREATE TABLE " + sq(D.T_COLLECT_SERVER) + " (" +
+        return "CREATE TABLE IF NOT EXISTS " + sq(D.T_COLLECT_SERVER) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_NAME, D.TEXT) + " , " +
                 cddl(D.C_URL, D.TEXT) + " , " +
@@ -75,7 +84,7 @@ public class FormsDatabaseModule implements DatabaseModule {
     }
 
     private String createTableCollectBlankForm() {
-        return "CREATE TABLE " + sq(D.T_COLLECT_BLANK_FORM) + " (" +
+        return "CREATE TABLE IF NOT EXISTS " + sq(D.T_COLLECT_BLANK_FORM) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_COLLECT_SERVER_ID, D.INTEGER, true) + " , " +
                 cddl(D.C_FORM_ID, D.TEXT, true) + " , " +
@@ -93,7 +102,7 @@ public class FormsDatabaseModule implements DatabaseModule {
     }
 
     private String createTableCollectFormInstance() {
-        return "CREATE TABLE " + sq(D.T_COLLECT_FORM_INSTANCE) + " (" +
+        return "CREATE TABLE IF NOT EXISTS " + sq(D.T_COLLECT_FORM_INSTANCE) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_COLLECT_SERVER_ID, D.INTEGER, true) + " , " +
                 cddl(D.C_STATUS, D.INTEGER, true) + " , " +
@@ -109,7 +118,7 @@ public class FormsDatabaseModule implements DatabaseModule {
     }
 
     private String createTableCollectFormInstanceMediaFile() {
-        return "CREATE TABLE " + sq(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE) + " (" +
+        return "CREATE TABLE IF NOT EXISTS " + sq(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_COLLECT_FORM_INSTANCE_ID, D.INTEGER, true) + " , " +
                 cddl(D.C_MEDIA_FILE_ID, D.INTEGER, true) + " , " +
@@ -122,7 +131,7 @@ public class FormsDatabaseModule implements DatabaseModule {
     }
 
     private String createTableCollectFormInstanceVaultFile() {
-        return "CREATE TABLE " + sq(D.T_COLLECT_FORM_INSTANCE_VAULT_FILE) + " (" +
+        return "CREATE TABLE IF NOT EXISTS " + sq(D.T_COLLECT_FORM_INSTANCE_VAULT_FILE) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_COLLECT_FORM_INSTANCE_ID, D.INTEGER, true) + " , " +
                 cddl(D.C_VAULT_FILE_ID, D.TEXT, true) + " , " +

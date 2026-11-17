@@ -39,7 +39,7 @@ public class SettingsDatabaseModule implements DatabaseModule {
     }
 
     private String createTableSettings() {
-        return "CREATE TABLE " + sq(D.T_SETTINGS) + "(" +
+        return "CREATE TABLE IF NOT EXISTS " + sq(D.T_SETTINGS) + "(" +
                 cddl(D.C_NAME, D.TEXT) + " PRIMARY KEY, " +
                 cddl(D.C_INT_VALUE, D.INTEGER) + " , " +
                 cddl(D.C_TEXT_VALUE, D.TEXT) +

@@ -1,0 +1,1 @@
+Hotfix: Restored lost files for users who first installed Tella on or before 2024.
