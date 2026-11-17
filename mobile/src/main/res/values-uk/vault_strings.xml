@@ -77,4 +77,5 @@
     <string name="Vault_SaveToDevice_SheetTitle">Зберегти \"%1$s\" на пристрій?</string>
     <string name="Vault_SaveToDevice_SheetAction">ЗБЕРЕГТИ НА ПРИСТРІЙ</string>
     <string name="Vault_Folder_Empty_Msg">Ця папка порожня! Натисніть кнопку + нижче, щоб імпортувати файл або створити папку.</string>
+    <string name="Vault_SaveVerification_SheetAction">Інформація для перевірки</string>
 </resources>

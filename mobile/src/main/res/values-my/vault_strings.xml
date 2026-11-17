@@ -65,4 +65,5 @@
     <plurals name="Vault_deleteFile_SheetDesc">
         <item quantity="other">The selected file will be permanently delated from Tella.</item>
     </plurals>
+    <string name="Vault_SaveVerification_SheetAction">အတည်ပြုချက် အချက်အလက်</string>
 </resources>

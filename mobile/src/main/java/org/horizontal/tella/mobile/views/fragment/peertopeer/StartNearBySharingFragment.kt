@@ -34,8 +34,9 @@ class StartNearBySharingFragment : BaseBindingFragment<StartNearBySharingFragmen
                 navManager().navigateFromStartNearBySharingFragmentToTipsToConnectFragment()
             }
             learnMoreTextView.setOnClickListener {
-                baseActivity.maybeChangeTemporaryTimeout()
-                Util.startBrowserIntent(context, getString(R.string.peerToPeer_documentation_url))
+                baseActivity.maybeChangeTemporaryTimeout {
+                    Util.startBrowserIntent(context, getString(R.string.peerToPeer_documentation_url))
+                }
             }
 
             sendFilesBtn.setOnClickListener { selectOption(true) }

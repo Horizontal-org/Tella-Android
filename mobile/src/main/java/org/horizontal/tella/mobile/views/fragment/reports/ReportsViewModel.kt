@@ -19,6 +19,7 @@ import org.horizontal.tella.mobile.domain.usecases.reports.GetReportsServersUseC
 import org.horizontal.tella.mobile.domain.usecases.reports.GetReportsUseCase
 import org.horizontal.tella.mobile.domain.usecases.reports.SaveReportFormInstanceUseCase
 import com.hzontal.tella_vault.VaultFile
+import org.horizontal.tella.mobile.util.jobs.PendingReportsLock
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.ReportCounts
 import org.horizontal.tella.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
@@ -68,6 +69,7 @@ class ReportsViewModel @Inject constructor(
         saveReportFormInstanceUseCase.setReportFormInstance(reportInstance)
         saveReportFormInstanceUseCase.execute(onSuccess = { result ->
             _reportInstance.postValue(result)
+            refreshPendingReportsLock()
         }, onError = {
             _error.postValue(it)
         }, onFinished = {
@@ -81,6 +83,7 @@ class ReportsViewModel @Inject constructor(
         saveReportFormInstanceUseCase.setReportFormInstance(reportInstance)
         saveReportFormInstanceUseCase.execute(onSuccess = { result ->
             _reportInstance.postValue(result)
+            refreshPendingReportsLock()
         }, onError = {
             _error.postValue(it)
         }, onFinished = {
@@ -178,6 +181,7 @@ class ReportsViewModel @Inject constructor(
 
         deleteReportUseCase.execute(onSuccess = {
             _instanceDeleted.postValue(instance.title)
+            refreshPendingReportsLock()
         }, onError = {
             _error.postValue(it)
         }, onFinished = {
@@ -290,6 +294,9 @@ class ReportsViewModel @Inject constructor(
         getReportsServersUseCase.execute(
             onSuccess = { servers ->
                 val server = servers.first { it.id == instance.serverId }
+                if (PendingReportsLock.keepsVaultUnlocked(server)) {
+                    AndroidSchedulers.mainThread().scheduleDirect { PendingReportsLock.apply(true) }
+                }
                 reportsRepository.submitReport(
                     server,
                     instance,
@@ -307,6 +314,10 @@ class ReportsViewModel @Inject constructor(
             onFinished = {
             }
         )
+    }
+
+    private fun refreshPendingReportsLock() {
+        disposables.add(PendingReportsLock.refreshQuietly(dataSource).subscribe())
     }
 
     override fun clearDisposable() {

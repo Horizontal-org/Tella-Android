@@ -36,7 +36,7 @@ class ReportTabsFragment : MainReportFragment() {
     }
 
     override fun getEmptyMessageIcon(): Int {
-        return R.drawable.ic_reports
+        return R.drawable.ic_empty_reports
     }
 
     private fun scheduleWorker() {

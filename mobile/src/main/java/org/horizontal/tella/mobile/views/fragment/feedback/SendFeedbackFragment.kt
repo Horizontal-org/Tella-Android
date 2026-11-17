@@ -29,6 +29,7 @@ import org.horizontal.tella.mobile.util.TellaReleaseNaming
 import org.horizontal.tella.mobile.util.jobs.WorkerSendFeedBack
 import org.horizontal.tella.mobile.views.activity.SettingsActivity
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
+import org.horizontal.tella.mobile.views.base_ui.FragmentEdgeToEdge
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.OnNavBckListener
 
 @AndroidEntryPoint
@@ -40,6 +41,10 @@ class SendFeedbackFragment :
 
     private val viewModel by viewModels<SendFeedbackViewModel>()
     private var isSubmitEnabled = isDescriptionEnabled && Preferences.isFeedbackSharingEnabled()
+
+    override fun applyEdgeToEdgeIfNeeded(view: View) {
+        FragmentEdgeToEdge.apply(view, baseActivity, applyImeInset = true)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -86,7 +91,9 @@ class SendFeedbackFragment :
             }
         }
         binding.feedbackSwitch.setTextAndAction(R.string.action_learn_more) {
-            Util.startBrowserIntent(requireContext(), getString(R.string.config_feedback_url))
+            baseActivity.maybeChangeTemporaryTimeout {
+                Util.startBrowserIntent(requireContext(), getString(R.string.config_feedback_url))
+            }
         }
         // Set up the toolbar icons
         (activity as SettingsActivity).setToolbarHomeIcon(R.drawable.ic_close_white)
@@ -118,7 +125,8 @@ class SendFeedbackFragment :
     fun handleBackButton() {
         if (isSubmitEnabled)
         // Display a confirmation dialog using BottomSheetUtils
-            BottomSheetUtils.showConfirmSheet(fragmentManager = parentFragmentManager,
+            BottomSheetUtils.showConfirmSheet(
+                fragmentManager = parentFragmentManager,
                 titleText = getString(R.string.save_draft),
                 descriptionText = getString(R.string.description_submit_feedback),
                 actionButtonLabel = getString(R.string.Uwazi_Action_Save_Draft).uppercase(),
@@ -254,7 +262,7 @@ class SendFeedbackFragment :
     private fun buildFeedbackText(): String {
         val releaseLine = getString(
             R.string.feedback_metadata_release_line,
-            TellaReleaseNaming.fullReleaseLabel(requireContext())
+            TellaReleaseNaming.fullReleaseLabel(baseActivity)
         )
         val contact = binding.newFeedbackEditContact.text?.toString()?.trim().orEmpty()
         val description = binding.newFeedbackEditDescription.text?.toString()?.trim().orEmpty()

@@ -7,12 +7,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
-import org.hzontal.tella.keys.key.LifecycleMainKey
-import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentEditServerBinding
 import org.horizontal.tella.mobile.domain.entity.reports.TellaReportServer
-import org.horizontal.tella.mobile.util.LockTimeoutManager
 import org.horizontal.tella.mobile.util.show
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.dialog.ID_KEY
@@ -161,7 +158,6 @@ class EditTellaServerFragment :
                 if (isBindingServerDetails) return@setOnCheckedChangeListener
                 reportServer.isAutoUpload = isChecked
                 autoDeleteSeparator.isVisible = isChecked
-                updateTimeoutSetting(isChecked || backgroundUploadSwitch.mSwitch.isChecked)
                 autoDeleteSwitch.apply {
                     isVisible = isChecked
                     if (!isChecked) mSwitch.isChecked = false
@@ -201,16 +197,6 @@ class EditTellaServerFragment :
         server.isAutoDelete = reportServer.isAutoDelete
         server.hideProjectUrl = reportServer.hideProjectUrl
         return server
-    }
-
-    private fun updateTimeoutSetting(enableNoTimeout: Boolean) {
-        if (enableNoTimeout) {
-            MyApplication.getMainKeyHolder().timeout =
-                LifecycleMainKey.NO_TIMEOUT
-        } else {
-            MyApplication.getMainKeyHolder().timeout =
-                LockTimeoutManager.IMMEDIATE_SHUTDOWN
-        }
     }
 
 }

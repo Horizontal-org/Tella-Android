@@ -19,7 +19,6 @@ import android.media.MediaScannerConnection;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.DocumentsContract;
@@ -207,6 +206,7 @@ public class MediaFileHandler {
         FileUtil.emptyDir(new File(context.getFilesDir(), C.MEDIA_DIR));
         FileUtil.emptyDir(new File(context.getFilesDir(), C.METADATA_DIR));
         FileUtil.emptyDir(new File(context.getFilesDir(), C.TMP_DIR));
+        clearVerificationShareCache(context);
     }
 
     public static void exportMediaFile(Context context,
@@ -619,7 +619,7 @@ public class MediaFileHandler {
 
 
     public static Single<VaultFile> importOthersUri(Context context, Uri uri, String parentId) throws Exception {
-        String mimeType = context.getContentResolver().getType(uri);
+        String mimeType = MediaFile.INSTANCE.normalizedMimeType(context.getContentResolver().getType(uri));
 
         DocumentFile doc = DocumentFile.fromSingleUri(context, uri);
         if (doc == null || !doc.exists()) {
@@ -1006,27 +1006,26 @@ public class MediaFileHandler {
         launchShare(context, Collections.singletonList(mediaFileUri), vaultFile.mimeType, false);
     }
 
+    @SuppressLint("CheckResult")
     public static void startShareActivity(Context context, List<VaultFile> mediaFiles, boolean includeMetadata) {
         boolean withVerification = includeMetadata && hasVerificationMetadata(mediaFiles);
         ArrayList<Uri> uris = collectShareUris(context, mediaFiles, withVerification);
-        // TODO 3.5.0: resume the Signal zip share below. Until then Signal receives the same files as the rest of the app.
-        // if (!withVerification || !isSignalShareAvailable(context)) {
-        //     launchShare(context, uris, "*/*", uris.size() > 1, null);
-        //     return;
-        // }
-        //
-        // Context appContext = context.getApplicationContext();
-        // Single.fromCallable(() -> createVerificationShareZip(appContext, mediaFiles))
-        //         .subscribeOn(Schedulers.io())
-        //         .observeOn(AndroidSchedulers.mainThread())
-        //         .subscribe(
-        //                 zipUri -> launchShare(context, uris, "*/*", uris.size() > 1, zipUri),
-        //                 error -> {
-        //                     Timber.e(error, MediaFileHandler.class.getName());
-        //                     launchShare(context, uris, "*/*", uris.size() > 1, null);
-        //                 }
-        //         );
-        launchShare(context, uris, "*/*", uris.size() > 1, null);
+        if (!withVerification || !isSignalShareAvailable(context)) {
+            launchShare(context, uris, "*/*", uris.size() > 1, null);
+            return;
+        }
+
+        Context appContext = context.getApplicationContext();
+        Single.fromCallable(() -> createVerificationShareZip(appContext, mediaFiles))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        zipUri -> launchShare(context, uris, "*/*", uris.size() > 1, zipUri),
+                        error -> {
+                            Timber.e(error, MediaFileHandler.class.getName());
+                            launchShare(context, uris, "*/*", uris.size() > 1, null);
+                        }
+                );
     }
 
     private static boolean hasVerificationMetadata(List<VaultFile> mediaFiles) {
@@ -1160,25 +1159,23 @@ public class MediaFileHandler {
         if (uris.isEmpty()) {
             return;
         }
-        Intent shareIntent = new Intent();
-        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        shareIntent.setType(mimeType);
-        if (multiple || uris.size() > 1) {
-            shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
-            shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, new ArrayList<>(uris));
+
+        boolean zipAsMainPayload = signalZipUri != null && chooserMayIgnoreCustomTargets();
+        Intent shareIntent;
+        if (zipAsMainPayload) {
+            shareIntent = buildZipSendIntent(signalZipUri);
+            context.grantUriPermission(
+                    SIGNAL_PACKAGE,
+                    signalZipUri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+            );
         } else {
-            shareIntent.setAction(Intent.ACTION_SEND);
-            shareIntent.putExtra(Intent.EXTRA_STREAM, uris.get(0));
+            shareIntent = buildFilesShareIntent(uris, mimeType, multiple);
         }
-        ClipData clipData = ClipData.newRawUri(null, uris.get(0));
-        for (int i = 1; i < uris.size(); i++) {
-            clipData.addItem(new ClipData.Item(uris.get(i)));
-        }
-        shareIntent.setClipData(clipData);
 
         Intent chooser = Intent.createChooser(shareIntent, context.getText(R.string.action_share));
         chooser.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        if (signalZipUri != null) {
+        if (signalZipUri != null && !zipAsMainPayload) {
             attachSignalZipShare(context, chooser, shareIntent, signalZipUri);
         }
         if (!(context instanceof Activity)) {
@@ -1200,16 +1197,67 @@ public class MediaFileHandler {
         }
     }
 
+    private static Intent buildFilesShareIntent(List<Uri> uris, String mimeType, boolean multiple) {
+        Intent shareIntent = new Intent();
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        shareIntent.setType(mimeType);
+        if (multiple || uris.size() > 1) {
+            shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
+            shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, new ArrayList<>(uris));
+        } else {
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, uris.get(0));
+        }
+        ClipData clipData = ClipData.newRawUri(null, uris.get(0));
+        for (int i = 1; i < uris.size(); i++) {
+            clipData.addItem(new ClipData.Item(uris.get(i)));
+        }
+        shareIntent.setClipData(clipData);
+        return shareIntent;
+    }
+
+    private static Intent buildZipSendIntent(Uri zipUri) {
+        Intent zipIntent = new Intent(Intent.ACTION_SEND);
+        zipIntent.setType(VerificationMetadataCsv.MIME_TYPE_ZIP);
+        zipIntent.putExtra(Intent.EXTRA_STREAM, zipUri);
+        zipIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        zipIntent.setClipData(ClipData.newRawUri(null, zipUri));
+        return zipIntent;
+    }
+
+    /**
+     * True on vendors whose share sheet replaces the stock chooser and may ignore
+     * {@link Intent#EXTRA_INITIAL_INTENTS} and {@link Intent#EXTRA_EXCLUDE_COMPONENTS}.
+     */
+    private static boolean chooserMayIgnoreCustomTargets() {
+        return hasCustomShareSheet(Build.MANUFACTURER) || hasCustomShareSheet(Build.BRAND);
+    }
+
+    static boolean hasCustomShareSheet(@Nullable String vendor) {
+        if (vendor == null) {
+            return false;
+        }
+        String normalized = vendor.trim().toLowerCase(Locale.ROOT);
+        return normalized.equals("huawei") || normalized.equals("honor");
+    }
+
+    public static void clearVerificationShareCache(Context context) {
+        VerificationShareCacheCleaner.clearActive();
+        deleteShareCache(context);
+    }
+
     static void deleteShareCache(Context context) {
         File shareDir = new File(context.getApplicationContext().getCacheDir(), SHARE_CACHE_DIR);
         File[] existing = shareDir.listFiles();
-        if (existing == null) {
-            return;
-        }
-        for (File file : existing) {
-            if (!file.delete()) {
-                Timber.w("Failed to delete share cache file %s", file.getAbsolutePath());
+        if (existing != null) {
+            for (File file : existing) {
+                if (!file.delete()) {
+                    Timber.w("Failed to delete share cache file %s", file.getAbsolutePath());
+                }
             }
+        }
+        if (shareDir.exists() && !shareDir.delete()) {
+            Timber.w("Failed to delete share cache directory %s", shareDir.getAbsolutePath());
         }
     }
 
@@ -1226,11 +1274,7 @@ public class MediaFileHandler {
             Intent defaultShare,
             Uri zipUri
     ) {
-        Intent signalIntent = new Intent(Intent.ACTION_SEND);
-        signalIntent.setType(VerificationMetadataCsv.MIME_TYPE_ZIP);
-        signalIntent.putExtra(Intent.EXTRA_STREAM, zipUri);
-        signalIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        signalIntent.setClipData(ClipData.newRawUri(null, zipUri));
+        Intent signalIntent = buildZipSendIntent(zipUri);
         signalIntent.setPackage(SIGNAL_PACKAGE);
 
         List<ResolveInfo> signalActivities = queryShareActivities(context, signalIntent);

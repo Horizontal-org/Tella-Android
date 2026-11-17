@@ -40,9 +40,6 @@ public class C {
     //A day in milliseconds
     public static final long DAY = 86400000;
 
-    //An hour in milliseconds
-    public static final long UPLOAD_SET_DURATION = 3600000;
-
     public static final long UPLOAD_REPORT_DURATION = 1800000;
 
     //Resource file type

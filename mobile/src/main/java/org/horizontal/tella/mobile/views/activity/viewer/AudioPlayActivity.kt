@@ -203,8 +203,9 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
     override fun onBackPressed() {
         super.onBackPressed()
         if (isInfoShown) {
+            isInfoShown = false
             toolbar.menu.findItem(R.id.menu_item_more).isVisible = true
-            toolbar.menu.findItem(R.id.menu_item_metadata).isVisible = true
+            setupMetadataMenuItem(handlingVaultFile?.metadata != null)
             toolbar.title = handlingVaultFile?.name
         } else {
             stopPlayer()

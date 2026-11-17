@@ -17,8 +17,6 @@ import org.hzontal.tella.keys.config.IUnlockRegistryHolder
 import org.hzontal.tella.keys.config.UnlockRegistry
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.data.sharedpref.Preferences
-import org.horizontal.tella.mobile.util.LockTimeoutManager
-import org.horizontal.tella.mobile.util.LockTimeoutManager.IMMEDIATE_SHUTDOWN
 import org.horizontal.tella.mobile.views.activity.PatternUpgradeActivity
 
 abstract class BaseLockActivity : BaseActivity() {
@@ -94,23 +92,5 @@ abstract class BaseLockActivity : BaseActivity() {
         Preferences.setUnlockTime(System.currentTimeMillis())
         restrictActivity()
         super.onResume()
-    }
-
-    private fun maybeRestoreTimeout() {
-        // Check if a temporary timeout is currently set in preferences
-        if (Preferences.isTempTimeout()) {
-            // Reset the temporary timeout flag in preferences
-            Preferences.setTempTimeout(false)
-            // Immediately set the lock timeout to shut down the application
-            LockTimeoutManager().lockTimeout = IMMEDIATE_SHUTDOWN
-        }
-    }
-
-    override fun onDestroy() {
-        // Attempt to restore the timeout setting if it was temporarily changed
-        maybeRestoreTimeout()
-        // Note: onDestroy() is not always reliable, as its execution depends on system behavior
-        // and can vary across devices.
-        super.onDestroy()
     }
 }

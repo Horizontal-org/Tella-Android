@@ -169,6 +169,7 @@ class DivviupUtils @Inject constructor(private val context: Context) {
     }
 
     fun runTimeSpentEvent(milliseconds: Long) {
+        if (!hasAcceptedAnalytics() || isDebugBuild()) return
         ioScope.launch {
             try {
                 sendSumMeasurement(

@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.StrictMode;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -25,6 +27,7 @@ import androidx.work.Configuration;
 
 import com.bumptech.glide.Glide;
 
+import org.horizontal.tella.mobile.util.LockTimeoutManager;
 import org.horizontal.tella.mobile.util.crash.CrashReporterProvider;
 
 import com.hzontal.tella_locking_ui.TellaKeysUI;
@@ -33,7 +36,9 @@ import com.hzontal.tella_locking_ui.ui.AppCompatActivityUnlocker;
 import com.hzontal.tella_locking_ui.ui.DeviceCredentialsUnlockActivity;
 import com.hzontal.tella_locking_ui.ui.password.PasswordUnlockActivity;
 import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity;
+
 import org.horizontal.tella.mobile.views.activity.onboarding.OnboardingLockProtectSheet;
+
 import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity;
 import com.hzontal.tella_vault.Vault;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -111,6 +116,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     private long startTime;
     private long totalTimeSpent = 0; // Store total time spent in the app
     private int activityReferences = 0;
+    private int resumedActivities = 0;
+    private Activity resumedActivity;
     private boolean isActivityChangingConfigurations = false;
 
 
@@ -230,6 +237,17 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         vaultConfig.root = new File(this.getFilesDir(), C.MEDIA_DIR);
 
         mainKeyHolder = new LifecycleMainKey(ProcessLifecycleOwner.get().getLifecycle(), Preferences.getLockTimeout());
+        mainKeyHolder.setOnCleared(() -> {
+            LockTimeoutManager.onMainKeyCleared();
+            new Handler(Looper.getMainLooper()).post(() -> {
+                Activity activity = resumedActivity;
+                if (activity instanceof BaseLockActivity
+                        && !activity.isFinishing() && !activity.isDestroyed()) {
+                    ((BaseLockActivity) activity).restrictActivity();
+                }
+            });
+            MediaFileHandler.clearVerificationShareCache(this);
+        });
         //Tella keys
         TellaKeys.initialize();
         initializeLockConfigRegistry();
@@ -313,7 +331,6 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
 
     @Override
     public void onUnSuccessfulUnlock(String tag, Throwable throwable) {
-        CrashReporterProvider.INSTANCE.get().recordException(throwable);
     }
 
     @Override
@@ -403,23 +420,39 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
 
     @Override
     public void onActivityResumed(@NonNull Activity activity) {
-
+        resumedActivity = activity;
+        boolean returning = resumedActivities == 0;
+        resumedActivities++;
+        if (returning && mainKeyHolder != null) {
+            mainKeyHolder.noteAppResumed();
+            LockTimeoutManager.restoreTemporaryTimeout();
+        }
     }
 
     @Override
     public void onActivityPaused(@NonNull Activity activity) {
-
+        if (resumedActivity == activity) {
+            resumedActivity = null;
+        }
+        resumedActivities = Math.max(0, resumedActivities - 1);
+        if (resumedActivities == 0 && !activity.isChangingConfigurations() && mainKeyHolder != null) {
+            mainKeyHolder.noteAppPaused();
+            LockTimeoutManager.onAppPaused();
+        }
     }
 
     @Override
     public void onActivityStopped(Activity activity) {
         isActivityChangingConfigurations = activity.isChangingConfigurations();
         if (--activityReferences == 0 && !isActivityChangingConfigurations) {
+            if (mainKeyHolder != null) {
+                mainKeyHolder.deactivate();
+            }
             // App enters background
             long spentTime = System.currentTimeMillis() - startTime;
             totalTimeSpent += spentTime; // Add to total time spent
             Preferences.setTimeSpent(totalTimeSpent); // Save the time to shared preferences
-            divviupUtils.runTimeSpentEvent(totalTimeSpent); // Send analytics if needed
+            divviupUtils.runTimeSpentEvent(spentTime);
             TempFileManager.INSTANCE.deleteAllFiles();
         }
     }

@@ -82,7 +82,10 @@
     <string name="permission_dialog.expl_device.storage">Для экспарту мультымедыя файлаў дадатку патрабуецца дазвол на доступ да знешняга сховішча</string>
     <string name="gallery_toast_fail.deleting.files">Памылка пры выдаленні файлаў. Некаторыя мультымедыя файлы не выдалены</string>
     <plurals name="gallery_toast_files.exported">
-        <item quantity="one">%1$d file saved to the device</item>
+        <item quantity="one">%1$d файл захаваны на прыладу</item>
+        <item quantity="few">%1$d файлы захаваныя на прыладу</item>
+        <item quantity="many">%1$d файлаў захавана на прыладу</item>
+        <item quantity="other">%1$d файлаў захавана на прыладу</item>
     </plurals>
     <string name="gallery_delete.files_dialog.title">Выдаліць мультымедыя файлы?</string>
     <string name="gallery_delete.files_dialog.expl">Абраныя мультымедыя файлы будуць выдаленыя з вашай галерэі.</string>
@@ -117,7 +120,7 @@
     <string name="settings.camo_expl">Выберыце ўласны значок і імя, каб лепш схаваць Tella на прыладзе. Звярніце ўвагу, што значок Tella застанецца бачным у меню дадаткаў Android.</string>
     <string name="gallery_action.desc_save.to.device">Захаваць на прыладзе</string>
     <string name="settings.docu_verification_action">Рэжым праверкі</string>
-    <string name="settings.docu_verification_action.expl">Зрабіць вашыя медыя-файлы праверанымі, збіраючы інфармацыю пра прыладу і месцазнаходжанне.</string>
+    <string name="settings.docu_verification_action.expl">Makes it easier to verify where and when a photo, video, or audio recording was captured by collecting information about your device and location.</string>
     <string name="collect_no.form_heading">Лёгкі збор дадзеных</string>
     <string name="collect_expl_not.connected.to.server">Каб атрымліваць формы і адпраўляць дадзеныя, неабходна спачатку падключыцца да сумяшчальнага сервера. Запытайце ў вашай спонсарскай арганізацыі інфармацыю аб серверы і <a href="tella_scheme://open.collect.manage.servers.activity"> наладзьце сервер тут </a> .</string>
     <string name="collect.sent_expl_no.forms">Няма адпраўленых формаў для паказу</string>
@@ -147,11 +150,9 @@
     <string name="gallery_action.desc_file.metadata">Метададзеныя</string>
     <string name="verification.info_app.bar">Метададзеныя</string>
     <string name="verification.info_field_filename">Імя файла</string>
-    <string name="verification.info_field_file.path">Шлях да файла</string>
     <string name="verification.info_field_file.modified">Файл зменены</string>
     <string name="verification.info_field_hash">Файлавы хэш</string>
     <string name="verification.info_field_manufacturer">Вытворца</string>
-    <string name="verification.info_field_hardware">Абсталяванне</string>
     <string name="verification.info_field_device.id">Ідэнтыфікацыйны нумар прылады</string>
     <string name="verification.info_field_screen.size">Памер экрана</string>
     <string name="verification.info_field_language">Мова</string>
@@ -169,7 +170,6 @@
     <string name="settings.camo_calculator2">Калькулятар</string>
     <string name="verification.info_subheading_file.metadata">Файл</string>
     <string name="verification.info_subheading_device.metadata">Прылада</string>
-    <string name="verification.info_subheading_context.metadata">Кантэкст</string>
     <string name="verification.info_field_metadata.not.available">Не даступны</string>
     <string name="verification.info_field_latitude">Шырата</string>
     <string name="verification.info_field_longitude">Даўгата</string>
@@ -184,7 +184,10 @@
     <string name="collect.form_signature_toast_fail.saving">Пры захаванні подпісу адбылася памылка</string>
     <string name="collect.form_acknowledge_select.expl">OK. Калі ласка, працягвайце.</string>
     <plurals name="collect.end_meta_number.of.elements">
-        <item quantity="one">%d file</item>
+        <item quantity="one">%d файл</item>
+        <item quantity="few">%d файлы</item>
+        <item quantity="many">%d файлаў</item>
+        <item quantity="other">%d файлаў</item>
     </plurals>
     <string name="action_learn.more">Даведайцеся больш</string>
     <string name="settings.servers_add.server_dialog.title">Дадаць сервер</string>
@@ -225,10 +228,7 @@
     <string name="verification.collecting_list.item_device">Ідэнтыфікацыя прылады</string>
     <string name="verification.collecting_list.item_network">Інфармацыя аб сетцы</string>
     <string name="verification.collecting_dialog.expl">Збор інфармацыі, каб зрабіць файл правераным. Гэта можа заняць некалькі хвілін. Пераканайцеся, што для дасягнення лепшых вынікаў ваша прылада бачыць неба.</string>
-    <string name="verification.help.info_app.bar">Дапамога па метададзеным</string>
     <string name="gallery_action.desc_metadata.help">Дапамога па метададзеным</string>
-    <string name="verification.info_file.path.expl">Дзе знаходзіўся файл у каталогу Tella.</string>
-    <string name="verification.info_hash.expl">Унікальны нумар для ідэнтыфікацыі файла.</string>
     <string name="verification.info_date.time.modified.expl">Дата і час апошняга змянення файла на прыладзе.</string>
     <string name="verification.info_manufacturer.expl">Назва вытворцы прылады.</string>
     <string name="verification.info_device.model.expl">Дакладная мадэль прылады.</string>
@@ -241,7 +241,6 @@
     <string name="verification.info_wifi.mac.expl">Унікальны ідэнтыфікатар прылады для злучэння з Wi-Fi.</string>
     <string name="verification.info_ipv4.expl">Унікальны адрас, які вызначае падключэнне прылады да Інтэрнэту.</string>
     <string name="verification.info_ipv6.expl">Апошні ідэнтыфікатар злучэння прыладай з Інтэрнэтам.</string>
-    <string name="verification.info_location.expl">Дакладнае размяшчэнне прылады ўключае каардынаты шыраты і даўжыні, вышыню ў метрах, дакладнасць вымярэння ў метрах і час вымярэння.</string>
     <string name="verification.info_location.provider.expl">Як вызначаецца месцазнаходжанне. \"Злітае\" азначае, што выкарыстоўваецца мноства метадаў, уключаючы GPS і сеткавыя злучэнні.</string>
     <string name="verification.info_location.speed.expl">Хуткасць, з якой рухаецца прылада ў метрах у секунду.</string>
     <string name="verification.info_cell.towers.expl">Ідэнтыфікацыйныя нумары ўсіх станцый, да якіх падключана прылада.</string>
@@ -400,7 +399,10 @@
     <string name="Vault_CreateFolder_SheetAction">Create</string>
     <string name="ServerSettings_ServerName_ToolTip">Give your server a name to recognize it if you add more servers later. It could be the organization’s name, the project’s name, etc.</string>
     <plurals name="Vault_Importing_SheetProgress">
-        <item quantity="one">file imported</item>
+        <item quantity="one">файл імпартаваны</item>
+        <item quantity="few">файлы імпартаваныя</item>
+        <item quantity="many">файлаў імпартавана</item>
+        <item quantity="other">файлаў імпартавана</item>
     </plurals>
     <string name="Vault_Importing_SheetTitle">Importing and encrypting</string>
     <string name="Rec_Exit_SheetTitle">Save recording?</string>
@@ -482,7 +484,10 @@
     <string name="Uwazi_Server_Title">Server :</string>
     <string name="Uwazi_Template_Title">Template :</string>
     <plurals name="Uwazi_MiltiFileWidget_FilesAttached">
-        <item quantity="one">%1$d file attached</item>
+        <item quantity="one">%1$d файл далучаны</item>
+        <item quantity="few">%1$d файлы далучаныя</item>
+        <item quantity="many">%1$d файлаў далучана</item>
+        <item quantity="other">%1$d файлаў далучана</item>
     </plurals>
     <string name="Uwazi_MiltiFileWidget_SelectFiles">Select files</string>
     <string name="Uwazi_MiltiFileWidget_SelectPdfFiles">Select PDF files</string>
@@ -508,19 +513,34 @@
     <string name="Collect_Subtitle_RemoveForm">Are you sure you want to remove \"%1$s\"?</string>
     <string name="Util_ellapsedTime_Year">More than a year ago</string>
     <plurals name="Util_ellapsedTime_Months">
-        <item quantity="one">A month ago</item>
+        <item quantity="one">Месяц таму</item>
+        <item quantity="few">%d месяцы таму</item>
+        <item quantity="many">%d месяцаў таму</item>
+        <item quantity="other">%d месяцаў таму</item>
     </plurals>
     <plurals name="Util_ellapsedTime_Weeks">
-        <item quantity="one">A week ago</item>
+        <item quantity="one">Тыдзень таму</item>
+        <item quantity="few">%d тыдні таму</item>
+        <item quantity="many">%d тыдняў таму</item>
+        <item quantity="other">%d тыдняў таму</item>
     </plurals>
     <plurals name="Util_ellapsedTime_Days">
-        <item quantity="one">One day ago</item>
+        <item quantity="one">Адзін дзень таму</item>
+        <item quantity="few">%d дні таму</item>
+        <item quantity="many">%d дзён таму</item>
+        <item quantity="other">%d дзён таму</item>
     </plurals>
     <plurals name="Util_ellapsedTime_Hours">
-        <item quantity="one">An hour ago</item>
+        <item quantity="one">Гадзіну таму</item>
+        <item quantity="few">%d гадзіны таму</item>
+        <item quantity="many">%d гадзін таму</item>
+        <item quantity="other">%d гадзін таму</item>
     </plurals>
     <plurals name="Util_ellapsedTime_Minutes">
-        <item quantity="one">A minute ago</item>
+        <item quantity="one">Хвіліну таму</item>
+        <item quantity="few">%d хвіліны таму</item>
+        <item quantity="many">%d хвілін таму</item>
+        <item quantity="other">%d хвілін таму</item>
     </plurals>
     <string name="Util_ellapsedTime_Seconds">A few seconds ago</string>
     <string name="Donwload_Templates_Title_Description">These are the templates available on the Uwazi instances you are connected to.</string>
@@ -563,8 +583,6 @@
     <string name="Collect_DeleteDraftForm_SheetExpl">Are you sure you want to delete this draft?</string>
     <string name="Collect_DeleteForm_SheetExpl">Are you sure you want to delete this form?</string>
     <string name="Uwazi_Dialog_Draft_Title">Exit entity?</string>
-    <string name="Verification_Label_meter">%f м</string>
-    <string name="Verification_Label_MeterPerSecond">%f м/с</string>
     <string name="settings_sec_security_screen">Screen security</string>
     <string name="settings_sec_security_screen_expl">Block screenshots and screen recordings inside Tella and screen preview in the list of recent apps</string>
     <string name="settings.serv_add.server.selection_dialog.description">If you are not sure, please ask your organization.</string>
@@ -610,14 +628,23 @@
     <string name="settings.docu_auto.delete_action.expl">Tella will automatically delete the files from your device as soon as they are uploaded to the server.</string>
     <string name="settings.docu_delete.upload.server_dialog.expl">You will no longer be able to upload files to this server.</string>
     <plurals name="upload.main_meta_number.of.files">
-        <item quantity="one">One file</item>
+        <item quantity="one">Адзін файл</item>
+        <item quantity="few">%d файлы</item>
+        <item quantity="many">%d файлаў</item>
+        <item quantity="other">%d файлаў</item>
     </plurals>
     <string name="upload.main_meta_number.of.files_with_average" formatted="false">%d/%d MB uploaded</string>
     <plurals name="upload.main_meta_number.of.files.uploaded">
-        <item quantity="one">%d file uploaded</item>
+        <item quantity="one">%d файл запампаваны</item>
+        <item quantity="few">%d файлы запампаваныя</item>
+        <item quantity="many">%d файлаў запампавана</item>
+        <item quantity="other">%d файлаў запампавана</item>
     </plurals>
     <plurals name="upload.main_meta_minutes.left">
-        <item quantity="one">%d minute left</item>
+        <item quantity="one">Засталася %d хвіліна</item>
+        <item quantity="few">Засталося %d хвіліны</item>
+        <item quantity="many">Засталося %d хвілін</item>
+        <item quantity="other">Засталося %d хвілін</item>
     </plurals>
     <string name="settings.select_customization">Customization</string>
     <string name="Uwazi_Send_Header_Title">End of entity</string>
@@ -817,7 +844,10 @@
     <string name="Sensitive_Chnage_Description">The next version of Tella (to be released on 15 July 2024) will include major technical improvements. These changes carry a small risk that some files are lost when updating to the new version. If you store sensitive files in Tella, we advise you to copy them to a safe place outside of Tella before the update. Tap ‘Learn More’ below for more information on the upcoming changes and guidance on how to export all files from Tella.</string>
     <string name="Learn_More">LEARN MORE</string>
     <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
-        <item quantity="one">%1$d entity selected</item>
+        <item quantity="one">Выбрана %1$d сутнасць</item>
+        <item quantity="few">Выбраны %1$d сутнасці</item>
+        <item quantity="many">Выбрана %1$d сутнасцяў</item>
+        <item quantity="other">Выбрана %1$d сутнасцяў</item>
     </plurals>
     <string name="Uwazi_RelationShipWidget_Select_Entities">Select the entities you want to connect to this property.</string>
     <string name="Analytics_contribute_reminder_title">You are sharing data</string>
@@ -1004,14 +1034,23 @@
     <string name="success_title">Success</string>
     <string name="failure_title">Something went wrong</string>
     <plurals name="success_file_received_from_sender">
-        <item quantity="one">You have successfully received %1$d file from the sender.</item>
+        <item quantity="one">Вы паспяхова атрымалі ад адпраўніка %1$d файл.</item>
+        <item quantity="few">Вы паспяхова атрымалі ад адпраўніка %1$d файлы.</item>
+        <item quantity="many">Вы паспяхова атрымалі ад адпраўніка %1$d файлаў.</item>
+        <item quantity="other">Вы паспяхова атрымалі ад адпраўніка %1$d файлаў.</item>
     </plurals>
     <plurals name="success_file_sent_to_recipient">
-        <item quantity="one">You have successfully sent %1$d file to the recipient.</item>
+        <item quantity="one">Вы паспяхова адправілі атрымальніку %1$d файл.</item>
+        <item quantity="few">Вы паспяхова адправілі атрымальніку %1$d файлы.</item>
+        <item quantity="many">Вы паспяхова адправілі атрымальніку %1$d файлаў.</item>
+        <item quantity="other">Вы паспяхова адправілі атрымальніку %1$d файлаў.</item>
     </plurals>
     <string name="partial_success_summary">Only %1$d files were received. %2$d files were not received.</string>
     <plurals name="failure_file_received_expl">
-        <item quantity="one">0 files were received. %1$d file was not received.</item>
+        <item quantity="one">Атрымана 0 файлаў. Не ўдалося атрымаць %1$d файл.</item>
+        <item quantity="few">Атрымана 0 файлаў. Не ўдалося атрымаць %1$d файлы.</item>
+        <item quantity="many">Атрымана 0 файлаў. Не ўдалося атрымаць %1$d файлаў.</item>
+        <item quantity="other">Атрымана 0 файлаў. Не ўдалося атрымаць %1$d файлаў.</item>
     </plurals>
     <string name="view_files_action">View Files</string>
     <string name="view_files">VIEW FILES</string>
@@ -1103,34 +1142,24 @@
     <string name="Uwazi_RemoveTemplate_ConfirmTitle">Remove \"%1$s\"?</string>
     <string name="Uwazi_Template_Removed_Toast">\"%s\" has been removed from your downloads.</string>
     <string name="onboard.title_nearby_sharing">Падзяліцца толькі мультымедыйным файлам</string>
-    <string name="verification.info_field_hash.sha256">File hash SHA256</string>
-    <string name="verification.info_field_file.created">File created</string>
-    <string name="verification.info_field_network">Network</string>
-    <string name="verification.info_field_data.type">Data type</string>
-    <string name="verification.info_field_notes">Notes</string>
     <string name="verification.info_field_location.latitude">Latitude</string>
     <string name="verification.info_field_location.longitude">Longitude</string>
     <string name="verification.info_field_location.accuracy">Accuracy</string>
     <string name="verification.info_field_location.altitude">Altitude</string>
-    <string name="verification.info_field_location.time.value">Timestamp of GPS reading</string>
     <string name="verification.info_field_ambient.temperature">Ambient temperature</string>
-    <string name="verification.info_field_light">Light</string>
+    <string name="verification.info_field_light">Light level</string>
     <string name="verification.info_subheading_network.metadata">Network</string>
     <string name="verification.info_subheading_location.metadata">Location</string>
-    <string name="verification.info_subheading_other.metadata">Other</string>
-    <string name="verification.info_subheading_general">General</string>
+    <string name="verification.info_subheading_other.metadata">Environment</string>
     <string name="verification.help.intro">Tella records metadata about every photo, video, and audio you capture: the file, the device, and the environment around it.</string>
     <string name="verification.help.intro.evidence">This verification information can be used to corroborate evidence and cross-check it with other facts known about the event or the area where it was captured. %1$s</string>
     <string name="verification.help.intro.warning">Some of this information (ip, geolocation) can identify you or your device, be careful when sharing it.</string>
-    <string name="verification.help.categories">The verification information can be divided into five categories:</string>
     <string name="verification.help.file.bar">File help</string>
     <string name="verification.help.device.bar">Device help</string>
     <string name="verification.help.network.bar">Network help</string>
     <string name="verification.help.location.bar">Location help</string>
-    <string name="verification.help.other.bar">Other help</string>
+    <string name="verification.help.other.bar">Environment help</string>
     <string name="verification.info_filename.expl">The file\'s name.</string>
-    <string name="verification.info_file.created.expl">When the file was created in Tella, if available.</string>
-    <string name="verification.info_notes.expl">Optional notes attached to the file.</string>
     <string name="verification.info_data.type.expl">The type of mobile data network the device is connected to.</string>
     <string name="verification.info_location.latitude.expl">The exact latitude of the device in degrees.</string>
     <string name="verification.info_location.longitude.expl">The exact longitude of the device in degrees.</string>
@@ -1147,4 +1176,30 @@
     <string name="verification.save_csv_already_saved_path">You can find it in your Tella files, under %s.</string>
     <string name="verification.save_csv_already_saved_action">I understand</string>
     <string name="onboard_lock_warning_message_recover">If you forget your lock, there is currently no way to recover it. Your data inside Tella will be lost forever.</string>
+    <string name="verification_file_hash_help">A unique number generated from the content of the file</string>
+    <string name="verification_network_connected_to">Connected to</string>
+    <string name="verification_network_nearby_cells">Nearby cell towers</string>
+    <string name="verification_network_nearby_wifi">Nearby Wi-Fi networks</string>
+    <string name="verification_network_wifi">Wi-Fi</string>
+    <string name="verification_network_cellular">Cellular network</string>
+    <string name="verification_network_not_mobile">The device was not on mobile data</string>
+    <string name="verification_location_speed">Speed</string>
+    <string name="verification_location_recorded_at">Location recorded at</string>
+    <string name="verification.info_field_not_supported_on_device">Not supported on this device</string>
+    <string name="verification_file_last_modified">Last modified</string>
+    <string name="verification_file_folder">Folder</string>
+    <string name="verification_file_info_created">Verification info created</string>
+    <string name="verification_file_size_help">The size of the file</string>
+    <string name="verification_file_format_help">The format of the file</string>
+    <string name="verification_file_created_help">The date and time when the file was first created on the device</string>
+    <string name="verification_file_resolution_help">The exact number of pixels that make up the image</string>
+    <string name="verification_file_folder_help">Where the file is located in the Tella directory</string>
+    <string name="verification_file_info_created_help">The date and time when the verification information was created on the device</string>
+    <string name="verification_device_model">Model</string>
+    <string name="verification_device_wifi_mac_address">Wi-Fi MAC address</string>
+    <string name="verification_device_region">Region</string>
+    <string name="verification_device_not_recorded">Could not be recorded</string>
+    <string name="verification_network_mobile_type">Mobile network type</string>
+    <string name="verification_network_ipv4_address">IPv4 address</string>
+    <string name="verification_network_ipv6_address">IPv6 address</string>
 </resources>
