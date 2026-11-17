@@ -21,6 +21,8 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
         reportTypeTextView = view.findViewById(R.id.server_name_textView)
         twoLinesReportTypeTextView = view.findViewById(R.id.two_line_server_name_textView)
         reportTypeImg = view.findViewById(R.id.server_img)
+        reportTypeTextView.text = ""
+        twoLinesReportTypeTextView.text = ""
 
         when (item.type) {
             ServerType.UWAZI -> {
@@ -102,6 +104,17 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
 
             ServerType.PEERTOPEER -> {
                 twoLinesReportTypeTextView.text = view.context.getText(R.string.NearBySharing)
+                reportTypeImg.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        view.resources,
+                        R.drawable.ic_p2p,
+                        null
+                    )
+                )
+            }
+
+            ServerType.OUISYNC -> {
+                reportTypeTextView.text = view.context.getString(R.string.ouisync)
                 reportTypeImg.setImageDrawable(
                     ResourcesCompat.getDrawable(
                         view.resources,

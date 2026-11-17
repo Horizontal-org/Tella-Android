@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ouisync_graph"
+    app:startDestination="@id/ouisyncReposFragment">
+
+    <fragment
+        android:id="@+id/ouisyncReposFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.ouisync.OuisyncRepositoriesFragment"
+        android:label="@string/ouisync">
+        <action
+            android:id="@+id/action_ouisyncRepos_to_import"
+            app:destination="@id/ouisyncImportFragment" />
+        <action
+            android:id="@+id/action_ouisyncRepos_to_files"
+            app:destination="@id/ouisyncFilesFragment" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/ouisyncImportFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.ouisync.OuisyncImportFragment"
+        android:label="@string/ouisync_import_repository" />
+
+    <fragment
+        android:id="@+id/ouisyncFilesFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.ouisync.OuisyncFilesFragment"
+        android:label="@string/ouisync">
+        <argument
+            android:name="repoName"
+            app:argType="string" />
+        <argument
+            android:name="repoLabel"
+            android:defaultValue=""
+            app:argType="string" />
+    </fragment>
+</navigation>

@@ -469,3 +469,5 @@
 
 -keep class org.bouncycastle.** { *; }
 -dontwarn org.bouncycastle.**
+
+-keep class org.equalitie.ouisync.** { *; }
