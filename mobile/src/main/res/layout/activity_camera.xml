@@ -29,6 +29,10 @@
         <org.horizontal.tella.mobile.views.custom.CameraGridOverlayView android:id="@+id/gridOverlay"
             android:layout_width="match_parent" android:layout_height="match_parent"
             android:importantForAccessibility="no" android:visibility="gone" />
+        <ImageView android:id="@+id/focusIndicator" android:layout_width="80dp" android:layout_height="80dp"
+            android:layout_gravity="top|left" android:clickable="false" android:focusable="false"
+            android:importantForAccessibility="no" android:src="@drawable/camera_focus_indicator"
+            android:visibility="invisible" />
         <FrameLayout android:layout_width="48dp" android:layout_height="250dp"
             android:layout_gravity="bottom|start" android:layout_marginStart="16dp" android:layout_marginBottom="16dp">
             <SeekBar android:id="@+id/camera_zoom" style="@style/CameraZoomSeekBar"

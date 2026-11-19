@@ -12,6 +12,7 @@ import android.media.MediaActionSound
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.OrientationEventListener
 import android.view.Surface
@@ -49,7 +50,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updatePadding
+import androidx.lifecycle.Lifecycle
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.gson.Gson
@@ -87,6 +88,7 @@ import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import timber.log.Timber
 import java.io.File
+import java.util.concurrent.CancellationException
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
@@ -138,6 +140,9 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     private var cameraStopped = false
     private var pendingCaptureAfterLocationCheck = PendingCapture.NONE
     private var gpsPromptIgnoredForCurrentSession = false
+    private var focusRequestId = 0L
+    private var isTapFocusActive = false
+    private val resetTapFocusRunnable = Runnable { resetTapFocus() }
 
     private lateinit var binding: ActivityCameraBinding
     private var captureWithAutoUpload = true
@@ -274,6 +279,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     }
 
     override fun onPause() {
+        resetTapFocus()
         super.onPause()
         mOrientationEventListener?.disable()
     }
@@ -283,12 +289,14 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
             captureButton.performClick()
         }
         cameraProvider?.unbindAll()
+        camera = null
         cameraStopped = true
         stopLocationMetadataListening()
         super.onStop()
     }
 
     override fun onDestroy() {
+        resetTapFocus()
         super.onDestroy()
         hideProgressDialog()
         hideVideoResolutionDialog()
@@ -387,6 +395,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
                     setResult(RESULT_OK, this)
                     finish()
                 }
+
                 IntentMode.COLLECT -> {
                     val list: MutableList<String> = mutableListOf()
                     list.add(vaultFile.id)
@@ -394,6 +403,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
                     setResult(RESULT_OK, this)
                     finish()
                 }
+
                 else -> {
                     putExtra(C.CAPTURED_MEDIA_FILE_ID, vaultFile.metadata)
                     setResult(RESULT_OK, this)
@@ -559,11 +569,13 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
                         imageCapture?.flashMode = ImageCapture.FLASH_MODE_ON
                     }
                 }
+
                 ImageCapture.FLASH_MODE_AUTO -> {
                     flashMode = ImageCapture.FLASH_MODE_ON
                     flashButton.displayFlashOn()
                     imageCapture?.flashMode = ImageCapture.FLASH_MODE_ON
                 }
+
                 else -> {
                     turnFlashDown()
                 }
@@ -585,11 +597,13 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
                         putExtra(PhotoViewerActivity.VIEW_PHOTO, lastMediaFile)
                     }
                 }
+
                 MediaFile.isVideoFileType(it) -> {
                     intent = Intent(this, VideoViewerActivity::class.java).apply {
                         putExtra(VideoViewerActivity.VIEW_VIDEO, lastMediaFile)
                     }
                 }
+
                 else -> {
                     intent = Intent(this, MainActivity::class.java).apply {
                         putExtra(MainActivity.PHOTO_VIDEO_FILTER, FilterType.PHOTO_VIDEO.name)
@@ -607,6 +621,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     }
 
     private fun setCameraZoom() {
+        resetTapFocus()
         camera?.cameraControl?.setLinearZoom(zoomLevel.toFloat() / 100f)
     }
 
@@ -643,6 +658,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
                 zoomLevel = i
                 setCameraZoom()
             }
+
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
@@ -687,19 +703,87 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setupPreviewTapToFocus() {
+        var hadMultiplePointers = false
+        val gestureDetector =
+            GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
+                override fun onDown(event: MotionEvent): Boolean = true
+
+                override fun onSingleTapUp(event: MotionEvent): Boolean {
+                    if (!hadMultiplePointers) {
+                        focusPreviewAt(event.x, event.y)
+                    }
+                    return true
+                }
+            })
+        gestureDetector.setOnDoubleTapListener(null)
         binding.viewFinder.setOnTouchListener { _, event ->
-            if (event.action != MotionEvent.ACTION_UP) {
-                return@setOnTouchListener false
+            when (event.actionMasked) {
+                MotionEvent.ACTION_DOWN -> hadMultiplePointers = false
+                MotionEvent.ACTION_POINTER_DOWN -> hadMultiplePointers = true
             }
-            val cameraControl = camera?.cameraControl ?: return@setOnTouchListener false
-            val factory = binding.viewFinder.meteringPointFactory
-            val point = factory.createPoint(event.x, event.y)
-            val action = FocusMeteringAction.Builder(point, FocusMeteringAction.FLAG_AF)
-                .setAutoCancelDuration(3, TimeUnit.SECONDS)
-                .build()
-            cameraControl.startFocusAndMetering(action)
+            gestureDetector.onTouchEvent(event)
             true
         }
+        binding.viewFinder.previewStreamState.observe(this) { state ->
+            if (state != PreviewView.StreamState.STREAMING) {
+                resetTapFocus()
+            }
+        }
+    }
+
+    private fun focusPreviewAt(focusX: Float, focusY: Float) {
+        val currentCamera = camera ?: return
+        val viewFinder = binding.viewFinder
+        if (cameraStopped || !lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED) ||
+            viewFinder.previewStreamState.value != PreviewView.StreamState.STREAMING ||
+            focusX < 0f || focusX >= viewFinder.width || focusY < 0f || focusY >= viewFinder.height
+        ) return
+
+        val point = viewFinder.meteringPointFactory.createPoint(focusX, focusY)
+        val action = FocusMeteringAction.Builder(point, FocusMeteringAction.FLAG_AF)
+            .setAutoCancelDuration(TAP_FOCUS_DURATION_MS, TimeUnit.MILLISECONDS)
+            .build()
+        if (!currentCamera.cameraInfo.isFocusMeteringSupported(action)) return
+
+        clearFocusIndicator()
+        val requestId = focusRequestId
+        isTapFocusActive = true
+        binding.focusIndicator.apply {
+            x = viewFinder.left + focusX - width / 2f
+            y = viewFinder.top + focusY - height / 2f
+            visibility = View.VISIBLE
+            postDelayed(resetTapFocusRunnable, TAP_FOCUS_DURATION_MS)
+        }
+        val focusFuture = currentCamera.cameraControl.startFocusAndMetering(action)
+        focusFuture.addListener({
+            if (requestId != focusRequestId) return@addListener
+            try {
+                if (!focusFuture.get().isFocusSuccessful) {
+                    resetTapFocus()
+                }
+            } catch (_: CancellationException) {
+                resetTapFocus()
+            } catch (e: ExecutionException) {
+                resetTapFocus()
+                Timber.d(e, "Unable to focus camera")
+            } catch (_: InterruptedException) {
+                Thread.currentThread().interrupt()
+                resetTapFocus()
+            }
+        }, ContextCompat.getMainExecutor(this))
+    }
+
+    private fun resetTapFocus() {
+        clearFocusIndicator()
+        if (!isTapFocusActive) return
+        isTapFocusActive = false
+        camera?.cameraControl?.cancelFocusAndMetering()
+    }
+
+    private fun clearFocusIndicator() {
+        focusRequestId++
+        binding.focusIndicator.removeCallbacks(resetTapFocusRunnable)
+        binding.focusIndicator.visibility = View.INVISIBLE
     }
 
     private fun updateCameraControlVisibility(localCameraProvider: ProcessCameraProvider) {
@@ -707,7 +791,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         switchButton.visibility = if (hasFrontCamera) View.VISIBLE else View.GONE
         updateFlashCapabilities(localCameraProvider)
         val showFlash = deviceHasFlash(localCameraProvider) &&
-            (mode != CameraMode.VIDEO || flashSupportsTorch)
+                (mode != CameraMode.VIDEO || flashSupportsTorch)
         if (showFlash) {
             flashButton.visibility = View.VISIBLE
             updateFlashButtonIcon()
@@ -735,8 +819,8 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         return localCameraProvider.availableCameraInfos.any { info ->
             Camera2CameraInfo.from(info)
                 .getCameraCharacteristic(CameraCharacteristics.LENS_FACING) == lensFacingInt &&
-                Camera2CameraInfo.from(info)
-                    .getCameraCharacteristic(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
+                    Camera2CameraInfo.from(info)
+                        .getCameraCharacteristic(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
         }
     }
 
@@ -746,10 +830,12 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
                 flashButton.displayFlashAuto()
                 flashButton.contentDescription = getString(R.string.action_disable_flash)
             }
+
             ImageCapture.FLASH_MODE_ON -> {
                 flashButton.displayFlashOn()
                 flashButton.contentDescription = getString(R.string.action_disable_flash)
             }
+
             else -> {
                 flashButton.displayFlashOff()
                 flashButton.contentDescription = getString(R.string.action_enable_flash)
@@ -998,6 +1084,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         const val VAULT_CURRENT_ROOT_PARENT = "vcrf"
         private const val CLICK_DELAY = 1200
         private const val CLICK_MODE_DELAY = 2000
+        private const val TAP_FOCUS_DURATION_MS = 3000L
 
         @JvmField
         var CAMERA_MODE = "cm"
@@ -1012,6 +1099,8 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
 
     @SuppressLint("UnsafeOptInUsageError")
     private fun startCamera() {
+        resetTapFocus()
+        camera = null
         val viewFinder = binding.viewFinder
 
         val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
@@ -1052,6 +1141,8 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
 
     @SuppressLint("UnsafeOptInUsageError")
     private fun startVideo() {
+        resetTapFocus()
+        camera = null
         val viewFinder = binding.viewFinder
 
         val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
