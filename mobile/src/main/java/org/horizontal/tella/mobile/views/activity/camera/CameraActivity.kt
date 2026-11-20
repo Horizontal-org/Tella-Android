@@ -11,13 +11,18 @@ import android.hardware.SensorManager
 import android.media.MediaActionSound
 import android.os.Build
 import android.os.Bundle
+import android.transition.ChangeBounds
+import android.transition.TransitionManager
 import android.util.DisplayMetrics
+import android.util.Size
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.OrientationEventListener
 import android.view.Surface
 import android.view.View
 import android.view.WindowManager
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
@@ -48,6 +53,7 @@ import androidx.camera.video.VideoRecordEvent
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
@@ -136,6 +142,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     private var flashSupportsAuto = true
     private var flashSupportsTorch = true
     private var gridEnabled = false
+    private var photoAspectRatio = PhotoAspectRatio.THREE_FOUR
     private var shutterSound: MediaActionSound? = null
     private var cameraStopped = false
     private var pendingCaptureAfterLocationCheck = PendingCapture.NONE
@@ -160,8 +167,11 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         }
         binding = ActivityCameraBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        photoAspectRatio = PhotoAspectRatio.fromSavedValue(
+            savedInstanceState?.getString(PHOTO_ASPECT_RATIO_STATE)
+        )
         binding.viewFinder.implementationMode = PreviewView.ImplementationMode.COMPATIBLE
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.cameraControlsContainer) { view, insets ->
             val statusBars = insets.getInsets(WindowInsetsCompat.Type.statusBars())
             val navBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
             val cutout = insets.getInsets(WindowInsetsCompat.Type.displayCutout())
@@ -179,7 +189,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
             view.setPadding(left, top, right, bottom)
             insets
         }
-        ViewCompat.requestApplyInsets(binding.root)
+        ViewCompat.requestApplyInsets(binding.cameraControlsContainer)
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         initView()
         overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
@@ -189,6 +199,11 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         setupCameraModeButton()
         setupImagePreview()
         initObservers()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString(PHOTO_ASPECT_RATIO_STATE, photoAspectRatio.name)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -328,6 +343,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     }
 
     private fun handleBackPressed() {
+        if (hideCameraOptions()) return
         if (maybeStopVideoRecording()) return
         if (!Preferences.isAnonymousMode() && isAddingInProgress) {
             BottomSheetUtils.showConfirmSheet(
@@ -426,6 +442,19 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         flashButton.rotateView(rotation)
         durationView.rotateView(rotation)
         captureButton.rotateView(rotation)
+        binding.menuGridButton.rotateView(rotation)
+        binding.menuFlashButton.rotateView(rotation)
+        listOf(
+            binding.menuAspectRatioValue,
+            binding.flashPanelTitle,
+            binding.flashBackButton,
+            binding.aspectRatioPanelTitle,
+            binding.aspectRatioBackButton,
+            binding.aspectRatioThreeFour,
+            binding.aspectRatioNineSixteen,
+            binding.aspectRatioOneOne,
+            binding.aspectRatioFull
+        ).forEach { it.animate().rotation(rotation.toFloat()).start() }
         if (mode != CameraMode.PHOTO) {
             resolutionButton.rotateView(rotation)
         }
@@ -490,10 +519,10 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         if (mode == CameraMode.VIDEO) {
             turnFlashDown()
         }
+        mode = CameraMode.PHOTO
         setPhotoActive()
         captureButton.displayPhotoButton()
         captureButton.contentDescription = context.getString(R.string.Uwazi_WidgetMedia_Take_Photo)
-        mode = CameraMode.PHOTO
         startCamera()
         resetZoom()
         lastClickTime = System.currentTimeMillis()
@@ -504,29 +533,24 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         if (System.currentTimeMillis() - lastClickTime < CLICK_MODE_DELAY) return
         if (mode == CameraMode.VIDEO) return
 
+        mode = CameraMode.VIDEO
         startVideo()
         turnFlashDown()
         captureButton.displayVideoButton()
         captureButton.contentDescription = context.getString(R.string.Uwazi_WidgetMedia_Take_Video)
         setVideoActive()
-        mode = CameraMode.VIDEO
         resetZoom()
         lastClickTime = System.currentTimeMillis()
     }
 
     private fun onGridClicked() {
+        hideCameraOptions()
         gridEnabled = !gridEnabled
-        updateGridOverlay()
-        if (gridEnabled) {
-            gridButton.displayGridOn()
-            gridButton.contentDescription = getString(R.string.action_hide_gridview)
-        } else {
-            gridButton.displayGridOff()
-            gridButton.contentDescription = getString(R.string.action_show_gridview)
-        }
+        updateGridUi()
     }
 
     private fun onSwitchClicked() {
+        hideCameraOptions()
         isBackCamera = !isBackCamera
         lensFacing = if (isBackCamera) {
             CameraSelector.DEFAULT_BACK_CAMERA
@@ -543,43 +567,6 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
             startCamera()
         } else {
             startVideo()
-        }
-    }
-
-    private fun onFlashClicked() {
-        if (mode == CameraMode.VIDEO) {
-            if (!flashSupportsTorch) return
-            if (flashMode == ImageCapture.FLASH_MODE_OFF) {
-                flashMode = ImageCapture.FLASH_MODE_ON
-                flashButton.displayFlashOn()
-                camera?.cameraControl?.enableTorch(true)
-            } else {
-                turnFlashDown()
-            }
-        } else {
-            when (flashMode) {
-                ImageCapture.FLASH_MODE_OFF -> {
-                    if (flashSupportsAuto) {
-                        flashMode = ImageCapture.FLASH_MODE_AUTO
-                        flashButton.displayFlashAuto()
-                        imageCapture?.flashMode = ImageCapture.FLASH_MODE_AUTO
-                    } else {
-                        flashMode = ImageCapture.FLASH_MODE_ON
-                        flashButton.displayFlashOn()
-                        imageCapture?.flashMode = ImageCapture.FLASH_MODE_ON
-                    }
-                }
-
-                ImageCapture.FLASH_MODE_AUTO -> {
-                    flashMode = ImageCapture.FLASH_MODE_ON
-                    flashButton.displayFlashOn()
-                    imageCapture?.flashMode = ImageCapture.FLASH_MODE_ON
-                }
-
-                else -> {
-                    turnFlashDown()
-                }
-            }
         }
     }
 
@@ -687,14 +674,24 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     }
 
     private fun setupCameraGridButton() {
+        updateGridUi()
+    }
+
+    private fun updateGridUi() {
         updateGridOverlay()
+        binding.menuGridButton.isSelected = gridEnabled
+        val description = getString(
+            if (gridEnabled) R.string.action_hide_gridview else R.string.action_show_gridview
+        )
         if (gridEnabled) {
             gridButton.displayGridOn()
-            gridButton.contentDescription = getString(R.string.action_hide_gridview)
+            binding.menuGridButton.displayGridOn()
         } else {
             gridButton.displayGridOff()
-            gridButton.contentDescription = getString(R.string.action_show_gridview)
+            binding.menuGridButton.displayGridOff()
         }
+        gridButton.contentDescription = description
+        binding.menuGridButton.contentDescription = description
     }
 
     private fun updateGridOverlay() {
@@ -798,6 +795,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         } else {
             flashButton.visibility = View.INVISIBLE
         }
+        binding.menuFlashButton.isEnabled = showFlash
     }
 
     private fun updateFlashCapabilities(localCameraProvider: ProcessCameraProvider) {
@@ -825,29 +823,37 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     }
 
     private fun updateFlashButtonIcon() {
+        binding.menuFlashButton.isSelected = flashMode != ImageCapture.FLASH_MODE_OFF
         when (flashMode) {
             ImageCapture.FLASH_MODE_AUTO -> {
                 flashButton.displayFlashAuto()
+                binding.menuFlashButton.displayFlashAuto()
                 flashButton.contentDescription = getString(R.string.action_disable_flash)
+                binding.menuFlashButton.contentDescription = getString(R.string.camera_flash_auto_description)
             }
 
             ImageCapture.FLASH_MODE_ON -> {
                 flashButton.displayFlashOn()
+                binding.menuFlashButton.displayFlashOn()
                 flashButton.contentDescription = getString(R.string.action_disable_flash)
+                binding.menuFlashButton.contentDescription = getString(R.string.camera_flash_on_description)
             }
 
             else -> {
                 flashButton.displayFlashOff()
+                binding.menuFlashButton.displayFlashOff()
                 flashButton.contentDescription = getString(R.string.action_enable_flash)
+                binding.menuFlashButton.contentDescription = getString(R.string.camera_flash_off_description)
             }
         }
+        updateFlashOptionsSelection()
     }
 
     private fun turnFlashDown() {
         flashMode = ImageCapture.FLASH_MODE_OFF
-        flashButton.displayFlashOff()
         imageCapture?.flashMode = ImageCapture.FLASH_MODE_OFF
         camera?.cameraControl?.enableTorch(false)
+        updateFlashButtonIcon()
     }
 
     private fun hideProgressDialog() {
@@ -869,18 +875,25 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     }
 
     private fun setPhotoActive() {
+        hideCameraOptions()
         binding.photoMode.isSelected = true
         binding.videoMode.isSelected = false
         photoModeText.alpha = 1f
         videoModeText.alpha = if (modeLocked) 0.1f else 0.5f
         resolutionButton.visibility = View.GONE
+        binding.aspectRatioMenuItem.visibility = View.VISIBLE
+        updatePhotoAspectRatioUi()
+        updatePreviewBounds()
     }
 
     private fun setVideoActive() {
+        hideCameraOptions()
         binding.videoMode.isSelected = true
         binding.photoMode.isSelected = false
         videoModeText.alpha = 1f
         photoModeText.alpha = if (modeLocked) 0.1f else 0.5f
+        binding.aspectRatioMenuItem.visibility = View.GONE
+        updatePreviewBounds()
         if (videoResolutionManager != null) {
             resolutionButton.visibility = View.VISIBLE
         }
@@ -967,6 +980,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         binding.close.setOnClickListener { closeCamera() }
 
         binding.captureButton.setOnClickListener {
+            hideCameraOptions()
             if (mode == CameraMode.PHOTO) {
                 maybeCapturePhoto()
             } else if (videoRecording) {
@@ -984,9 +998,165 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         binding.videoMode.setOnClickListener { onVideoClicked() }
         binding.gridButton.setOnClickListener { onGridClicked() }
         binding.switchButton.setOnClickListener { onSwitchClicked() }
-        binding.flashButton.setOnClickListener { onFlashClicked() }
+        binding.flashButton.setOnClickListener { showFlashPanel() }
         binding.previewImage.setOnClickListener { onPreviewClicked() }
         binding.resolutionButton.setOnClickListener { chooseVideoResolution() }
+        setupCameraOptions()
+    }
+
+    private fun setupCameraOptions() {
+        binding.moreButton.setOnClickListener {
+            if (!hideCameraOptions()) showMorePanel()
+        }
+        binding.panelDismissArea.setOnClickListener { hideCameraOptions() }
+        binding.menuGridButton.setOnClickListener { onGridClicked() }
+        binding.menuFlashButton.setOnClickListener { showFlashPanel() }
+        binding.menuAspectRatioValue.setOnClickListener { showAspectRatioPanel() }
+        binding.flashBackButton.setOnClickListener { showMorePanel() }
+        binding.aspectRatioBackButton.setOnClickListener { showMorePanel() }
+
+        listOf(
+            binding.flashOffOption to ImageCapture.FLASH_MODE_OFF,
+            binding.flashOnOption to ImageCapture.FLASH_MODE_ON,
+            binding.flashAutoOption to ImageCapture.FLASH_MODE_AUTO
+        ).forEach { (view, flashMode) ->
+            view.setOnClickListener { selectFlashMode(flashMode) }
+        }
+        listOf(
+            binding.aspectRatioThreeFour,
+            binding.aspectRatioNineSixteen,
+            binding.aspectRatioOneOne,
+            binding.aspectRatioFull
+        ).forEachIndexed { index, view ->
+            view.setOnClickListener { selectPhotoAspectRatio(PhotoAspectRatio.entries[index]) }
+        }
+
+        updatePhotoAspectRatioUi()
+        updateFlashOptionsSelection()
+    }
+
+    private fun showMorePanel() {
+        setCameraPanel(binding.morePanel)
+    }
+
+    private fun showFlashPanel() {
+        if (!binding.menuFlashButton.isEnabled) return
+        setCameraPanel(binding.flashPanel)
+    }
+
+    private fun showAspectRatioPanel() {
+        if (mode != CameraMode.PHOTO) return
+        setCameraPanel(binding.aspectRatioPanel)
+    }
+
+    private fun hideCameraOptions(): Boolean {
+        val wasVisible = binding.morePanel.isVisible || binding.flashPanel.isVisible ||
+            binding.aspectRatioPanel.isVisible
+        setCameraPanel(null)
+        return wasVisible
+    }
+
+    private fun setCameraPanel(panel: View?) {
+        binding.morePanel.isVisible = panel === binding.morePanel
+        binding.flashPanel.isVisible = panel === binding.flashPanel
+        binding.aspectRatioPanel.isVisible = panel === binding.aspectRatioPanel
+        binding.panelDismissArea.isVisible = panel != null
+        binding.cameraZoom.isVisible = panel == null
+        binding.moreButton.isVisible = panel == null
+        panel?.requestFocus()
+    }
+
+    private fun selectFlashMode(selectedMode: Int) {
+        if (selectedMode == ImageCapture.FLASH_MODE_AUTO && !flashSupportsAuto) return
+        flashMode = selectedMode
+        if (mode == CameraMode.VIDEO) {
+            camera?.cameraControl?.enableTorch(selectedMode == ImageCapture.FLASH_MODE_ON)
+        } else {
+            camera?.cameraControl?.enableTorch(false)
+            imageCapture?.flashMode = selectedMode
+        }
+        updateFlashButtonIcon()
+    }
+
+    private fun updateFlashOptionsSelection() {
+        binding.flashOffOption.isSelected = flashMode == ImageCapture.FLASH_MODE_OFF
+        binding.flashOnOption.isSelected = flashMode == ImageCapture.FLASH_MODE_ON
+        binding.flashAutoOption.isSelected = flashMode == ImageCapture.FLASH_MODE_AUTO
+        binding.flashAutoOption.visibility =
+            if (mode == CameraMode.PHOTO && flashSupportsAuto) View.VISIBLE else View.GONE
+    }
+
+    private fun selectPhotoAspectRatio(selectedRatio: PhotoAspectRatio) {
+        if (photoAspectRatio == selectedRatio) return
+        photoAspectRatio = selectedRatio
+        applyPhotoCropAspectRatio()
+        updatePhotoAspectRatioUi()
+        updatePreviewBounds(animate = true)
+        binding.aspectRatioPanel.announceForAccessibility(
+            getString(R.string.camera_aspect_ratio_selected, getString(selectedRatio.titleRes))
+        )
+    }
+
+    private fun updatePhotoAspectRatioUi() {
+        val title = getString(photoAspectRatio.titleRes)
+        binding.menuAspectRatioValue.text = title
+        binding.menuAspectRatioValue.contentDescription =
+            "${getString(R.string.camera_aspect_ratio_settings)}: $title"
+        listOf(
+            binding.aspectRatioThreeFour,
+            binding.aspectRatioNineSixteen,
+            binding.aspectRatioOneOne,
+            binding.aspectRatioFull
+        ).forEachIndexed { index, view ->
+            view.isSelected = photoAspectRatio == PhotoAspectRatio.entries[index]
+        }
+    }
+
+    private fun applyPhotoCropAspectRatio() {
+        val displayMetrics = resources.displayMetrics
+        val screenWidth = binding.root.width.takeIf { it > 0 } ?: displayMetrics.widthPixels
+        val screenHeight = binding.root.height.takeIf { it > 0 } ?: displayMetrics.heightPixels
+        imageCapture?.setCropAspectRatio(photoAspectRatio.cropRatio(screenWidth, screenHeight))
+    }
+
+    private fun updatePreviewBounds(animate: Boolean = false) {
+        binding.root.post {
+            val rootWidth = binding.root.width
+            if (rootWidth <= 0) return@post
+            val cameraHeight = (binding.cameraArea.bottom - binding.cameraArea.top).coerceAtLeast(0)
+            val threeFourSize = PhotoAspectRatio.THREE_FOUR.fitInside(rootWidth, cameraHeight)
+            val threeFourTop = binding.cameraArea.bottom - threeFourSize.height
+            val (size, top) = if (mode == CameraMode.VIDEO) {
+                Size(rootWidth, cameraHeight) to binding.cameraArea.top
+            } else {
+                when (photoAspectRatio) {
+                    PhotoAspectRatio.THREE_FOUR -> threeFourSize to threeFourTop
+                    PhotoAspectRatio.NINE_SIXTEEN -> photoAspectRatio.sizeForWidth(rootWidth).let {
+                        it to binding.cameraModeBar.top - it.height
+                    }
+                    PhotoAspectRatio.ONE_ONE -> photoAspectRatio
+                        .fitInside(threeFourSize.width, threeFourSize.height)
+                        .let { it to threeFourTop + (threeFourSize.height - it.height) / 2 }
+                    PhotoAspectRatio.FULL -> Size(rootWidth, binding.root.height) to 0
+                }
+            }
+            val preview = binding.cameraPreviewFrame
+            val layoutParams = preview.layoutParams as FrameLayout.LayoutParams
+            if (animate && preview.height > 0) {
+                TransitionManager.beginDelayedTransition(
+                    binding.root,
+                    ChangeBounds().apply {
+                        duration = PREVIEW_RATIO_ANIMATION_MS
+                        interpolator = AccelerateDecelerateInterpolator()
+                        addTarget(preview)
+                    }
+                )
+            }
+            layoutParams.width = size.width
+            layoutParams.height = size.height
+            layoutParams.topMargin = top
+            preview.layoutParams = layoutParams
+        }
     }
 
     private fun maybeCapturePhoto() {
@@ -1084,7 +1254,9 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         const val VAULT_CURRENT_ROOT_PARENT = "vcrf"
         private const val CLICK_DELAY = 1200
         private const val CLICK_MODE_DELAY = 2000
-        private const val TAP_FOCUS_DURATION_MS = 3000L
+        private const val TAP_FOCUS_DURATION_MS = 3_000L
+        private const val PHOTO_ASPECT_RATIO_STATE = "photo_aspect_ratio"
+        private const val PREVIEW_RATIO_ANIMATION_MS = 350L
 
         @JvmField
         var CAMERA_MODE = "cm"
@@ -1107,8 +1279,6 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         cameraProviderFuture.addListener({
             try {
                 cameraProvider = cameraProviderFuture.get()
-                val metrics = DisplayMetrics().also { viewFinder.display?.getRealMetrics(it) }
-                val aspectRatio = aspectRatio(metrics.widthPixels, metrics.heightPixels)
                 val rotation = viewFinder.display?.rotation ?: Surface.ROTATION_0
 
                 val localCameraProvider = cameraProvider
@@ -1117,16 +1287,17 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
                 localCameraProvider.unbindAll()
 
                 preview = Preview.Builder()
-                    .setTargetAspectRatio(aspectRatio)
+                    .setTargetAspectRatio(AspectRatio.RATIO_4_3)
                     .setTargetRotation(rotation)
                     .build()
 
                 imageCapture = ImageCapture.Builder()
                     .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
                     .setFlashMode(flashMode)
-                    .setTargetAspectRatio(aspectRatio)
+                    .setTargetAspectRatio(AspectRatio.RATIO_4_3)
                     .setTargetRotation(rotation)
                     .build()
+                applyPhotoCropAspectRatio()
 
                 bindToLifecycle(localCameraProvider, viewFinder)
             } catch (e: InterruptedException) {

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="camera_design_surface">#202326</color>
-    <color name="camera_design_accent">#E4AA55</color>
-    <color name="camera_design_panel">#D9071012</color>
-    <color name="camera_design_option">#202326</color>
-    <color name="camera_design_option_selected">#485052</color>
+    <color name="camera_design_surface">#1F2125</color>
+    <color name="camera_design_accent">#F2B25E</color>
+    <color name="camera_design_panel">#CC071013</color>
+    <color name="camera_design_option">#1F2125</color>
+    <color name="camera_design_option_selected">#4C4E51</color>
+    <color name="camera_design_label">#E0FFFFFF</color>
     <color name="camera_design_ring">#85888A</color>
     <color name="camera_design_feedback_neutral">#DDE0E1</color>
     <color name="camera_recording_timer_red">#AB1013</color>
@@ -12,6 +13,13 @@
 
     <string name="camera_flash_title">Flash</string>
     <string name="camera_grid_title">Grid</string>
+    <string name="camera_aspect_ratio_title">Aspect</string>
+    <string name="camera_aspect_ratio_settings">Choose photo aspect ratio</string>
+    <string name="camera_aspect_ratio_selected">Photo aspect ratio %1$s selected</string>
+    <string name="camera_aspect_ratio_3_4" translatable="false">3:4</string>
+    <string name="camera_aspect_ratio_9_16" translatable="false">9:16</string>
+    <string name="camera_aspect_ratio_1_1" translatable="false">1:1</string>
+    <string name="camera_aspect_ratio_full">Full</string>
     <string name="camera_flash_off">Off</string>
     <string name="camera_flash_on">On</string>
     <string name="camera_flash_auto">Auto</string>
@@ -56,19 +64,55 @@
     </style>
 
     <style name="CameraDesignMenuButton">
-        <item name="android:layout_width">64dp</item>
-        <item name="android:layout_height">64dp</item>
+        <item name="android:layout_width">56dp</item>
+        <item name="android:layout_height">56dp</item>
         <item name="android:background">@drawable/camera_option_background</item>
-        <item name="android:padding">18dp</item>
+        <item name="android:padding">12dp</item>
         <item name="android:tint">@color/camera_control_tint</item>
     </style>
 
     <style name="CameraDesignMenuLabel">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:fontFamily">@font/open_sans_semibold</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textAppearance">@style/TextAppearance.Tella.Body2</item>
+        <item name="android:textColor">@color/camera_design_label</item>
+    </style>
+
+    <style name="CameraDesignMenuValue">
+        <item name="android:layout_width">56dp</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:background">@drawable/camera_option_background</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAppearance">@style/TextAppearance.Tella.Heading2</item>
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="CameraDesignAspectOption">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@null</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textAppearance">@style/TextAppearance.Tella.Heading2</item>
+        <item name="android:textColor">@color/camera_control_tint</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="CameraDesignPanelTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:letterSpacing">0.036</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textAppearance">@style/TextAppearance.Tella.Body1</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="CameraDesignFlashOption">
@@ -96,8 +140,8 @@
         <item name="android:layout_marginTop">6dp</item>
         <item name="android:duplicateParentState">true</item>
         <item name="android:importantForAccessibility">no</item>
+        <item name="android:textAppearance">@style/TextAppearance.Tella.ButtonDetailRegular</item>
         <item name="android:textColor">@color/camera_control_tint</item>
-        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="CameraDesignMode">
@@ -118,7 +162,7 @@
         <item name="android:duplicateParentState">true</item>
         <item name="android:gravity">center</item>
         <item name="android:textAllCaps">true</item>
+        <item name="android:textAppearance">@style/TextAppearance.Tella.Body2</item>
         <item name="android:textColor">@color/camera_mode_text</item>
-        <item name="android:textSize">14sp</item>
     </style>
 </resources>
