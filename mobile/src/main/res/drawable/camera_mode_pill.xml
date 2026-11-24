@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<inset xmlns:android="http://schemas.android.com/apk/res/android" android:insetTop="8dp" android:insetBottom="8dp">
+<inset xmlns:android="http://schemas.android.com/apk/res/android" android:insetTop="12dp" android:insetBottom="12dp">
     <selector>
-        <item android:state_selected="true"><shape><solid android:color="@color/camera_design_accent" /><corners android:radius="24dp" /></shape></item>
+        <item android:state_selected="true"><shape><solid android:color="@color/camera_design_mode_accent" /><corners android:radius="24dp" /></shape></item>
         <item android:state_pressed="true"><shape><solid android:color="@color/camera_design_option_selected" /><corners android:radius="24dp" /></shape></item>
         <item><shape><solid android:color="@android:color/transparent" /></shape></item>
     </selector>

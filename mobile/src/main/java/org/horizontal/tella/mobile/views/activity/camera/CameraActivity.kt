@@ -879,7 +879,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         binding.photoMode.isSelected = true
         binding.videoMode.isSelected = false
         photoModeText.alpha = 1f
-        videoModeText.alpha = if (modeLocked) 0.1f else 0.5f
+        videoModeText.alpha = if (modeLocked) 0.1f else 1f
         resolutionButton.visibility = View.GONE
         binding.aspectRatioMenuItem.visibility = View.VISIBLE
         updatePhotoAspectRatioUi()
@@ -891,7 +891,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         binding.videoMode.isSelected = true
         binding.photoMode.isSelected = false
         videoModeText.alpha = 1f
-        photoModeText.alpha = if (modeLocked) 0.1f else 0.5f
+        photoModeText.alpha = if (modeLocked) 0.1f else 1f
         binding.aspectRatioMenuItem.visibility = View.GONE
         updatePreviewBounds()
         if (videoResolutionManager != null) {

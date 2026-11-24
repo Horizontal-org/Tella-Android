@@ -2,6 +2,8 @@
 <resources>
     <color name="camera_design_surface">#1F2125</color>
     <color name="camera_design_accent">#F2B25E</color>
+    <color name="camera_design_mode_accent">#DDA45A</color>
+    <color name="camera_design_grey1">#DCDCDC</color>
     <color name="camera_design_panel">#CC071013</color>
     <color name="camera_design_option">#1F2125</color>
     <color name="camera_design_option_selected">#4C4E51</color>
@@ -145,10 +147,8 @@
     </style>
 
     <style name="CameraDesignMode">
-        <item name="android:layout_width">104dp</item>
-        <item name="android:layout_height">48dp</item>
-        <item name="android:layout_marginStart">4dp</item>
-        <item name="android:layout_marginEnd">4dp</item>
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">52dp</item>
         <item name="android:background">@drawable/camera_mode_pill</item>
         <item name="android:gravity">center</item>
         <item name="android:orientation">horizontal</item>
