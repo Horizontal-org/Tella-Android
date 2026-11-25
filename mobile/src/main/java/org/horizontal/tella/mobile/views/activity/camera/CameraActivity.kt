@@ -445,15 +445,8 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         binding.menuGridButton.rotateView(rotation)
         binding.menuFlashButton.rotateView(rotation)
         listOf(
-            binding.menuAspectRatioValue,
             binding.flashPanelTitle,
-            binding.flashBackButton,
-            binding.aspectRatioPanelTitle,
-            binding.aspectRatioBackButton,
-            binding.aspectRatioThreeFour,
-            binding.aspectRatioNineSixteen,
-            binding.aspectRatioOneOne,
-            binding.aspectRatioFull
+            binding.flashBackButton
         ).forEach { it.animate().rotation(rotation.toFloat()).start() }
         if (mode != CameraMode.PHOTO) {
             resolutionButton.rotateView(rotation)
