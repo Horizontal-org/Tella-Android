@@ -15,8 +15,6 @@ import android.transition.ChangeBounds
 import android.transition.TransitionManager
 import android.util.DisplayMetrics
 import android.util.Size
-import android.view.GestureDetector
-import android.view.MotionEvent
 import android.view.OrientationEventListener
 import android.view.Surface
 import android.view.View
@@ -24,7 +22,6 @@ import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -37,7 +34,6 @@ import androidx.camera.core.AspectRatio
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraInfo
 import androidx.camera.core.CameraSelector
-import androidx.camera.core.FocusMeteringAction
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
@@ -56,7 +52,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.Lifecycle
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.gson.Gson
@@ -94,9 +89,7 @@ import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import timber.log.Timber
 import java.io.File
-import java.util.concurrent.CancellationException
 import java.util.concurrent.ExecutionException
-import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -108,7 +101,6 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     private lateinit var flashButton: CameraFlashButton
     private lateinit var captureButton: CameraCaptureButton
     private lateinit var durationView: CameraDurationTextView
-    private lateinit var mSeekBar: SeekBar
     private lateinit var previewView: ImageView
     private lateinit var photoModeText: TextView
     private lateinit var videoModeText: TextView
@@ -120,7 +112,6 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     private var videoRecording = false
     private var progressDialog: ProgressDialog? = null
     private var mOrientationEventListener: OrientationEventListener? = null
-    private var zoomLevel = 0
     private var capturedMediaFile: VaultFile? = null
     private var lastMediaFile: VaultFile? = null
     private var videoQualityDialog: AlertDialog? = null
@@ -147,9 +138,16 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     private var cameraStopped = false
     private var pendingCaptureAfterLocationCheck = PendingCapture.NONE
     private var gpsPromptIgnoredForCurrentSession = false
-    private var focusRequestId = 0L
-    private var isTapFocusActive = false
-    private val resetTapFocusRunnable = Runnable { resetTapFocus() }
+    private val previewController by lazy {
+        CameraPreviewController(
+            lifecycleOwner = this,
+            previewView = binding.viewFinder,
+            focusIndicator = binding.focusIndicator,
+            zoomSlider = binding.cameraZoom,
+            cameraProvider = { camera },
+            isCameraActive = { !cameraStopped },
+        )
+    }
 
     private lateinit var binding: ActivityCameraBinding
     private var captureWithAutoUpload = true
@@ -176,16 +174,18 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
             val navBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
             val cutout = insets.getInsets(WindowInsetsCompat.Type.displayCutout())
             val mandatory = insets.getInsets(WindowInsetsCompat.Type.mandatorySystemGestures())
+
             var top = maxOf(statusBars.top, cutout.top, mandatory.top)
             if (top == 0) {
-                val ignoring = insets.getInsetsIgnoringVisibility(
+                // Status bar currently hidden: keep its normal height so the layout doesn't jump.
+                top = insets.getInsetsIgnoringVisibility(
                     WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.displayCutout()
-                )
-                top = maxOf(top, ignoring.top)
+                ).top
             }
             val bottom = maxOf(navBars.bottom, mandatory.bottom)
             val left = maxOf(statusBars.left, navBars.left, cutout.left, mandatory.left)
             val right = maxOf(statusBars.right, navBars.right, cutout.right, mandatory.right)
+
             view.setPadding(left, top, right, bottom)
             insets
         }
@@ -282,7 +282,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     override fun onResume() {
         super.onResume()
         mOrientationEventListener?.enable()
-        mSeekBar.progress = zoomLevel
+        previewController.syncZoomSlider()
         viewModel.getLastMediaFile()
         if (ContextCompat.checkSelfPermission(
                 this, Manifest.permission.CAMERA
@@ -294,7 +294,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     }
 
     override fun onPause() {
-        resetTapFocus()
+        previewController.resetFocus()
         super.onPause()
         mOrientationEventListener?.disable()
     }
@@ -311,7 +311,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     }
 
     override fun onDestroy() {
-        resetTapFocus()
+        previewController.resetFocus()
         super.onDestroy()
         hideProgressDialog()
         hideVideoResolutionDialog()
@@ -333,7 +333,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         } else {
             startCamera()
         }
-        setCameraZoom()
+        previewController.applyZoom()
     }
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
@@ -512,8 +512,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     private fun onMediaFilesUploadScheduleError() {}
 
     private fun onPhotoClicked() {
-        if (modeLocked) return
-        if (System.currentTimeMillis() - lastClickTime < CLICK_MODE_DELAY) return
+        if (modeLocked || videoRecording) return
         if (mode == CameraMode.PHOTO) return
 
         if (mode == CameraMode.VIDEO) {
@@ -524,13 +523,11 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         captureButton.displayPhotoButton()
         captureButton.contentDescription = context.getString(R.string.Uwazi_WidgetMedia_Take_Photo)
         startCamera()
-        resetZoom()
-        lastClickTime = System.currentTimeMillis()
+        previewController.resetZoom()
     }
 
     private fun onVideoClicked() {
-        if (modeLocked) return
-        if (System.currentTimeMillis() - lastClickTime < CLICK_MODE_DELAY) return
+        if (modeLocked || videoRecording) return
         if (mode == CameraMode.VIDEO) return
 
         mode = CameraMode.VIDEO
@@ -539,8 +536,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         captureButton.displayVideoButton()
         captureButton.contentDescription = context.getString(R.string.Uwazi_WidgetMedia_Take_Video)
         setVideoActive()
-        resetZoom()
-        lastClickTime = System.currentTimeMillis()
+        previewController.resetZoom()
     }
 
     private fun onGridClicked() {
@@ -601,17 +597,6 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         return intent
     }
 
-    private fun resetZoom() {
-        zoomLevel = 0
-        mSeekBar.progress = 0
-        setCameraZoom()
-    }
-
-    private fun setCameraZoom() {
-        resetTapFocus()
-        camera?.cameraControl?.setLinearZoom(zoomLevel.toFloat() / 100f)
-    }
-
     private fun maybeStopVideoRecording(): Boolean {
         if (videoRecording) {
             captureButton.performClick()
@@ -638,17 +623,8 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
             captureButton.displayVideoButton()
         }
         setupCameraGridButton()
-        setupPreviewTapToFocus()
+        previewController.attach()
         setOrientationListener()
-        mSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
-                zoomLevel = i
-                setCameraZoom()
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar) {}
-        })
         if (hasCameraPermissions(this)) {
             resumeCameraPreview()
         }
@@ -696,91 +672,6 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
 
     private fun updateGridOverlay() {
         binding.gridOverlay.visibility = if (gridEnabled) View.VISIBLE else View.GONE
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    private fun setupPreviewTapToFocus() {
-        var hadMultiplePointers = false
-        val gestureDetector =
-            GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
-                override fun onDown(event: MotionEvent): Boolean = true
-
-                override fun onSingleTapUp(event: MotionEvent): Boolean {
-                    if (!hadMultiplePointers) {
-                        focusPreviewAt(event.x, event.y)
-                    }
-                    return true
-                }
-            })
-        gestureDetector.setOnDoubleTapListener(null)
-        binding.viewFinder.setOnTouchListener { _, event ->
-            when (event.actionMasked) {
-                MotionEvent.ACTION_DOWN -> hadMultiplePointers = false
-                MotionEvent.ACTION_POINTER_DOWN -> hadMultiplePointers = true
-            }
-            gestureDetector.onTouchEvent(event)
-            true
-        }
-        binding.viewFinder.previewStreamState.observe(this) { state ->
-            if (state != PreviewView.StreamState.STREAMING) {
-                resetTapFocus()
-            }
-        }
-    }
-
-    private fun focusPreviewAt(focusX: Float, focusY: Float) {
-        val currentCamera = camera ?: return
-        val viewFinder = binding.viewFinder
-        if (cameraStopped || !lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED) ||
-            viewFinder.previewStreamState.value != PreviewView.StreamState.STREAMING ||
-            focusX < 0f || focusX >= viewFinder.width || focusY < 0f || focusY >= viewFinder.height
-        ) return
-
-        val point = viewFinder.meteringPointFactory.createPoint(focusX, focusY)
-        val action = FocusMeteringAction.Builder(point, FocusMeteringAction.FLAG_AF)
-            .setAutoCancelDuration(TAP_FOCUS_DURATION_MS, TimeUnit.MILLISECONDS)
-            .build()
-        if (!currentCamera.cameraInfo.isFocusMeteringSupported(action)) return
-
-        clearFocusIndicator()
-        val requestId = focusRequestId
-        isTapFocusActive = true
-        binding.focusIndicator.apply {
-            x = viewFinder.left + focusX - width / 2f
-            y = viewFinder.top + focusY - height / 2f
-            visibility = View.VISIBLE
-            postDelayed(resetTapFocusRunnable, TAP_FOCUS_DURATION_MS)
-        }
-        val focusFuture = currentCamera.cameraControl.startFocusAndMetering(action)
-        focusFuture.addListener({
-            if (requestId != focusRequestId) return@addListener
-            try {
-                if (!focusFuture.get().isFocusSuccessful) {
-                    resetTapFocus()
-                }
-            } catch (_: CancellationException) {
-                resetTapFocus()
-            } catch (e: ExecutionException) {
-                resetTapFocus()
-                Timber.d(e, "Unable to focus camera")
-            } catch (_: InterruptedException) {
-                Thread.currentThread().interrupt()
-                resetTapFocus()
-            }
-        }, ContextCompat.getMainExecutor(this))
-    }
-
-    private fun resetTapFocus() {
-        clearFocusIndicator()
-        if (!isTapFocusActive) return
-        isTapFocusActive = false
-        camera?.cameraControl?.cancelFocusAndMetering()
-    }
-
-    private fun clearFocusIndicator() {
-        focusRequestId++
-        binding.focusIndicator.removeCallbacks(resetTapFocusRunnable)
-        binding.focusIndicator.visibility = View.INVISIBLE
     }
 
     private fun updateCameraControlVisibility(localCameraProvider: ProcessCameraProvider) {
@@ -903,7 +794,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         videoResolutionManager?.let { manager ->
             videoQualityDialog = CameraDialogsUtil.showVideoResolutionDialog(
                 this,
-                CameraDialogsUtil.VideoQualityConsumer { applyVideoQuality() },
+                { applyVideoQuality() },
                 manager
             )
         }
@@ -971,7 +862,6 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         updateFlashButtonIcon()
         captureButton = binding.captureButton
         durationView = binding.durationView
-        mSeekBar = binding.cameraZoom
         previewView = binding.previewImage
         photoModeText = binding.photoText
         videoModeText = binding.videoText
@@ -1046,6 +936,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
 
     private fun showAspectRatioPanel() {
         if (mode != CameraMode.PHOTO) return
+        updatePhotoAspectRatioUi()
         setCameraPanel(binding.aspectRatioPanel)
     }
 
@@ -1108,7 +999,14 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
             binding.aspectRatioOneOne,
             binding.aspectRatioFull
         ).forEachIndexed { index, view ->
-            view.isSelected = photoAspectRatio == PhotoAspectRatio.entries[index]
+            val isSelected = photoAspectRatio == PhotoAspectRatio.entries[index]
+            view.isSelected = isSelected
+            view.setTextColor(
+                ContextCompat.getColor(
+                    this,
+                    if (isSelected) R.color.camera_design_accent else android.R.color.white
+                )
+            )
         }
     }
 
@@ -1228,6 +1126,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         }
         durationView.start()
         captureButton.displayStopVideo()
+        binding.cameraModeBar.visibility = View.INVISIBLE
         gridButton.visibility = View.GONE
         switchButton.visibility = View.GONE
         resolutionButton.visibility = View.GONE
@@ -1253,8 +1152,6 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         const val MEDIA_FILE_KEY = "mfk"
         const val VAULT_CURRENT_ROOT_PARENT = "vcrf"
         private const val CLICK_DELAY = 1200
-        private const val CLICK_MODE_DELAY = 2000
-        private const val TAP_FOCUS_DURATION_MS = 3_000L
         private const val PHOTO_ASPECT_RATIO_STATE = "photo_aspect_ratio"
         private const val PREVIEW_RATIO_ANIMATION_MS = 350L
 
@@ -1271,12 +1168,13 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
 
     @SuppressLint("UnsafeOptInUsageError")
     private fun startCamera() {
-        resetTapFocus()
+        previewController.resetFocus()
         camera = null
         val viewFinder = binding.viewFinder
 
         val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
         cameraProviderFuture.addListener({
+            if (mode != CameraMode.PHOTO) return@addListener
             try {
                 cameraProvider = cameraProviderFuture.get()
                 val rotation = viewFinder.display?.rotation ?: Surface.ROTATION_0
@@ -1300,10 +1198,10 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
                 applyPhotoCropAspectRatio()
 
                 bindToLifecycle(localCameraProvider, viewFinder)
-            } catch (e: InterruptedException) {
+            } catch (_: InterruptedException) {
                 Toast.makeText(context, "Error starting camera", Toast.LENGTH_SHORT).show()
                 return@addListener
-            } catch (e: ExecutionException) {
+            } catch (_: ExecutionException) {
                 Toast.makeText(context, "Error starting camera", Toast.LENGTH_SHORT).show()
                 return@addListener
             }
@@ -1312,12 +1210,13 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
 
     @SuppressLint("UnsafeOptInUsageError")
     private fun startVideo() {
-        resetTapFocus()
+        previewController.resetFocus()
         camera = null
         val viewFinder = binding.viewFinder
 
         val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
         cameraProviderFuture.addListener({
+            if (mode != CameraMode.VIDEO) return@addListener
             cameraProvider = cameraProviderFuture.get()
             val metrics = DisplayMetrics().also { viewFinder.display?.getRealMetrics(it) }
             val aspectRatio = aspectRatio(metrics.widthPixels, metrics.heightPixels)
@@ -1352,7 +1251,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
                     preview,
                     videoCapture,
                 )
-                preview?.setSurfaceProvider(viewFinder.surfaceProvider)
+                preview?.surfaceProvider = viewFinder.surfaceProvider
                 updateCameraControlVisibility(localCameraProvider)
                 onCameraUseCasesBound()
             } catch (e: Exception) {
@@ -1380,7 +1279,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
                 preview,
                 imageCapture,
             )
-            preview?.setSurfaceProvider(viewFinder.surfaceProvider)
+            preview?.surfaceProvider = viewFinder.surfaceProvider
             updateCameraControlVisibility(localCameraProvider)
             onCameraUseCasesBound()
         } catch (e: Exception) {
@@ -1491,6 +1390,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
                         captureButton.displayVideoButton()
                         durationView.stop()
                         videoRecording = false
+                        binding.cameraModeBar.visibility = View.VISIBLE
                         gridButton.visibility = View.VISIBLE
                         switchButton.visibility = View.VISIBLE
                         if (videoResolutionManager != null) {
