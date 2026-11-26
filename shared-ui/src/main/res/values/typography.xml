@@ -42,6 +42,16 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="TextAppearance.Tella.Body2.Bold">
+        <item name="android:fontFamily">@font/open_sans_bold</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextAppearance.Tella.Body2.SemiBold">
+        <item name="android:fontFamily">@font/open_sans_semibold</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
     <style name="TextAppearance.Tella.Body2.Italic">
         <item name="android:fontFamily">@font/open_sans_italic</item>
     </style>
@@ -72,6 +82,11 @@
 
     <style name="TextAppearance.Tella.Link1">
         <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextAppearance.Tella.CameraTab">
+        <item name="android:fontFamily">@font/open_sans_semibold</item>
+        <item name="android:textSize">15sp</item>
     </style>
 
     <!-- endregion -->
@@ -113,6 +128,14 @@
         <item name="android:textAppearance">@style/TextAppearance.Tella.Body2</item>
     </style>
 
+    <style name="Typography.Body2.Bold">
+        <item name="android:textAppearance">@style/TextAppearance.Tella.Body2.Bold</item>
+    </style>
+
+    <style name="Typography.Body2.SemiBold">
+        <item name="android:textAppearance">@style/TextAppearance.Tella.Body2.SemiBold</item>
+    </style>
+
     <style name="Typography.Body2.Italic">
         <item name="android:textAppearance">@style/TextAppearance.Tella.Body2.Italic</item>
     </style>
@@ -142,6 +165,10 @@
 
     <style name="Typography.Link1">
         <item name="android:textAppearance">@style/TextAppearance.Tella.Link1</item>
+    </style>
+
+    <style name="Typography.CameraTab">
+        <item name="android:textAppearance">@style/TextAppearance.Tella.CameraTab</item>
     </style>
 
     <!-- endregion -->
