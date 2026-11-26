@@ -963,9 +963,18 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     }
 
     private fun updateFlashOptionsSelection() {
-        binding.flashOffOption.isSelected = flashMode == ImageCapture.FLASH_MODE_OFF
-        binding.flashOnOption.isSelected = flashMode == ImageCapture.FLASH_MODE_ON
-        binding.flashAutoOption.isSelected = flashMode == ImageCapture.FLASH_MODE_AUTO
+        listOf(
+            Triple(binding.flashOffOption, binding.flashOffLabel, ImageCapture.FLASH_MODE_OFF),
+            Triple(binding.flashOnOption, binding.flashOnLabel, ImageCapture.FLASH_MODE_ON),
+            Triple(binding.flashAutoOption, binding.flashAutoLabel, ImageCapture.FLASH_MODE_AUTO)
+        ).forEach { (option, label, mode) ->
+            val isSelected = flashMode == mode
+            option.isSelected = isSelected
+            label.setTextAppearance(
+                if (isSelected) R.style.Typography_ButtonDetailBold
+                else R.style.Typography_ButtonDetailRegular
+            )
+        }
         binding.flashAutoOption.visibility =
             if (mode == CameraMode.PHOTO && flashSupportsAuto) View.VISIBLE else View.GONE
     }

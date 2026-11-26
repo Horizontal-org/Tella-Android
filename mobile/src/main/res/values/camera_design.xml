@@ -73,28 +73,25 @@
         <item name="android:tint">@color/camera_control_tint</item>
     </style>
 
-    <style name="CameraDesignMenuLabel">
+    <style name="CameraDesignMenuLabel" parent="@style/Typography.Body2.SemiBold">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">6dp</item>
-        <item name="android:fontFamily">@font/open_sans_semibold</item>
         <item name="android:includeFontPadding">false</item>
-        <item name="android:textAppearance">@style/TextAppearance.Tella.Body2</item>
         <item name="android:textColor">@color/camera_design_label</item>
     </style>
 
-    <style name="CameraDesignMenuValue">
+    <style name="CameraDesignMenuValue" parent="@style/Typography.Heading2">
         <item name="android:layout_width">56dp</item>
         <item name="android:layout_height">56dp</item>
         <item name="android:background">@drawable/camera_option_background</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
         <item name="android:gravity">center</item>
-        <item name="android:textAppearance">@style/TextAppearance.Tella.Heading2</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="CameraDesignAspectOption">
+    <style name="CameraDesignAspectOption" parent="@style/Typography.CameraTab">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@null</item>
@@ -102,18 +99,14 @@
         <item name="android:focusable">true</item>
         <item name="android:gravity">center</item>
         <item name="android:includeFontPadding">false</item>
-        <item name="android:textAppearance">@style/TextAppearance.Tella.Heading2</item>
         <item name="android:textColor">@color/camera_control_tint</item>
-        <item name="android:textSize">15sp</item>
     </style>
 
-    <style name="CameraDesignPanelTitle">
+    <style name="CameraDesignPanelTitle" parent="@style/Typography.CameraTab">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:includeFontPadding">false</item>
-        <item name="android:letterSpacing">0.036</item>
         <item name="android:textAllCaps">true</item>
-        <item name="android:textAppearance">@style/TextAppearance.Tella.Body1</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
 
@@ -136,13 +129,12 @@
         <item name="android:tint">@color/camera_control_tint</item>
     </style>
 
-    <style name="CameraDesignFlashOptionLabel">
+    <style name="CameraDesignFlashOptionLabel" parent="@style/Typography.ButtonDetailRegular">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">6dp</item>
         <item name="android:duplicateParentState">true</item>
         <item name="android:importantForAccessibility">no</item>
-        <item name="android:textAppearance">@style/TextAppearance.Tella.ButtonDetailRegular</item>
         <item name="android:textColor">@color/camera_control_tint</item>
     </style>
 
@@ -156,13 +148,12 @@
         <item name="android:focusable">true</item>
     </style>
 
-    <style name="CameraDesignModeText">
+    <style name="CameraDesignModeText" parent="@style/Typography.Body2.SemiBold">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:duplicateParentState">true</item>
         <item name="android:gravity">center</item>
         <item name="android:textAllCaps">true</item>
-        <item name="android:textAppearance">@style/TextAppearance.Tella.Body2</item>
         <item name="android:textColor">@color/camera_mode_text</item>
     </style>
 </resources>

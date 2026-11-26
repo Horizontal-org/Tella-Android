@@ -113,17 +113,20 @@
                 <LinearLayout android:id="@+id/flashOffOption" style="@style/CameraDesignFlashOption"
                     android:contentDescription="@string/camera_flash_off_description">
                     <ImageView style="@style/CameraDesignFlashOptionIcon" android:src="@drawable/ic_camera_flash_off" />
-                    <TextView style="@style/CameraDesignFlashOptionLabel" android:text="@string/camera_flash_off" />
+                    <TextView android:id="@+id/flashOffLabel" style="@style/CameraDesignFlashOptionLabel"
+                        android:text="@string/camera_flash_off" />
                 </LinearLayout>
                 <LinearLayout android:id="@+id/flashOnOption" style="@style/CameraDesignFlashOption"
                     android:contentDescription="@string/camera_flash_on_description">
                     <ImageView style="@style/CameraDesignFlashOptionIcon" android:src="@drawable/ic_camera_flash_on" />
-                    <TextView style="@style/CameraDesignFlashOptionLabel" android:text="@string/camera_flash_on" />
+                    <TextView android:id="@+id/flashOnLabel" style="@style/CameraDesignFlashOptionLabel"
+                        android:text="@string/camera_flash_on" />
                 </LinearLayout>
                 <LinearLayout android:id="@+id/flashAutoOption" style="@style/CameraDesignFlashOption"
                     android:contentDescription="@string/camera_flash_auto_description">
                     <ImageView style="@style/CameraDesignFlashOptionIcon" android:src="@drawable/ic_camera_flash_auto" />
-                    <TextView style="@style/CameraDesignFlashOptionLabel" android:text="@string/camera_flash_auto" />
+                    <TextView android:id="@+id/flashAutoLabel" style="@style/CameraDesignFlashOptionLabel"
+                        android:text="@string/camera_flash_auto" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -164,21 +167,22 @@
             android:layout_gravity="top|center_horizontal" android:layout_marginTop="8dp"
             android:gravity="center_horizontal" android:orientation="vertical">
             <org.horizontal.tella.mobile.views.custom.CameraDurationTextView android:id="@+id/durationView"
+                style="@style/Typography.CameraTab"
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                 android:background="@drawable/camera_recording_timer_background"
                 android:gravity="center" android:minWidth="84dp" android:minHeight="32dp"
                 android:paddingStart="12dp" android:paddingTop="6dp"
                 android:paddingEnd="12dp" android:paddingBottom="6dp"
-                android:fontFamily="sans-serif-medium" android:fontFeatureSettings="tnum"
+                android:fontFeatureSettings="tnum"
                 android:includeFontPadding="false" android:singleLine="true" android:textDirection="ltr"
-                android:textSize="14sp" android:textColor="@android:color/white"
+                android:textColor="@android:color/white"
                 android:visibility="gone" tools:text="00:00:37" />
-            <TextView android:id="@+id/gridFeedback" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            <TextView android:id="@+id/gridFeedback" style="@style/Typography.Subheading2"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
                 android:layout_marginTop="4dp" android:accessibilityLiveRegion="polite"
                 android:background="@drawable/camera_feedback_off" android:gravity="center"
                 android:minHeight="28dp" android:paddingStart="10dp" android:paddingTop="4dp"
                 android:paddingEnd="10dp" android:paddingBottom="4dp" android:textColor="@color/camera_design_surface"
-                android:textAppearance="@style/TextAppearance.Tella.Subheading2"
                 android:visibility="gone" tools:text="@string/camera_grid_on_feedback" />
         </LinearLayout>
     </FrameLayout>
